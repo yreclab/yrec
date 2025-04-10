@@ -1,0 +1,6 @@
+
+# The name for the executable can be changed after the NAME =
+
+NAME = yrec
+
+FFILES = \

@@ -1,0 +1,107 @@
+cp m0030start.nml1 yrec8.nml1
+cp start.nml2 yrec8.nml2
+./model5.1b
+cp m0040start.nml1 yrec8.nml1
+./model5.1b
+cp m0050start.nml1 yrec8.nml1
+./model5.1b
+cp m0060start.nml1 yrec8.nml1
+./model5.1b
+cp m0070start.nml1 yrec8.nml1
+./model5.1b
+cp m0080start.nml1 yrec8.nml1
+./model5.1b
+cp m0090start.nml1 yrec8.nml1
+./model5.1b
+cp m0100start.nml1 yrec8.nml1
+./model5.1b
+cp m0150start.nml1 yrec8.nml1
+./model5.1b
+cp m0200start.nml1 yrec8.nml1
+./model5.1b
+cp m0300start.nml1 yrec8.nml1
+./model5.1b
+cp m0400start.nml1 yrec8.nml1
+./model5.1b
+cp m0500start.nml1 yrec8.nml1
+./model5.1b
+cp m0600start.nml1 yrec8.nml1
+./model5.1b
+cp m0700start.nml1 yrec8.nml1
+./model5.1b
+cp m0800start.nml1 yrec8.nml1
+./model5.1b
+cp m0900start.nml1 yrec8.nml1
+./model5.1b
+cp m1000start.nml1 yrec8.nml1
+./model5.1b
+cp m1100start.nml1 yrec8.nml1
+./model5.1b
+cp m1200start.nml1 yrec8.nml1
+./model5.1b
+cp m1300start.nml1 yrec8.nml1
+./model5.1b
+cp m1400start.nml1 yrec8.nml1
+./model5.1b
+cp m1500start.nml1 yrec8.nml1
+./model5.1b
+cp m1600start.nml1 yrec8.nml1
+./model5.1b
+cp m1700start.nml1 yrec8.nml1
+./model5.1b
+cp m1800start.nml1 yrec8.nml1
+./model5.1b
+cp m1900start.nml1 yrec8.nml1
+./model5.1b
+cp m2000start.nml1 yrec8.nml1
+./model5.1b
+cp m2200start.nml1 yrec8.nml1
+./model5.1b
+cp m2400start.nml1 yrec8.nml1
+./model5.1b
+cp m2600start.nml1 yrec8.nml1
+./model5.1b
+cp m2800start.nml1 yrec8.nml1
+./model5.1b
+cp m3000start.nml1 yrec8.nml1
+./model5.1b
+cp m3500start.nml1 yrec8.nml1
+./model5.1b
+cp m4000start.nml1 yrec8.nml1
+./model5.1b
+cp m4500start.nml1 yrec8.nml1
+./model5.1b
+cp m5000start.nml1 yrec8.nml1
+./model5.1b
+cp m5500start.nml1 yrec8.nml1
+./model5.1b
+cp m6000start.nml1 yrec8.nml1
+./model5.1b
+cp m6500start.nml1 yrec8.nml1
+./model5.1b
+cp m7000start.nml1 yrec8.nml1
+./model5.1b
+cp m7500start.nml1 yrec8.nml1
+./model5.1b
+cp m8000start.nml1 yrec8.nml1
+./model5.1b
+cp m8500start.nml1 yrec8.nml1
+./model5.1b
+cp m9000start.nml1 yrec8.nml1
+./model5.1b
+cp m10000start.nml1 yrec8.nml1
+./model5.1b
+cp m12000start.nml1 yrec8.nml1
+./model5.1b
+cp m14000start.nml1 yrec8.nml1
+./model5.1b
+cp m16000start.nml1 yrec8.nml1
+./model5.1b
+cp m18000start.nml1 yrec8.nml1
+./model5.1b
+cp m20000start.nml1 yrec8.nml1
+./model5.1b
+cp m22500start.nml1 yrec8.nml1
+./model5.1b
+cp m25000start.nml1 yrec8.nml1
+./model5.1b

@@ -1,0 +1,15 @@
+
+ Pre-Main-Sequence (PMS) starting models generated from polytropes
+         LLP starting December 14, 2008)
+	 
+ gs98 composition, Z = .01757, CMIXL=1.759592, X=.712965
+	 
+ Polytrope starting models were fragile, in that if perturbed/rescaled 
+ they frequently failed to converge.
+ 
+ However, if they were rescaled and a few (3 to 7) timesteps were 
+ taken, the resulting models seemed much more robust.
+ 
+ Because we have a dense grid of polytrope starting models, new 
+ starting models with desired parameters could be created in a few 
+ rescaling steps.

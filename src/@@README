@@ -1,0 +1,4 @@
+YREC_042025 version notes
+Fixed typo (divide by zero) in remap, and trapped out potential divide by zero
+Fixed non-gfort compatible read statements in getmodel2
+Removed character strings from common blocks in parmin,rscale,and starin

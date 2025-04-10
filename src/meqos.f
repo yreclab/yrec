@@ -1,0 +1,76 @@
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C
+C     MIHALAS, HUMMER, DAPPEN EQUATION OF STATE
+C
+C     IMPLIMENTED BY YC MARCH 7, 1990
+C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+C MEQOS
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+      SUBROUTINE MEQOS(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
+     1 BETA14,FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
+     2 QDTT,QDPT,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
+
+C     LATMO,KSAHA NEEDED FOR EQSAHA                              
+      IMPLICIT REAL*8 (A-H,O-Z)                                                
+      IMPLICIT LOGICAL*4(L)                                                    
+ 
+      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+      PARAMETER ( IVARX = 25 )                                                 
+      PARAMETER (CNVS = 0.434294481D0 )
+      PARAMETER (ZERO = 0.0D0)
+      DIMENSION ATOMWT(4),FXION(3)                                       
+      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
+     *     SENV        
+      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
+      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN                    
+      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
+      COMMON/MHDOUT/VARMHD(IVARX)                                              
+      DATA NZP1/12/                                                            
+      DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/                       
+      SAVE
+
+      IER     = 0                     
+      T=10.0D0**T10
+      P=10.0D0**P10
+      CALL MHDPX(P10,T10,XC,R10)
+      D10=VARMHD(1)
+      D=10.0D0**D10
+      QDP=1.0D0/VARMHD(4)
+      CHIRA = VARMHD(4)
+      CHITA = VARMHD(5)
+      QDT= -CHITA/CHIRA
+      CP=VARMHD(9)
+      QCP=10.0D0**CP
+      QCPP=QDP*VARMHD(12)
+      QCPT=VARMHD(13)+VARMHD(12)*QDT
+      DELA=VARMHD(8)
+      QAP=QDP*VARMHD(10)*CNVS/DELA
+      QAT=(VARMHD(11)+VARMHD(10)*QDT)*CNVS/DELA
+      QDPT=QDT*(QAP-1.0D0+QDP+QCPP)
+      QDTT=QDT*(QAT+1.0D0+QDT+QCPT)
+      BETA=10.0D0**(VARMHD(20)-VARMHD(2))
+      BETAI=1.0D0/BETA
+      BETA14=1.0D0-BETA
+      DO ION=1,3
+      FXION(ION)=VARMHD(ION+13)
+      ENDDO
+      ETA=VARMHD(18)
+      RMU=10.0D0**VARMHD(20)/(D*T)
+      CALL MU(T,P,D,XC,Z,RMU2,AMU,EMU,BETA)
+      IF(ABS((RMU-RMU2)/RMU).GT.5.0D-7)THEN
+          WRITE(IOWR,*)' ERROR(MHD) IN MEAN WEIGHTS ... '
+          WRITE(IOWR,*)RMU,RMU2
+	  WRITE(IOWR,*) 'ERROR (MHD): CHECK MU'
+          WRITE(ISHORT,*)' ERROR(MHD): IN MEAN WEIGHTS ... '
+          WRITE(ISHORT,*)RMU,RMU2
+	  WRITE(ISHORT,*) 'ERROR (MHD): CHECK MU'
+          STOP
+      ENDIF
+      RETURN  
+  999 CONTINUE
+      WRITE(ISHORT,*) 'ERROR(MHD):... MHD TABLE FAIL'
+      STOP
+      END

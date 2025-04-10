@@ -1,0 +1,11 @@
+#
+# !/bin/csh
+#
+ setenv local /home/tinsley/pinsono/yrec3b/OPACITY/G93
+# INPUT
+ rm fort.*
+ ln -s $local/LIVERMORE.G93TABLES fort.11
+ ln -s $local/z01764.g93opal fort.12
+ ln -s $local/g93opal.dat fort.13
+ time $local/g93opal
+

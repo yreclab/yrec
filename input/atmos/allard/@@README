@@ -1,0 +1,25 @@
+ 
+        Allarad Atmosphere Tables
+	                          LLP  10/01/2008
+
+These tables from France Allard's wesbsite are:
+
+    Nextgen.p00		Original circa 1999 Allard Nextgen atmosphere tables 
+			Teff ranges from 1700 to 10000 Degrees K
+			GL ranges from 3.5 to 5.5
+			Feh and Alpha are 0.0
+
+    Nextgen2.all	Allard Nextgen2 atmosphere tables
+			Teff ranges from 900 to 10000 Degrees K in p00 table, with 
+			     varying ranges for other FeH.
+			GL ranges from 3.5 to 6
+			FeH ranges from 0.0 to -4.0
+			Alpha is 0.0
+			
+    AMES-Dusty2.p00	Allard AMES-Dusty2 atmosphere tables
+			Teff ranges from 900 to 3900 degrees K
+			GL ranges from 3.5 to 6.0
+			FeH and Alpha are 0.0
+			
+Note: the 10/01/2008 version of model, model4c, in my `/astro/development.models/model4c/10.01.2008 
+      is required to use the new Nextgen2.all and AMES-Dusty2.p00 Allard atmosphere tables.						

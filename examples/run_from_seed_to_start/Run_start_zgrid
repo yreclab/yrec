@@ -1,0 +1,61 @@
+cp m0050z0100start.nml1 yrec8.nml1
+cp start.nml2 yrec8.nml2
+./model5.1b
+cp m0050z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m0050z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m0050z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m0050z0600start.nml1 yrec8.nml1
+./model5.1b
+cp m0100z0100start.nml1 yrec8.nml1
+./model5.1b
+cp m0100z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m0100z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m0100z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m0100z0600start.nml1 yrec8.nml1
+./model5.1b
+cp m0300z0100start.nml1 yrec8.nml1
+./model5.1b
+cp m0300z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m0300z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m0300z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m0300z0600start.nml1 yrec8.nml1
+./model5.1b
+cp m1000z0100start.nml1 yrec8.nml1
+./model5.1b
+cp m1000z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m1000z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m1000z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m1000z0600start.nml1 yrec8.nml1
+./model5.1b
+cp m3000z0100start.nml1 yrec8.nml1
+./model5.1b
+cp m3000z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m3000z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m3000z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m3000z0600start.nml1 yrec8.nml1
+./model5.1b
+cp m10000z0100start.nml1 yrec8.nml1
+./model5.1b
+cp m10000z0030start.nml1 yrec8.nml1
+./model5.1b
+cp m10000z0010start.nml1 yrec8.nml1
+./model5.1b
+cp m10000z0400start.nml1 yrec8.nml1
+./model5.1b
+cp m10000z0600start.nml1 yrec8.nml1
+./model5.1b

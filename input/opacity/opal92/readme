@@ -1,0 +1,170 @@
+	This file contains information on updates and contents of the
+directory.  Please always read it prior to extracting data.
+
+==============================================================
+
+Notes:
+-----2/3/94       Replaced XCOTRIN.f, COTRIN.f, and XZTRIN.f with revised
+                  versions.  Should not effect previous calculations.
+-----12/16/93     Added file G93highz.  Tables for new Grevesse and
+                  Noels Photospheric abundances (Sept. 1993).
+                  Only small differences with G91highz are obtained (1-2%).
+                  In order to use XZTRIN.f interpolation code you need to
+                  change OPEN (2,FILE='G91highz') to OPEN(2,FILE='G93highz')
+-----7/25/93      Cosmetic changes to XZTRIN.f and XCOTRIN.f
+-----7/22/93      Replaced the file G91x70z03. 
+                  This file actually contained the same data as
+                  G91x70z02.  This error would have been detected by
+                  the XCOTRIN.f and COTRIN.f codes, which check for
+                  consistency of Z.
+-----7/22/93      Replaced XCOTRIN.f, COTRIN.f, and XZTRIN.f.
+                  Fixed some problems with going out of tables.
+-----7/13/93      Replaced XCOTRIN.f and COTRIN.f with improved versions.
+                  Also replaced XTRIN.f with XZTRIN.f. The codes
+                  XCOTRIN.f, COTRIN.f, and XZTRIN.f all now carryout a
+                  least squares based adjustment of the tabulated data,
+                  prior to interpolation.  The code XZTRIN.f (supplants
+                  XTRIN.f) interpolates the G91highz (PopI) opacity
+                  tables.  Use a call to OPACG91 to interpolate in
+                  X,Z,T6, and R.  Use a call to OPAC to interpolate
+                  in X,T6, and R at tabulated values of Z ( see code
+                  for explicit values).
+-----5/7/93       Made corrections to XCOTRIN.f and COTRIN.f to correct
+                  problems with derivatives and points outside of table.
+                  Also added SAVE statements required for some compilers
+-----2/25/93      Added lines 633-634 to XCOTRIN.f to avoid error that 
+                  occurs when the initial x > 0.07.
+                           633      alt(51)=log10(200.)
+                           634      alt(52)=lof10(500.)
+-----12/17/92     Made  dXc+dXo=0 a special case> Destroy earlier versions
+                    of XCOTRIN.f and COTRIN.f 
+-----12/17/92     Modified XCOTRIN.f and COTRIN.f> Destroy earlier versions
+-----12/16/92     Modified XCOTRIN.f and COTRIN.f> Destroy earlier versions
+
+-----12/14/92     Replaced the file G91x70z001-removed extraneous
+                            data.  Added some necessary blank lines to
+                            the end of some of the G91x*z* files.  Added
+                            additional G91x*z* files for Z=0.004 , 0.01,
+                            and 0.003 
+==============================================================
+
+
+------------DESCRIPTION OF ENHANCED C AND O TABLES-----------
+
+	This directory contains extensive opacity tables and codes for 
+interpolation of these tables in C, O, T6, and LogR or in X, C, O, T6,
+and LogR.  These codes provide the opacity and smooth first derivatives
+of the opacity.
+
+	The complete set of enhanced C/O tables is currently comprised
+of 30 files organized as follows:
+
+Z=0 set: 
+
+	G91x00z0
+	G91x03z0
+	G91x10z0
+	G91x35z0
+	G91x70z0
+
+Z=0.001 set:
+
+	G91x00z001
+	G91x03z001
+	G91x10z001
+	G91x35z001
+	G91x70z001
+
+Z=0.004 set:
+
+	G91x00z004
+	G91x03z004
+	G91x10z004
+	G91x35z004
+	G91x70z004
+
+Z=0.01set:
+
+	G91x00z01
+	G91x03z01
+	G91x10z01
+	G91x35z01
+	G91x70z01
+
+Z=0.02 set:
+
+	G91x00z02
+	G91x03z02
+	G91x10z02
+	G91x35z02
+	G91x70z02
+
+Z=0.03 set:
+
+	G91x00z03
+	G91x03z03
+	G91x10z03
+	G91x35z03
+	G91x70z03
+
+	As an example, the set of tables designated G91x00z0 is comprised of 
+60 individual tables for variations in enhanced C and O varying between 
+zero and 1-X-Z.  Each of these tables have 52 entries in T6 (0.006 to 500) 
+and 17 entries in log R (-7 to +1) (although not all grid points are filled).  
+G91 refers to the Grevesse 91 mixture described in our papers.  The part 
+x00 indicates that there is zero hydrogen content.  The part z0 indicates 
+that  the metal content is also zero.  The designations x03, x10, x35, x70 
+refer to X=0.03, 0.1, 0.35, and 0.70, respectively.  The designations z001, 
+z004, Z01, Z02, and Z03 refer to Z=0.001, 0.004, 0.01, 0.02, 0.03 
+respectively.  Tables for X>0 have 50 temperature entries running up to 
+T6=100.  Consequently, when X>0 opacity data is restricted by this limit.  
+The log R columns  for 0.0, 0.5 and 1.0  only go to T6=0.04 when X> 0.
+
+	The Grevesse 1991 abundances are the best current estimate of solar 
+composition.  We have chosen to use it for these abundances the enhanced 
+C and O tables simply for lack of a better determination.  Opacity tables 
+similar to those currently residing in this directory can readily be 
+calculated for other mixtures.  This capability is facilitated by the method 
+of corresponding states described in Rogers & Iglesias ,ApJ, Vol 400 (Dec. 
+1992)
+	The available interpolation codes are
+		COTRIN.f
+		XCOTRIN.f
+                XZTRIN.f
+
+	The code COTRIN.f is intended for interpolation in excess C and O, T6, 
+and log R.  It is currently set-up to read the first  file ,i.e., the X=0 file,
+from each set of constant Z files.  This requires that the file G91x00z0 (for 
+example) be copied into a file named 'codataa'.  Similar calculations are 
+possible for X >0, but this requires a recompilation of the COTRIN.f code 
+with an altered DATA statement.  See instructions with the code.
+
+	The code XCOTRIN.f is intended for interpolation in X, C, O, T6 and 
+Log R for constant Z. To do this for Z=0, for example, requires all five files 
+listed under Z=0.  To do the same thing for Z=0.001 requires the five files 
+listed under Z=0.001,etc. The interpolation code expects to read the five 
+files in each set (from IO unit 2; you may need to change IO unit if there is 
+a conflict) from files named codataa, codatab, codatac, codatad, codatae; i.e., 
+copy G91x00z0 into a file named codataa, G91x01z into codatab, etc.  The 
+same naming  procedure also applies to the other sets at constant Z..  Each 
+of the G91x*z* tables requires about 0.02-0.4Mb of memory.  Instructions 
+are included with the interpolation codes.  The codes COTRIN.f and 
+XCOTRIN.f are identical ,except the parameter mx=1 in COTRIN.f and  5 in 
+XCOTRIN.f.
+
+---------------------END OF DESCRIPTION OF C AND O-----------------------
+
+
+---------------------DESCRIPTION OF POP I TABLES-------------------------
+
+	Earlier we produced tables for the Grevesse 1991 abundances with 
+normal C and O for metallicities up to Z=0.04 (ApJS,79, 509,1992).  We 
+have now included the effect of spin-orbit interactions and extended the 
+tables to Z=0.1.  Physics effects that make some small additional changes 
+(a few per cent), beyond those reported in ApJ ,397, 717,1992, have also 
+been incorporated.  These tables can be read from the file G91highz.
+The code XZTRIN.f is available for interpolation of this file.  It 
+is a revised version of XCOTRIN.f.
+
+--------------------END OF DESCRITION OF POP I--------------------------
+

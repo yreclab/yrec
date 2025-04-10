@@ -1,0 +1,8 @@
+# /bin/csh
+#
+ setenv local /home/tinsley/pinsono/yrec3b/KURMOL
+ rm fort.*
+ ln -s $local/kapp00.ross fort.1
+ ln -s $local/kapp01.ross fort.2
+ ln -s $local/kapp005.ross fort.3
+ time $local/kaprossinterp

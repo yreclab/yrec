@@ -1,0 +1,23 @@
+
+# The name for the executable can be changed after the NAME =
+
+NAME = ZFS_interp_EOS5
+
+FFILES = \
+ZFS_interp_EOS5.f
+
+# This part specifies the compiler options, and can be used to move 
+# the executable to a target location by uncommenting the mv and 
+# specifying a target for the move.
+
+FFLAGS =  -c -O3 -w -132 
+
+SRSFILES = $(FFILES)
+
+OBJFILES = $(FFILES:.f=.o)
+
+$(NAME):	$(OBJFILES)
+	ifort -g -o $(NAME) *.o
+#	mv $(NAME) target
+.f.o:
+	ifort $(FFLAGS)  -g $*.f

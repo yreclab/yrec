@@ -1,0 +1,11 @@
+#
+# !/bin/csh
+#
+ setenv local /home/tinsley/pinsono/yrec3b/OPACITY
+# INPUT
+ rm fort.*
+ ln -s $local/LIVERMORE.AG89PFEMTABLES fort.11
+ ln -s $local/z0001.opalntest fort.12
+ ln -s $local/opal2.dat fort.13
+ time $local/opal2
+

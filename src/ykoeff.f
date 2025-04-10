@@ -1,0 +1,93 @@
+
+C
+C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C YKOEFF
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C YCK 3/91
+      SUBROUTINE YKOEFF
+
+      IMPLICIT REAL*8 (A-H,O-Z)
+      IMPLICIT LOGICAL*4 (L)
+      PARAMETER (NUMT=60)
+      PARAMETER (NUMD=50)
+      PARAMETER (NUMX=1)
+      PARAMETER (NUMXT=NUMT*NUMX)
+      PARAMETER (NUM4D=4*NUMD)
+C MHP 10/02 made array dimensions consistent
+      PARAMETER (NP=100)
+      DIMENSION C(4,NP),XD(NUMD)
+C      DIMENSION C(4,NUMD),XD(NUMD)
+      COMMON /GKRZ/GRIDT(NUMT)
+      COMMON /KRZ/OPACITY(NUMXT,NUMD),RHO(NUMXT,NUMD),NUMTM
+      COMMON /INTPL2/ CFORD(NUMXT,NUM4D),NDS(NUMXT),NDD(NUMXT)
+      COMMON /GKRZ2/GRIDT2(NUMT)
+      COMMON /KRZ2/OPACITY2(NUMXT,NUMD),RHO2(NUMXT,NUMD),NUMTM2
+      COMMON /INTPL22/ CFORD2(NUMXT,NUM4D),NDS2(NUMXT),NDD2(NUMXT)
+C OPACITY COMMON BLOCKS - modified 3/09
+      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
+     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,  
+     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z 
+      SAVE
+
+      DO 102 IT=1,NUMTM
+         INDEX1=IT
+         JD=0
+         IDS=1
+         IDF=NUMD
+         DO 103 ID=IDS,IDF
+            CHKD=RHO(IT,ID)
+            CHKO=OPACITY(IT,ID)
+            IF(CHKO.LE.0.0D0)GO TO 103
+            IF(JD.LE.0)NDS(INDEX1)=ID
+            JD=JD+1
+            XD(JD)=CHKD
+            C(1,JD)=DLOG10(CHKO)
+ 103     CONTINUE
+         NDD(INDEX1)=JD
+         IF(NDS(INDEX1).NE.1)STOP ' ERROR KURUCZ OPACITY NDS'
+         IF(NDD(INDEX1).LT.25)STOP ' ERROR KURUCZ OPACITY NDD'
+         IF(JD.LE.1)GO TO 102
+         CALL YSPLIN(XD,C,JD)
+         DO J=1,JD
+            DO I=1,4
+               INDEX2=I+(J-1)*4
+               CFORD(INDEX1,INDEX2)=C(I,J)
+            END DO
+         END DO
+ 102  CONTINUE
+C     
+C
+C
+C DBG 12/95 second Z table
+      IF(L2Z) THEN
+         DO 202 IT=1,NUMTM2
+            INDEX1=IT
+            JD=0
+            IDS=1
+            IDF=NUMD
+            DO 203 ID=IDS,IDF
+               CHKD=RHO2(IT,ID)
+               CHKO=OPACITY2(IT,ID)
+               IF(CHKO.LE.0.0D0)GO TO 203
+               IF(JD.LE.0)NDS2(INDEX1)=ID
+               JD=JD+1
+               XD(JD)=CHKD
+               C(1,JD)=DLOG10(CHKO)
+ 203        CONTINUE
+            NDD2(INDEX1)=JD
+            IF(NDS2(INDEX1).NE.1)STOP ' NDS2'
+            IF(NDD2(INDEX1).LT.25)STOP ' NDD2'
+            IF(JD.LE.1)GO TO 202
+            CALL YSPLIN(XD,C,JD)
+            DO J=1,JD
+               DO I=1,4
+                  INDEX2=I+(J-1)*4
+                  CFORD2(INDEX1,INDEX2)=C(I,J)
+               END DO
+            END DO
+ 202     CONTINUE
+      END IF
+
+      RETURN
+      END

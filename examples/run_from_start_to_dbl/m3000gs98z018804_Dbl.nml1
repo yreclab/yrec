@@ -1,0 +1,98 @@
+ $CONTROL  
+
+ DESCRIP(1) = "model5.1 test suite. Solar model, diffusion, no rotation" ! Label for output (optional)  
+ DESCRIP(2) = "Gray Atm OPAL06+SCV EOS GS98" ! Second line label for output (optional)
+
+ ! Option to adjust the CNO mixture to be consistent with the mixture used in the opacity tables
+ ISETMIX=0 ! 0 = do not adjust 1 = use specified mixture (AMIX below) 2 = custom mixture (see parmin.f for variables)
+! AMIX = 'GS98' ! current implemented solar mixtures are GS98,AAG21,M22P and M22M
+! Option to adjust the D/He3/Li6/Li7/Be9 abundances and the CNO isotope ratios to be consistent with a specified solar reference
+ ISETISO = 0! 0 = do not adjust 1 = use specified mixture (AISO below) 2 = custom mixture (see parmin.f for variables)
+! AISO = 'L21' ! Lodders 2021 is currently the only supported mixture, for a different one use the custom option
+
+ LCALS = .FALSE. ! Toggle to auto-calibrate solar Y and alpha to match the solar R and L at the age of the Sun. Does not enforce correct Z/X for mixture.
+  LCALSOLZX = .TRUE.
+  CALSOLZX = 0.02292d0 
+  TOLL = 3.0D-5 ! Tolerance target for L in the calibration routines.
+  TOLR = 3.0D-5 ! Tolerance target for R in the calibration routines.
+  CALSOLAGE = 4.568D9 ! Tolerance solar age in the calibration routines.
+  
+ NUMRUN = 1 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
+
+! KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
+! LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
+! RSCLM(1) = 12.00 ! If positive, rescale to this mass (Msun)
+! RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
+! RSCLX(1) = 0.708483 ! If positive, rescale to this hydrogen.
+! RSCLZ(1) = 0.018804 ! If positive, rescale to this metallicity. 
+! NMODLS(1) = 10 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
+! XENV0A(1) = 0.708483 ! Envelope abundance label
+! ZENV0A(1) = 0.018804 ! Envelope abundance label
+! CMIXLA(1) = 1.851885 ! Rescale to this mixing length (or use for the run).
+! LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.
+! SENV0A(1) = -1.0D-5 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
+  
+ KINDRN(1) = 1   
+ LFIRST(1) = .TRUE.  
+ NMODLS(1) = 1000 
+ XENV0A(1) = 0.708483 ! Envelope abundance label
+ ZENV0A(1) = 0.018804 ! Envelope abundance label
+ CMIXLA(1) = 1.852729
+ END_DCEN(1) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, start)
+! END_DCEN(1) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, end)
+! END_XCEN(1) = 0.70 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
+! END_XCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
+! END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+ 
+ ! The starting and last models include only abundances and structure variables. These options allow snapshots to be generated with more information. 
+ LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
+ LSTATM = .FALSE. ! If T, ppend an atmosphere to the stored model file.
+ LSTENV = .FALSE. ! If T, append an envelope to the stored model file. If LSTENV and LSTATM = F, no information is output beyond the fitting point.
+ LSTMOD = .TRUE. ! Set the same as LSTORE. May be redundant.
+ LSTPHYS = .TRUE. ! If T, output microphysics (e.g. epsilon, kappa) to store file.
+ LSTROT = .FALSE. ! If T, append rotation data to store file.
+ NPRTMOD = 50 ! Output detailed model structures every NPRTMOD models.
+ NPRTPT = 1 ! Output details for every NPRTPT points (if 1000 points and NPRTPT=10, 100 lines are output).
+ LSTPCH = .TRUE. ! If T, output details of the final model to the .store file.
+
+ LTRACK = .TRUE. ! If T, global properties are always output to the .track file. This should almost always be on.
+ ITRVER = 0 ! Toggle for different track file formats. 0 (one line per model) strongly recommended.
+  
+ LRWSH = .FALSE. ! If T, the short file retains only the details from the last model. This minimizes output file size.
+ LCORR = .TRUE. ! If true, output verbose details on model convergence to .short.
+  
+ LPULSE = .FALSE. ! If T, generate pulsation output. LSTATM AND LSTENV are needed to get data for those regions (highly recommended if LPULSE is T)  
+  
+ LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
+ FALEX06 = "../../input/opacity/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
+   
+ LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
+ ZOPAL951 = 0.018777 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ FLIV95 = "../../input/opacity/opal95/GS98.OP17" ! Atomic opacity table path
+  
+ LPUREZ = .TRUE. 
+ FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
+  
+! FFIRST = "../../input/models/pms/gs98/p900gs98z0188.nmo" ! Starting model path.
+ FFIRST = "../../input/models/start/m3000gs98z018804_prems.first" ! The last converged model is stored here.
+ FLAST = "output/m3000gs98z018804_Dbl.first" ! The last converged model is stored here.
+ FMODPT = "output/m3000gs98z018804_Dbl.full" ! No longer used.
+ FSTOR = "output/m3000gs98z018804_Dbl.store" ! Model snapshots during the run are stored here.
+ FTRACK = "output/m3000gs98z018804_Dbl.track" ! Global variables as a function of time are stored here.
+ FSHORT = "output/m3000gs98z018804_Dbl.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "output/m3000gs98z018804_Dbl.pmod" ! Pulsation output for the interior model.
+ FPENV = "output/m3000gs98z018804_Dbl.penv"! Pulsation output for the envelope model.
+ FPATM = "output/m3000gs98z018804_Dbl.atm" ! Pulsation output for the atmosphere model.
+ FSNU = "output/m3000gs98z018804_Dbl.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "output/m3000gs98z018804_Dbl.excomp" ! No longer used (light elements vs. time, now included in track file)
+  
+ FOPALE06 = "../../input/eos/opal2006/EOSOPAL06Z0.018776" ! OPAL 2006 EoS table path.
+ FcondOpacP = "../../input/opacity/potekhin/condall06.d" ! Conductive opacity table path.
+ FATM = "../../input/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
+ FALLARD = "../../input/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
+ FSCVH = "../../input/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
+ FSCVHE = "../../input/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
+ FSCVZ = "../../input/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
+ FFERMI = "../../input/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
+  
+ $END  

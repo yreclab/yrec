@@ -1,0 +1,28 @@
+
+# This part specifies the compiler options, and can be used to move 
+# the executable to a target location by uncommenting the mv and 
+# specifying a target for the move.
+
+FFLAGS =  -ffixed-line-length-132 -w -O3 
+
+SRSFILES = $(FFILES)
+
+OBJFILES = $(FFILES:.f=.o)
+
+#$(NAME):	$(OBJFILES)
+$(NAME):       $(SRSFILES)
+	gfortran $(FFLAGS) -o $(NAME) *.f 
+#	mv $(NAME) target
+#.f.o:
+#	gfortran $(FFLAGS) -o $*.f 
+
+clean:
+	rm -f $(NAME) *.o *.mod
+	
+PREFIX ?= /usr/local/bin
+
+# Install the executable to a target directory (default /usr/local/bin)
+install:
+	install -d $(PREFIX)
+	install -m 755 $(NAME) $(PREFIX)
+

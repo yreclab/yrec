@@ -1,0 +1,9 @@
+The gs98* tables in this directory are from the Ferguson et al. 2005
+paper for the Grevesse & Sauval (1998) mixture of heavy elements.  The
+notation is in the form mixture.x.z.tron, where
+
+x=mass fraction of hydrogen
+z=mass fraction of metals
+
+All of these are concatenated into alex06g98.tab; they are reorganized
+into a form recognized by the evolution code in alexmol06gs98.tab.
