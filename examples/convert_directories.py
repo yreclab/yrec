@@ -1,8 +1,14 @@
 #!/usr/bin/env python
-import sys
 
+# This script converts the input and output directories.
+# It removes the commented out FFIRST line and
+# changes the input and output paths to relative paths.
+# Usage: ./convert_directories.py <nml1>
+# KC 2025-04-18
+
+import sys
 if len(sys.argv) != 2:
-    print("Usage: python rename_directories.py <nml1>")
+    print("Usage: python convert_directories.py <nml1>")
     sys.exit(1)
 nml1 = sys.argv[1]
 
