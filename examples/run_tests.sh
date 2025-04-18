@@ -27,7 +27,11 @@ while IFS= read -r line; do
   for file in output/"$test".*; do
     rm "$file"
   done
-  ../"$yrec" "$test".nml1 "$test".nml2 > output/"$test".out
+  if [ -f "$test".nml2 ]; then
+    ../"$yrec" "$test".nml1 "$test".nml2 > output/"$test".out
+  else
+    ../"$yrec" "$test".nml1 "$dir".nml2 > output/"$test".out
+  fi
 
   echo -n "$(date '+%Y-%m-%d %H:%M:%S') "
   if [ "$1" = "S" ]; then
@@ -59,9 +63,9 @@ while IFS= read -r line; do
   fi
 
   echo
-  rm fort.20
+  rm fort.*
   cd ..
-done < "testsuite.txt"
+done < "testsuite.sh"
 
 echo -n "$(date '+%Y-%m-%d %H:%M:%S') "
 echo "All tests completed"

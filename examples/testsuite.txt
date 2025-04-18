@@ -1,7 +1,0 @@
-# format: <relative path within examples/> <file name without suffix>
-
-# Solar Models
-run_standard_solar_model Test_solarcal_noGS_norot
-# run_standard_solar_model Test_solar_noGS_norot
-# run_standard_solar_model Test_solar_GS_norot_gray_OPALSCV_SF2_GS98_OP_CF10
-# run_standard_solar_model Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10

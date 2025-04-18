@@ -77,7 +77,7 @@
  LPUREZ = .TRUE. 
  FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
- FFIRST = "../../input/models/pms/gs98/p100gs98z01757.ahbl" ! Starting model path.
+ FFIRST = "../../input/models/seed/p100gs98z01757.ahbl" ! Starting model path.
  FLAST = "output/Test_solar_GS_norot_gray_OPALSCV_SF2_GS98_OP_CF10.last" ! The last converged model is stored here.
  FMODPT = "output/Test_solar_GS_norot_gray_OPALSCV_SF2_GS98_OP_CF10.full" ! No longer used.
  FSTOR = "output/Test_solar_GS_norot_gray_OPALSCV_SF2_GS98_OP_CF10.store" ! Model snapshots during the run are stored here.

@@ -82,17 +82,17 @@
  LPUREZ = .TRUE. 
  FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
- FFIRST = "../../input/models/start/m10000gs98z018804_Dbl.first" ! Starting model path.
- FLAST = "output/Test_m10000_feh0_noGSstdcno_ZAMS.last" ! The last converged model is stored here.
- FMODPT = "output/Test_m10000_feh0_noGSstdcno_ZAMS.full" ! No longer used.
- FSTOR = "output/Test_m10000_feh0_noGSstdcno_ZAMS.store" ! Model snapshots during the run are stored here.
- FTRACK = "output/Test_m10000_feh0_noGSstdcno_ZAMS.track" ! Global variables as a function of time are stored here.
- FSHORT = "output/Test_m10000_feh0_noGSstdcno_ZAMS.short" ! Details about the numerics of the model run are stored here.
- FPMOD = "output/Test_m10000_feh0_noGSstdcno_ZAMS.pmod" ! Pulsation output for the interior model.
- FPENV = "output/Test_m10000_feh0_noGSstdcno_ZAMS.penv"! Pulsation output for the envelope model.
- FPATM = "output/Test_m10000_feh0_noGSstdcno_ZAMS.atm" ! Pulsation output for the atmosphere model.
- FSNU = "output/Test_m10000_feh0_noGSstdcno_ZAMS.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP = "output/Test_m10000_feh0_noGSstdcno_ZAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FFIRST = "../../input/models/dbl/m1000gs98z018804_Dbl.first" ! Starting model path.
+ FLAST = "output/Test_m1000_feh0_noGSstdpp_ZAMS.last" ! The last converged model is stored here.
+ FMODPT = "output/Test_m1000_feh0_noGSstdpp_ZAMS.full" ! No longer used.
+ FSTOR = "output/Test_m1000_feh0_noGSstdpp_ZAMS.store" ! Model snapshots during the run are stored here.
+ FTRACK = "output/Test_m1000_feh0_noGSstdpp_ZAMS.track" ! Global variables as a function of time are stored here.
+ FSHORT = "output/Test_m1000_feh0_noGSstdpp_ZAMS.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "output/Test_m1000_feh0_noGSstdpp_ZAMS.pmod" ! Pulsation output for the interior model.
+ FPENV = "output/Test_m1000_feh0_noGSstdpp_ZAMS.penv"! Pulsation output for the envelope model.
+ FPATM = "output/Test_m1000_feh0_noGSstdpp_ZAMS.atm" ! Pulsation output for the atmosphere model.
+ FSNU = "output/Test_m1000_feh0_noGSstdpp_ZAMS.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "output/Test_m1000_feh0_noGSstdpp_ZAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
   
  FOPALE06 = "../../input/eos/opal2006/EOSOPAL06Z0.016492" ! OPAL 2006 EoS table path.
  FcondOpacP = "../../input/opacity/potekhin/condall06.d" ! Conductive opacity table path.

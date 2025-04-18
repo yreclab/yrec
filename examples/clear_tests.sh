@@ -15,4 +15,4 @@ while IFS= read -r line; do
   for file in "$dir"/*/"$test".*; do
     rm "$file"
   done
-done < "testsuite.txt"
+done < "testsuite.sh"

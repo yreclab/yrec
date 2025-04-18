@@ -68,7 +68,7 @@
  LPUREZ = .TRUE.  
  FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL"  
   
- FFIRST = "../../input/models/pms/gs98/p100gs98z01757.ahbl"
+ FFIRST = "../../input/models/seed/p100gs98z01757.ahbl"
  FLAST = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.last"
  FMODPT = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.full"
  FSTOR = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.store"

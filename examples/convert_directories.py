@@ -23,8 +23,16 @@ with open(nml1, "w") as f:
             f.write(line)
             continue
 
+        if line.strip().startswith("FFIRST ="):
+            if ".pms" in line or ".ahbl" in line or ".nmo" in line:
+                line = line.replace("/home/ast-pinsonneault-group/EVOLUTION/input/models/pms/gs98",
+                                    "../../input/models/seed")
+            elif "prems." in line or "tams." in line:
+                line = line.replace("/home/pinsonneault.1/model/startmodels", "../../input/models/start")
+            elif "Dbl." in line:
+                line = line.replace("/home/pinsonneault.1/model/startmodels", "../../input/models/dbl")
+
         line = line.replace("/home/ast-pinsonneault-group/EVOLUTION/input", "../../input")
-        line = line.replace("/home/pinsonneault.1/model/startmodels", "../../input/models/start")
         line = line.replace("/home/pinsonneault.1/model/output", "output")
         line = line.replace("/home/pinsonneault.1/model/testsuite", "output")
         f.write(line)
