@@ -1,0 +1,92 @@
+ $CONTROL  
+
+ DESCRIP(1) = 'model5.1 test suite. Solar model, diffusion, rotation'  
+ DESCRIP(2) = 'Gray Atm OPAL06+SCV EOS GS98'
+
+ LCALS = FALSE.  
+ TOLL = 3.0D-5  
+ TOLR = 3.0D-5  
+ CALSOLAGE = 4.568D9
+  
+ NUMRUN = 3
+
+ KINDRN(1) = 3           
+ LFIRST(1) = .TRUE.     
+ RSCLM(1) = 1.00
+ RSCLCM(1) = -0.8D0        
+ RSCLX(1) = 0.713208
+ RSCLZ(1) = 0.017968
+ NMODLS(1) = 2	        
+ XENV0A(1) = 0.713208
+ ZENV0A(1) = 0.017968
+ CMIXLA(1) = 1.822729
+ LSENV0A(1) = .FALSE.
+ SENV0A(1) = -1.0D-7
+  
+ KINDRN(2) = 1  
+ LFIRST(2) = .FALSE.  
+ NMODLS(2) = 1000 
+ XENV0A(2) = 0.713208
+ ZENV0A(2) = 0.017968
+ CMIXLA(2) = 1.822729
+ ENDAGE(2) = 1.0D8 
+ 
+ KINDRN(3) = 1  
+ LFIRST(3) = .FALSE.  
+ NMODLS(3) = 1000
+ XENV0A(3) = 0.713208
+ ZENV0A(3) = 0.017968
+ CMIXLA(3) = 1.822729
+ ENDAGE(3) = 4.568D9 
+ 
+
+ LSTORE = .TRUE.       
+ LSTATM = .FALSE.
+ LSTENV = .FALSE.
+ LSTMOD = .TRUE.
+ LSTPHYS = .TRUE.
+ LSTROT = .TRUE.
+ NPRTMOD = 50              
+ NPRTPT = 1 
+ LSTPCH = .TRUE. 
+
+ LTRACK = .TRUE.  
+ ITRVER = 0  
+  
+ LRWSH = .FALSE.  
+ LCORR = .TRUE.  
+  
+ LPULSE = .FALSE.  
+  
+ LALEX06 = .TRUE.  
+ FALEX06 = "../../input/opacity/alex06/alexmol06gs98.tab"  
+   
+ LOPAL95 = .TRUE.  
+ ZOPAL951 = 0.017968  
+ FLIV95 = "../../input/opacity/opal95/GS98.OP17"  
+  
+ LPUREZ = .TRUE.  
+ FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL"  
+  
+ FFIRST = "../../input/models/pms/gs98/p100gs98z01757.ahbl"
+ FLAST = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.last"
+ FMODPT = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.full"
+ FSTOR = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.store"
+ FTRACK = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.track"
+ FSHORT = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.short"  
+ FPMOD = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.pmod"
+ FPENV = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.penv"
+ FPATM = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.atm"
+ FSNU = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.snu"
+ FSCOMP = "output/Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10.excomp"
+  
+ FOPALE06 = "../../input/eos/opal2006/EOSOPAL06Z0.018776"  
+ FcondOpacP = "../../input/opacity/potekhin/condall06.d"  
+ FATM = "../../input/atmos/kurucz/atmk1990p00.tab"
+ FALLARD = "../../input/atmos/allard/Nextgen2.all"  
+ FSCVH = "../../input/eos/scv/h_tab_i.dat"  
+ FSCVHE = "../../input/eos/scv/he_tab_i.dat"  
+ FSCVZ = "../../input/eos/scv/z_tab_i.dat"    
+ FFERMI = "../../input/eos/yale/FERMI.TAB"  
+  
+ $END  
