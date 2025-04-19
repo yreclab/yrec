@@ -1,10 +1,10 @@
 
 C***********************************************************************
       SUBROUTINE T6RINTERP(SLR,SLT)
+      use params, only : mx, mv, nr => nreos, nt => nteos
       IMPLICIT REAL*8 (A-H,O-Z)
 C     THE PURPOSE OF THIS SUBROUTINE IS TO INTERPOLATE IN T6 AND RHO
       SAVE
-      PARAMETER (MX=5,MV=10,NR=77,NT=56)
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR    
       COMMON/EE/ EPL(MX,NT,NR),XX(MX)
       COMMON/AA/ Q(4),H(4),XXH

@@ -4,8 +4,9 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MHDPX2
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      SUBROUTINE MHDPX2(PL,TL,ITBL,VAROUT,XCOMP,NDIMT)                  
-      PARAMETER( IVARC=20,IVARX=25,NCHEM0=6)                                   
+      SUBROUTINE MHDPX2(PL,TL,ITBL,VAROUT,XCOMP,NDIMT)    
+      use params, only : ivarx, nchem0              
+      PARAMETER( IVARC=20)                                   
       PARAMETER( NT1M=16,NT2M=79,NTXM=10,NR1M=87,NR2M=21,NRXM=21 )             
 C     ZAMS TABLES (LABELLED BY A,B,C)
       IMPLICIT REAL*8 (A-H,O-Z)                                                

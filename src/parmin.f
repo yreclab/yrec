@@ -4,18 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
+      use params, only : nt, ng, ntc, ngc, nts, nps, json
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
-      PARAMETER(NT=57,NG=11)
-C JNT 6/2014 ADD NTC AND NGC FOR KURUCZ/CASTELLI SURFACE PRESSURES
-      PARAMETER(NTC=76,NGC=11)
-C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
-      PARAMETER(NTA=54,NGA=5)
-      PARAMETER (NTS=63, NPS=76)
-      PARAMETER (JSON=5000)
 
       REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
       CHARACTER*256 FLAOL, FPUREZ

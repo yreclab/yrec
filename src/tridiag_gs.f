@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE TRIDIAG_GS(A,B,C,EX_PRIME,NPT,EX)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION A(JSON),B(JSON),C(JSON),EX_PRIME(JSON),EX(JSON),

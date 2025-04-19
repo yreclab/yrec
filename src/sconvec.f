@@ -3,7 +3,7 @@ C SCONVEC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SCONVEC(DELTS,HCOMP,HD,HL,HP,HR,HS,HT,M,MXZONE,NZONE,TEFFL)
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL

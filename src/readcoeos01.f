@@ -5,10 +5,9 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine readcoeos01
+      use params, only : mx, mv, nr => nr01, nt => nt01
 
 c..... The purpose of this subroutine is to read the data tables
-      
-      parameter (mx=5,mv=10,nr=169,nt=191)
       
       IMPLICIT REAL*8 (A-H,O-Z)
       

@@ -8,15 +8,7 @@ C*******
 C initialize all variables, set up common blocks
 C*******
 
-C the array size, i.e. max # of shells is specified in the 
-C parameter statement.  it defines JSON.  to change the array
-C size do a global change on "JSON=2000" or whatever.
-      PARAMETER (JSON=5000)
-      PARAMETER (NUMTT=70)
-      PARAMETER (NUMD=19)
-      PARAMETER (NUMX=10)
-      PARAMETER (NUMZ=13)
-      PARAMETER (NUMXZ=126)
+      use params, only : json, numtt, numd, numx, numz, numxz
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL - to save space make tables single precision

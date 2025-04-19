@@ -4,10 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MHDPX1
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDPX1(PL,TL,X)
+      use params, only : ivarx
 C
 C     MHDST MUST BE CALLED IN MAIN.                                            
 C     INTERPOLATION IN TABLES WITH DIFFERENT X AND FIXED Z                     
-      PARAMETER( IVARX=25,NDIMT=8 )                                            
+      PARAMETER( NDIMT=8 )                                            
 C     TL < TLIM1:         LOWER PART OF ZAMS TABLES                          
 C     TLIM1 < TL < TLIM2: UPPER PART OF ZAMS TABLES                          
 C     TL > TLIM2:         CENTRE TABLES                                      

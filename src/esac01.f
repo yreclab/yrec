@@ -5,6 +5,7 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine esac01 (xh,ztab,t6,r,iorder,irad,*)
+      use params, only : mx, mv, nr => nr01, nt => nt01
 
 c      The purpose of this subroutine is to interpolate 
 c      the equation of state and its derivatives in X, T6, density
@@ -57,7 +58,6 @@ c
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
       integer w
-      parameter (mx=5,mv=10,nr=169,nt=191)
 
 c***************************************************************************
 c

@@ -5,8 +5,8 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine radsub06 (irad,t6,density,moles,tmass)
+      use params, only : mx, mv, nr => nr06, nt => nt06
 
-      parameter (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles,k,molenak,Na
       common/eeos06/esact,eos(mv)

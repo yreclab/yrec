@@ -5,7 +5,7 @@
      *                  HR10,HR11,HR12,HS2,HT,IBEGIN,IEND,
      *                  DCDT,DODT,DXDT,DYDT,XC12,XO16,X,Z)
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT

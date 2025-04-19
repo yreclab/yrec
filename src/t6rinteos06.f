@@ -5,11 +5,11 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine t6rinteos06(slr,slt)
+      use params, only : mx, mv, nr => nr06, nt => nt06
 
 c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in 
 c     T6 and rho
 
-      parameter (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8 (A-H,O-Z)
       common/eeeos06/ epl(mx,nt,nr),xx(mx)
       common/aaeos06/ q(4),h(4),xxh

@@ -7,7 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)
 C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES 
 C ADDED (COMMON BLOCK NEWENG).
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

@@ -5,7 +5,7 @@ C HSOLVE
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE HSOLVE(M,HHA,HHB,HSRF)
 
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION HHA(4,2,JSON),HHB(4,JSON),HSRF(6)
       SAVE

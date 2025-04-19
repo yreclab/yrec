@@ -11,15 +11,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MEQOS(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
      1 BETA14,FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
      2 QDTT,QDPT,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
+      use params, only : ivarx, cnvs, zero
 
 C     LATMO,KSAHA NEEDED FOR EQSAHA                              
       IMPLICIT REAL*8 (A-H,O-Z)                                                
       IMPLICIT LOGICAL*4(L)                                                    
  
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      PARAMETER ( IVARX = 25 )                                                 
-      PARAMETER (CNVS = 0.434294481D0 )
-      PARAMETER (ZERO = 0.0D0)
       DIMENSION ATOMWT(4),FXION(3)                                       
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV        

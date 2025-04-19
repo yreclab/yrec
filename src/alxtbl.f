@@ -18,14 +18,9 @@ C IF MODEL HAS NO DIFFUSION.  INTERPOLATION BETWEEN COMPOSITIONS IS
 C 4-POINT LAGRANGIAN.
 C
       SUBROUTINE ALXTBL
+      use params, only : numx => numxalx, numz => numzalx, numxz => numxzalx, numt => numtalx, numd => numdalx, numxt => numxtalx
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      PARAMETER (NUMX=7)
-      PARAMETER (NUMZ=15)
-      PARAMETER (NUMXZ=105)
-      PARAMETER (NUMT=23)
-      PARAMETER (NUMD=17)
-      PARAMETER (NUMXT=8)
       CHARACTER*256 OPECALEX(NUMX)
       COMMON /ALEXO/OPECALEX,IALXO
 C OPACITY COMMON BLOCKS - modified 3/09

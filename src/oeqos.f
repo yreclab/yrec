@@ -21,6 +21,7 @@ C MEQOS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE OEQOS(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
      1 BETA14,RMU,AMU,EMU,QDT,QDP,QCP,DELA,*)
+      use params, only : ivarx, cnvs, zero
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -32,10 +33,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-
-      PARAMETER ( IVARX = 25 )
-      PARAMETER (CNVS = 0.434294481D0 )
-      PARAMETER (ZERO = 0.0D0)
 
       COMMON/E/ ESACT,EOS(10)
 

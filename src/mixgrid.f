@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE MIXGRID(COD2,HD,HL,HP,HR,HS,HS1,HS2,
      *                   HSTOT,IBEG,IEND,LCZ,M,
      *                   ECOD2,EM,LDUM2)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL

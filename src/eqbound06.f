@@ -2,10 +2,10 @@ C LLP  10/16/06 SUBROUTINE TO CHECK IF POINT IS WITHIN
 C OPAL 2006 EOS TABLE.
 
       SUBROUTINE EQBOUND06(T,DL,DL0,FAC,LTAB,LRAMP)
+      use params, only : mx, mv, nr => nr06, nt => nt06
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,k,l
-      parameter (mx=5,mv=10,nr=169,nt=197)
       common/aeos06/  xz(mx,mv,nt,nr),  
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)

@@ -14,7 +14,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT INTEGER*4 (I-K,M)
       IMPLICIT LOGICAL*4(L)

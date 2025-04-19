@@ -66,6 +66,9 @@ if compiler in ["ifort", "ifx"]:
     MakeEnd = MakeEnd.replace("#	gfortran $(FFLAGS) -o $*.f ",
                               f"	{compiler} $(FFLAGS)  -g $*.f")
 
+for file in glob.glob("*.f90"):
+    os.system(f"{compiler} -c {file}")
+
 with open("Makefile", "w") as f:
     f.write(MakeBeg)
     files = sorted(glob.glob("*.f*"))
@@ -79,6 +82,6 @@ with open("Makefile", "w") as f:
     f.write(MakeEnd)
 
 os.system("make")
-if compiler in ["ifort", "ifx"]:
-    os.system("rm *.o")
+# if compiler in ["ifort", "ifx"]:
+os.system("rm *.o *.mod")
 os.system("rm Makefile")

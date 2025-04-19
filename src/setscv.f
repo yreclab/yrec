@@ -3,7 +3,7 @@ c     compute the new equation of state and compare to the old one...
 
       SUBROUTINE SETSCV
 
-      PARAMETER (NTS=63, NPS=76)
+      use params, only : nts, nps
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

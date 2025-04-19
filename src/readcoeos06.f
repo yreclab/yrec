@@ -5,10 +5,10 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine readcoeos06
+      use params, only : mx, mv, nr => nr06, nt => nt06
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
-      parameter (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
       LOGICAL*4 LOPALE, lopale01,lopale06,LNumDeriv

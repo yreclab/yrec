@@ -10,7 +10,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C OSPLIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE OSPLIN(XVAL,YVAL,XTAB,YTAB,N,K)
-      PARAMETER (JSON=5000)
+      use params, only : json
       REAL*8 XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON),
      *       M(JSON),EPS
       INTEGER N,K,ERR

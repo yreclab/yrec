@@ -1,7 +1,7 @@
 C$$$$$$
       SUBROUTINE MIXCZ(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,IFSTCL)
 
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/FLAG/LEXCOM

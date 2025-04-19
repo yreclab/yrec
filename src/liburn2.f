@@ -5,7 +5,7 @@ C LIBURN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
       SUBROUTINE LIBURN2(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

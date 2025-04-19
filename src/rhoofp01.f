@@ -5,8 +5,8 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       function rhoofp01(x,ztab,t6,p,irad)
+      use params, only : mx, mv, nr => nr01, nt => nt01
       
-      parameter (mx=5,mv=10,nr=169,nt=191)
       IMPLICIT REAL*8 (A-H,O-Z)
       
       common/lreadco/itime

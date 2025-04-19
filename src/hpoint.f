@@ -8,7 +8,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *LSHELL,JCORE,JENV,OMEGA,ETA2,R0,HI,HJM,HKEROT,SJTOT,SKEROT,
      * BL,DELTS,FP,FT,HG,QIW,SMASS,TEFFL)
 
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

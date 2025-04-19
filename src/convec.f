@@ -3,7 +3,7 @@ C CONVEC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CONVEC(HCOMP,HD,HP,HR,HS,HT,LC,M,MRZONE,MXZONE,MXZON0,
      *                  JCORE,JENV,NRZONE,NZONE,NZONE0)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,

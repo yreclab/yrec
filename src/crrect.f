@@ -15,7 +15,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *OMEGA,R0,ITDONE,HG,HI,HJM, ITLVL,LCZ,MRZONE,MXZONE,NRZONE,NZONE,
      *QIW,HKEROT,HKEROT0)
 
-      PARAMETER(JSON=5000)
+      use params, only : json
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
 C        ASSUMES GIVEN LOG(L/LSUN) AS BL
 C        DELTS = TIME STEP IN SECONDS

@@ -7,7 +7,7 @@ C $$$$$$
      *                  MRZONE,MXZONE,NRZONE,NZONE,
      *                  COD2,HV,LOK)
 C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

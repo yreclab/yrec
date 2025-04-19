@@ -4,7 +4,7 @@ C MHP 10/02 UNUSED LFIRST REMOVED FROM CALL
      *                SJTOT,SMASS,TEFFL,HICZ,HJM)
 C     *                SJTOT,SMASS,TEFFL,HICZ,HJM,LFIRST)
 
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HJM(JSON)

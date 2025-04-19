@@ -14,7 +14,7 @@ C Last two lines are MODEL2 add-ons
 
 C  Write output model in MODEL2 format
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

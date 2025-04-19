@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE CTRIDI(N)
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
       SAVE

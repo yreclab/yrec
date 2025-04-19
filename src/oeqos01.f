@@ -29,14 +29,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       SUBROUTINE OEQOS01(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
      1 BETA14,RMU,AMU,EMU,QDT,QDP,QCP,DELA,*)
+      use params, only : ivarx, cnvs, zero, mx, mv, nr => nr01, nt => nt01
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      
-      parameter (mx=5,mv=10,nr=169,nt=191)
-      PARAMETER ( IVARX = 25 )
-      PARAMETER (CNVS = 0.434294481D0 )
-      PARAMETER (ZERO = 0.0D0)
       
       DIMENSION ATOMWT(4)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,

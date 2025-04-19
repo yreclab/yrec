@@ -2,8 +2,8 @@ C
 C
 C***********************************************************************
       SUBROUTINE RADSUB (T6,DENSITY,MOLES,TMASS)
+      use params, only : mx, mv, nr => nreos, nt => nteos
       IMPLICIT REAL*8 (A-H,O-Z)
-      PARAMETER (MX=5,MV=10,NR=77,NT=56)
       REAL*8 MOLES,K,MOLENAK,NA
       COMMON/E/ ESACT,EOS(10)
       COMMON/B/ ZZ(MX),IRI(10),INDEX(10),NTA(NR)

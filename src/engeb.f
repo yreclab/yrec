@@ -137,7 +137,7 @@ C  FOR OTHER ARRAYS IN THE PROGRAM.
 C  IU IS THE SHELL NUMBER.
 
 
-      PARAMETER(JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)
 

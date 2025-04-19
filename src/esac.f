@@ -2,6 +2,7 @@
 
 C*************************************************************************
       SUBROUTINE ESAC (XH,ZTAB,T6,R,IORDER,IRAD,*)
+      use params, only : mx, mv, nr => nreos, nt => nteos
 
       IMPLICIT REAL*8 (A-H,O-Z)
 
@@ -56,7 +57,6 @@ C
 C
       SAVE
       REAL*8 MOLES
-      PARAMETER (MX=5,MV=10,NR=77,NT=56)
       CHARACTER BLANK*1
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/LREADCO/ITIME

@@ -5,7 +5,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MDOT(DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,HSTOT,
      *                HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *                EACC,ETHAV,SUMDM,SENVOLD)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,

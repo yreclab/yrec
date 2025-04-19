@@ -1,9 +1,9 @@
 C MHP 7/2003 SUBROUTINE TO CHECK IF POINT IS WITHIN
 C OPAL EOS TABLE.
       SUBROUTINE EQBOUND01(T,DL,DL0,FAC,LTAB,LRAMP)
+      use params, only : mx, mv, nr => nr01, nt => nt01
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      PARAMETER (MX=5,MV=10,NR=169,NT=191)
       common/aeos/  xz(mx,mv,nt,nr),  
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)

@@ -5,8 +5,8 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine radsub01 (t6,density,moles,tmass)
-      
-      parameter (mx=5,mv=10,nr=169,nt=191)
+      use params, only : mx, mv, nr => nr01, nt => nt01
+
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles,k,molenak,Na
       common/eeos/esact,eos(mv)

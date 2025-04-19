@@ -4,13 +4,7 @@ C SETUPS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETUPS(V)
 
-      PARAMETER (JSON=5000)
-C JNT 06/14 ADD NTC FOR KURUCZ/CASTELLI 2004 ATM
-      PARAMETER (NT=57,NG=11)
-      PARAMETER (NTC=76,NGC=11)
-      PARAMETER (NTS=63, NPS=76)
-C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE
-      PARAMETER(NTA=54,NGA=5)
+      use params, only : json, nt, ng, ntc, ngc, nts, nps, nta, nga
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL

@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE BURSMIX(COD2,DELTS,HCOMP,HD,HL,HP,HR,HS,HS1,HS2,HSTOT,
      *                   HT,HV,IMAX,IMIN,JENV0,JENV1,LOK,LCZ,M,MRZONE,
      *                   MXZONE,NRZONE,NZONE)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/FLAG/LEXCOM

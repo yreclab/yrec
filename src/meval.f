@@ -9,7 +9,7 @@ C                                   BY D.F.MCALLISTER & J.A.ROULIER
 C                                     CODED BY S.L.DOOD & M.ROULIER
 C                                       N.C. STATE UNIVERSITY
 C
-      PARAMETER (JSON=5000)
+      use params, only : json
       REAL*8 XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON),
      *     MTAB(JSON),V1,V2,W1,W2,Z1,Z2,Y1,Y2,E1,E2,SPLINE,EPS
       INTEGER START,START1,END,END1,ERR,FND

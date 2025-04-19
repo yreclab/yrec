@@ -6,14 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENVINT(B,FPL,FTL,GL,HSTOT,IE,LPRT,LSBC,PLIM,RL,TEFFL,
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT)
-
-      PARAMETER(JSON=5000)
-C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES OF KURUCZ.
-      PARAMETER(NT=57,NG=11)
-C JNT 06/14 ADDED NTC/NGC FOR KTTAU=5
-      PARAMETER(NTC=76,NGC=11)
-C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE TABLES
-      PARAMETER(NTA=54,NGA=5)
+      use params, only : json, nt, ng, ntc, ngc, nta, nga
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -5,10 +5,9 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine t6rinteos01(slr,slt)
+      use params, only : mx, mv, nr => nr01, nt => nt01
 
 c     The purpose of this subroutine is to interpolate in T6 and rho
-      
-      parameter (mx=5,mv=10,nr=169,nt=191)
       
       IMPLICIT REAL*8 (A-H,O-Z)
       

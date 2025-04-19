@@ -1,7 +1,7 @@
 C$$$$$$
       SUBROUTINE WTIME(DELTS,M,OMEGA,DELTSW,DWMAX)
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/CT2/DTWIND

@@ -9,7 +9,7 @@ C   llp  06/15/2009
       SUBROUTINE MASSLOSS(BL,DAGE,DELTS,HCOMP,HD,HJM,HP,HR,HS,
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HS(JSON),

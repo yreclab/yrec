@@ -47,8 +47,7 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT, 
      *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)   
-      PARAMETER (JSON=5000)
-	PARAMETER (NTS=63, NPS=76)
+	  use params, only : json, nts, nps
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 	REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)

@@ -1,10 +1,10 @@
 C
 C**********************************************************************
       SUBROUTINE READCO
+      use params, only : mx, mv, nr => nreos, nt => nteos
       IMPLICIT REAL*8 (A-H,O-Z)
 C..... THE PURPOSE OF THIS SUBROUTINE IS TO READ THE DATA TABLES
       SAVE
-      PARAMETER (MX=5,MV=10,NR=77,NT=56)
 C YCK >>>  2/95 OPAL EOS
       LOGICAL*4 LOPALE,lopale01,lopale06,LNumDeriv
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR

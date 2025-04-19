@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE EQUAL_TO_MODEL(DT,ER,EX,IBEGIN,IEND,NPT,HCOMP,HQPR,
      *                          HRU,HS1,HTU,M,STOT)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/CONFAC/CON_RAD,CON_MASS,CON_TEMP,CON_TIME

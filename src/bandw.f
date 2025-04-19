@@ -1,6 +1,7 @@
 C $$$$$$
       SUBROUTINE BANDW(A,NM,M1,M2,B)
-      PARAMETER (JSON=5000, NMAX=8000)
+      use params, only : json
+      PARAMETER (NMAX=8000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       INTEGER*4 M1,M2,NM

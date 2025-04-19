@@ -4,7 +4,7 @@ C $$$$$$
      *               EX,EY,EZ,ELI,EM_H,ER_H,EDEN_H,ETEM_H,EHQPR_H,EDELR_H,
      *               EX_H,EY_H,EZ_H,ELI_H)
 
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 3/94 ADDED METAL DIFFUSION.

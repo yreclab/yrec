@@ -8,7 +8,7 @@ C                                   BY D.F.MCALLISTER & J.A.ROULIER
 C                                     CODED BY S.L.DODD & M.ROULIER
 C                                       N.C. STATE UNIVERSITY
 C
-      PARAMETER (JSON=5000)
+      use params, only : json
       REAL*8 XTAB(JSON),S
       INTEGER FND,FIRST
 C

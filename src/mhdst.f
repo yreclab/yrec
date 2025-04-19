@@ -5,10 +5,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MHDST
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDST(IR1,IR2,IR3,IR4,IR5,IR6,IR7,IR8)                        
+      use params, only : ivarx, nchem0
       IMPLICIT REAL*8 (A-H,O-Z)                                                
       IMPLICIT LOGICAL*4(L)
 
-      PARAMETER( IVARC=20,IVARX=25,NCHEM0=6)                                   
+      PARAMETER( IVARC=20)                                   
       PARAMETER( NT1M=16,NT2M=79,NTXM=10,NR1M=87,NR2M=21,NRXM=21 )             
 C     ZAMS TABLES (LABELLED BY A,B,C)  
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH

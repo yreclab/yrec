@@ -22,7 +22,7 @@ c
 c  Update (Input and Output) Arguments: KSAHA
 c
 
-      PARAMETER (NTS=63, NPS=76)
+      use params, only : nts, nps
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR

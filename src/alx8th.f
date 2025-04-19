@@ -1,13 +1,9 @@
 
 C  SUBROUTINE FOR GENERATING SURFACE X TABLES FOR ALEXANDER OPACITIES
       SUBROUTINE ALX8TH(X)
+      use params, only : numx => numxalx, numz => numzalx, numt => numtalx, numd => numdalx, numxt => numxtalx
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      PARAMETER (NUMX=7)
-      PARAMETER (NUMZ=15)
-      PARAMETER (NUMT=23)
-      PARAMETER (NUMD=17)
-      PARAMETER (NUMXT=8)
 C     ALEX LOW T OPACITY
       COMMON /GALOT/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ)
       COMMON /ALOT/CAPALEX(NUMXT,NUMT,NUMD),XE,ZE,IX,IT,ID

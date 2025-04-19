@@ -3,7 +3,7 @@ C $$$$$$
      *                          IBEGIN,IEND,M,QCOD1X,QCOD2X,DR,
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
      *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT)
-      PARAMETER (JSON=5000)
+      use params, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 3/94 ADDED METAL DIFFUSION.

@@ -18,12 +18,14 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MHDPX
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDPX(PL,TL,XC,RL)
+      use params, only : nchem0
+
       IMPLICIT REAL*8 (A-H,O-Z)                                                
       IMPLICIT LOGICAL*4(L)
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
 C     S/R MHDSTX MUST BE CALLED IN MAIN.                                  
 C     CALLS VARIABLE-X VERSION
-      PARAMETER( IVARC=25,NCHEM0=6)                                            
+      PARAMETER( IVARC=25)                                            
       COMMON/MHDOUT/VARMHD(IVARC)                                              
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
