@@ -1,5 +1,5 @@
 #!/bin/bash
-./make.py
+# ./make.py
 cd ../examples/
 ./run_tests.sh
 cd ../src

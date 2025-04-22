@@ -9,6 +9,7 @@ C initialize all variables, set up common blocks
 C*******
 
       use params, only : json, numtt, numd, numx, numz, numxz
+      use parmin90, only : lmonte, imbeg, imend
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL - to save space make tables single precision
@@ -118,7 +119,7 @@ C DBG 12/94 added calibrate stellar model
 C MHP 7/96 common block added for sound speed
       COMMON/SOUND/GAM1(JSON),LSOUND
 C MHP 8/96 monte carlo option for snus added.
-      COMMON/MONTE/LMONTE,IMBEG,IMEND
+c      COMMON/MONTE/LMONTE,IMBEG,IMEND
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C MHP 6/14 DERIVATIVES ADDED TO COMMON BLOCK.  NOT USED FOR DERIVATIVES
 C IN THE MONTE CARLO.

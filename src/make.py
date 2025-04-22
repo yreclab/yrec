@@ -40,7 +40,7 @@ SRSFILES = $(FFILES)
 OBJFILES = $(FFILES:.f=.o)
 
 $(NAME):       $(SRSFILES)
-	gfortran $(FFLAGS) -o $(NAME) *.f 
+	gfortran $(FFLAGS) -o $(NAME) *.f90 *.f
 #	mv $(NAME) target
 #.f.o:
 #	gfortran $(FFLAGS) -o $*.f 
@@ -66,11 +66,6 @@ if compiler in ["ifort", "ifx"]:
     MakeEnd = MakeEnd.replace("#	gfortran $(FFLAGS) -o $*.f ",
                               f"	{compiler} $(FFLAGS)  -g $*.f")
 
-for ffiles in ["params.f90"]:
-    command = f"{compiler} -c {ffiles}"
-    print(command, flush=True)
-    os.system(command)
-
 with open("Makefile", "w") as f:
     f.write(MakeBeg)
     files = sorted(glob.glob("*.f*"))
@@ -84,7 +79,6 @@ with open("Makefile", "w") as f:
     f.write(MakeEnd)
 
 os.system("make")
-# if compiler in ["ifort", "ifx"]:
-os.system("rm *.o *.mod")
+os.system("rm *.mod")
 os.system("rm Makefile")
 print()

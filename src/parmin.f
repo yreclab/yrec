@@ -5,6 +5,7 @@ C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
       use params, only : nt, ng, ntc, ngc, nts, nps, json
+      use parmin90, only : lmonte, imbeg, imend
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -198,7 +199,7 @@ C 10/14 MHP NEW PARAMETERS - REPLACING DTDIF,DTWIND, HPTTOL & ATIME VECTORS
      * TOL_DM_MIN,TOL_DP_CORE_MAX,TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,
      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LNEWVARS
 C MHP 6/96 MONTE CARLO OPTION FOR SNUS ADDED.
-      COMMON/MONTE/LMONTE,IMBEG,IMEND
+c      COMMON/MONTE/LMONTE,IMBEG,IMEND
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
@@ -356,7 +357,7 @@ C G Somers 3/17 USE NEW OVERTURN TIMESCALE CALC?
 C
 C DBG DATA CARDS FOR THE RUN PARAMETERS
 C MHP DATA FOR MONTE CARLO OPTION, ETC
-      DATA LMONTE,IMBEG,IMEND/.FALSE.,1,1/
+c      DATA LMONTE,IMBEG,IMEND/.FALSE.,1,1/
 c Changed slightly 3He-3He on 9/25/97 to take account of the S'. 
 c  Previously (6/16/97) used S at Gamow Peak. Agrees with Workshop paper.
 c
