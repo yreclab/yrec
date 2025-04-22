@@ -25,7 +25,11 @@ C Amu_M and alogNe were incorrectly dimensoned Amu_M(mx,nr) and alogNe(mx,nr).
 C the required dimensions are Amu_M(nr,nt) alogNe(nr,nt), which is much larger.
 C Something was being overwritten.         llp 8/19/08
 C     x    amu_M(mx,nr),alogNe(mx,nr),rhogr(mx,nr),frac(mx,6),
-      common/eeeeos06/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
+c KC 2025-04-22 Downgraded this to arrays as it was only used in readcoeos06.f.
+c      common/eeeeos06/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
+c     x    amu_M(nr,nt),alogNe(nr,nt),rhogr(mx,nr),frac(mx,6),
+c     x    alogr(nr,nt)
+      dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    amu_M(nr,nt),alogNe(nr,nt),rhogr(mx,nr),frac(mx,6),
      x    alogr(nr,nt)
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR

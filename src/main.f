@@ -95,9 +95,9 @@ C DBG 4/26/94 Tired of not have access to current age of model so...
      *QIW(JSON),HG(JSON),V(12),HKEROTO(JSON)
 C     MHP 10/24 FLAG FOR END OF RUN
       LOGICAL*4 LEND_KIND
-C JVS 02/12
-	COMMON/STCH/HCOMPF(15,JSON),HRF(JSON),HPF(JSON),HDF(JSON),
-     * HSF(JSON),HTF(JSON)
+C JVS 02/12; KC 2025-04-22 Commented this out as it was not used.
+C	COMMON/STCH/HCOMPF(15,JSON),HRF(JSON),HPF(JSON),HDF(JSON),
+C     * HSF(JSON),HTF(JSON)
 
 C DBG PULSE OUT 7/92
 C variables used to contral output of pulsation models.  model
@@ -143,7 +143,9 @@ C interpolation factors for Z,X,T, and R, as well as derivative
 C factors for T and RHO.
       COMMON/OP95FACT/BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4)
 C MHP 05/02 ADDED FOR ITERATION BETWEEN ROTATION AND STRUCTURE CALCULATION
-      COMMON/ORIGSTART/HJM0(JSON),HCOMPP0(15,JSON)
+C      COMMON/ORIGSTART/HJM0(JSON),HCOMPP0(15,JSON)
+C KC 2025-04-22 Downgraded this to arrays as it was only used in main.f.
+      DIMENSION HJM0(JSON),HCOMPP0(15,JSON)
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C***MHP 1/04 inserted for test

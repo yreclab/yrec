@@ -10,7 +10,7 @@
 yrec="../src/yrec"
 if [ ! -f "$yrec" ]; then
   cd ../src
-  make
+  ./make.py
   cd ../examples
 fi
 

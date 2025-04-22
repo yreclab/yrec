@@ -66,8 +66,10 @@ if compiler in ["ifort", "ifx"]:
     MakeEnd = MakeEnd.replace("#	gfortran $(FFLAGS) -o $*.f ",
                               f"	{compiler} $(FFLAGS)  -g $*.f")
 
-for file in glob.glob("*.f90"):
-    os.system(f"{compiler} -c {file}")
+for ffiles in ["params.f90"]:
+    command = f"{compiler} -c {ffiles}"
+    print(command, flush=True)
+    os.system(command)
 
 with open("Makefile", "w") as f:
     f.write(MakeBeg)
@@ -85,3 +87,4 @@ os.system("make")
 # if compiler in ["ifort", "ifx"]:
 os.system("rm *.o *.mod")
 os.system("rm Makefile")
+print()

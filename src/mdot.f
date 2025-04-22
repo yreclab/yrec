@@ -22,7 +22,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
-      COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
+C KC 2025-04-22 Downgraded this to variables as it was only used in dadcoeft.f.
+C      COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
+C KC 2025-04-22 WARNING! The initialization line in parmin.f was commented out.
+      DATA LSOLWIND,DMSUN,DMWSUN,DMWMAX/.FALSE.,-2.0D-14,2.863E-6,9.054E-5/
       DIMENSION HCOMP(15,JSON),HS(JSON),HS1(JSON),HS2(JSON),
      *          HT(JSON),HJM(JSON),OMEGA(JSON),HR(JSON),
      *          HP(JSON),HD(JSON)

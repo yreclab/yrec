@@ -22,7 +22,10 @@ c..... The purpose of this subroutine is to read the data tables
       common/beos/ iri(10),index(10),nta(nr),zz(mx)
       common/eeos/esact,eos(mv)
       common/eeeos/ epl(mx,nt,nr),xx(mx)
-      common/eeeeos/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
+c KC 2025-04-22 Downgraded this to arrays as it was only used in readcoeos01.f.
+c      common/eeeeos/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
+c     x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
+      dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
