@@ -23,9 +23,9 @@ c  Update (Input and Output) Arguments: KSAHA
 c
 
       use params, only : nts, nps
+      
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV

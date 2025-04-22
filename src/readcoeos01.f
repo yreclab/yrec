@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine readcoeos01
       use params, only : mx, mv, nr => nr01, nt => nt01
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
 c..... The purpose of this subroutine is to read the data tables
       
@@ -27,7 +28,6 @@ c      common/eeeeos/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
 c     x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
       dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
      x     lopale06,LNumDeriv
 C mhp 7/2003

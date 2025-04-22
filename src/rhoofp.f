@@ -1,8 +1,8 @@
 C********************************************************************
       REAL*8 FUNCTION RHOOFP(X,ZTAB,T6,P,IRAD)
       use params, only : mx, mv, nr => nreos, nt => nteos
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/LREADCO/ITIME
       COMMON/A/  XZ(MX,MV,NT,NR),  
      .T6LIST(NR,NT),RHO(NR),T6A(NT),ESK(NT,NR),ESK2(NT,NR),DFSX(MX),

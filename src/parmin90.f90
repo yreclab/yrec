@@ -22,7 +22,6 @@ module parmin90
   public :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
 
   ! Variables from COMMON/MONTE/
-  ! MHP 8/96 monte carlo option for snus added.
   public :: lmonte, imbeg, imend
 
   ! Variables from COMMON/VNEWCB/
@@ -73,6 +72,8 @@ module parmin90
   character(len=256) :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
 
   ! Variables from COMMON/MONTE/
+  ! MHP 8/96 Monte Carlo option for snus added.
+  ! MHP data for Monte Carlo option, etc
   logical :: lmonte = .false.
   integer :: imbeg = 1, imend = 1
 

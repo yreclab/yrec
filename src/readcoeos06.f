@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine readcoeos06
       use params, only : mx, mv, nr => nr06, nt => nt06
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
@@ -32,7 +33,6 @@ c     x    alogr(nr,nt)
       dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    amu_M(nr,nt),alogNe(nr,nt),rhogr(mx,nr),frac(mx,6),
      x    alogr(nr,nt)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
      x     lopale06,LNumDeriv
 

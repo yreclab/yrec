@@ -48,6 +48,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT, 
      *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)   
 	  use params, only : json, nts, nps
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 	REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)
@@ -84,7 +86,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	common/eeos06/esact,eos(10)
 	COMMON /LLOT95/ZTAB
 	COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
-	COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50)

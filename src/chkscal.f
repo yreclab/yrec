@@ -4,6 +4,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C CHKSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CHKSCAL(BL, TEFFL, DAGE, NK)
+      use parmin90, only : ITRACK  ! COMMON/LUOUT/
+
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
       IMPLICIT REAL*8(A-H,O-Z)
@@ -22,7 +24,6 @@ C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
       COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR, 
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
      2      LSTAR, LTEFF, LPASSR,LCALST
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       SAVE
 C     LSTAR     T - have got a star at Teff and L
 C     LPASSR    T - on run have just passed Teff

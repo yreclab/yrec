@@ -2,12 +2,12 @@ C
 C**********************************************************************
       SUBROUTINE READCO
       use params, only : mx, mv, nr => nreos, nt => nteos
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
 C..... THE PURPOSE OF THIS SUBROUTINE IS TO READ THE DATA TABLES
       SAVE
 C YCK >>>  2/95 OPAL EOS
       LOGICAL*4 LOPALE,lopale01,lopale06,LNumDeriv
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       CHARACTER*256 FOPALE,fopale01,fopale06
       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
      x     lopale06,LNumDeriv

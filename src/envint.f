@@ -7,6 +7,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT)
       use params, only : json, nt, ng, ntc, ngc, nta, nga
+      use parmin90, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/    
+      use parmin90, only : IOPENV, IOPATM  ! COMMON/LUNUM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -16,10 +18,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * EDEL2(JSON)
       CHARACTER*256 FLAOL, FPUREZ, FATM, FALLARD
 
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
 C DBG CHANGED MAXSTEP FROM 200 TO 2000 TO GIVE ATMOSPHERE INTEGRATER A CHANCE.
       PARAMETER (MAXSTP = 2000,TINY=1.0D-30)
       EXTERNAL QATM,QENV

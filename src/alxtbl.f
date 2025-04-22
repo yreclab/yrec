@@ -18,7 +18,10 @@ C IF MODEL HAS NO DIFFUSION.  INTERPOLATION BETWEEN COMPOSITIONS IS
 C 4-POINT LAGRANGIAN.
 C
       SUBROUTINE ALXTBL
-      use params, only : numx => numxalx, numz => numzalx, numxz => numxzalx, numt => numtalx, numd => numdalx, numxt => numxtalx
+      use params, only : numx => numxalx, numz => numzalx, numxz => numxzalx,
+     +                   numt => numtalx, numd => numdalx, numxt => numxtalx
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 OPECALEX(NUMX)
@@ -31,8 +34,6 @@ C     ALEX LOW T OPACITY
       COMMON /GALOT/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ)
       COMMON /ALOT/CAPALEX(NUMXT,NUMT,NUMD),XE,ZE,IX,IT,ID
       COMMON /ALOTALL/CAPTALEX(NUMXZ,NUMT,NUMD)
-C MHP 10/02 ISHORT UNDECLARED
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
 C     LOCAL ARRAYS
       REAL*8 CAPTMP(NUMD)
       DATA XXG/0.0D0,0.1D0,0.2D0,0.35D0,0.5D0,0.7D0,0.8D0/

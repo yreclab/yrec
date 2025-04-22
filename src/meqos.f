@@ -12,12 +12,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      1 BETA14,FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
      2 QDTT,QDPT,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
       use params, only : ivarx, cnvs, zero
+      use parmin90, only : ISHORT, IOWR  ! COMMON/LUOUT/
 
 C     LATMO,KSAHA NEEDED FOR EQSAHA                              
       IMPLICIT REAL*8 (A-H,O-Z)                                                
       IMPLICIT LOGICAL*4(L)                                                    
- 
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+
       DIMENSION ATOMWT(4),FXION(3)                                       
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV        

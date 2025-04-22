@@ -8,28 +8,18 @@ C*******
 C initialize all variables, set up common blocks
 C*******
 
-      use params, only : json, numtt, numd, numx, numz, numxz
-      use parmin90, only : lmonte, imbeg, imend
+      use params, only : JSON, NUMTT, NUMD, NUMX, NUMZ, NUMXZ
+      use parmin90, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! COMMON/LUOUT/
+      use parmin90, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! COMMON/LUNUM/
+      use parmin90, only : FPMOD, FPENV, FPATM, FDYN  ! COMMON/LUFNM/
+      use parmin90, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL - to save space make tables single precision
       REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
       CHARACTER*256 FISO, FLAOL, FPUREZ
       CHARACTER*256 FLAOL2, FOPAL2
-      CHARACTER*256 FLAST, FFIRST, FRUN, FSTAND, FFERMI,
-     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
-     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
-     3    FLLDAT, FSNU, FSCOMP, FKUR, 
-     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
-      COMMON/LUFNM/ FLAST, FFIRST, FRUN, FSTAND, FFERMI,
-     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
-     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
-     3    FLLDAT, FSNU, FSCOMP, FKUR, 
-     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
 C DBGLAOL
       COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
@@ -118,8 +108,6 @@ C DBG 12/94 added calibrate stellar model
      2      LSTAR, LTEFF, LPASSR,LCALST
 C MHP 7/96 common block added for sound speed
       COMMON/SOUND/GAM1(JSON),LSOUND
-C MHP 8/96 monte carlo option for snus added.
-c      COMMON/MONTE/LMONTE,IMBEG,IMEND
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C MHP 6/14 DERIVATIVES ADDED TO COMMON BLOCK.  NOT USED FOR DERIVATIVES
 C IN THE MONTE CARLO.
@@ -194,7 +182,6 @@ C*******
 C START 
 C*******
 
-      IOWR = 9
 C LPUNCH is TRUE once first model is calculated
       LPUNCH=.FALSE.
 C read in user parameters

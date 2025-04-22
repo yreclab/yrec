@@ -3,6 +3,7 @@
 C*************************************************************************
       SUBROUTINE ESAC (XH,ZTAB,T6,R,IORDER,IRAD,*)
       use params, only : mx, mv, nr => nreos, nt => nteos
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
 
@@ -58,7 +59,6 @@ C
       SAVE
       REAL*8 MOLES
       CHARACTER BLANK*1
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/LREADCO/ITIME
       COMMON/EE/ EPL(MX,NT,NR),XX(MX)
       COMMON/AA/ Q(4),H(4),XXH

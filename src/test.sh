@@ -1,5 +1,6 @@
 #!/bin/bash
-# ./make.py
+rm yrec
+./make.py
 cd ../examples/
 ./run_tests.sh
 cd ../src

@@ -5,6 +5,7 @@ C MHDPX1
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDPX1(PL,TL,X)
       use params, only : ivarx
+      use parmin90, only : ISHORT, IOWR  ! COMMON/LUOUT/
 C
 C     MHDST MUST BE CALLED IN MAIN.                                            
 C     INTERPOLATION IN TABLES WITH DIFFERENT X AND FIXED Z                     
@@ -17,8 +18,7 @@ C                         BY THE TABLES
 C                                                                              
       IMPLICIT REAL*8 (A-H,O-Z)                                                
       IMPLICIT LOGICAL*4(L)
-      DIMENSION VAROUT(NDIMT,IVARX),XC(NDIMT)                                  
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+      DIMENSION VAROUT(NDIMT,IVARX),XC(NDIMT)
 
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/TTTT/TLIM1,TLIM2,TMINI,TMAXI                                      

@@ -19,6 +19,7 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 
 
 	SUBROUTINE ALTABINIT
+       use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
       PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -27,7 +28,6 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 	LOGICAL*4 LALTPTau100
       CHARACTER*256 FALLARD
 
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP 
      x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
      x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA

@@ -30,6 +30,7 @@ C created.
 
 
        SUBROUTINE ALFILEIN
+       use parmin90, only : ISHORT  ! COMMON/LUOUT/
 C
 C Parameters NTA and NGA are respectively the maximum expected numbers 
 C of Teff's and GL's we expect to encounter, even in future tables
@@ -45,7 +46,6 @@ C associated max number of GL's is nGL.
       CHARACTER*256 inrec2
 	DIMENSION TEFFs(NTA)
 	LOGICAL*4 LALTPTau100
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
 
       COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP 
      x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),

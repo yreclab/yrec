@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       function rhoofp01(x,ztab,t6,p,irad)
       use params, only : mx, mv, nr => nr01, nt => nt01
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
       
       IMPLICIT REAL*8 (A-H,O-Z)
       
@@ -15,7 +16,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/beos/ iri(10),index(10),nta(nr),zz(mx)
       common/eeos/esact,eos(mv)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       
       dimension nra(nt)
       data sigmacc/1.8914785e-3/

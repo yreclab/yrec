@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine t6rinteos06(slr,slt)
       use params, only : mx, mv, nr => nr06, nt => nt06
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
 c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in 
 c     T6 and rho
@@ -17,8 +18,7 @@ c     T6 and rho
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      common/eeos06/esact,eos(mv)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR    
+      common/eeos06/esact,eos(mv) 
 c
       save
       iu=0

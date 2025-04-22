@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       
       subroutine esac06 (xh,ztab,t6,r,iorder,irad,*)
       use params, only : mx, mv, nr => nr06, nt => nt06
+      use parmin90, only : ISHORT  ! COMMON/LUOUT/
 
 c..... The purpose of this subroutine is to interpolate 
 c      the equation of state and its derivatives in X, T6, density
@@ -193,7 +194,6 @@ c	variables obtained by interpolation.  These interplated values
 c	are for the specified x, t6 and density.
 c***************************************************************************
 
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
             dimension frac(7)
       data aprop/83.14511/
       data ID/"OPALEOS/ESAC06:"/
