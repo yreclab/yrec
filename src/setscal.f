@@ -6,6 +6,7 @@ C SETSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETSCAL
       use settings, only : ITRACK  ! COMMON/LUOUT/
+      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! COMMON/CKIND/
       use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
       use settings, only : C4PI  ! COMMON/CONST1/
       use settings, only : CSIG  ! COMMON/CONST2/
@@ -13,8 +14,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 FLAOL2, FOPAL2
-      COMMON /CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1        NUMRUN
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50)

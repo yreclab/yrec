@@ -6,6 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENTIME(DELTS,HL,HP,HR,HT,TEFFL,M,EDELT)
 
       use params, only : json
+      use settings, only : TRIDT, TRIDL  ! COMMON/CENV/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -13,7 +14,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
-      COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
       DIMENSION HT(JSON),HL(JSON),HP(JSON),HR(JSON)
       DIMENSION NHMAX(4),HMAX(4)
       SAVE

@@ -5,6 +5,7 @@ C CHKSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CHKSCAL(BL, TEFFL, DAGE, NK)
       use settings, only : ITRACK  ! COMMON/LUOUT/
+      use settings, only : RESCAL  ! COMMON/CKIND/
       use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
       use settings, only : C4PI  ! COMMON/CONST1/
       use settings, only : CSIG  ! COMMON/CONST2/
@@ -13,8 +14,6 @@ C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON /CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1        NUMRUN
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50)

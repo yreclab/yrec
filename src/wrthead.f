@@ -6,6 +6,7 @@ C write the headers for all the appropriate output files
 
       SUBROUTINE WRTHEAD (SMASS)
       use settings, only : ITRACK, IOWR  ! COMMON/LUOUT/
+      use settings, only : NMODLS, IRESCA, LFIRST  ! COMMON/CKIND/
       use settings, only : LTRACK  ! COMMON/CCOUT2/
       use settings, only : CMSUN, CMBOL  ! COMMON/CONST/
       use settings, only : CMIXL  ! COMMON/CONST3/
@@ -14,8 +15,6 @@ C write the headers for all the appropriate output files
       IMPLICIT LOGICAL*4(L)
 C MHP 10/02 added proper dimensions for flaol2, fopal2
       CHARACTER*256 FISO,FLAOL2, FOPAL2
-      COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1       NUMRUN
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *             IOLAOL2, IOOPAL2, NK,
      *             LZRAMP, FLAOL2, FOPAL2
