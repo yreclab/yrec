@@ -6,6 +6,7 @@ C write the headers for all the appropriate output files
 
       SUBROUTINE WRTHEAD (SMASS)
       use settings, only : ITRACK, IOWR  ! COMMON/LUOUT/
+      use settings, only : LTRACK  ! COMMON/CCOUT2/
       use settings, only : CMSUN, CMBOL  ! COMMON/CONST/
       use settings, only : CMIXL  ! COMMON/CONST3/
 
@@ -22,7 +23,6 @@ C MHP 10/02 added proper dimensions for flaol2, fopal2
       COMMON/LABEL/XENV0,ZENV0
 C COMMON/LUNUM/
       COMMON/CHRONE/LRWSH, LISO, IISO, FISO
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
 
       IF (IRESCA(NK) .EQ. 1) THEN

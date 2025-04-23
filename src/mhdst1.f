@@ -8,6 +8,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      .                  DRH1,DRH2,NCHEM,ATWT,ABUN,ABFRCS,GASMU,
      .                  TLOGD,TLOGU,TDDIF0,TDDIFD,TDDIFU,ATWD,ATWU,
      .                  ABUD,ABUU,ABFRCD,ABFRCU)
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
@@ -20,7 +21,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       DIMENSION TDDIFU(NT2M,NR2M,IVAR1)
       DIMENSION ATWD(NCHEM0),ABUD(NCHEM0),ABFRCD(NCHEM0)
       DIMENSION ATWU(NCHEM0),ABUU(NCHEM0),ABFRCU(NCHEM0)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
       IF(IDX.EQ.0) THEN
           IFILES = 1

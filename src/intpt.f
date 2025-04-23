@@ -6,12 +6,12 @@ C INTPT
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE INTPT(PL,TL,TDVAR,NTM,NRM,IVAR,TLOG,NT,NR,
      1                 VAR1,VAR2,Y,VAROUT)
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION TDVAR(NTM,NRM,IVAR),TLOG(NTM),VAR1(IVAR,4),
      1          VAR2(IVAR,4),VAROUT(IVAR),Y(IVAR)
       DIMENSION IRM(4),IR(4,4),IT(4),XX(4)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       INTEGER*4 L
       SAVE
       DO 100 N=1,NT

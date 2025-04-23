@@ -4,11 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C RABU
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RABU(IR,NCHEM0,NCHEM,ATWT,ABUN,ABFRCS,GASMU)
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
       DIMENSION ATWT(NCHEM0),ABUN(NCHEM0),ABFRCS(NCHEM0)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
 C     NCHEM,ATWT,ABUN,ABFRCS ARE OUTPUT
 C     READ(IR,99) NCHEM,(ATWT(IC),ABUN(IC),ABFRCS(IC),

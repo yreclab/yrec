@@ -17,6 +17,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use params, only : json
       use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : LCORR  ! COMMON/CCOUT2/
       use settings, only : CLN  ! COMMON/CONST1/
 
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
@@ -27,7 +28,6 @@ C OUTPUTS  LFINI = .T. IF MODEL HAS CONVERGED
 C          LARGE = .T. IF CORRECTIONS ARE TOO LARGE
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV

@@ -11,6 +11,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json
       use settings, only : IDEBUG, ISHORT  ! COMMON/LUOUT/
       use settings, only : NPOINT  ! COMMON/CCOUT1/
+      use settings, only : LDEBUG  ! COMMON/CCOUT2/
       use settings, only : CLN, CC23  ! COMMON/CONST1/
       use settings, only : CGL  ! COMMON/CONST2/
       use settings, only : CLNDP  ! COMMON/CONST3/
@@ -28,7 +29,6 @@ C MHP 10/02 ADDED MRZONE,MXZONE TO DIMENSION STATEMENTS
      * MRZONE(13,2),MXZONE(12,2)
       DIMENSION PS(3),RS(3),ESTORE(4)
       COMMON/BURN/HCOMPM(15,JSON)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT

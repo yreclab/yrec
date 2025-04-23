@@ -13,6 +13,7 @@ C*******
       use settings, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! COMMON/LUNUM/
       use settings, only : FPMOD, FPENV, FPATM, FDYN  ! COMMON/LUFNM/
       use settings, only : LSTORE  ! COMMON/CCOUT/
+      use settings, only : LSTPCH  ! COMMON/CCOUT2/
       use settings, only : CLSUN, CLSUNL, CLNSUN, CRSUN, CRSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -31,7 +32,6 @@ C DBGLAOL
      *   FLAOL, FPUREZ
       COMMON/TRACK/ITRVER
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
       COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
      1       NUMRUN

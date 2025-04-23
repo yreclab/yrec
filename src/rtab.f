@@ -5,12 +5,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C RTAB
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RTAB(IR,NTM,NRM,IVAR,NT,NR,TL,TDVAR)
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
 C     NT IS INPUT; NR,TL,TDVAR ARE OUTPUT
       DIMENSION TL(NTM),TDVAR(NTM,NRM,IVAR)
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
       DO 10 N = 1, NT
 C     READ(IR,1001) NRR,TL(N)

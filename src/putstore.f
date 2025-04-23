@@ -21,6 +21,8 @@ C     WRITE MODEL OUT IN ASCII FORMAT
       use params, only : json, nts, nps
       use settings, only : ISHORT, ISTOR  ! COMMON/LUOUT/
       use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT  ! COMMON/CCOUT/
+C KC 2025-04-23 LMILNE was not imported but was used in this source file.
+C      use settings, only : LMILNE  ! COMMON/CCOUT2/
       use settings, only : CLSUN  ! COMMON/CONST/
       use settings, only : CLN, CC13  ! COMMON/CONST1/
       use settings, only : CGL  ! COMMON/CONST2/
