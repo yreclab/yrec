@@ -21,14 +21,46 @@ module settings
   public :: flldat, fsnu, fscomp, fkur
   public :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
 
+  ! Variables from COMMON/IOMONTE/
+  public :: fmonte1, fmonte2, imonte1, imonte2
+
+  ! Variables from COMMON/CCOUT/, COMMON/CCOUT1/, and COMMON/CCOUT2/
+  public :: lstore, lstatm, lstenv, lstmod, lstphys, lstrot, lscrib
+  public :: npenv, nprtmod, nprtpt, npoint
+  public :: ldebug, lcorr, lmilne, ltrack, lstpch
+
+  ! Variables from COMMON/CENV/
+  public :: tridt, tridl, senv0, lsenv0, lnew0
+
+  ! Variables from COMMON/CKIND/
+  public :: rescal, nmodls, iresca, lfirst, numrun
+
+  ! Variables from COMMON/COMP/ and COMMON/COMP2/
+  public :: xenv, zenv, zenvm, amuenv, fxenv, xnew, znew, stotal, senv
+  public :: yenv, y3env
+
   ! Variables from COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/, and COMMON/CONST3/
   public :: clsun, clsunl, clnsun, cmsun, cmsunl, crsun, crsunl, cmbol
   public :: cln, clni, c4pi, c4pil, c4pi3l, cc13, cc23, cpi
   public :: cgas, ca3, ca3l, csig, csigl, cgl, cmkh, cmkhn
   public :: cdelrl, cmixl, cmixl2, cmixl3, clndp, csecyr
 
+  ! Variables from COMMON/CTLIM/, COMMON/CT2/, and COMMON/CT3/
+  public :: atime, tcut, tscut, tenv0, tenv1, tenv, tgcut
+  public :: dtwind
+  public :: lptime
+
+  ! Variables from COMMON/CTOL/
+  public :: htoler, fcorr0, fcorri, fcorr, hpttol
+  public :: niter1, niter2, niter3
+
+  ! Variables from COMMON/DIFUS/
+  public :: dtdif, djok, itdif1, itdif2
+
   ! Variables from COMMON/MONTE/
   public :: lmonte, imbeg, imend
+
+  !> ----------------------------------------------------------------------- <!
 
   ! Variables from COMMON/VNEWCB/
   ! DBG 1/96 The array v, read in via rdlaol, contained the mass fractions
@@ -77,6 +109,32 @@ module settings
   character(len=256) :: flldat, fsnu, fscomp, fkur
   character(len=256) :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
 
+  ! Variables from COMMON/IOMONTE/
+  character(len=256) :: fmonte1, fmonte2
+  integer, parameter :: imonte1 = 70, imonte2 = 71  ! MHP 6/98 Monte Carlo for snus
+
+  ! Variables from COMMON/CCOUT/, COMMON/CCOUT1/, and COMMON/CCOUT2/
+  ! envint.f: G Somers 11/14, add i/o common block
+  logical :: lstore = .false., lstatm, lstenv, lstmod, lstphys, lstrot, lscrib = .true.
+  integer :: npenv, nprtmod = 1, nprtpt = 1, npoint = 1
+  logical :: ldebug = .false., lcorr = .true., lmilne = .false., ltrack = .true., lstpch = .false.
+
+  ! Variables from COMMON/CENV/
+  real(dp) :: tridt = 1.0e-2_dp, tridl = 8.0e-2_dp, senv0
+  logical :: lsenv0, lnew0 = .false.
+
+  ! Variables from COMMON/CKIND/
+  real(dp) :: rescal(4, 50)
+  integer :: nmodls(50) = 0, iresca(50)
+  logical :: lfirst(50) = .true.
+  integer :: numrun = 1
+
+  ! Variables from COMMON/COMP/ and COMMON/COMP2/
+  ! getnewenv.f: senv is the difference in mass between the total and the last model
+  !              point.  It is set to a different value in this routine.
+  real(dp) :: xenv, zenv, zenvm, amuenv, fxenv(12), xnew, znew, stotal, senv
+  real(dp) :: yenv, y3env
+
   ! Variables from COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/, and COMMON/CONST3/
   ! getnewenv.f: Physical constants.
   real(dp) :: clsun = 3.8515e33_dp, clsunl, clnsun, cmsun, cmsunl, &
@@ -85,6 +143,35 @@ module settings
   real(dp) :: cgas, ca3, ca3l, csig, csigl, cgl, cmkh, cmkhn
   real(dp) :: cdelrl, cmixl = 1.4_dp, cmixl2, cmixl3, clndp, &
             & csecyr  ! engeb.f: seconds per year
+
+  ! Variables from COMMON/CTLIM/, COMMON/CT2/, and COMMON/CT3/
+  ! midmod.f: MHP 05/02 Added for deuterium burning (tcut)
+  ! mix.f: MHP Common block added for G.S. (tcut)
+  real(dp) :: atime(14) = [1.0e-3_dp, 2.0e-2_dp, 5.0e-1_dp, 2.0e-2_dp, 3.0e-1_dp, 1.5e-3_dp, &
+            & 1.0e-1_dp, 2.0e-2_dp, 4.0e-2_dp, 2.0e-2_dp, 2.0e-2_dp, 0.25_dp, 1.5_dp, 0.25_dp], &
+            & tcut(5) = [6.5_dp, 6.5_dp, 6.82_dp, 7.7_dp, 7.5_dp], &
+            & tscut = 6.0_dp, tenv0 = 3.0_dp, tenv1 = 9.0_dp, tenv, tgcut = 6.9_dp
+  real(dp) :: dtwind = 1.0e1_dp
+  ! main.f: LLP 8/07 Make LPTIME available for calibration
+  logical :: lptime = .true.
+
+  ! Variables from COMMON/CTOL/
+  ! starin.f: MHP 10/98 Added hpttol for changing core fitting point
+  ! getnewenv.f: hpttol used to set the spatial resolution of the envelope integration
+  real(dp) :: htoler(5, 2) = reshape([6.0e-5_dp, 4.5e-5_dp, 3.0e-5_dp, 9.0e-5_dp, 3.0e-5_dp, &
+            & 9.0e-1_dp, 5.0e-1_dp, 5.0e-1_dp, 2.0_dp, 2.5e-6_dp], [5, 2]), &
+            & fcorr0 = 0.8_dp, fcorri = 0.1_dp, fcorr, hpttol(12) = &
+            & [1.0e-8_dp, 8.0e-2_dp, 5.0e-2_dp, 5.0e-2_dp, 1.0_dp, 1.0_dp, &
+            &  0.0_dp, 5.0e-2_dp, 2.0e-2_dp, 5.0e-2_dp, 5.0e-2_dp, 1.0e-1_dp]
+  integer :: niter1 = 2, niter2 = 20, niter3 = 2
+
+  ! Variables from COMMON/DIFUS/
+  ! main.f: MHP 05/02 added option to iterate between rotation and
+  !         structure calculations - set itdif1 greater than 1
+  ! getnewenv.f: hpttol used to set the spatial resolution of the envelope integration
+  ! dadcoeft.f: convergence criterion
+  real(dp) :: dtdif = 1.0e-2_dp, djok = 1.0e-4_dp
+  integer :: itdif1 = 1, itdif2 = 1
 
   ! Variables from COMMON/MONTE/
   ! MHP 8/96 Monte Carlo option for snus added.
