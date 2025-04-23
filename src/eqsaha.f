@@ -6,9 +6,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE EQSAHA(FX,TL,T,PL,P,DL,D,BETA,BETAI,BETA14,FXION,RMU,
      *AMU,EMU,LDERIV,LATMO,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,
      *KSAHA)
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLN  ! COMMON/CONST1/
-      use parmin90, only : CGAS, CMKH  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CGAS, CMKH  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

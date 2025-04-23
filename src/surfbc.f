@@ -8,10 +8,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *       TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M)
 
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
-      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
+      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
 C INPUTS   LRESET = .T.  REDO ALL 3 ENVELOPES AND RETRIANGULATE IF NEED
 C BOTH LNEW AND LRESET ARE RESET TO .FALSE.
@@ -50,7 +50,7 @@ C MHP 9/01
             LNEW = .TRUE.
 C MHP 06/13 Remember that flag is switched
             LTTAU = .TRUE.
-         ENDIF            
+         ENDIF
       ENDIF
       IF(KTTAU. EQ. 4) THEN
          IF(TEFFL.GE. AL_TEFFLmax) THEN
@@ -63,7 +63,7 @@ C MHP 06/13 Remember that flag is switched
             LNEW = .TRUE.
 C MHP 06/13 Remember that flag is switched
             LTTAU = .TRUE.
-         ENDIF            
+         ENDIF
       ENDIF
       IF(LTTAU)THEN
          IF(KTTAU0.EQ.3.AND.TEFFL.LT.3.95D0)THEN
@@ -143,12 +143,12 @@ C	    IF(LPENV) THEN
 C	       WRITE(ISHORT,30) I,TRIT(I),TRIL(I)
 C 30            FORMAT(/,' NEW ENVELOPE NO.',I2,' LOG(TE) =',F9.5,
 C     *              '  LOG(L) =',F8.5)
-C	    ENDIF        
+C	    ENDIF
 C G Somers END
 	    IXX=I
 	    LSBC0 = .TRUE.
 C DBG PULSE: DO NOT DO PULSE OUTPUT
-            LPULPT = .FALSE. 
+            LPULPT = .FALSE.
 C G Somers 10/14, FOR SPOTTED RUNS, FIND THE
 C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
 	    IF(LC(M).AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN

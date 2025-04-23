@@ -7,12 +7,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *HL,HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
      * DAGE)
       use params, only : json
-      use parmin90, only : IOPMOD  ! COMMON/LUNUM/
-      use parmin90, only : IMODPT  ! COMMON/LUOUT/
-      use parmin90, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
-      use parmin90, only : CGAS, CSIGL, CGL  ! COMMON/CONST2/
-      use parmin90, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : IOPMOD  ! COMMON/LUNUM/
+      use settings, only : IMODPT  ! COMMON/LUOUT/
+      use settings, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
+      use settings, only : CGAS, CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -66,7 +66,7 @@ C G Somers END
          print*,'wrtmod LSOUND 1: ',LSOUND
 
       IF(LSOUND)THEN
-         
+
          print*,'wrtmod LSOUND 2: ',LSOUND
 
 CFD 10/09 Add an extra output to plot the sound speed profile easyly

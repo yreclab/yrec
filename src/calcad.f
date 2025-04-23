@@ -1,11 +1,11 @@
 C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-C CALCAD: links together and integrates sound speed profiles, for acoustic 
+C CALCAD: links together and integrates sound speed profiles, for acoustic
 C depth to convection zone, acoustic depth of atmosphere
 C INPUTS:
-C	HR: array of radii for the interiors solution 
+C	HR: array of radii for the interiors solution
 C	RCZ: physical radius of the convection zone (logged), calculated in wrtout
-C	M: last interior point	
+C	M: last interior point
 C	HD: interior's density
 C	HP: interior pressure
 C	HT: interior temperature
@@ -24,7 +24,7 @@ C
 C
 C
 C OUTPUTS:
-C 	Adjusts the values in the common block for acoustic depth: 
+C 	Adjusts the values in the common block for acoustic depth:
 C		TAUCZN = acoustic depth to CZ / sound travel time from surface-center
 C		TCZ = acoustic depth to CZ (seconds)
 C		TNORM = sound travel time from surface to center (seconds)
@@ -35,23 +35,23 @@ C
 C
 C
 C COMMON BLOCKED THINGS:
-C	
+C
 C        LCLCD = Logical flag for output of CALCAD files at AGEOUT ages
 C        AGEOUT(5) = Ages for which you want output. Hard coded in parmin
-C        IACAT = 
+C        IACAT =
 C        IJLAST = Again, for output
 C        LJLAST = Again, for output
 C        LJWRT = ouput on/off toggle
-C        LADON = toggle on calcad imposed 4d interpolation in opacity	
+C        LADON = toggle on calcad imposed 4d interpolation in opacity
 C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT, 
-     *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)   
+      SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT,
+     *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)
 	  use params, only : json, nts, nps
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLSUNL, CRSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
-      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
+      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -59,8 +59,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
 	REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
 	REAL*8 ABEG0,AMIN0,AMAX0,EBEG0,EMIN0,EMAX0
-	REAL*8 STARR(JSON),START(JSON),STARD(JSON),STARX(JSON),STARP(JSON), 
-     *	 STARZ(JSON),STARC(JSON),TNORM,TCZ,TAUCZN,STARCZ(JSON),STARRZ(JSON)	
+	REAL*8 STARR(JSON),START(JSON),STARD(JSON),STARX(JSON),STARP(JSON),
+     *	 STARZ(JSON),STARC(JSON),TNORM,TCZ,TAUCZN,STARCZ(JSON),STARRZ(JSON)
 	REAL*8 ATMOSX, ATMOST(JSON),ATMOSD(JSON),ATMOSP(JSON),ADELAD(JSON),ATMOSC(JSON),
      *	 ATGAM1(JSON), ATMOSR(JSON),GM1(JSON)
 	INTEGER I, K, N, U, ICZ, NN, IENDJ, FLG, V, IATCNT, KTSAV
@@ -72,7 +72,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
      *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT			
+     *IJENT, IJDEL, LACOUT
 	COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
@@ -114,14 +114,14 @@ C Initialize values:
 	ATMOSX=0.0D0
 	TATMOS = 0.0D0
 C	KTSAV = 3
-	
-C Need to calculate the sound speed in the envelope: first, stitch 
-C envelope and interior together (so that T, P, R all agree at fitting 
-C point. Then calculate sound speed in the envelope and interior 
+
+C Need to calculate the sound speed in the envelope: first, stitch
+C envelope and interior together (so that T, P, R all agree at fitting
+C point. Then calculate sound speed in the envelope and interior
 C and integrate.
 
 C First, do the envelope integration to make sure the values in ENVSTRUCT
-C are up-to-date (this section of code grabbed from wrtmod). First, integrate the atm and store values with grey atm	
+C are up-to-date (this section of code grabbed from wrtmod). First, integrate the atm and store values with grey atm
 	ABEG0 = ATMBEG
 	AMIN0 = ATMMIN
 	AMAX0 = ATMMAX
@@ -135,9 +135,9 @@ C are up-to-date (this section of code grabbed from wrtmod). First, integrate th
 	ENVMIN = ENVSTP
 	ENVMAX = ENVSTP
 	IDUMJ = 0
-	BJ = DEXP(CLN*BL)	
+	BJ = DEXP(CLN*BL)
 	FPLJ(1) = FP(M)
-	FTLJ(1) = FT(M)	
+	FTLJ(1) = FT(M)
 	KATMJ = 0
 	KENVJ = 0
 	KSAHAJ = 0
@@ -148,9 +148,9 @@ C are up-to-date (this section of code grabbed from wrtmod). First, integrate th
 	XJ = HCOMP(1,M)
 	ZJ = HCOMP(3,M)
 	RLJ = 0.5D0*(BL + CLSUNL - 4.0D0*TEFFL - C4PIL - CSIGL)
-	GLJ = CGL + STOTAL - RLJ - RLJ	
+	GLJ = CGL + STOTAL - RLJ - RLJ
 	PLIMJ = HP(M)
-c	IF (KTTAU .EQ. 0) LAOLY = .TRUE. 
+c	IF (KTTAU .EQ. 0) LAOLY = .TRUE.
 c	IF (KTTAU .EQ. 3) LAOLY = .FALSE.	! for grey atm intergration: stores values in common block
 C	G Somers 10/14, FOR SPOTTED RUNS, FIND THE PRESSURE AT
 C	THE AMBIENT TEMPERATURE ATEFFL
@@ -161,7 +161,7 @@ C	THE AMBIENT TEMPERATURE ATEFFL
 	ENDIF
 	CALL ENVINT(BJ,FPLJ,FTLJ,GLJ,HSTOT,IXXJ,LPRTJ,LSBC0J,
      *         PLIMJ,RLJ,ATEFFL,XJ,ZJ,DUM1,IDUMJ,KATMJ,KENVJ,KSAHAJ,
-     *         DUM2,DUM3,DUM4,LPULPTJ)	
+     *         DUM2,DUM3,DUM4,LPULPTJ)
 C	G Somers END
 
 
@@ -177,7 +177,7 @@ C Stitch interior and envelope together, convert into ESAC06 units
 34	CONTINUE
 	DO 35, I=1,NUMENV-1
 		STARR(M+I)=DEXP(CLN*ENVR(I+1))
-		START(M+I)=DEXP(CLN*ENVT(I+1))/1.0D6	
+		START(M+I)=DEXP(CLN*ENVT(I+1))/1.0D6
 		STARD(M+I)=DEXP(CLN*ENVD(I+1))
 		STARP(M+I)=DEXP(CLN*ENVP(I+1))
 		STARX(M+I)=HCOMP(1,M)
@@ -185,7 +185,7 @@ C Stitch interior and envelope together, convert into ESAC06 units
 35	CONTINUE
 
 
-C Call EOS interpolator: Takes OPAL2006 EOS if possible. If OPAL06 is off, uses SCV 
+C Call EOS interpolator: Takes OPAL2006 EOS if possible. If OPAL06 is off, uses SCV
 C For OPAL 2006 EOS:
 	IF (LOPALE06) THEN
 		IORDER=9
@@ -202,7 +202,7 @@ C For OPAL 2006 EOS:
 36		CONTINUE
 	ENDIF
 C For SCV EOS: (when OPAL06 is turned off, SCV on for backup, Yale if SCV is off)
-	IF ( .NOT. LOPALE06) THEN 
+	IF ( .NOT. LOPALE06) THEN
 		DO 41, I=1,M+NUMENV-1
 			STX=STARX(I)
 			STT=START(I)*1.0D6
@@ -245,17 +245,17 @@ C Integrate for the full acoustic depth for normalization
 	IF (K.LE.3) THEN
 		K=4
 		NN=1+1
-	ENDIF		
+	ENDIF
 
-	CALL BOOLE(STARR,STARC,K,NN,TNORM) 
+	CALL BOOLE(STARR,STARC,K,NN,TNORM)
 
-	
- 
+
+
 
 C Find the location of the CZ, but only if one exists
 	IF (JENV.LT.M) THEN
-		RCZ=DEXP(CLN*(RCZL+CRSUNL))	
-	
+		RCZ=DEXP(CLN*(RCZL+CRSUNL))
+
 
 C	get the location of the convection zone, and count nonzero entries:
 			IENDJ=0
@@ -282,7 +282,7 @@ C			Interpolate to find Cs at the exact CZ radius
 					IF (ICZ .EQ. 1) THEN
 						RCZ(1) = STARR(ICZ)
 						ANS(1) = STARC(ICZ)
-					ELSE 
+					ELSE
 						DO 66 P=1,7
 							HOOD1(P)=STARR(ICZ-2+P)
 							HOOD2(P)=STARC(ICZ-2+P)
@@ -307,7 +307,7 @@ C Then call Boole from surface to cz:
 		ELSE
 			NN=K-ICZ+1+1
 		ENDIF
-		CALL BOOLE(STARRZ,STARCZ,V,NN,TCZ) 
+		CALL BOOLE(STARRZ,STARCZ,V,NN,TCZ)
 	ELSE
 		TCZ = 0.0d0
 	ENDIF
@@ -362,7 +362,7 @@ c	ELSE
 c		NN=V+1
 c	ENDIF
 c
-c	CALL BOOLE(ATMOSR,ATMOSC,V,NN,TATMOS) 
+c	CALL BOOLE(ATMOSR,ATMOSC,V,NN,TATMOS)
 
 C Output normalized acoustic depth
 	TAUCZN=0.0D0
@@ -372,7 +372,7 @@ C Output acoustic depth info to ISHORT
 	WRITE(ISHORT,67)TCZ,TNORM,TAUCZN,TATMOS
 67       FORMAT(1X,'Acoustic depth to CZ:',F14.8,2X,'Acoustic depth to center',
      *F13.7,2X,'Normalized taucz:',F11.9, 'Acoustic depth of atmopshere:',F16.8,2X)
- 
+
 555		CONTINUE
 C--------------------------------------------------------------
 C Save all vectors of interest when the end of a kind card is reached.
@@ -393,16 +393,16 @@ C Save all vectors of interest when the end of a kind card is reached.
 				WRITE(UNIT=ICLCD,FMT=1504),DAGE, STARR(I), STARC(I),
      *                     0.0d0, 0.0d0, DELADJ(I), GM1(I), STARP(I),
      *			   START(I),STARD(I),STARX(I)
-			
+
 				ENDIF
-			
-	
+
+
 1505			CONTINUE
 1504			FORMAT(1X,11E16.8)
 c			DO 1520 I=1,IATCNT
 c				WRITE(UNIT=IACAT,FMT=1521),DAGE, ATMOSR(I), ATMOSC(I),
 c    *                     DELADJ(I), ATGAM1(I), ATMOSP(I), ATMOST(I), ATMOSX
-c	
+c
 c1520			CONTINUE
 c1521			FORMAT(1X,8E16.8)
 
@@ -463,4 +463,4 @@ c444	CONTINUE
 
 
 
-	
+

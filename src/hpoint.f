@@ -9,10 +9,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * BL,DELTS,FP,FT,HG,QIW,SMASS,TEFFL)
 
       use params, only : json
-      use parmin90, only : IDEBUG, ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLN, CC23  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
-      use parmin90, only : CLNDP  ! COMMON/CONST3/
+      use settings, only : IDEBUG, ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLN, CC23  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLNDP  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -346,7 +346,7 @@ C
          END DO
          MNEW = MNEW + NPT
          JPREV = MNEW
-C 
+C
       END DO
 
 
@@ -402,7 +402,7 @@ C
       END DO
       MNEW = MM
 C
- 102  CONTINUE 
+ 102  CONTINUE
 C TEST FOR ASSIGNING POINTS BASED ON THE GRADIENT IN Z.
       DO J = 1,M
          XTAB(J) = HS(J)
@@ -777,7 +777,7 @@ C OF THE ANGULAR VELOCITY DISTRIBUTION
 C  CALCULATE NEW SURFACE OPACITY TABLE IF NEEDED.
       IF(DABS(XNEW-HCOMP(1,M)).GT.1.0D-8) THEN
 	         XNEW = HCOMP(1,M)
-	         ZNEW = HCOMP(3,M)		
+	         ZNEW = HCOMP(3,M)
 	         CALL SURFOPAC(XNEW)
 
       END IF

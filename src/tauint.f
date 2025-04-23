@@ -1,9 +1,9 @@
 C$$$$$$
       SUBROUTINE TAUINT(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
       use params, only : json
-      use parmin90, only : CMSUN  ! COMMON/CONST/
-      use parmin90, only : CLN  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
+      use settings, only : CMSUN  ! COMMON/CONST/
+      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -20,19 +20,19 @@ C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       DIMENSION HCOMP(15,JSON),HS2(JSON),LCZ(JSON),
      *     XSUM(15), HR(JSON), HP(JSON), HD(JSON), HG(JSON), HS1(JSON),
-     *     DEL1(JSON), DEL2(JSON), SVEL(JSON)  
+     *     DEL1(JSON), DEL2(JSON), SVEL(JSON)
       SAVE
 
 
-C JVS 02/12 CALCULATE THE LOCAL CONVECTIVE OVERTURN TIMESCALE AT THE BASE 
-C OF THE CZ. IN OLDER VERSIONS THIS WAS ONLY DONE FOR ROTATING MODELS; 
+C JVS 02/12 CALCULATE THE LOCAL CONVECTIVE OVERTURN TIMESCALE AT THE BASE
+C OF THE CZ. IN OLDER VERSIONS THIS WAS ONLY DONE FOR ROTATING MODELS;
 C THIS MAKES IT SO TAUCZ IS CALCULATED FOR ALL MODELS.
 C THIS CODE SNAGGED FROM MIDMOD
 C  DETERMINE EXTENT OF SURFACE CONVECTION ZONE.
       LALLCZ = .FALSE.
-C JVS Allows the last point to be stable. 
+C JVS Allows the last point to be stable.
       IF(LCZ(M) .OR. LCZ(M-1))THEN
-C  SURFACE C.Z. EXISTS.  FIND LOWEST SHELL (IMAX), WHICH IS ALSO THE 
+C  SURFACE C.Z. EXISTS.  FIND LOWEST SHELL (IMAX), WHICH IS ALSO THE
 C  UPPERMOST ZONE CONSIDERED FOR STABILITY AGAINST ROTATIONALLY INDUCED MIXING.
          DO 71 I = M-1,1,-1
             IF(.NOT.LCZ(I)) GOTO 81
@@ -85,7 +85,7 @@ C FIND V
                   GOTO 85
                ENDIF
             END DO
-		! One pressure scale height overshoots edge of interior 
+		! One pressure scale height overshoots edge of interior
 		! calculation. Stitch on the envelope for more room
 		DO K = 2,NUMENV
                IF(ENVR(K).GT.RTESTL .AND. EVELS(K) .GT. 0.0)THEN
@@ -144,12 +144,12 @@ C DEFINE TAUCZ
       ENDIF
 
 C--------------------------------------------------------------
-C			OPEN(UNIT=100,FILE='diagnostic.out',STATUS='OLD')			
+C			OPEN(UNIT=100,FILE='diagnostic.out',STATUS='OLD')
 C			DO 1505 I=1,M
-C			IF (LCZ(I)) HOLD = 1.0 
-C			IF (.NOT.LCZ(I)) HOLD = 0.0 
-C					WRITE(100,1504), HS2(I), HS1(I), HR(I),HOLD, 
-C     *			DEL1(I), DEL2(I), SVEL(I), 
+C			IF (LCZ(I)) HOLD = 1.0
+C			IF (.NOT.LCZ(I)) HOLD = 0.0
+C					WRITE(100,1504), HS2(I), HS1(I), HR(I),HOLD,
+C     *			DEL1(I), DEL2(I), SVEL(I),
 C1505			CONTINUE
 C1504			FORMAT(1X,7E16.8)
 C			CLOSE(100)

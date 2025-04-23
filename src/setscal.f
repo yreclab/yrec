@@ -5,10 +5,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SETSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETSCAL
-      use parmin90, only : ITRACK  ! COMMON/LUOUT/
-      use parmin90, only : CLSUN, CRSUN  ! COMMON/CONST/
-      use parmin90, only : C4PI  ! COMMON/CONST1/
-      use parmin90, only : CSIG  ! COMMON/CONST2/
+      use settings, only : ITRACK  ! COMMON/LUOUT/
+      use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
+      use settings, only : C4PI  ! COMMON/CONST1/
+      use settings, only : CSIG  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -21,10 +21,10 @@ C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
       COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
      1 SENV0A(50)
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50), 
+      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *             IOLAOL2, IOOPAL2, NK,
      *             LZRAMP, FLAOL2, FOPAL2
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR, 
+      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
      2      LSTAR, LTEFF, LPASSR,LCALST
       SAVE
@@ -89,7 +89,7 @@ C     THE NEXT SERIES OF 24 CALIBRATING RUNS.
          SETDT(I) = SETDT(2)
          LSETDT(I) = LSETDT(2)
       END DO
-      WRITE(*,*) ' Evolve to R*, L* = ', SR, XLS 
-      WRITE(ITRACK,*) '#Evolve to R*, L* = ', SR, XLS 
+      WRITE(*,*) ' Evolve to R*, L* = ', SR, XLS
+      WRITE(ITRACK,*) '#Evolve to R*, L* = ', SR, XLS
       RETURN
       END

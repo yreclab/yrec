@@ -13,8 +13,8 @@ C  CONVERGED MODEL) AND STORE MODELS D(EVERY NPUNCH MODELS)
 
 C     WRITE MODEL OUT IN ASCII FORMAT
       use params, only : json, nts, nps
-      use parmin90, only : ILAST, ISHORT, IOWR  ! COMMON/LUOUT/
-      use parmin90, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : ILAST, ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -30,10 +30,10 @@ C     WRITE MODEL OUT IN ASCII FORMAT
      * HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      * CFENV(9),TLUMX(8),OMEGA(JSON)
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
-C      input to output model - starting with a code for th initial model 
+C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX     
-      
+      COMMON /I2O/ COMPMIX
+
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
       COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
@@ -50,8 +50,8 @@ C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C OPACITY COMMON BLOCKS - modified 3/09
       COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,  
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z 
+     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
+     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
       COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *   FLAOL, FPUREZ
@@ -60,8 +60,8 @@ C OPACITY COMMON BLOCKS - modified 3/09
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
      *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
-      
-      
+
+
       SAVE
 
 C physics flags:
@@ -127,7 +127,7 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
 
-      
+
       WRITE(IOWR,360) MODEL,M,TEFFL,BL,DAGE
   360 FORMAT(I6,'  #SHELLS=', I4, '  LogTeff=',F8.5,
      *       '  Log(L/Lsun)=',F8.5,'  Age=',F12.5)

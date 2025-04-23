@@ -2,13 +2,13 @@
 C***********************************************************************
       SUBROUTINE T6RINTERP(SLR,SLT)
       use params, only : mx, mv, nr => nreos, nt => nteos
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
 C     THE PURPOSE OF THIS SUBROUTINE IS TO INTERPOLATE IN T6 AND RHO
-      SAVE  
+      SAVE
       COMMON/EE/ EPL(MX,NT,NR),XX(MX)
       COMMON/AA/ Q(4),H(4),XXH
-      COMMON/A/  XZ(MX,MV,NT,NR),  
+      COMMON/A/  XZ(MX,MV,NT,NR),
      .T6LIST(NR,NT),RHO(NR),T6A(NT),ESK(NT,NR),ESK2(NT,NR),DFSX(MX),
      . DFS(NT),DFSR(NR),XA(MX),M,MF
       COMMON/BB/L1,L2,L3,L4,K1,K2,K3,K4,IP,IQ
@@ -46,7 +46,7 @@ C.....    EOS(I) SMOOTHED IN LEFT 3X4
           ESACT=ESACT*DIX+ESACT2*(1.D0-DIX)
         ENDIF
         IF(IQ .EQ. 3) THEN
- 
+
 C.....     EOS(I) IN UPPER-RIGHT 3X3.
           ESACTQ2=QUAD(IS,IW,SLT,Q(2),Q(3),Q(4),T6A(K2),T6A(K3),T6A(K4))
           ESACTQ=ESACTQ*DIX+ESACTQ2*(1.D0-DIX)
@@ -61,7 +61,7 @@ C.....        EOS(I) SMOOTHED IN BOTH LOG(T6) AND LOG(R)
         ENDIF
         IF (ESACT .GT. 1.D+15) THEN
           WRITE(ISHORT,'("INTERPOLATION INDICES OUT OF RANGE",
-     X              ";PLEASE REPORT CONDITIONS.")') 
+     X              ";PLEASE REPORT CONDITIONS.")')
           STOP
         ENDIF
 

@@ -1,13 +1,13 @@
 C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-C WRTHEAD 
+C WRTHEAD
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C write the headers for all the appropriate output files
 
       SUBROUTINE WRTHEAD (SMASS)
-      use parmin90, only : ITRACK, IOWR  ! COMMON/LUOUT/
-      use parmin90, only : CMSUN, CMBOL  ! COMMON/CONST/
-      use parmin90, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : ITRACK, IOWR  ! COMMON/LUOUT/
+      use settings, only : CMSUN, CMBOL  ! COMMON/CONST/
+      use settings, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -40,8 +40,8 @@ C COMMON/LUNUM/
      *       ' Z=',F8.6,' CMIXL=', F8.6, ' NO.MODS=', I5)
 
       IF (LISO) THEN
-C header stuff for isochrone output 
-         GMMASS = SMASS*CMSUN           
+C header stuff for isochrone output
+         GMMASS = SMASS*CMSUN
          WRITE(IISO, 1495) GMMASS,
      *        XENV0,ZENV0,CMIXL,CMBOL
  1495    FORMAT(7X, 1P5E16.8)
@@ -53,8 +53,8 @@ C the track out file then change this version number.
          WRITE(ITRACK, 1500)ITRVER,SMASS,XENV0,ZENV0,CMIXL
  1500    FORMAT('#Version=',i3,'  Mtot/Msun =',1PE16.8,
      *        '  Initial: X =',1PE16.8,' Z =',1PE16.8,
-     *        '  Mix. length =', 1PE16.8)  
-         IF(ITRVER .EQ. 0) THEN      
+     *        '  Mix. length =', 1PE16.8)
+         IF(ITRVER .EQ. 0) THEN
 c            WRITE(ITRACK, 1503)
 c 1503       FORMAT(
 c     1'# Model #, shells, AGE(Gyr), log(L/Lsun), log(R/Rsun), log(g),',
@@ -91,7 +91,7 @@ C block if desired.
      2'ac_top       Rfrac_base      Rfrac_midp      Rfrac_top         P_phot           Mass     ',/,
      2'# ')
 C G Somers END.
-         ELSE IF(ITRVER .EQ. 1) THEN      
+         ELSE IF(ITRVER .EQ. 1) THEN
             WRITE(ITRACK, 1505)
  1505       FORMAT(
      1'# Model #, shells, AGE, log(L/Lsun), log(R/Rsun), log(g),',
@@ -118,7 +118,7 @@ C G Somers END.
  1515       FORMAT(
      1'#Model #, shells, AGE, log(L/Lsun), log(R/Rsun), log(g),',
      1' log(Teff), Mconv. core, Mconv. env., % Grav Energy, X env')
-         END IF 
+         END IF
       END IF
 
       RETURN

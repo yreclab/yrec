@@ -12,23 +12,23 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      1 BETA14,FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
      2 QDTT,QDPT,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
       use params, only : ivarx, cnvs, zero
-      use parmin90, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
 
-C     LATMO,KSAHA NEEDED FOR EQSAHA                              
-      IMPLICIT REAL*8 (A-H,O-Z)                                                
-      IMPLICIT LOGICAL*4(L)                                                    
+C     LATMO,KSAHA NEEDED FOR EQSAHA
+      IMPLICIT REAL*8 (A-H,O-Z)
+      IMPLICIT LOGICAL*4(L)
 
-      DIMENSION ATOMWT(4),FXION(3)                                       
+      DIMENSION ATOMWT(4),FXION(3)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV        
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT                   
+     *     SENV
+      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
-      COMMON/MHDOUT/VARMHD(IVARX)                                              
-      DATA NZP1/12/                                                            
-      DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/                       
+      COMMON/MHDOUT/VARMHD(IVARX)
+      DATA NZP1/12/
+      DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
       SAVE
 
-      IER     = 0                     
+      IER     = 0
       T=10.0D0**T10
       P=10.0D0**P10
       CALL MHDPX(P10,T10,XC,R10)
@@ -65,7 +65,7 @@ C     LATMO,KSAHA NEEDED FOR EQSAHA
 	  WRITE(ISHORT,*) 'ERROR (MHD): CHECK MU'
           STOP
       ENDIF
-      RETURN  
+      RETURN
   999 CONTINUE
       WRITE(ISHORT,*) 'ERROR(MHD):... MHD TABLE FAIL'
       STOP

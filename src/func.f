@@ -4,8 +4,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE FUNC(X,G,S,R0,HS,AINT,Q,W2,A,I)
 
       use params, only : json
-      use parmin90, only : CLN, C4PI, CC13  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLN, C4PI, CC13  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

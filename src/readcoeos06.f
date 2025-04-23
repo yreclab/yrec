@@ -1,12 +1,12 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     READCOEOS06
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine readcoeos06
       use params, only : mx, mv, nr => nr06, nt => nt06
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
@@ -16,7 +16,7 @@ c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
       CHARACTER*256 FOPALE,fopale01,fopale06
       character*1 blank
       common/aaeos06/ q(4),h(4),xxh
-      common/aeos06/  xz(mx,mv,nt,nr),  
+      common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
@@ -42,7 +42,7 @@ c     x    alogr(nr,nt)
 
         if (itimeco .ne. 12345678) then
         do i=1,mx
-          do j=1,mv 
+          do j=1,mv
             do k=1,nt
               do l=1,nr
                 xz(i,j,k,l)=1.D+35
@@ -55,12 +55,12 @@ c     x    alogr(nr,nt)
 	enddo
         itimeco=12345678
         endif
- 
+
       close (2)
 c..... read  tables
        open(IOPALE, FILE=FOPALE06,STATUS='OLD')
- 
- 
+
+
       do 3 m=1,mx
       read (IOPALE,'(3x,f6.4,3x,f12.9,11x,f10.7,17x,f10.7)')
      x  xin(m),zz(m),moles(m),tmass(m)
@@ -87,7 +87,7 @@ c..... read  tables
          read (IOPALE,'(a)') blank
          go to 4
       endif
-      read (IOPALE,'(f11.6,1x,f6.4,e11.4,2e13.6,2e11.3,5f10.6)') 
+      read (IOPALE,'(f11.6,1x,f6.4,e11.4,2e13.6,2e11.3,5f10.6)')
      x t6list(jcs,i),amu_M(jcs,i),alogNe(jcs,j),
      x (xz(m,index(iv),i,jcs),iv=1,9)
     4 continue
@@ -98,7 +98,7 @@ c..... read  tables
     2 continue
       read(IOPALE,'(a)') blank
     3 continue
- 
+
       do i=1,nt
          if(t6list(1,i) .eq. 0D0) then
             write(ISHORT,'("READCOEOS06: Error:",i4,

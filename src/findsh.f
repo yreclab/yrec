@@ -59,7 +59,7 @@ C  IF CENTRAL X BELOW THRESHOLD THEN CALCULATE H SHELL VALUES
 	 XLEND = DLMIN*HL(M)
 C  FIND BEGINNING(JXBEG), MIDDLE(JXMID) AND END(JXEND) OF H SHELL
 	 DO 10 I = 1,M
-c	    IF(HCOMP(1,I).LE.1.0D-10) THEN  ! Changed after discussion with Marc 
+c	    IF(HCOMP(1,I).LE.1.0D-10) THEN  ! Changed after discussion with Marc
 	    IF(HCOMP(1,I).LE.ATIME(1)) THEN ! to force consistency with above LLP 9/24/08
 	       JXBEG = JXBEG+1
 	       JXMID = JXMID+1

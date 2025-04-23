@@ -57,14 +57,14 @@ C UNITS ARE b
       DATA QS0E_1_13_A98,QS0E_1_14_A98,QS0E_1_16_A98,QS0E_1_BE7P_A98/
      *     -7.8D-3,-1.28D-2,-2.4D-2,-1.33D-5/
 C REFERENCE SECOND DERIVATIVES OF CROSS SECTIONS (ADELBERGER ET AL. 1998)
-      DATA QQS0EE_1_12_A98,QQS0EE_1_13_A98,QQS0EE_1_16_A98, 
+      DATA QQS0EE_1_12_A98,QQS0EE_1_13_A98,QQS0EE_1_16_A98,
      *     QQS0EE_1_BE7P_A98/
      *     8.3D-5,7.3D-4,5.7D-5,7.22D-8/
-C The code explicitly treats non-equilibrium C12,C13,N14,O16.  
+C The code explicitly treats non-equilibrium C12,C13,N14,O16.
 C N15 burning is assumed to immediately follow N14+p, with the
 C branching ratio between C12+Alpha and O16+Gamma calculated using
 C the relative S0 for the two.  To change the branching ratio, change
-C S0_1_15_C12ALP and S0_1_15_O16.  O17 proton capture is assumed to 
+C S0_1_15_C12ALP and S0_1_15_O16.  O17 proton capture is assumed to
 C immediately follow O16 proton capture, producing N14.
 C He-burning reactions triple-alpha,C12+He4,C13+He4,N14+He4 are tracked
 C in the code, using the Caughlin&Fowler(1988) cross-sections.  As resonances
@@ -167,24 +167,24 @@ C         QQS0EE(3) = (S0PP_3_4/S0_3_4)/(QQS0EE_3_4_A98/S0_3_4_A98) ZEROED OUT I
             QQS0EE(4) = (S0PP_1_12/S0_1_12)/(QQS0EE_1_12_A98/S0_1_1_A98)
          ELSE
             QQS0EE(4)=0.0D0
-         ENDIF   
+         ENDIF
          IF(S0_1_13.GT.0.0D0)THEN
             QQS0EE(5) = (S0PP_1_13/S0_1_13)/(QQS0EE_1_13_A98/S0_1_1_A98)
          ELSE
             QQS0EE(5)=0.0D0
-         ENDIF   
+         ENDIF
 C         QQS0EE(6) = (S0PP_1_14/S0_1_14)/(QQS0EE_1_14_A98/S0_1_14_A98) ZEROED OUT IN 2003 VERSION
          IF(S0_1_16.GT.0.0D0)THEN
             QQS0EE(7) = (S0PP_1_16/S0_1_16)/(QQS0EE_1_16_A98/S0_1_1_A98)
          ELSE
             QQS0EE(7)=0.0D0
-         ENDIF   
+         ENDIF
          IF(S0_1_BE7P.GT.0.0D0)THEN
             QQS0EE(8)=(S0PP_1_BE7P/S0_1_BE7P)/
      *             (QQS0EE_1_BE7P_A98/S0_1_BE7P_A98)
          ELSE
             QQS0EE(8)=0.0D0
-         ENDIF   
+         ENDIF
       ENDIF
 C OPTION TO OVERWRITE SPATIAL AND TEMPORAL TOLERANCES WITH MORE INTUITIVE VARIABLE NAMES.
 C NOTE: THIS OVERWRITES THE HPTTOL AND ATIME VECTORS.

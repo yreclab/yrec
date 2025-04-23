@@ -99,7 +99,7 @@ C INTERPOLATION FACTORS FOR X
          QR(4) = XXG06(IX+3)
       ENDIF
       X = XE
-      CALL INTRP2(QR,FX,X)      
+      CALL INTRP2(QR,FX,X)
 C      WRITE(*,*)XE,(QR(I),I=1,4)
       DO I = 1,NUMT
          DO J = 1,NUMD

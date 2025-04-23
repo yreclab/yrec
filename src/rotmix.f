@@ -3,13 +3,13 @@ C 2) SOLVE FOR BURNING IN EACH CONVECTION ZONE.
 
       SUBROUTINE ROTMIX(DELTS,HCOMP,HS2,HT,ITLVL,M,MRZONE,MXZONE,
      *                  NRZONE,NZONE
-     *                  ,HSTOT,HD,HS,HR,HP,LC,HS1) 
+     *                  ,HSTOT,HD,HS,HR,HP,LC,HS1)
 
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLN  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
-      use parmin90, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -136,7 +136,7 @@ C
          IF(JMAX.GE.2) THEN
 C  FM IS THE MASS FRACTION ABOVE THE OUTER POINT.
             FM = (STOT-HS1(JMAX))/STOT
-C  TSCALE IS THE TIMESCALE FOR SETTLING OF HELIUM AT THE OUTER 
+C  TSCALE IS THE TIMESCALE FOR SETTLING OF HELIUM AT THE OUTER
 C  BOUNDARY (MICHAUD ET AL 1984, APJ V.282,P.206)
             TSCALE = 4.348D21*CSECYR*FM/EXP(CLN*1.5D0*HT(JMAX))
 C  RESTRICT TIMESTEP TO THE MINIMUM OF THE MODEL TIMESTEP AND

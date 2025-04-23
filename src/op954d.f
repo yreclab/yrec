@@ -37,14 +37,14 @@ C FOR EACH X, GET CAPPA FOR 4 VALUES OF T
 C FOR EACH T, GET CAPPA FOR 4 VALUES OF R
                ID = JD(I)
 C LOG CAPPA AT DESIRED RHO FOR EACH OF THE 4 DESIRED T.
-               C(I) = BD(I,1)*CAPPA2(IXZ,IT,ID) + 
+               C(I) = BD(I,1)*CAPPA2(IXZ,IT,ID) +
      *                BD(I,2)*CAPPA2(IXZ,IT,ID+1)
-     *               + BD(I,3)*CAPPA2(IXZ,IT,ID+2) 
+     *               + BD(I,3)*CAPPA2(IXZ,IT,ID+2)
      *              + BD(I,4)*CAPPA2(IXZ,IT,ID+3)
 C D LOG CAPPA/D LOG R FOR EACH OF THE 4 DESIRED T.
-               QC(I) = BDD(I,1)*CAPPA2(IXZ,IT,ID) 
+               QC(I) = BDD(I,1)*CAPPA2(IXZ,IT,ID)
      *               + BDD(I,2)*CAPPA2(IXZ,IT,ID+1)
-     *                + BDD(I,3)*CAPPA2(IXZ,IT,ID+2) 
+     *                + BDD(I,3)*CAPPA2(IXZ,IT,ID+2)
      *               + BDD(I,4)*CAPPA2(IXZ,IT,ID+3)
             END DO
 C CHECK ON WHETHER RHO IS OUTSIDE OF THE TABLE AND NEEDS EXTRAPOLATION
@@ -64,33 +64,33 @@ C CORRECT CAPPA BY USING THE DERIVATIVE AT THE BOUNDARY.
                END DO
             ENDIF
 C INTERPOLATE FOR LOG CAPPA IN T.
-            CC(J) = BT(1)*C(1) + BT(2)*C(2) + BT(3)*C(3) 
+            CC(J) = BT(1)*C(1) + BT(2)*C(2) + BT(3)*C(3)
      *            + BT(4)*C(4)
 C D LOG CAPPA/D LOG T
-            CCT(J) = BTT(1)*C(1) + BTT(2)*C(2) + BTT(3)*C(3) 
+            CCT(J) = BTT(1)*C(1) + BTT(2)*C(2) + BTT(3)*C(3)
      *             + BTT(4)*C(4)
 C D LOG CAPPA/D LOG R
-            CCD(J) = BT(1)*QC(1) + BT(2)*QC(2) + BT(3)*QC(3) 
+            CCD(J) = BT(1)*QC(1) + BT(2)*QC(2) + BT(3)*QC(3)
      *             + BT(4)*QC(4)
          END DO
 C INTERPOLATE FOR LOG CAPPA IN X.
-         CZ(K) = BX(K,1)*CC(1) + BX(K,2)*CC(2) + BX(K,3)*CC(3) + 
+         CZ(K) = BX(K,1)*CC(1) + BX(K,2)*CC(2) + BX(K,3)*CC(3) +
      *           BX(K,4)*CC(4)
 C INTERPOLATE FOR QOT IN X.
-         CZT(K) = BX(K,1)*CCT(1) + BX(K,2)*CCT(2) + BX(K,3)*CCT(3) + 
+         CZT(K) = BX(K,1)*CCT(1) + BX(K,2)*CCT(2) + BX(K,3)*CCT(3) +
      *            BX(K,4)*CCT(4)
 C INTERPOLATE FOR QOD IN X.
-         CZD(K) = BX(K,1)*CCD(1) + BX(K,2)*CCD(2) + BX(K,3)*CCD(3) + 
+         CZD(K) = BX(K,1)*CCD(1) + BX(K,2)*CCD(2) + BX(K,3)*CCD(3) +
      *            BX(K,4)*CCD(4)
       END DO
 C INTERPOLATE FOR LOG CAPPA IN Z.
-      OL = BZ(1)*CZ(1) + BZ(2)*CZ(2) + BZ(3)*CZ(3) + 
+      OL = BZ(1)*CZ(1) + BZ(2)*CZ(2) + BZ(3)*CZ(3) +
      *     BZ(4)*CZ(4)
 C INTERPOLATE FOR QOT IN Z.
-      QOT = BZ(1)*CZT(1) + BZ(2)*CZT(2) + BZ(3)*CZT(3) + 
+      QOT = BZ(1)*CZT(1) + BZ(2)*CZT(2) + BZ(3)*CZT(3) +
      *     BZ(4)*CZT(4)
 C INTERPOLATE FOR QOD IN Z.
-      QOD = BZ(1)*CZD(1) + BZ(2)*CZD(2) + BZ(3)*CZD(3) + 
+      QOD = BZ(1)*CZD(1) + BZ(2)*CZD(2) + BZ(3)*CZD(3) +
      *     BZ(4)*CZD(4)
 C CORRECT FROM DERIVATE AT FIXED R TO DERIVATIVE AT FIXED RHO.
       QOT = QOT - 3.0D0*QOD

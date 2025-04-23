@@ -3,8 +3,8 @@ C $$$$$$
      *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X)
 
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLN, CC13  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -144,7 +144,7 @@ C     D2 = R**2/LN LAMBDA * T**5/2 * (X+3)/(X+1)/(3+5X)
 C MHP 10/02 INITIALIZED X - WAS NOT DONE PRIOR TO USAGE IN SHELL 1
          IF(ILAMBDA.EQ.2)THEN
 C           Noerdlinger's formula (1977 A&A 57,407) for LN LAMBDA:
-C           Ln Lambda = -19.7 - ln[4/(3*X + 1)]/2 - ln(rho)/2 + 1.5*ln(T) 
+C           Ln Lambda = -19.7 - ln[4/(3*X + 1)]/2 - ln(rho)/2 + 1.5*ln(T)
             LN_LAMBDA=-1.97D1 - 0.5D0*LOG(1.0D0/(0.75D0*X+0.25D0))
      *                -0.5D0*HD(I)*CLN + 1.5D0*HT(I)*CLN
          ELSE IF(ILAMBDA.EQ.3)THEN
@@ -167,7 +167,7 @@ C         X = HCOMP(1,I)
             COD1(I)=FAC*HQPR(I)*(X - X2 - XZ)*(1.25D0+
      *           SDEL(2,I)*6.0D0*(X+0.32D0)/FAC2)
             COD2(I)=FAC*(X+3.0D0)/(5.0D0*X2 + 8.0D0*X + 3.0D0)
-            QCOD1X(I)=FAC*HQPR(I)*( (1.0D0-2.0D0*X-Z)*(1.25D0+ 
+            QCOD1X(I)=FAC*HQPR(I)*( (1.0D0-2.0D0*X-Z)*(1.25D0+
      *      (6.0D0*SDEL(2,I)*(X+0.32D0))/FAC2)+(X-X2-XZ)*6.0D0*
      *          SDEL(2,I)*(3.384D0+2.88D0*X+4.5D0*X2)/FAC2**2 )
             QCOD2X(I)=-FAC*(5.0D0*X2 + 3.0D1*X + 2.1D1)/
@@ -193,14 +193,14 @@ c                 calculate density of electrons (NE) from mass density (RHO):
                   AC=0.D0
                   DO II=1,NSPEC
 	             AC=AC+ATOMWT(II)*C(II)
-                  ENDDO	
-                  NE=RHO/(1.6726D-24*AC)	
-c                 calculate interionic distance (AO): 
+                  ENDDO
+                  NE=RHO/(1.6726D-24*AC)
+c                 calculate interionic distance (AO):
                   NI=0.D0
                   DO II=1,NSPEC-1
                      NI=NI+C(II)*NE
                   ENDDO
-                  AO=(0.23873D0/NI)**CC13	
+                  AO=(0.23873D0/NI)**CC13
 c                 calculate Debye length (LAMBDAD):
                   CZ=0.D0
                   DO II=1,NSPEC
@@ -237,7 +237,7 @@ c                 calculate Coulomb logarithms:
             QACX = -1.42D0 + 1.294D0*X
 CFD 10/09 Mimic Mixing to reduce settling.
 C            COD1(I) = FAC*HQPR(I)*X*(AP+AT)
-            COD1(I) = CSTMIXING*FAC*HQPR(I)*X*(AP+AT) 
+            COD1(I) = CSTMIXING*FAC*HQPR(I)*X*(AP+AT)
             COD2(I) = CSTMIXING*FAC*AC
             QCOD1X(I) = FAC*HQPR(I)*(AP+AT+X*(QAPX+QATX))
             QCOD2X(I) = FAC*QACX
@@ -270,7 +270,7 @@ C old ver.     QCOD1Z(I) = FAC*HQPR(I)*(AP+AT)
             ENDIF
          ENDIF
 C
-C If using Noerdlinger's formula for LN LAMBDA, have a new term 
+C If using Noerdlinger's formula for LN LAMBDA, have a new term
 C in D(D1)/DX
          IF(ILAMBDA.EQ.2)  THEN
            QCOD1X(I)=QCOD1X(I) + COD1(I)*1.5D0/

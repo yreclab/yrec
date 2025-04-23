@@ -5,7 +5,7 @@ C GETMODEL2 - Read a Model2 format stellar model file into memory
 C
 C llp  4/16/03
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       SUBROUTINE GETMODEL2(BL,CFENV,CMIXL,DAGE,DDAGE,FTRI,HCOMP,HD,HL,
      * HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
@@ -15,7 +15,7 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
       use params, only : json
-      use parmin90, only : CLSUN  ! COMMON/CONST/
+      use settings, only : CLSUN  ! COMMON/CONST/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -28,11 +28,11 @@ C Last two lines are MODEL2 add-ons
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      &     HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      &     CFENV(9),TLUMX(8),OMEGA(JSON)
-     
+
       save
 
       REWIND(IREAD)
-      
+
 C get the header record
       READ(IREAD,10) ATEMP,MODEL,M,SMASS,TEFFL,BL,HSTOT,DAGE,
      *   DDAGE,HS(1),HS(M)
@@ -46,13 +46,13 @@ C is stored in the model (rotating or not?, extendec compotition, etc.)
    30 FORMAT(2I8,F16.10,1X,A6,1X,3(A4,1X),L1,1X,A4,1X,11(L1,1X),
      &     3(1PE18.10))
 
-C Get the  LUMINOSITIES---PP(1-2-3)-CNO-HE-NU-GRAV 
+C Get the  LUMINOSITIES---PP(1-2-3)-CNO-HE-NU-GRAV
 C CONVERT TO SOLAR LUMINOSITIES
       READ(IREAD,40) (TLUMX(J),J=1,7)
 c   40 FORMAT('TLUMX',5X,1P7E17.9)
    40 FORMAT(12X,1P7E17.9)
 
-C If TLUMX are in ergs, convert to solar units.  Decide by 
+C If TLUMX are in ergs, convert to solar units.  Decide by
 C comparing to 10**20.  IF larger, divide by CLSUN.
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
      *     DABS(TLUMX(6)),TLUMX(7))
@@ -63,7 +63,7 @@ C comparing to 10**20.  IF larger, divide by CLSUN.
       ENDIF
 
 C Get the ENVELOPE DATA
-C FTRI is 1,normally.  It is set to -1  if any of the record numbers 
+C FTRI is 1,normally.  It is set to -1  if any of the record numbers
 C for the envelope triangle records was set to -1 by WRTLST.
       FTRI = 1D0
       DO I = 1,3

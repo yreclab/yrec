@@ -15,19 +15,19 @@ C  MHP 10/97
 C
 c   On 10/13/97, JNB converted the nuclear masses from neutral nuclear
 c   masses to bare nuclear masses by subtracting Z(I)*(m_e)*c^2 from
-c   the neutral nuclear masses. This caused changes in a number of 
+c   the neutral nuclear masses. This caused changes in a number of
 c   places: in ANUC(I), in Q1(I)-Q7(I), in the calculation of the Be7electron
 c   Be7proton rates, and in the calculation of the N15p branching ratio.
 c
-c   JNB made some purely cosmetic changes on 1/20/96. Revised all of the 
-c   input Q's on 9/23-25/97 to agree with submitted version of Solar 
-c   Fusion Workshop paper. The SStandard are fixed to agree with 
+c   JNB made some purely cosmetic changes on 1/20/96. Revised all of the
+c   input Q's on 9/23-25/97 to agree with submitted version of Solar
+c   Fusion Workshop paper. The SStandard are fixed to agree with
 c   the Workshop paper. JNB recalculated all of the EG(I) to determine
-c   the best values for the energy generation for all the reactions, 
+c   the best values for the energy generation for all the reactions,
 c   taking account of my improved calculations of neutrino energy loss.
 c   The calculations are documented in Vol. 19, 132-141, 1997 of my notes.
-c   The neutral atom mass differences are taken from Table of Isotopes, 
-c   8th Ed, 1996 and the neutrino energy losses from Bahcall, Gallium 
+c   The neutral atom mass differences are taken from Table of Isotopes,
+c   8th Ed, 1996 and the neutrino energy losses from Bahcall, Gallium
 c   solar neutrino experiments, Phys Rev C, in press, 1997.
 c
 C ALL NUMBERS IN THIS SUBROUTINE HAVE BEEN CHECKED AND REVISED, WHERE
@@ -58,7 +58,7 @@ C ************************************
 C  THE VALUE OF J DENOTES WHICH OF THE REACTIONS THE COEFFICIENTS
 C  REFER TO:
 C  J = 1, PP; J = 2, HE3+HE3; J = 3, HE3+ HE4; J =4, P + C12;  J = 5, P+C13;
-C  J = 6. P + N14; J = 7, P + O16 ; J = 8, HE4+C13; J = 10, HE4+C12; 
+C  J = 6. P + N14; J = 7, P + O16 ; J = 8, HE4+C13; J = 10, HE4+C12;
 C  J = 11, HE4 + N14; J = 12, TRIPLE ALPHA.
 C  REACTION 14 IS PEP; REACTION 15 IS BE7 ELECTRON CAPTURE; REACTION 16 IS
 C   BE7 PROTON CAPTURE; REACTION 17 IS THE HEP REACTION.
@@ -79,7 +79,7 @@ C  FOR OTHER ARRAYS IN THE PROGRAM.
 C IU IS THE SHELL NUMBER.
 
       use params, only : json
-      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : CLN, CC13  ! COMMON/CONST1/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)
@@ -99,7 +99,7 @@ C MHP 6/14 DERIVATIVES ADDED
 C ***************************
 C ANUC ARE ATOMIC MASS UNITS.
 C ***************************
-c  On 10/13/97, JNB converted ANUC(I) from neutral atomic masses to 
+c  On 10/13/97, JNB converted ANUC(I) from neutral atomic masses to
 c  bare nuclear masses.
 c
 c  The scale is the mass of C12 divided by 12 or 931.49432 MeV,
@@ -202,7 +202,7 @@ C     5Q6/-3.3804,-12.2757,-12.826,-13.6899,-13.7173,-15.2281,-16.6925/,
 C     6Q7/20.8964,76.6003,67.8036,69.130,70.3809,69.8517,70.8012/,
 C     7Q8/0.,0.,0.,0.0,0.0,0.0,0./,
 C     8NRXNS/13/
-C MHP 9/14 RESTORED BE7+P DERIVATIVES THAT WERE ZEROED OUT 
+C MHP 9/14 RESTORED BE7+P DERIVATIVES THAT WERE ZEROED OUT
       DATA Q1/0.12317,.03392,.0325,.0304,.03035,.0273,.02494,.040572/,
      1Q2/1.08749,-.273,-.2085,.7630,-0.4044,-1.60,-1.224,-0.2095/,
      2Q3/.93833,-.0648,-.0474,.1626,-.08598,-.3064,-.2139,-0.0595/,
@@ -245,7 +245,7 @@ C  WERE NOT CHECKED.
 C DEFINE NEXT THE FRACTIONAL ABUNDANCES BY MASS OF THE IMPORTANT
 C  ISOTOPES.
 C X, Y, Z, XHE3,..., XBE9 ARE THE MASS FRACTIONS OF THE ISOTOPES.
-C  THE ABUNDANCES OF NEUTRONS, H2, H3, NE20,AND MG24, WHICH ARE, 
+C  THE ABUNDANCES OF NEUTRONS, H2, H3, NE20,AND MG24, WHICH ARE,
 C  RESPECTIVELY, XFRAC(I) FOR I = 1,3,4,12,13, ARE NO LONGER USED.
       XFRAC(1) = 0.0
       XFRAC(2) = X
@@ -479,9 +479,9 @@ C 1-F1 IS THE FRACTION OF THE BE7 THAT IS BURNED BY PROTON CAPTURE.
 C F3 IS THE FRACTION OF THE N14 THAT IS BURNED BY P, ALPHA REACTION.
 C 1-F3 IS THE FRACTION OF THE N15 THAT IS BURNED BY P, GAMMA REACTION.
 C SEE TABLE 21 OF BAHCALL AND ULRICH (1988), REV. MOD. PHYS. 60.
-c 10/13/97. I changed Temp3 (i.e., tau) by 5/10^5 as a result of 
+c 10/13/97. I changed Temp3 (i.e., tau) by 5/10^5 as a result of
 c using bare nuclear masses. Previously coefficient was -10.26202.
-c I did not change Be7electron for the slightly different S0 for 
+c I did not change Be7electron for the slightly different S0 for
 c electron capture, since that is done in SStandard. Previous coefficient
 c in Be7electron expression was (3.126571E+5). 10/14/97.
 c
@@ -556,7 +556,7 @@ C FOR N15+P -> C12+ALPHA AND O16+GAMMA
 C
       C12ALPHA = T9M23 + 0.0273016*T9M13 + 2.01186 + 0.384763*T9P13
      $          + 17.0579*T9P23 + 8.29580*T9
-C      C12ALPHA = C12ALPHA*67500.         
+C      C12ALPHA = C12ALPHA*67500.
       C12ALPHA = C12ALPHA*67500*FC12
       F3 = C12ALPHA/(C12ALPHA + O16GAMMA)
       F4 = 1.0D0 - F3
@@ -565,7 +565,7 @@ C END OF NEW ROUTINE FOR THE BRANCHING OF N15 + P .
          RATE(I)=0.
    60 CONTINUE
 C***MHP 3/91 ALPHA CAPTURE REACTIONS UPDATED TO CAUGHLAN AND FOWLER(1988)
-C   RATES.  THE RATES ARE EXPRESSED IN THE SAME TERMS USED BY CZ, WITH 
+C   RATES.  THE RATES ARE EXPRESSED IN THE SAME TERMS USED BY CZ, WITH
 C   THE CONVERSION FACTOR IN THE FRONT OBTAINED FROM VANDENBERG'S
 C   NOTES ON THE REACTION RATES.
 C  RATE(8)  HE4+C13

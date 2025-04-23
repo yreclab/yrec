@@ -18,24 +18,24 @@ C  MHP 10/97
 C
 c   On 10/13/97, JNB converted the nuclear masses from neutral nuclear
 c   masses to bare nuclear masses by subtracting Z(I)*(m_e)*c^2 from
-c   the neutral nuclear masses. This caused changes in a number of 
+c   the neutral nuclear masses. This caused changes in a number of
 c   places: in ANUC(I), in Q1(I)-Q7(I), in the calculation of the Be7electron
 c   Be7proton rates, and in the calculation of the N15p branching ratio.
 c
-c   JNB made some purely cosmetic changes on 1/20/96. Revised all of the 
-c   input Q's on 9/23-25/97 to agree with submitted version of Solar 
-c   Fusion Workshop paper. The SStandard are fixed to agree with 
+c   JNB made some purely cosmetic changes on 1/20/96. Revised all of the
+c   input Q's on 9/23-25/97 to agree with submitted version of Solar
+c   Fusion Workshop paper. The SStandard are fixed to agree with
 c   the Workshop paper. JNB recalculated all of the EG(I) to determine
-c   the best values for the energy generation for all the reactions, 
+c   the best values for the energy generation for all the reactions,
 c   taking account of my improved calculations of neutrino energy loss.
 c   The calculations are documented in Vol. 19, 132-141, 1997 of my notes.
-c   The neutral atom mass differences are taken from Table of Isotopes, 
-c   8th Ed, 1996 and the neutrino energy losses from Bahcall, Gallium 
+c   The neutral atom mass differences are taken from Table of Isotopes,
+c   8th Ed, 1996 and the neutrino energy losses from Bahcall, Gallium
 c   solar neutrino experiments, Phys Rev C, in press, 1997.
 c
-c  All numbers in this subroutine have been calculated by John Bahcall 
-c  so that they agree with the modern numbers in Neutrino 
-c  Astrophysics (1989) or much more recent results, as indicated in 
+c  All numbers in this subroutine have been calculated by John Bahcall
+c  so that they agree with the modern numbers in Neutrino
+c  Astrophysics (1989) or much more recent results, as indicated in
 c  comments lines.
 C
 C  PREVIOUS VERSIONS OF THE YALE CODE
@@ -56,25 +56,25 @@ C  SSTANDARD(I) = 1.0 WHEN THE ITH CROSS SECTION HAS THE STANDARD VALUE
 C  MEASUREMENTS USED IN NEUTRINO ASTROPHYSICS.
 C  MHP 10/97
 C
-c  The PREVIOUS standard values of SStandard(I) used were those that 
-c   were given in Table 1 of Bahcall and Pinsonneault (1992).  This work 
+c  The PREVIOUS standard values of SStandard(I) used were those that
+c   were given in Table 1 of Bahcall and Pinsonneault (1992).  This work
 c   was  published in the Reviews of Modern Physics, 64,885, 1992. The
-c   current version of SStandard(I) refers to Bahcall and 
-c   Pinsonneault(1995) , Rev. Mod. Phys. 67, 781 (1995), Table 1, if 
-c   changes have occured.  Otherwise, they are the same as in the 
-c   Bahcall-Pinsonnealt (1992) Rev. Mod. Phys. article.  
+c   current version of SStandard(I) refers to Bahcall and
+c   Pinsonneault(1995) , Rev. Mod. Phys. 67, 781 (1995), Table 1, if
+c   changes have occured.  Otherwise, they are the same as in the
+c   Bahcall-Pinsonnealt (1992) Rev. Mod. Phys. article.
 C
-c  Weakscreening is a parameter set in this subroutine. To obtain 
-c  the Graboske et al. and Salpeter standard results, use: 
-c  weakscreening = 0.03.  To investigate the effect of always using 
-c  weak screening, use a value for weakscreening greater than unity, 
+c  Weakscreening is a parameter set in this subroutine. To obtain
+c  the Graboske et al. and Salpeter standard results, use:
+c  weakscreening = 0.03.  To investigate the effect of always using
+c  weak screening, use a value for weakscreening greater than unity,
 c  e. g., 30. The transition region between weak and strong screening
 c  is defined by Graboske et al. as $\Lambda_{12} = 0.1$, see page
-c  ApJ 181, 465 (1973) [5/15/97].  
+c  ApJ 181, 465 (1973) [5/15/97].
 c
 c  The value of SStandard(17) for hep is taken from Carlson et al (1991)
 c  Phys. Rev. C 44, 619. It corresponds to an S sub 0 =
-c  1.3 E-20 keV-barns, a factor of 0.1625  smaller than indicated by the 
+c  1.3 E-20 keV-barns, a factor of 0.1625  smaller than indicated by the
 c  older measurements and calculations used in Neutrino Astrophysics.
 c
 C THE NUCLEAR ENERGY RELEASE TO THE STAR FROM EACH REACTION
@@ -138,7 +138,7 @@ C  IU IS THE SHELL NUMBER.
 
 
       use params, only : json
-      use parmin90, only : CLN, CC13, CC23  ! COMMON/CONST1/
+      use settings, only : CLN, CC13, CC23  ! COMMON/CONST1/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)
@@ -183,7 +183,7 @@ C NEUTRINO COEFFICIENTS
 C ***************************
 C ANUC ARE ATOMIC MASS UNITS.
 C ***************************
-c  On 10/13/97, JNB converted ANUC(I) from neutral atomic masses to 
+c  On 10/13/97, JNB converted ANUC(I) from neutral atomic masses to
 c  bare nuclear masses.
 c
 c  The scale is the mass of C12 divided by 12 or 931.49432 MeV,
@@ -228,8 +228,8 @@ C EACH OF THE Q'S IS INDEPENDENT OF TEMPERATURE (T), AS CAN BE SEEN FROM
 C  EQUATIONS 3.10 AND 3.11 .
 C
 C MHP 10/97
-c All of the values of the Q1, ...., Q5 have been recalculated, using 
-c  where needed nuclear cross sections given in Tables 3.2 and 3.4 of 
+c All of the values of the Q1, ...., Q5 have been recalculated, using
+c  where needed nuclear cross sections given in Tables 3.2 and 3.4 of
 c  Neutrino Astrophysics.  They have been updated on 9/16/97 to reflect
 c  the derivatives and cross section factors in Adelberger et al. 1998,
 c  the paper on the Solar Fusion Workshop.
@@ -291,7 +291,7 @@ C     5Q6/-3.3804,-12.2757,-12.826,-13.6899,-13.7173,-15.2281,-16.6925/,
 C     6Q7/20.8964,76.6003,67.8036,69.130,70.3809,69.8517,70.8012/,
 C     7Q8/0.,0.,0.,0.0,0.0,0.0,0./,
 C     8NRXNS/13/
-C MHP 9/14 RESTORED BE7+P DERIVATIVES THAT WERE ZEROED OUT 
+C MHP 9/14 RESTORED BE7+P DERIVATIVES THAT WERE ZEROED OUT
       DATA Q1/0.12317,.03392,.0325,.0304,.03035,.0273,.02494,.040572/,
      1Q2/1.08749,-.273,-.2085,.7630,-0.4044,-1.60,-1.224,-0.2095/,
      2Q3/.93833,-.0648,-.0474,.1626,-.08598,-.3064,-.2139,-0.0595/,
@@ -303,22 +303,22 @@ C MHP 9/14 RESTORED BE7+P DERIVATIVES THAT WERE ZEROED OUT
      8NRXNS/13/
 C ***NOTE THAT SSTANDARD IS AN INPUT PARAMETER SET IN THE NAMELIST;
 C PREVIOUS PUBLISHED SETS OF SSTANDARD ARE INDICATED BELOW.
-c Changed slightly 3He-3He on 9/25/97 to take account of the S'. 
+c Changed slightly 3He-3He on 9/25/97 to take account of the S'.
 c
 c****************FD Feb 09 ************************************
 c Original data from Neutrino Astrophysics 1989 Bahcall
 c Table 3.2 and 3.4
-c Table 3.2 pp            
+c Table 3.2 pp
 c         Q(MeV)  S_0(KeV barns)
 c H-p     1.44    4.07E-022
 c He3-He3 12.86   5.15E+003
 c He3-He4 1.59    0.54
 c 7Be-p   0.14    0.02
 c He-p    19.8    8.00E-020
-c                
-c                
+c
+c
 c Table 3.4 cno   Q(MeV)  S_0(MeV barns)
-c                 
+c
 c C12-p   1.94    1.45E-003
 c C13-p   7.55    5.50E-003
 c N14-p   7.3     3.32E-003
@@ -328,20 +328,20 @@ c O16-p   0.6     9.40E-003
 c
 c****************************************************************************
 C FD-MP Fev 2009 values changed to included the results presented at Gran Sasso
-C by A. Formicola  
-C Cross sections are:  
+C by A. Formicola
+C Cross sections are:
 C  s11      pp      = 3.92 +- 0.08 D-25 MeVb      Physun talk Formicola
-C  s13      Hep     = 8.6  +- 1.3  D-20 KeVb         
-C  s33      He3-He3 = 5.32 +- 0.08 MeVb             
+C  s13      Hep     = 8.6  +- 1.3  D-20 KeVb
+C  s33      He3-He3 = 5.32 +- 0.08 MeVb
 C  s34      He3_He4 = 0.568 +- 0.014 KeVb         mean LUNA 2007 - Brown 2007 - Singh 2004
-C  s17      Be7+p   = 22.1 +-0.6 +-0.6 eVb        A.Junghans PRC70(2004)045501      
+C  s17      Be7+p   = 22.1 +-0.6 +-0.6 eVb        A.Junghans PRC70(2004)045501
 C  s114     N14-p   = 1.57 +- 0.13 KeVb           Marta et al. Luna coll. PRC 78 (2008) 022802)
 c
-c This cross section factor gives the following SSTANDARD 
+c This cross section factor gives the following SSTANDARD
 c
 c  SSTANDARD=0.9631,1.0330,1.0519,0.9241,1.3818,0.47290,1.0,
 c 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0108,0.84770,1.0750
-c********************************************************************** 
+c**********************************************************************
 C BP03 values, changed 7/21/03
 C     SStandard/0.9681,1.0485,0.9815,0.9241,1.3818,1.0542,1.0,
 C    $          1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0108,0.8807,1.075/
@@ -404,7 +404,7 @@ C REACTIONS (EALPCA).
 C DEFINE NEXT THE FRACTIONAL ABUNDANCES BY MASS OF THE IMPORTANT
 C  ISOTOPES.
 C X, Y, Z, XHE3,..., XBE9 ARE THE MASS FRACTIONS OF THE ISOTOPES.
-C  THE ABUNDANCES OF NEUTRONS, H2, H3, NE20,AND MG24, WHICH ARE, 
+C  THE ABUNDANCES OF NEUTRONS, H2, H3, NE20,AND MG24, WHICH ARE,
 C  RESPECTIVELY, XFRAC(I) FOR I = 1,3,4,12,13, ARE NO LONGER USED.
       XFRAC(1) = 0.0
       XFRAC(2) = X
@@ -501,7 +501,7 @@ C  CGS UNITS.
       T9M32=T9M1*T9M12
 C MHP 5/02 ADD DEUTERIUM BURNING TERM TO THE CODE
 C IF DEUTERIUM IS ABOVE A MINIMUM THRESHOLD VALUE.
-C RDEUT IS THE RATE (EXCLUDING FACTORS OF THE 
+C RDEUT IS THE RATE (EXCLUDING FACTORS OF THE
 C ABUNDANCES) AND QRTDEUT IS THE DERIVATIVE W/R/T T.
 C NOTE THAT SCREENING IS EXCLUDED - REASONABLE GIVEN
 C THE LOW TEMPERATURES INVOLVED.
@@ -524,7 +524,7 @@ C NO SHORTER THAN THE CONVECTIVE OVERTURN TIMESCALE.
            RDEUTMAX = 6.023D23/ANUC(3)/TAUCZ
            RDEUT2 = RDEUT*X
            IF(RDEUT2.GT.RDEUTMAX)THEN
-C JVS 0712 Commented out write command 
+C JVS 0712 Commented out write command
 C              WRITE(*,*)RDEUT2,RDEUTMAX
               IF(X.GT.1.0D-6)THEN
                  RDEUT = RDEUTMAX/X
@@ -711,9 +711,9 @@ C F2 IS THE FRACTION OF THE BE7 THAT IS BURNED BY PROTON CAPTURE.
 C F3 IS THE FRACTION OF THE N14 THAT IS BURNED BY P, ALPHA REACTION.
 C F4 IS THE FRACTION OF THE N15 THAT IS BURNED BY P, GAMMA REACTION.
 C SEE TABLE 21 OF BAHCALL AND ULRICH (1988), REV. MOD. PHYS. 60.
-c 10/13/97. I changed Temp3 (i.e., tau) by 5/10^5 as a result of 
+c 10/13/97. I changed Temp3 (i.e., tau) by 5/10^5 as a result of
 c using bare nuclear masses. Previously coefficient was -10.26202.
-c I did not change Be7electron for the slightly different S0 for 
+c I did not change Be7electron for the slightly different S0 for
 c electron capture, since that is done in SStandard. Previous coefficient
 c in Be7electron expression was (3.126571E+5). 10/14/97.
 c
@@ -799,7 +799,7 @@ C END OF NEW ROUTINE FOR THE BRANCHING OF N15 + P .
          DRATT(I)=0.
    60 CONTINUE
 C***MHP 3/91 ALPHA CAPTURE REACTIONS UPDATED TO CAUGHLAN AND FOWLER(1988)
-C   RATES.  THE RATES ARE EXPRESSED IN THE SAME TERMS USED BY CZ, WITH 
+C   RATES.  THE RATES ARE EXPRESSED IN THE SAME TERMS USED BY CZ, WITH
 C   THE CONVERSION FACTOR IN THE FRONT OBTAINED FROM VANDENBERG'S
 C   NOTES ON THE REACTION RATES.
 C  RATE(8)  HE4+C13
@@ -895,8 +895,8 @@ C DEFINE THE CONSTANT TO CONVERT MEV'S TO ERGS. THE NUMBERS THAT APPEAR
 C  ARE IN MEV SO THEY CAN BE EASILY IDENTIFIED.
       CONVERT = 1.602177E-6
 C THE MULTIPLYING CONSTANTS BELOW ARE IN MEV.
-c  JNB changed the pp energy release by 0.002 MeV because of a better 
-c  estimate of the neutrino energy loss on 9/25/97. See pg. 139 of 
+c  JNB changed the pp energy release by 0.002 MeV because of a better
+c  estimate of the neutrino energy loss on 9/25/97. See pg. 139 of
 c  Vol. 19 of my notes.  On pgs. 139-141, I document other small changes
 c  to this energy generation. No large changes; all of order keV changes
 c  except for the rare 8B reaction.  9/28/97.
@@ -1068,8 +1068,8 @@ C DEFINE 4*PI*(AU)**2 .
 C FLUX OF PP NEUTRINOS.
          FLUX(1) = EG(1)/FOURPIAU2
 C FLUX OF PEP NEUTRINOS. USE EQUATION 3.17 OF NEUTRINO ASTROPHYSICS.
-c Note that should not change SStandard(14) unless the ratio of pep to pp 
-c  is changed.  Pep rate is explicitly scaled here with respect to the pp 
+c Note that should not change SStandard(14) unless the ratio of pep to pp
+c  is changed.  Pep rate is explicitly scaled here with respect to the pp
 c  rate.
          FLUX(2) = (3.4848E-6)*RWE*T9M12*(1.0 + 20.*T9)*EG(1)
          FLUX(2) = FLUX(2)*SSTANDARD(14)/FOURPIAU2
@@ -1167,7 +1167,7 @@ C routines.  See subroutine NEUTR for complete description.
           PET = PEP + DSNUDT
 
 
-***************************************************************** 
+*****************************************************************
 
 
        ELSE
@@ -1205,7 +1205,7 @@ CC PLASMA NEUTRINOS
          QEDNX = 0.0
          IF(T9.GE.0.2) THEN
 C MHP 10/02 fixed column 72 problem
-            QEDN= EZ*(V1(2)+2.*EZ*V1(3))/POLX11 - EZ*V1(7) 
+            QEDN= EZ*(V1(2)+2.*EZ*V1(3))/POLX11 - EZ*V1(7)
      *            - 3.0d0*EZ3/POLX12
             QETN= -QEDN+ ELI*(V1(4)+ELI*(2.*V1(5)+3.*ELI*V1(6)))/POLX12
             QETNX= EL2*(-26.08+EL2*(534.+EL2*(9204.+EL2*7348.8)))/POLX10

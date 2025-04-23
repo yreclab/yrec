@@ -6,10 +6,10 @@ C The subroutines LUBKSB and LUDCMP are from Numerical Recipes.
 C*************************************************************
 C This routine inverses the burgers equations.
 C
-C The system contains N equations with N unknowns. 
-C The equations are: the M momentum equations, 
-C                    the M energy equations, 
-C                    two constraints: the current neutrality 
+C The system contains N equations with N unknowns.
+C The equations are: the M momentum equations,
+C                    the M energy equations,
+C                    two constraints: the current neutrality
 C                                     the zero fluid velocity.
 C The unknowns are: the M diffusion velocities,
 C                   the M heat fluxes,
@@ -26,14 +26,14 @@ C Fluid 2 is the helium
 C Fluids 3 to M-1 are the heavy elements
 C Fluid M is the electrons
 C
-C The vectors A,Z and X contain the atomic mass numbers, 
+C The vectors A,Z and X contain the atomic mass numbers,
 C the charges (ionization), and the mass fractions, of the elements.
 C NOTE: Since M is the electron fluid, its mass and charge must be
 C      A(M)=m_e/m_u
 C      Z(M)=-1.
 C
 C The array CL contains the values of the Coulomb Logarithms.
-C The vector AP, AT, and array AX contains the results for the diffusion 
+C The vector AP, AT, and array AX contains the results for the diffusion
 C coefficients.
 
       IMPLICIT REAL*8(A-H,O-Z)
@@ -49,16 +49,16 @@ C      INTEGER M,N,I,J,L,MMAX,NMAX
       REAL*8 KO
       SAVE
 
-C The vectors C and GRADC contain the concentrations and the 
-C concentration gradients; 
+C The vectors C and GRADC contain the concentrations and the
+C concentration gradients;
 C CC is the total concentration: CC=sum(C_s)
 C AC is proportional to the mass density: AC=sum(A_s C_s)
-C The arrays XX,Y,YY and K are various parameters which appear in 
+C The arrays XX,Y,YY and K are various parameters which appear in
 C Burgers equations.
 C The vectors and arrays ALPHA, NU, GAMMA, DELTA, and GA represent
-C the "right- and left-hand-sides" of Burgers equations, and later 
+C the "right- and left-hand-sides" of Burgers equations, and later
 C the diffusion coefficients.
-      
+
 
 C Initialize parameters:
 
@@ -69,7 +69,7 @@ C Initialize parameters:
       ENDDO
       CC=0.D0
       AC=0.D0
-       
+
 C Calculate concentrations from mass fractions:
 
       TEMP=0.D0
@@ -82,7 +82,7 @@ C Calculate concentrations from mass fractions:
       C(M)=1.D0
 
 C Calculate CC and AC:
-         
+
       DO I=1,M
          CC=CC+C(I)
          AC=AC+A(I)*C(I)
@@ -110,7 +110,7 @@ c      END DO
       ENDDO
 
 C Write the burgers equations and the two constraints as
-C alpha_s dp + nu_s dT + sum_t(not 2 or M) gamma_st dC_t 
+C alpha_s dp + nu_s dT + sum_t(not 2 or M) gamma_st dC_t
 C                     = sum_t delta_st w_t
 
       DO I=1,M
@@ -136,7 +136,7 @@ C                     = sum_t delta_st w_t
             GAMMA(I,J)=0.D0
          ENDDO
       ENDDO
-      
+
       DO I=M+1,N-2
          ALPHA(I)=0.D0
          NU(I)=2.5D0*C(I-M)/CC
@@ -144,25 +144,25 @@ C                     = sum_t delta_st w_t
             GAMMA(I,J)=0.D0
          ENDDO
       ENDDO
-      
+
       ALPHA(N-1)=0.D0
       NU(N-1)=0
       DO J=1,N
          GAMMA(N-1,J)=0.D0
       ENDDO
-      
+
       ALPHA(N)=0.D0
       NU(N)=0
       DO J=1,N
          GAMMA(N,J)=0.D0
       ENDDO
-      
+
       DO I=1,N
          DO J=1,N
             DELTA(I,J)=0.D0
          ENDDO
       ENDDO
-      
+
       DO I=1,M
          DO J=1,M
             IF (J.EQ.I) THEN
@@ -175,7 +175,7 @@ C                     = sum_t delta_st w_t
                DELTA(I,J)=K(I,J)
             ENDIF
          ENDDO
-         
+
          DO J=M+1,N-2
             IF(J-M.EQ.I) THEN
                DO L=1,M
@@ -187,12 +187,12 @@ C                     = sum_t delta_st w_t
                DELTA(I,J)=-0.6D0*Y(I,J-M)*K(I,J-M)
             ENDIF
          ENDDO
-         
+
          DELTA(I,N-1)=C(I)*Z(I)
-         
+
          DELTA(I,N)=-C(I)*A(I)
       ENDDO
-      
+
       DO I=M+1,N-2
          DO J=1,M
             IF (J.EQ.I-M) THEN
@@ -205,7 +205,7 @@ C                     = sum_t delta_st w_t
                DELTA(I,J)=-1.5D0*XX(I-M,J)*K(I-M,J)
             ENDIF
          ENDDO
-         
+
          DO J=M+1,N-2
             IF (J-M.EQ.I-M) THEN
                DO L=1,M
@@ -219,19 +219,19 @@ C                     = sum_t delta_st w_t
                DELTA(I,J)=2.7D0*K(I-M,J-M)*XX(I-M,J-M)*Y(I-M,J-M)
             ENDIF
          ENDDO
-         
+
          DELTA(I,N-1)=0.D0
-         
+
          DELTA(I,N)=0.D0
       ENDDO
-      
+
       DO J=1,M
          DELTA(N-1,J)=C(J)*Z(J)
       ENDDO
       DO J=M+1,N
          DELTA(N-1,J)=0.D0
       ENDDO
-      
+
       DO J=1,M
          DELTA(N,J)=C(J)*A(J)
       ENDDO
@@ -246,7 +246,7 @@ C Inverse the system for each possible right-hand-side, i.e.,
 C if alpha is the r.h.s., we obtain the coefficient A_p
 C if nu    ---------------------------------------- A_T
 C if gamma(i,j) ----------------------------------- A_Cj
-C 
+C
 C If I=1, we obtain the hydrogen diffusion velocity
 C If I=2, ------------- helium   ------------------
 C If I=3,M-1, --------- heavy element -------------
@@ -256,7 +256,7 @@ C For I=N-1, we get the electric field
 C For I=N, we get the gravitational force g
 
       CALL LUDCMP(DELTA,N,NMAX,INDX,D)
-      
+
       CALL LUBKSB(DELTA,N,NMAX,INDX,ALPHA)
       CALL LUBKSB(DELTA,N,NMAX,INDX,NU)
       DO J=1,N
@@ -286,8 +286,8 @@ C The results for the coefficients must be multiplied by p/K_0:
             AX(I,J)=GAMMA(I,J)
          ENDDO
       ENDDO
-      
+
 
       RETURN
-      
-      END                                                             
+
+      END

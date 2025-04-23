@@ -1,24 +1,24 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     T6RINTEOS01
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       subroutine t6rinteos06(slr,slt)
       use params, only : mx, mv, nr => nr06, nt => nt06
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
 
-c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in 
+c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in
 c     T6 and rho
 
       IMPLICIT REAL*8 (A-H,O-Z)
       common/eeeos06/ epl(mx,nt,nr),xx(mx)
       common/aaeos06/ q(4),h(4),xxh
-      common/aeos06/  xz(mx,mv,nt,nr),  
+      common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      common/eeos06/esact,eos(mv) 
+      common/eeos06/esact,eos(mv)
 c
       save
       iu=0
@@ -56,7 +56,7 @@ c.....    eos(i) smoothed in left 3x4
           esact=esact*dix+esact2*(1D0-dix)
 c       endif   ! moved to loc a
         if(iq .eq. 3) then
- 
+
 c.....     eos(i) in upper-right 3x3.
           esactq2=quadeos06(is,iw,slt,q(2),q(3),q(4),t6a(k2),t6a(k3),
      x            t6a(k4))
@@ -73,7 +73,7 @@ c.....        eos(i) smoothed in both log(T6) and log(R)
         endif
         if (esact .gt. 1.D+15) then
           write(ISHORT,'("T6RINTEOS06: Interpolation indices out",
-     x              " of range;please report conditions.")') 
+     x              " of range;please report conditions.")')
           stop
         endif
 

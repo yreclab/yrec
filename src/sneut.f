@@ -6,11 +6,11 @@
 
 
 c..this routine computes neutrino losses from the analytic fits of
-c..itoh et al. apjs 102, 411, 1996, and also returns their derivatives. 
+c..itoh et al. apjs 102, 411, 1996, and also returns their derivatives.
 
 
 c..input:
-c..temp = temperature 
+c..temp = temperature
 c..den  = density
 c..abar = mean atomic weight
 c..zbar = mean charge
@@ -60,7 +60,7 @@ c..pair production
      5                 qpair,qpairdt,qpairdd,qpairda,qpairdz
 
 
-c..plasma 
+c..plasma
       double precision gl2,gl2dt,gl2dd,gl2da,gl2dz,gl12,gl32,gl72,gl6,
      1                 ft,ftdt,ftdd,ftda,ftdz,fl,fldt,fldd,flda,fldz,
      2                 fxy,fxydt,fxydd,fxyda,fxydz
@@ -80,8 +80,8 @@ c..brem
      3                 fbrem,fbremdt,fbremdd,fbremda,fbremdz,
      4                 gbrem,gbremdt,gbremdd,gbremda,gbremdz,
      5                 u,gm1,gm2,gm13,gm23,gm43,gm53,v,w,fb,gt,gb,
-     6                 fliq,fliqdt,fliqdd,fliqda,fliqdz, 
-     7                 gliq,gliqdt,gliqdd,gliqda,gliqdz 
+     6                 fliq,fliqdt,fliqdd,fliqda,fliqdz,
+     7                 gliq,gliqdt,gliqdd,gliqda,gliqdz
 
 
 c..recomb
@@ -119,9 +119,9 @@ c..propagate through the routine. cv and ca are the vector and axial currents.
      3                  cvp    = 1.0d0 - cv,
      4                  ca     = 0.5d0,
      5                  cap    = 1.0d0 - ca,
-     6                  tfac1  = cv*cv + ca*ca + 
+     6                  tfac1  = cv*cv + ca*ca +
      7                           (xnufam-1.0d0) * (cvp*cvp+cap*cap),
-     8                  tfac2  = cv*cv - ca*ca + 
+     8                  tfac2  = cv*cv - ca*ca +
      9                           (xnufam-1.0d0) * (cvp*cvp - cap-cap),
      &                  tfac3  = tfac2/tfac1,
      1                  tfac4  = 0.5d0 * tfac1,
@@ -133,7 +133,7 @@ c..propagate through the routine. cv and ca are the vector and axial currents.
 
 
 c..initialize
- 
+
       spair   = 0.0d0
       spairdt = 0.0d0
       spairdd = 0.0d0
@@ -224,14 +224,14 @@ c..some frequent factors
 
 
       a0     = rm * 1.0d-9
-      a1     = a0**oneth 
+      a1     = a0**oneth
       zeta   = a1 * xlm1
       zetadt = -a1 * xlm2 * xldt
       a2     = oneth * a1*rmi * xlm1
-      zetadd = a2 * rmdd 
+      zetadd = a2 * rmdd
       zetada = a2 * rmda
       zetadz = a2 * rmdz
-      
+
       zeta2 = zeta * zeta
       zeta3 = zeta2 * zeta
 
@@ -240,10 +240,10 @@ c..some frequent factors
 
 
 c..pair neutrino section
-c..for reactions like e+ + e- => nu_e + nubar_e 
+c..for reactions like e+ + e- => nu_e + nubar_e
 
 
-c..equation 2.8 
+c..equation 2.8
       gl   = 1.0d0 - 13.04d0*xl2 +133.5d0*xl4 +1534.0d0*xl6 +918.6d0*xl8
       gldt = xldt*(-26.08d0*xl +534.0d0*xl3 +9204.0d0*xl5 +7348.8d0*xl7)
 
@@ -262,7 +262,7 @@ c..equation 2.7
        b1     = exp(-4.9924d0*zeta)
        b2     = -b1*4.9924d0
       end if
-      
+
       xnum   = a1 * b1
       c      = a2*b1 + a1*b2
       xnumdt = c*zetadt
@@ -275,8 +275,8 @@ c..equation 2.7
        a1   = 9.383d-1*xlm1 - 4.141d-1*xlm2 + 5.829d-2*xlm3
        a2   = -9.383d-1*xlm2 + 2.0d0*4.141d-1*xlm3 - 3.0d0*5.829d-2*xlm4
       else
-       a1   = 1.2383d0*xlm1 - 8.141d-1*xlm2 
-       a2   = -1.2383d0*xlm2 + 2.0d0*8.141d-1*xlm3 
+       a1   = 1.2383d0*xlm1 - 8.141d-1*xlm2
+       a2   = -1.2383d0*xlm2 + 2.0d0*8.141d-1*xlm3
       end if
 
 
@@ -301,7 +301,7 @@ c..equation 2.7
 
 c..equation 2.6
       a1     = 10.7480d0*xl2 + 0.3967d0*xlp5 + 1.005d0
-      a2     = xldt*(2.0d0*10.7480d0*xl + 0.5d0*0.3967d0*xlmp5) 
+      a2     = xldt*(2.0d0*10.7480d0*xl + 0.5d0*0.3967d0*xlmp5)
       xnum   = 1.0d0/a1
       xnumdt = -xnum*xnum*a2
 
@@ -319,9 +319,9 @@ c..equation 2.6
 
       d      = -0.3d0*xden/b1
       xdendt = -d*rm*c*c*a2
-      xdendd = d*rmdd*c 
-      xdenda = d*rmda*c 
-      xdendz = d*rmdz*c 
+      xdendd = d*rmdd*c
+      xdenda = d*rmda*c
+      xdendz = d*rmdz*c
 
 
       qpair   = xnum*xden
@@ -368,7 +368,7 @@ c..equation 2.5
 
 
 
-c..plasma neutrino section 
+c..plasma neutrino section
 c..for collective reactions like gamma_plasmon => nu_e + nubar_e
 c..equation 4.6
 
@@ -380,7 +380,7 @@ c..equation 4.6
 
       b1   =  sqrt(1.0d0 + a2)
       b2   = 1.0d0/b1
-  
+
       c00  = 1.0d0/(temp*temp*b1)
 
 
@@ -392,7 +392,7 @@ c..equation 4.6
       gl2dd = 1.1095d11 * (rmdd*c00  - d*rmdd)
       gl2da = 1.1095d11 * (rmda*c00  - d*rmda)
       gl2dz = 1.1095d11 * (rmdz*c00  - d*rmdz)
-      
+
 
 
       gl    = sqrt(gl2)
@@ -427,12 +427,12 @@ c..equation 4.8
       fl   = a1*c
 
 
-      d    = (a2 - fl*b2)*c       
+      d    = (a2 - fl*b2)*c
       fldt = d*gl2dt
       fldd = d*gl2dd
       flda = d*gl2da
       fldz = d*gl2dz
-     
+
 
 
 c..equation 4.9 and 4.10
@@ -444,15 +444,15 @@ c..equation 4.9 and 4.10
       xnumdt = -iln10*0.5d0*tempi
       a2     = iln10*sixth*rmi
       xnumdd = a2*rmdd
-      xnumda = a2*rmda 
-      xnumdz = a2*rmdz 
+      xnumda = a2*rmda
+      xnumdz = a2*rmdz
 
 
       xden   = sixth * (-24.5d0 + cc + 3.0d0*xlnt)
       xdendt = iln10*0.5d0*tempi
       xdendd = a2*rmdd
-      xdenda = a2*rmda 
-      xdendz = a2*rmdz 
+      xdenda = a2*rmda
+      xdendz = a2*rmdz
 
 
 
@@ -465,7 +465,7 @@ c..equation 4.11
        fxyda = 0.0d0
 
 
-      else 
+      else
 
 
        a1  = 0.39d0 - 1.25d0*xnum - 0.35d0*sin(4.5d0*xnum)
@@ -554,15 +554,15 @@ c..equation 4.1 and 4.5
       a1      = splas
       splas   = a2*a1
       splasdt = a2*splasdt + a3*a1
-      splasdd = a2*splasdd 
-      splasda = a2*splasda 
-      splasdz = a2*splasdz 
+      splasdd = a2*splasdd
+      splasda = a2*splasda
+      splasdz = a2*splasdz
 
 
 
 
 
-c..photoneutrino process section  
+c..photoneutrino process section
 c..for reactions like e- + gamma => e- + nu_e + nubar_e
 c..                   e+ + gamma => e+ + nu_e + nubar_e
 c..equation 3.8 for tau, equation 3.6 for cc,
@@ -585,7 +585,7 @@ c..and table 2 written out for speed
        c15  = -5.249d9
        c16  = -5.153d9
        c20  =  1.067d11
-       c21  = -9.782d9 
+       c21  = -9.782d9
        c22  = -7.193d9
        c23  = -6.936d9
        c24  = -6.893d9
@@ -611,41 +611,41 @@ c..and table 2 written out for speed
       else if (temp .ge. 1.0d8  .and. temp .lt. 1.0d9) then
        tau   =  log10(temp * 1.0d-8)
        cc   =  1.5654d0
-       c00  =  9.889d10 
+       c00  =  9.889d10
        c01  = -4.524d8
-       c02  = -6.088d6 
-       c03  =  4.269d7 
-       c04  =  5.172d7 
-       c05  =  4.910d7 
+       c02  = -6.088d6
+       c03  =  4.269d7
+       c04  =  5.172d7
+       c05  =  4.910d7
        c06  =  4.388d7
        c10  =  1.813d11
-       c11  = -7.556d9 
-       c12  = -3.304d9  
+       c11  = -7.556d9
+       c12  = -3.304d9
        c13  = -1.031d9
-       c14  = -1.764d9  
+       c14  = -1.764d9
        c15  = -1.851d9
        c16  = -1.928d9
        c20  =  9.750d10
        c21  =  3.484d10
-       c22  =  5.199d9  
-       c23  = -1.695d9  
-       c24  = -2.865d9  
-       c25  = -3.395d9  
+       c22  =  5.199d9
+       c23  = -1.695d9
+       c24  = -2.865d9
+       c25  = -3.395d9
        c26  = -3.418d9
-       dd01 = -1.135d8   
-       dd02 =  1.256d8   
-       dd03 =  5.149d7   
-       dd04 =  3.436d7   
+       dd01 = -1.135d8
+       dd02 =  1.256d8
+       dd03 =  5.149d7
+       dd04 =  3.436d7
        dd05 =  1.005d7
-       dd11 =  1.652d9  
-       dd12 = -3.119d9  
-       dd13 = -1.839d9  
-       dd14 = -1.458d9  
+       dd11 =  1.652d9
+       dd12 = -3.119d9
+       dd13 = -1.839d9
+       dd14 = -1.458d9
        dd15 = -8.956d8
-       dd21 = -1.549d10  
-       dd22 = -9.338d9  
-       dd23 = -5.899d9  
-       dd24 = -3.035d9  
+       dd21 = -1.549d10
+       dd22 = -9.338d9
+       dd23 = -5.899d9
+       dd24 = -3.035d9
        dd25 = -1.598d9
 
 
@@ -654,34 +654,34 @@ c..and table 2 written out for speed
        cc   =  1.5654d0
        c00  =  9.581d10
        c01  =  4.107d8
-       c02  =  2.305d8   
-       c03  =  2.236d8   
-       c04  =  1.580d8   
-       c05  =  2.165d8   
+       c02  =  2.305d8
+       c03  =  2.236d8
+       c04  =  1.580d8
+       c05  =  2.165d8
        c06  =  1.721d8
        c10  =  1.459d12
        c11  =  1.314d11
-       c12  = -1.169d11  
-       c13  = -1.765d11  
-       c14  = -1.867d11  
-       c15  = -1.983d11  
+       c12  = -1.169d11
+       c13  = -1.765d11
+       c14  = -1.867d11
+       c15  = -1.983d11
        c16  = -1.896d11
        c20  =  2.424d11
        c21  = -3.669d9
-       c22  = -8.691d9  
-       c23  = -7.967d9  
-       c24  = -7.932d9  
-       c25  = -7.987d9  
+       c22  = -8.691d9
+       c23  = -7.967d9
+       c24  = -7.932d9
+       c25  = -7.987d9
        c26  = -8.333d9
        dd01 =  4.724d8
-       dd02 =  2.976d8   
-       dd03 =  2.242d8   
-       dd04 =  7.937d7   
+       dd02 =  2.976d8
+       dd03 =  2.242d8
+       dd04 =  7.937d7
        dd05 =  4.859d7
        dd11 = -7.094d11
        dd12 = -3.697d11
-       dd13 = -2.189d11  
-       dd14 = -1.273d11  
+       dd13 = -2.189d11
+       dd14 = -1.273d11
        dd15 = -5.705d10
        dd21 = -2.254d10
        dd22 = -1.551d10
@@ -712,40 +712,40 @@ c..equation 3.7, compute the expensive trig functions only one time
       xast = sin(fac2*tau)
 
 
-      a0 = 0.5d0*c00 
+      a0 = 0.5d0*c00
      1     + c01*cos1 + dd01*sin1 + c02*cos2 + dd02*sin2
      2     + c03*cos3 + dd03*sin3 + c04*cos4 + dd04*sin4
      3     + c05*cos5 + dd05*sin5 + 0.5d0*c06*last
 
 
-      f0 =  taudt*fac1*(-c01*sin1 + dd01*cos1 - c02*sin2*2.0d0 
-     1     + dd02*cos2*2.0d0 - c03*sin3*3.0d0 + dd03*cos3*3.0d0 
+      f0 =  taudt*fac1*(-c01*sin1 + dd01*cos1 - c02*sin2*2.0d0
+     1     + dd02*cos2*2.0d0 - c03*sin3*3.0d0 + dd03*cos3*3.0d0
      2     - c04*sin4*4.0d0 + dd04*cos4*4.0d0
-     3     - c05*sin5*5.0d0 + dd05*cos5*5.0d0) 
+     3     - c05*sin5*5.0d0 + dd05*cos5*5.0d0)
      4     - 0.5d0*c06*xast*fac2*taudt
 
 
-      a1 = 0.5d0*c10 
+      a1 = 0.5d0*c10
      1     + c11*cos1 + dd11*sin1 + c12*cos2 + dd12*sin2
      2     + c13*cos3 + dd13*sin3 + c14*cos4 + dd14*sin4
      3     + c15*cos5 + dd15*sin5 + 0.5d0*c16*last
 
 
-      f1 = taudt*fac1*(-c11*sin1 + dd11*cos1 - c12*sin2*2.0d0 
-     1     + dd12*cos2*2.0d0 - c13*sin3*3.0d0 + dd13*cos3*3.0d0 
-     2     - c14*sin4*4.0d0 + dd14*cos4*4.0d0 - c15*sin5*5.0d0 
+      f1 = taudt*fac1*(-c11*sin1 + dd11*cos1 - c12*sin2*2.0d0
+     1     + dd12*cos2*2.0d0 - c13*sin3*3.0d0 + dd13*cos3*3.0d0
+     2     - c14*sin4*4.0d0 + dd14*cos4*4.0d0 - c15*sin5*5.0d0
      3     + dd15*cos5*5.0d0) - 0.5d0*c16*xast*fac2*taudt
 
 
-      a2 = 0.5d0*c20 
+      a2 = 0.5d0*c20
      1     + c21*cos1 + dd21*sin1 + c22*cos2 + dd22*sin2
      2     + c23*cos3 + dd23*sin3 + c24*cos4 + dd24*sin4
      3     + c25*cos5 + dd25*sin5 + 0.5d0*c26*last
 
 
-      f2 = taudt*fac1*(-c21*sin1 + dd21*cos1 - c22*sin2*2.0d0 
-     1     + dd22*cos2*2.0d0 - c23*sin3*3.0d0 + dd23*cos3*3.0d0 
-     2     - c24*sin4*4.0d0 + dd24*cos4*4.0d0 - c25*sin5*5.0d0 
+      f2 = taudt*fac1*(-c21*sin1 + dd21*cos1 - c22*sin2*2.0d0
+     1     + dd22*cos2*2.0d0 - c23*sin3*3.0d0 + dd23*cos3*3.0d0
+     2     - c24*sin4*4.0d0 + dd24*cos4*4.0d0 - c25*sin5*5.0d0
      3     + dd25*cos5*5.0d0) - 0.5d0*c26*xast*fac2*taudt
 
 
@@ -771,7 +771,7 @@ c..equation 3.4
 
 
       dum    = 3.0d0*zeta2
-      xdendt = dum*zetadt - xldt*(6.290d-3*xlm2 
+      xdendt = dum*zetadt - xldt*(6.290d-3*xlm2
      1         + 2.0d0*7.483d-3*xlm3 + 3.0d0*3.061d-4*xlm4)
       xdendd = dum*zetadd
       xdenda = dum*zetada
@@ -784,7 +784,7 @@ c..equation 3.4
       fphotdd = (xnumdd - fphot*xdendd)*dum
       fphotda = (xnumda - fphot*xdenda)*dum
       fphotdz = (xnumdz - fphot*xdendz)*dum
-  
+
 
 
 c..equation 3.3
@@ -794,7 +794,7 @@ c..equation 3.3
 
 
       dum    = 1.875d8*xl + 1.653d8*xl2 + 8.449d8*xl3 - 1.604d8*xl4
-      dumdt  = xldt*(1.875d8 + 2.0d0*1.653d8*xl + 3.0d0*8.449d8*xl2 
+      dumdt  = xldt*(1.875d8 + 2.0d0*1.653d8*xl + 3.0d0*8.449d8*xl2
      1         - 4.0d0*1.604d8*xl3)
 
 
@@ -825,10 +825,10 @@ c..equation 3.2
 
       a1      = sphot
       sphot   = rm*a1
-      sphotdt = rm*sphotdt  
-      sphotdd = rm*sphotdd + rmdd*a1  
-      sphotda = rm*sphotda + rmda*a1  
-      sphotdz = rm*sphotdz + rmdz*a1  
+      sphotdt = rm*sphotdt
+      sphotdd = rm*sphotdd + rmdd*a1
+      sphotda = rm*sphotda + rmda*a1
+      sphotdz = rm*sphotdz + rmdz*a1
 
 
       a1      = tfac4*(1.0d0 - tfac3 * qphot)
@@ -856,7 +856,7 @@ c..equation 3.2
 
 
 
-c..bremsstrahlung neutrino section 
+c..bremsstrahlung neutrino section
 c..for reactions like e- + (z,a) => e- + (z,a) + nu + nubar
 c..                   n  + n     => n + n + nu + nubar
 c..                   n  + p     => n + p + nu + nubar
@@ -868,7 +868,7 @@ c..equation 4.3
       t812   = sqrt(t8)
       t832   = t8 * t812
       t82    = t8*t8
-      t83    = t82*t8 
+      t83    = t82*t8
       t85    = t82*t83
       t86    = t85*t8
       t8m1   = 1.0d0/t8
@@ -928,7 +928,7 @@ c..equation 5.2
        c02   = z*etadd
        c03   = z*etada
        c04   = z*etadz
-       
+
        z      = 1.0d0/dum
        xden   = c00*z
        xdendt = (c01 - xden*dumdt)*z
@@ -950,7 +950,7 @@ c..equation 5.9
        f0    = (-2.0d0*6.7d5*t8m3 - 5.0d0*7.66d9*t8m6)*1.0d-8
 
 
-       z     = 1.0d0 + rm*1.0d-9 
+       z     = 1.0d0 + rm*1.0d-9
        dum   = a0*z
        dumdt = f0*z
        z     = a0*1.0d-9
@@ -980,12 +980,12 @@ c..equation 5.9
 
 
        z     = den**(0.656d0)
-       dum   = c00*rmi  + c01  + c02*z 
+       dum   = c00*rmi  + c01  + c02*z
        dumdt = dd00*rmi + dd01 + dd02*z
        z     = -c00*rmi*rmi
        dumdd = z*rmdd + 0.656d0*c02*den**(-0.454d0)
-       dumda = z*rmda 
-       dumdz = z*rmdz 
+       dumda = z*rmda
+       dumdz = z*rmdz
 
 
        xden  = 1.0d0/dum
@@ -1014,10 +1014,10 @@ c..equation 5.1
 
        z       = tfac4*fbrem - tfac5*gbrem
        sbrem   = dum * z
-       sbremdt = dumdt*z + dum*(tfac4*fbremdt - tfac5*gbremdt) 
-       sbremdd = dumdd*z + dum*(tfac4*fbremdd - tfac5*gbremdd) 
-       sbremda = dumda*z + dum*(tfac4*fbremda - tfac5*gbremda) 
-       sbremdz = dumdz*z + dum*(tfac4*fbremdz - tfac5*gbremdz) 
+       sbremdt = dumdt*z + dum*(tfac4*fbremdt - tfac5*gbremdt)
+       sbremdd = dumdd*z + dum*(tfac4*fbremdd - tfac5*gbremdd)
+       sbremda = dumda*z + dum*(tfac4*fbremda - tfac5*gbremda)
+       sbremdz = dumdz*z + dum*(tfac4*fbremdz - tfac5*gbremdz)
 
 
 
@@ -1048,38 +1048,38 @@ c..compute the expensive trig functions of equation 5.21 only once
 
 
 c..equation 5.21
-       fb =  0.5d0 * 0.17946d0  + 0.00945d0*u + 0.34529d0   
+       fb =  0.5d0 * 0.17946d0  + 0.00945d0*u + 0.34529d0
      1       - 0.05821d0*cos1 - 0.04969d0*sin1
      2       - 0.01089d0*cos2 - 0.01584d0*sin2
      3       - 0.01147d0*cos3 - 0.00504d0*sin3
      4       - 0.00656d0*cos4 - 0.00281d0*sin4
-     5       - 0.00519d0*cos5 
+     5       - 0.00519d0*cos5
 
 
-       c00 =  a0*(0.00945d0 
+       c00 =  a0*(0.00945d0
      1       + 0.05821d0*sin1       - 0.04969d0*cos1
      2       + 0.01089d0*sin2*2.0d0 - 0.01584d0*cos2*2.0d0
      3       + 0.01147d0*sin3*3.0d0 - 0.00504d0*cos3*3.0d0
      4       + 0.00656d0*sin4*4.0d0 - 0.00281d0*cos4*4.0d0
-     5       + 0.00519d0*sin5*5.0d0) 
+     5       + 0.00519d0*sin5*5.0d0)
 
 
-      
+
 c..equation 5.22
        ft =  0.5d0 * 0.06781d0 - 0.02342d0*u + 0.24819d0
      1       - 0.00944d0*cos1 - 0.02213d0*sin1
      2       - 0.01289d0*cos2 - 0.01136d0*sin2
      3       - 0.00589d0*cos3 - 0.00467d0*sin3
      4       - 0.00404d0*cos4 - 0.00131d0*sin4
-     5       - 0.00330d0*cos5 
+     5       - 0.00330d0*cos5
 
 
-       c01 = a0*(-0.02342d0  
+       c01 = a0*(-0.02342d0
      1       + 0.00944d0*sin1       - 0.02213d0*cos1
      2       + 0.01289d0*sin2*2.0d0 - 0.01136d0*cos2*2.0d0
      3       + 0.00589d0*sin3*3.0d0 - 0.00467d0*cos3*3.0d0
      4       + 0.00404d0*sin4*4.0d0 - 0.00131d0*cos4*4.0d0
-     5       + 0.00330d0*sin5*5.0d0) 
+     5       + 0.00330d0*sin5*5.0d0)
 
 
 
@@ -1107,7 +1107,7 @@ c..equation 5.24
      2       - 0.00184d0*cos2 - 0.00354d0*sin2
      3       + 0.00146d0*cos3 - 0.00014d0*sin3
      4       + 0.00031d0*cos4 - 0.00018d0*sin4
-     5       + 0.00069d0*cos5 
+     5       + 0.00069d0*cos5
 
 
        c03 = a0*(-0.00829d0
@@ -1115,7 +1115,7 @@ c..equation 5.24
      2       + 0.00184d0*sin2*2.0d0 - 0.00354d0*cos2*2.0d0
      3       - 0.00146d0*sin3*3.0d0 - 0.00014d0*cos3*3.0d0
      4       - 0.00031d0*sin4*4.0d0 - 0.00018d0*cos4*4.0d0
-     5       - 0.00069d0*sin5*5.0d0) 
+     5       - 0.00069d0*sin5*5.0d0)
 
 
 
@@ -1124,7 +1124,7 @@ c..equation 5.24
        dumdd = oneth*dum*deni
        dumda = -oneth*dum*abari
        dumdz = 2.0d0*dum*zbari
-     
+
        gm1   = 1.0d0/dum
        gm2   = gm1*gm1
        gm13  = gm1**oneth
@@ -1147,7 +1147,7 @@ c..equation 5.25 and 5.26
 c..equation 5.19 and 5.20
        fliq   = v*fb + (1.0d0 - v)*ft
        fliqdt = a0*dumdt*(fb - ft)
-       fliqdd = a0*dumdd*(fb - ft) + v*c00 + (1.0d0 - v)*c01 
+       fliqdd = a0*dumdd*(fb - ft) + v*c00 + (1.0d0 - v)*c01
        fliqda = a0*dumda*(fb - ft)
        fliqdz = a0*dumdz*(fb - ft)
 
@@ -1170,10 +1170,10 @@ c..equation 5.17
 
        z       = tfac4*fliq - tfac5*gliq
        sbrem   = dum * z
-       sbremdt = dumdt*z + dum*(tfac4*fliqdt - tfac5*gliqdt) 
-       sbremdd = dumdd*z + dum*(tfac4*fliqdd - tfac5*gliqdd) 
-       sbremda = dumda*z + dum*(tfac4*fliqda - tfac5*gliqda) 
-       sbremdz = dumdz*z + dum*(tfac4*fliqdz - tfac5*gliqdz) 
+       sbremdt = dumdt*z + dum*(tfac4*fliqdt - tfac5*gliqdt)
+       sbremdd = dumdd*z + dum*(tfac4*fliqdd - tfac5*gliqdd)
+       sbremda = dumda*z + dum*(tfac4*fliqda - tfac5*gliqda)
+       sbremdz = dumdz*z + dum*(tfac4*fliqdz - tfac5*gliqdz)
 
 
       end if
@@ -1244,7 +1244,7 @@ c..equation 6.7, 6.13 and 6.14
        zetadz = 2.0d0*zeta*zbari
 
 
-       c00    = 1.0d0/(1.0d0 + f1*nu + f2*nu2 + f3*nu3)  
+       c00    = 1.0d0/(1.0d0 + f1*nu + f2*nu2 + f3*nu3)
        c01    = f1 + f2*2.0d0*nu + f3*3.0d0*nu2
        dum    = zeta*c00
        dumdt  = zetadt*c00 + zeta*c01*nudt
@@ -1253,26 +1253,26 @@ c..equation 6.7, 6.13 and 6.14
        dumdz  = zetadz*c00 + zeta*c01*nudz
 
 
-     
+
        z      = 1.0d0/dum
-       dd00   = dum**(-2.25) 
+       dd00   = dum**(-2.25)
        dd01   = dum**(-4.55)
        c00    = a1*z + a2*dd00 + a3*dd01
        c01    = -(a1*z + 2.25*a2*dd00 + 4.55*a3*dd01)*z
-    
 
 
-       z      = exp(c*nu)  
-       dd00   = b*z*(1.0d0 + d*dum)        
+
+       z      = exp(c*nu)
+       dd00   = b*z*(1.0d0 + d*dum)
        gum    = 1.0d0 + dd00
-       gumdt  = dd00*c*nudt + b*z*d*dumdt  
-       gumdd  = dd00*c*nudd + b*z*d*dumdd  
-       gumda  = dd00*c*nuda + b*z*d*dumda  
-       gumdz  = dd00*c*nudz + b*z*d*dumdz  
+       gumdt  = dd00*c*nudt + b*z*d*dumdt
+       gumdd  = dd00*c*nudd + b*z*d*dumdd
+       gumda  = dd00*c*nuda + b*z*d*dumda
+       gumdz  = dd00*c*nudz + b*z*d*dumdz
 
 
 
-       z   = exp(nu)  
+       z   = exp(nu)
        a1  = 1.0d0/gum
 
 
@@ -1298,11 +1298,11 @@ c..equation 6.5
        srecodz = sreco*(14.0d0*zbari + bigjdz*a2 - z*(zetadz+nudz)*a1)
 
 
-      end if 
+      end if
 
 
 
-c..convert from erg/cm^3/s to erg/g/s 
+c..convert from erg/cm^3/s to erg/g/s
 c..comment these out to duplicate the itoh et al plots
 
 
@@ -1310,44 +1310,44 @@ c..comment these out to duplicate the itoh et al plots
       spairdt = spairdt*deni
       spairdd = spairdd*deni - spair*deni
       spairda = spairda*deni
-      spairdz = spairdz*deni  
+      spairdz = spairdz*deni
 
 
       splas   = splas*deni
       splasdt = splasdt*deni
       splasdd = splasdd*deni - splas*deni
       splasda = splasda*deni
-      splasdz = splasdz*deni  
+      splasdz = splasdz*deni
 
 
       sphot   = sphot*deni
       sphotdt = sphotdt*deni
       sphotdd = sphotdd*deni - sphot*deni
       sphotda = sphotda*deni
-      sphotdz = sphotdz*deni  
+      sphotdz = sphotdz*deni
 
 
       sbrem   = sbrem*deni
       sbremdt = sbremdt*deni
       sbremdd = sbremdd*deni - sbrem*deni
       sbremda = sbremda*deni
-      sbremdz = sbremdz*deni  
+      sbremdz = sbremdz*deni
 
 
       sreco   = sreco*deni
       srecodt = srecodt*deni
       srecodd = srecodd*deni - sreco*deni
       srecoda = srecoda*deni
-      srecodz = srecodz*deni  
+      srecodz = srecodz*deni
 
 
 
 c..the total neutrino loss rate
       snu    =  splas + spair + sphot + sbrem + sreco
-      dsnudt =  splasdt + spairdt + sphotdt + sbremdt + srecodt  
-      dsnudd =  splasdd + spairdd + sphotdd + sbremdd + srecodd 
-      dsnuda =  splasda + spairda + sphotda + sbremda + srecoda 
-      dsnudz =  splasdz + spairdz + sphotdz + sbremdz + srecodz 
+      dsnudt =  splasdt + spairdt + sphotdt + sbremdt + srecodt
+      dsnudd =  splasdd + spairdd + sphotdd + sbremdd + srecodd
+      dsnuda =  splasda + spairda + sphotda + sbremda + srecoda
+      dsnudz =  splasdz + spairdz + sphotdz + sbremdz + srecodz
 
 
 

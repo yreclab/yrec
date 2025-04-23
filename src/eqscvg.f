@@ -4,7 +4,7 @@ C EQUATION OF STATE.
      *AMU,EMU,ETA,QDT,QDP,QCP,DELA,LCALC)
 
       use params, only : nts, nps
-      use parmin90, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -39,7 +39,7 @@ C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
          END DO
          II = 1
   10     CONTINUE
-         IDT = MAX(1,II)         
+         IDT = MAX(1,II)
          IDT = MIN(NTS-3,IDT)
       ELSE
 C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS
@@ -66,7 +66,7 @@ C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
          END DO
          JJ = 1
   30     CONTINUE
-         IDP = MAX(1,JJ)         
+         IDP = MAX(1,JJ)
          IDP = MIN(NPTSX(IDT)-3,IDP)
       ELSE
 C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS.  NOTE SEARCH IS DONE AT LOWEST
@@ -101,13 +101,13 @@ C DENSITY FOR X=1, Y=1, Z=1
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,4) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,4) +
      *   FP(2)*TABLEX(II,IDP+1,4) + FP(3)*TABLEX(II,IDP+2,4)
      *   + FP(4)*TABLEX(II,IDP+3,4)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,4) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,4) +
      *   FP(2)*TABLEY(II,IDP+1,4) + FP(3)*TABLEY(II,IDP+2,4)
      *   + FP(4)*TABLEY(II,IDP+3,4)
-         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,4) + 
+         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,4) +
      *   FP(2)*TABLEZ(II,IDP+1,4) + FP(3)*TABLEZ(II,IDP+2,4)
      *   + FP(4)*TABLEZ(II,IDP+3,4)
       END DO
@@ -133,13 +133,13 @@ C FOR RADIATION PRESSURE QDP = 0, SO QDP(TOT) = QDP(GAS)*P/PGAS
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,8) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,8) +
      *   FP(2)*TABLEX(II,IDP+1,8) + FP(3)*TABLEX(II,IDP+2,8)
      *   + FP(4)*TABLEX(II,IDP+3,8)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,8) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,8) +
      *   FP(2)*TABLEY(II,IDP+1,8) + FP(3)*TABLEY(II,IDP+2,8)
      *   + FP(4)*TABLEY(II,IDP+3,8)
-         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,13) + 
+         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,13) +
      *   FP(2)*TABLEZ(II,IDP+1,13) + FP(3)*TABLEZ(II,IDP+2,13)
      *   + FP(4)*TABLEZ(II,IDP+3,13)
       END DO
@@ -159,13 +159,13 @@ C RADIATION PRESSURE AND USE THE CORRECTED QDP, QPT TO GET QDT.
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.zdiffOPEOSfinalewkop95zscv1.full
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,7) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,7) +
      *   FP(2)*TABLEX(II,IDP+1,7) + FP(3)*TABLEX(II,IDP+2,7)
      *   + FP(4)*TABLEX(II,IDP+3,7)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,7) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,7) +
      *   FP(2)*TABLEY(II,IDP+1,7) + FP(3)*TABLEY(II,IDP+2,7)
      *   + FP(4)*TABLEY(II,IDP+3,7)
-         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,10) + 
+         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,10) +
      *   FP(2)*TABLEZ(II,IDP+1,10) + FP(3)*TABLEZ(II,IDP+2,10)
      *   + FP(4)*TABLEZ(II,IDP+3,10)
       END DO
@@ -181,7 +181,7 @@ C INTERPOLATE IN TEMPERATURE
       QPT = QPT0*BETA + 4.0D0*BETM1
       QDT = -QPT*QDP
 C  CP = S*(D LN S/ D LN T)|P IS TABULATED. USE
-C  CP = DU/DT + P*(D LN RHO/D LN T)**2/RHO/T/(D LN RHO/ D LN P)      
+C  CP = DU/DT + P*(D LN RHO/D LN T)**2/RHO/T/(D LN RHO/ D LN P)
 C  TO FIND DU/DT.  THEN INCLUDE THE EFFECTS OF RADIATION PRESSURE
 C  ON DU/DT AND THE OTHER TERMS AND GET A CORRECTED CP.
 C CP (GAS PRESSURE ONLY).
@@ -192,13 +192,13 @@ C  ENTROPY AND ENTROPY OF MIXING
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,5) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,5) +
      *   FP(2)*TABLEX(II,IDP+1,5) + FP(3)*TABLEX(II,IDP+2,5)
      *   + FP(4)*TABLEX(II,IDP+3,5)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,5) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,5) +
      *   FP(2)*TABLEY(II,IDP+1,5) + FP(3)*TABLEY(II,IDP+2,5)
      *   + FP(4)*TABLEY(II,IDP+3,5)
-         TEMP(I,3)=FP(1)*SMIX(II,IDP) + 
+         TEMP(I,3)=FP(1)*SMIX(II,IDP) +
      *   FP(2)*SMIX(II,IDP+1) + FP(3)*SMIX(II,IDP+2)
      *   + FP(4)*SMIX(II,IDP+3)
       END DO
@@ -219,13 +219,13 @@ C D LN S/ D LN T (X AND Y) AND DU/DT (Z)
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,9) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,9) +
      *   FP(2)*TABLEX(II,IDP+1,9) + FP(3)*TABLEX(II,IDP+2,9)
      *   + FP(4)*TABLEX(II,IDP+3,9)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,9) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,9) +
      *   FP(2)*TABLEY(II,IDP+1,9) + FP(3)*TABLEY(II,IDP+2,9)
      *   + FP(4)*TABLEY(II,IDP+3,9)
-         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,7) + 
+         TEMP(I,3)=FP(1)*TABLEZ(II,IDP,7) +
      *   FP(2)*TABLEZ(II,IDP+1,7) + FP(3)*TABLEZ(II,IDP+2,7)
      *   + FP(4)*TABLEZ(II,IDP+3,7)
       END DO
@@ -242,7 +242,7 @@ C INTERPOLATE IN TEMPERATURE
 C NOW FIND DU/DT FROM THE ORIGINAL TABLE.
       QUT = QCP0 - PGAS*QDT0**2/QDP0/D/T
 C CORRECT DU/DT FOR RADIATION
-      UR = 3.0D0*PRAD/D 
+      UR = 3.0D0*PRAD/D
       QUT = QUT + 4.0D0*UR/T
 C CORRECT CP FOR RADIATION PRESSURE
       QCP = QUT + P*QDT**2/QDP/D/T
@@ -250,17 +250,17 @@ C ADIABATIC TEMPERATURE GRADIENT
       DELA = -P*QDT/D/T/QCP
 
 C Get fractions of total particles (including electrons), as follows:
-C   XTF_H2  the fraction that is neutral hydrogen molecules, and 
-C   XTF_He  the fraction thst is neutral helium).  
-C   These are in column 2 respectively of the SCV hydrogen and 
+C   XTF_H2  the fraction that is neutral hydrogen molecules, and
+C   XTF_He  the fraction thst is neutral helium).
+C   These are in column 2 respectively of the SCV hydrogen and
 C   Helium tables.
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,2) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,2) +
      *   FP(2)*TABLEX(II,IDP+1,2) + FP(3)*TABLEX(II,IDP+2,2)
      *   + FP(4)*TABLEX(II,IDP+3,2)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,2) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,2) +
      *   FP(2)*TABLEY(II,IDP+1,2) + FP(3)*TABLEY(II,IDP+2,2)
      *   + FP(4)*TABLEY(II,IDP+3,2)
       END DO
@@ -271,17 +271,17 @@ C INTERPOLATE IN TEMPERATURE
      *         + FT(4)*TEMP(4,2)
 
 C Get more fractions of total particles (including electrons), as follows:
-C   XTF_H1  the fraction that is neutral hydrogen atoms, and 
-C   XTF_HeP  the fraction thst is singly ionized helium).  
-C   These are in column 3 respectively of the SCV hydrogen and 
+C   XTF_H1  the fraction that is neutral hydrogen atoms, and
+C   XTF_HeP  the fraction thst is singly ionized helium).
+C   These are in column 3 respectively of the SCV hydrogen and
 C   Helium tables.
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
          II = IDT+I-1
-         TEMP(I,1)=FP(1)*TABLEX(II,IDP,3) + 
+         TEMP(I,1)=FP(1)*TABLEX(II,IDP,3) +
      *   FP(2)*TABLEX(II,IDP+1,3) + FP(3)*TABLEX(II,IDP+2,3)
      *   + FP(4)*TABLEX(II,IDP+3,3)
-         TEMP(I,2)=FP(1)*TABLEY(II,IDP,3) + 
+         TEMP(I,2)=FP(1)*TABLEY(II,IDP,3) +
      *   FP(2)*TABLEY(II,IDP+1,3) + FP(3)*TABLEY(II,IDP+2,3)
      *   + FP(4)*TABLEY(II,IDP+3,3)
       END DO
@@ -300,11 +300,11 @@ C  XTF_HePP the helium related fraction that is doubly ionized helium (He++)
 C Particle and charge conservation yields:
       XTF_H_e = .5D0*(1D0 - XTF_H2 - XTF_H1)
       XTF_HP = XTF_H_e
-      XTF_He_e = (1D0/3D0)*(2D0 - 2D0*XTF_He - XTF_HeP) 
+      XTF_He_e = (1D0/3D0)*(2D0 - 2D0*XTF_He - XTF_HeP)
       XTF_HePP = 1D0 - XTF_He - XTF_HeP - XTF_He_e
 
 C We are seeking the fraction XHP of hydrogen nuclei that are singly ionized,
-C the fraction XHeP of helium huclei that are singly ionized and XHePP, the 
+C the fraction XHeP of helium huclei that are singly ionized and XHePP, the
 C helium fraction that is doubly ionized.
       XHP = XTF_HP / (XTF_H2 + XTF_H1 + XTF_HP)
       XHeP = XTF_HeP / (XTF_He + XTF_HeP + XTF_HePP)

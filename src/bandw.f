@@ -67,13 +67,13 @@ C               WRITE(*,*)I,J,K,A(J,K),IMJ5,A(J,IMJ5),
 C     *                   K+J-I,A(I,K+J-I)
             END DO
          END DO
-      END DO            
+      END DO
       IF(ABS(A(NM,5)).LT.TINY) STOP 999
       B(NM) = B(NM)/A(NM,5)
 C      WRITE(*,*)NM,B(NM),A(NM,5)
 C      WRITE(*,912)((A(I,JJ),JJ=1,10),B(I),I=1,NM)
 C 912  FORMAT(1P11E12.3)
-      
+
 C D2W/DR2 TERM
 C         PIVOT = A(I+2,3)
 C         B(I1) = B(I1) - A(I1,4)*B(I)
@@ -167,10 +167,10 @@ C         END DO
 C         DO J = I,I-3,-1
 C            DO K = J-1,I-5,-1
 C               KK = 5 + I - K
-C               B(K) = B(K)-B(J)*A(K,KK)               
+C               B(K) = B(K)-B(J)*A(K,KK)
 C            END DO
 C         END DO
-      END DO      
+      END DO
       DO I = 5,2,-1
          JJ = -(I-1)
          DO J = -1,JJ,-1

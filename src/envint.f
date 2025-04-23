@@ -7,13 +7,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT)
       use params, only : json, nt, ng, ntc, ngc, nta, nga
-      use parmin90, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/    
-      use parmin90, only : IOPENV, IOPATM  ! COMMON/LUNUM/
+      use settings, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/
+      use settings, only : IOPENV, IOPATM  ! COMMON/LUNUM/
 C DBG pulse: constants needed for del and dela calculation
-      use parmin90, only : CLSUNL, CRSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, CC23  ! COMMON/CONST1/
-      use parmin90, only : CGAS, CA3, CGL  ! COMMON/CONST2/
-      use parmin90, only : CDELRL, CSECYR  ! COMMON/CONST3/
+      use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
+      use settings, only : CLN, CC23  ! COMMON/CONST1/
+      use settings, only : CGAS, CA3, CGL  ! COMMON/CONST2/
+      use settings, only : CDELRL, CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -58,7 +58,7 @@ C JNT 6/14 ADD FOR KURUCZ/CASTELLI 2004 ATMOSPHERES
 C MHP 6/97 ADDED ALLARD MODEL ATMOSPHERES
 C      COMMON/ATMOS3/ATMZA,ATMPLA(NTA,NGA),
 C     *ATMTLA(NTA),ATMGLA(NGA),FALLARD,IOATMA
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN, 
+      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
      x       IOATMA					           ! ALSURFP and PARMIN
 	COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
 C DBG 7/95 To store variables for pulse output
@@ -83,8 +83,8 @@ C JVS Acoustic depth common block
   	COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
      *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT		 	
-	
+     *IJENT, IJDEL, LACOUT
+
 C G Somers 11/14, ADD I/O COMMON BLOCK
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB
 C G Somers END
@@ -97,13 +97,13 @@ C VECTOR FROM SCALAR
       DIMENSION XYZ(22)
       DATA XYZ/22*99.99D0/
       SAVE
-	
+
 C DBG PULSE TURN ON DERIVATIVE CALCULATOR
       IF (LPULPT.AND.LPRT) THEN
           LPUMOD = .TRUE.
           LDERIV = .TRUE.
           LATMO = .FALSE.
-      ELSE 
+      ELSE
           LPUMOD = .FALSE.
           LDERIV = .FALSE.
           LATMO = .TRUE.
@@ -122,32 +122,32 @@ C GET PRESSURE AT T=Teff BY INTERPOLATION IN TABLE ATMPL.
       IF (KTTAU .EQ. 3) THEN
 C KURUCZ ATMOSPHERES
          CALL SURFP(TEFFL,GL,LPRT.AND.LSTATM)
-         GOTO 200        
+         GOTO 200
 C JNT 06/14
 C GET PRESSURE AT T=Teff BY INTERPOLATION IN TABLE ATMPLC.
       ELSE IF (KTTAU .EQ. 5) THEN
 C KURUCZ ATMOSPHERES
          CALL KCSURFP(TEFFL,GL,LPRT.AND.LSTATM)
-         GOTO 200      
-C We have Kurucz atmosphere boundary conditions 
+         GOTO 200
+C We have Kurucz atmosphere boundary conditions
       ELSE IF (KTTAU .EQ. 4) THEN
 C ALLARD & HAUSCHILDT ATMOSPHERES
-         CALL ALSURFP(TEFFL,GL,LPRT.AND.LSTATM,LAlFail) 
+         CALL ALSURFP(TEFFL,GL,LPRT.AND.LSTATM,LAlFail)
 C Changed to Allard atmosphere code
          IF(LAlFail) then
-            KTTAU=0		
+            KTTAU=0
             LTTAU = .TRUE.
-C Set to gray atmosphere (KTTAU=0), as 
+C Set to gray atmosphere (KTTAU=0), as
 C TeffL is above Allard max, or GL is out of range.
             WRITE(*,*) 'ENVINT: Change to gray atmosphere (KTTAU=0)'
             WRITE(ISHORT,*)'ENVINT: Change to gray atmosphere (KTTAU=0)'
             goto 2
          ENDIF
-         GOTO 200     
+         GOTO 200
 C We have Allard atmosphere boundary conditions
       ENDIF
-    2 CONTINUE  
-C Start gray atmosphere bounary conditions    
+    2 CONTINUE
+C Start gray atmosphere bounary conditions
 C GUESS THE TEMPERATURE FOR AN OPTICAL DEPTH NEAR ZERO.
       IDT = 15
       DO 5 JJ = 1,4
@@ -161,12 +161,12 @@ C GUESS THE TEMPERATURE FOR AN OPTICAL DEPTH NEAR ZERO.
       ELSE IF (KTTAU .EQ. 2) THEN
             TL = TEFFL + HRA(CC23) - HRAS
       END IF
-C                 For kttau = 0,1,or 2, very occasionally the integration 
-C                 fails because the starting point (X0) is past the end 
-C                 point (XLIM). When this happens, we divide the effective 
+C                 For kttau = 0,1,or 2, very occasionally the integration
+C                 fails because the starting point (X0) is past the end
+C                 point (XLIM). When this happens, we divide the effective
 C                 starting density (atmd0) by 10 and retry.
       atmdx = atmd0
- 1998 continue   
+ 1998 continue
 C Return point if X0 > XLIM
       T = DEXP(CLN*TL)
 C FIND THE PRESSURE CORRESPONDING TO THIS T AND THE DENSITY CHOSEN
@@ -174,7 +174,7 @@ C FOR THE START OF THE ATMOSPHERE INTEGRATION.
 
 c      PL = DLOG10((CGAS*ATMD0 + CA3*T**3)*T)
       PL = DLOG10((CGAS*ATMDX + CA3*T**3)*T)
-      
+
 C NOW FIND THE OPTICAL DEPTH(X0) WHERE THE ATMOSPHERE INTEGRATION BEGINS.
 C YC   IF LMHD USE MHD EQUATION OF STATE.
       IF(LMHD)THEN
@@ -238,7 +238,7 @@ C     *         PL, TAUP ,O,QDP,QED,
      *         QQET,QOD,QOT,DEL,DELA,
      *         QCP,RMU,QDT,PELPF
           END IF
-		
+
  5001 FORMAT(5E16.9,/,5E16.9,/,5E16.9,/,4E16.9)
  6001 FORMAT(5E23.16,/,5E23.16,/,5E23.16,/,4E23.16)
  6003 FORMAT(6E23.16,/,6E23.16,/,6E23.16,/,4E23.16)
@@ -254,7 +254,7 @@ C SET NUMERICAL PARAMETERS UP.
 C KRISHNA-SWAMY T TAU HAS DIFFERENT ZERO THAN EDDINGTON T TAU
 C TAU = 0.312156330 AT TEFF.
             XLIM = -0.505627854D0
-      ELSE 
+      ELSE
 C TAU = 2/3 AT TEFF.
             XLIM = -0.176091259D0
       END IF
@@ -375,7 +375,7 @@ C DEPENDENT VARIABLES.  INTEGRATE FROM TAU = 2/3 TO THE LAST
 C MASS POINT IN THE MODEL.
 
 
-  200 CONTINUE   ! Kurucz and Allard (KTTAU=3 and 4) bypass atmosphere 
+  200 CONTINUE   ! Kurucz and Allard (KTTAU=3 and 4) bypass atmosphere
                  !  integration and come here
 
 C G Somers 3/17, IF INTERESTED ONLY IN PPHOT, BREAK HERE.
@@ -397,7 +397,7 @@ C         XYZ = 99.99D0
 C 5002    FORMAT(E16.9)
 C 6002    FORMAT(E23.16)
       ENDIF
-C DBG 
+C DBG
 C  IF ENVELOPE MASS(SENV) SMALL ENOUGH,SKIP ENVELOPE INTEGRATION.
 C DBG 2/92 CHANGED FROM 1.0D-10 to 1.0D-12
       IF(SENV.GT.-1.0D-12) THEN
@@ -470,7 +470,7 @@ c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
       IF(LPRT.AND.LSTENV) THEN
 	 WRITE(ISTOR,240) 'GRAV  ','P   ','T   ','DEPTH    ','M      ',
      *       'D    ','O   ','BETA','DELR  ','DELA','DEL ','HII ',
-     *       'HEII','HEIII','V   ','GAM1   ','QQDP   '       
+     *       'HEII','HEIII','V   ','GAM1   ','QQDP   '
  240     FORMAT(1X,3A10,2A14,2A10,A7,A9,5A6,A9,2A12)
 c     X' ',4X,'GRAV',7X,'P',8X,'T',8X,'DEPTH',6X,'M',
 c     *        9X,'D',6X,'O',7X,'BETA',3X,'DELR',5X,'DELA',3X,
@@ -585,7 +585,7 @@ C DBG 7/95 Appended mixing length info at end of first three lines
      *              QQCP,QRMU,QQDT,PELPF
             END IF
          END IF
-C DBG END	
+C DBG END
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
 	 IF(LPRT.AND.LSTENV) THEN
 	    SRAD = DEXP(CLN*RL)
@@ -624,7 +624,7 @@ C HAS NOT OVERSHOT THE FITTING POINT.
             LCENV(NUMENV) = EVEL.GT.0.0D0
 C JVS 08/13 ADD RUN FOR CZ CALCULATION
 		EDELS(1,NUMENV) = EDEL(1)
-		EDELS(2,NUMENV) = EDEL(2) 
+		EDELS(2,NUMENV) = EDEL(2)
 		EDELS(3,NUMENV) = EDEL(3)
 		EVELS(NUMENV) = EVEL
 		EBETAS(NUMENV) = EBETA
@@ -766,15 +766,15 @@ C G Somers END
 
 			IF (I.EQ.NUMENV) THEN
 				ENVS2(I) = 0.0
-			ELSE 
+			ELSE
 				ENVS2(I)=DEXP(CLN*ENVS(I+1))-DEXP(CLN*ENVS(I))
 			ENDIF
 
 			EDEL1(I) = EDELS(1,I)
-			EDEL2(I) = EDELS(2,I) 
+			EDEL2(I) = EDELS(2,I)
 		END DO
 
-		CALL TAUCAL(ENVX,ENVS2,ENVS1,LCENV,ENVR,ENVP,ENVD,ENVG,NUMENV, 
+		CALL TAUCAL(ENVX,ENVS2,ENVS1,LCENV,ENVR,ENVP,ENVD,ENVG,NUMENV,
      *            EVELS, EDEL1,EDEL2)
 	ENDIF
 

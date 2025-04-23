@@ -5,13 +5,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE COEFFT(DELTS,M,HD,HHA,HHB,HHC,HL,HMAX,HP,HPP,HR,HS,HS1,
      *HS2,HT,HTT,HCOMP,LC,TLUMX,LATMO,LDERIV,LMIX,LOCOND,QDT,QDP,KSAHA,
      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)
-C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES 
+C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES
 C ADDED (COMMON BLOCK NEWENG).
       use params, only : json
-      use parmin90, only : CLSUN, CLNSUN  ! COMMON/CONST/
-      use parmin90, only : CLN, CLNI, C4PIL, C4PI3L, CC13  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
-      use parmin90, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : CLSUN, CLNSUN  ! COMMON/CONST/
+      use settings, only : CLN, CLNI, C4PIL, C4PI3L, CC13  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -239,7 +239,7 @@ C TO UNITS OF 10**10 ERGS BY MULTIPLYING BY THE MASS.
 C JVS 10/11 Calculate the He3+He3 and sum of He3+He3 and He3+He4 luminosity
 		UMHE33(IM) = (HS2(IM)/CLSUN)*ENGHE3
 		UMHEAL(IM) = (HS2(IM)/CLSUN)*HE3ALL
-C JVS end		
+C JVS end
             TLUMX(8)=TLUMX(8)+(HS2(IM)/CLSUN)*ECA
             THL = THL + (HS2(IM)/CLSUN)*ECA
             QL = E
@@ -283,7 +283,7 @@ C ADD CHANGE IN ENTROPY FROM ACCRETED MATERIAL
 C            IF(LMDOT.AND.DMDT0.GT.0.0D0)THEN
 C               IF(IM.GE.JENV)THEN
 C                  QACC = - T*SCEN*DMDT0/CSECYR/SMASS0
-C                  WRITE(*,*)QL,QACC                  
+C                  WRITE(*,*)QL,QACC
 C                  QL = QL + QACC
 C               ENDIF
 C            ENDIF
@@ -340,7 +340,7 @@ C  ZERO OUT NUCLEAR ENERGY TERMS IF T < NUCLEAR CUTOFF.
             SEG(7,IM) = HHC(IM)
             DO J = 1,6
                SEG(J,IM) = 0.0D0
-           END DO 
+           END DO
 	   ELSE
 C         ELSE IF(LONG) THEN
 C  LONG OUTPUT NEEDED
@@ -354,7 +354,7 @@ C  LONG OUTPUT NEEDED
             ENDIF
             DO J = 1,5
                SEG(J,IM) = EG(J)*ESUMI
-        	END DO 
+        	END DO
 C  SHORT OUTPUT ONLY
 C         ELSE
 C            SESUM(IM) = EG(1)+EG(2)+EG(3)+EG(4)+EG(5)
@@ -370,7 +370,7 @@ C            SEG(7,IM) = HHC(IM)
          SDEL(3,IM) = DELA
          DO J = 1,3
             SFXION(J,IM) = FXION(J)
-	   END DO 
+	   END DO
          SVEL(IM) = VEL
 C MHP 02/12 COMMENTED CODE OUT, AS REPLICATED BELOW
 C         IF(LSOUND) THEN

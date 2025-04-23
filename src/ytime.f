@@ -5,7 +5,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *   HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HR10,HR11,HR12,HR13,
      *   HF1,HF2,QDP,QDT,JXBEG)
       use params, only : json
-      use parmin90, only : CLSUN  ! COMMON/CONST/
+      use settings, only : CLSUN  ! COMMON/CONST/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -78,7 +78,7 @@ C SET LIMITS ON HE BURNING FOR NON-HELIUM FLASH STARS
 	 IF(YCORE.GE.ATIME(1)) THEN
 
             DELTSY = MIN(ATIME(4),ATIME(5)*YCORE)
-C    
+C
 	    DELTSY = (5.85D17/CLSUN)*DELTSY*(HS1(JCORE)/HL(JCORE))
 
             ELSE

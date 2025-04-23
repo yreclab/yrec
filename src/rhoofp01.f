@@ -1,34 +1,34 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     RHOOFP01
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       function rhoofp01(x,ztab,t6,p,irad)
       use params, only : mx, mv, nr => nr01, nt => nt01
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+
       IMPLICIT REAL*8 (A-H,O-Z)
-      
+
       common/lreadco/itime
-      common/aeos/  xz(mx,mv,nt,nr),  
+      common/aeos/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/beos/ iri(10),index(10),nta(nr),zz(mx)
       common/eeos/esact,eos(mv)
-      
+
       dimension nra(nt)
       data sigmacc/1.8914785e-3/
-      
+
       data (nra(i),i=1,nt)/16*169,168,167,166,165,2*164,163,2*162,161,
      x   160,2*159,4*143,5*137,6*134,2*125,5*123,2*122,6*121,4*119,
      x   8*116,6*115,8*113,7*111,6*110,34*109,107,104,40*100,10*99,98,
      x   97,96,95,94,93,92/
       SAVE
-      
+
       RAT=SIGMACC
       PR=0.0D0
-C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB 
+C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB
       PNR=P-PR
 
       IF (ITIME .NE. 12345678) THEN
@@ -68,7 +68,7 @@ C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB
           go to 11
           endif
    14     klo=ilo
-      
+
       pmax=xz(mlo,1,klo,nra(klo))*t6*rho(nra(klo)) +
      + IRAD*4.D0/3.D0*RAT*T6**4
       pmin=xz(mlo,1,klo,1)*t6*rho(1) +
@@ -80,7 +80,7 @@ C     stop
 C      write (ISHORT,'("pnr, pmax,pmin=",3e14.4)') pnr,pmax,pmin
       GOTO 999
       endif
-      
+
       rhog1=rho(nra(klo))*pnr/pmax
       CALL ESAC01 (X,ZTAB,T6,RHOG1,1,IRAD,*999)
       p1=eos(1)
@@ -98,7 +98,7 @@ C          if(rhog2 .gt. rho(klo)) rhog2=rho(klo)  ! Corrected below llp 8/19/08
           CALL ESAC01 (X,ZTAB,T6,RHOG2,1,IRAD,*999)
           p2=eos(1)
         endif
-           
+
         icount=0
     1 continue
       icount=icount+1
@@ -108,7 +108,7 @@ C          if(rhog2 .gt. rho(klo)) rhog2=rho(klo)  ! Corrected below llp 8/19/08
 C      if (abs((p3-pnr)/pnr) .lt. 1.D-5) then
       IF (ABS((P3-PNR)/PNR) .LT. 0.5D-7) THEN
          rhoofp01=rhog3
-      
+
          return
       endif
       if (p3 .gt. pnr) then
@@ -126,10 +126,10 @@ C        write (*,'("No convergence after 10 tries")')
         GOTO 999
 C        stop
       endif
-  
+
   999 CONTINUE
       RHOOFP01=-999.0D0
 C      WRITE(ISHORT,'("FAIL TO FIND RHO")')
       RETURN
-      
+
       end

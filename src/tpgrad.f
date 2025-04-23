@@ -8,11 +8,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
 
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
-      use parmin90, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! COMMON/CONST3/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLSUNL  ! COMMON/CONST/
+      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! COMMON/CONST3/
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
 C COMPUTES RADIATIVE GRADIENT AND COMPARES WITH ADIABATIC GRADIENT
 C COMPUTES CONVECTIVE GRADIENT VIA MIXING LENGTH THEORY IF APPLICABLE
@@ -101,7 +101,7 @@ C G Somers END
       PHI2 = PHI*PHI
       PHIPHI = 1.0D0/(1.0D0 + CMIXL2*PHI2)
 C SOLVE CUBIC A3*V**3 + V**2 + A1*V - 1.0 = 0.0
-C ENSURE THAT THE SQUARE ROOT BEING TAKEN IS THAT OF A 
+C ENSURE THAT THE SQUARE ROOT BEING TAKEN IS THAT OF A
 C POSITIVE NUMBER
       TEST = DELDEL*G*(-QDT)/PRESHT
       IF(TEST.GT.0.0D0)THEN

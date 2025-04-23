@@ -6,10 +6,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *                EACC,ETHAV,SUMDM,SENVOLD)
       use params, only : json
-      use parmin90, only : CMSUN  ! COMMON/CONST/
-      use parmin90, only : CLN, CC23  ! COMMON/CONST1/
-      use parmin90, only : CA3  ! COMMON/CONST2/
-      use parmin90, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : CMSUN  ! COMMON/CONST/
+      use settings, only : CLN, CC23  ! COMMON/CONST1/
+      use settings, only : CA3  ! COMMON/CONST2/
+      use settings, only : CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -99,7 +99,7 @@ C OVERALL SCALE FACTOR IN R
          T = 10.0D0**HT(JENV)
          P = 10.0D0**HP(JENV)
          D = 10.0D0**HD(JENV)
-         BETA = 1.0D0- (CA3*T**4/P) 
+         BETA = 1.0D0- (CA3*T**4/P)
          RMU = P*BETA/(D*T)
 C         DLOGEN = (DELM/DMCZ)*(SACC-SCEN)/RMU
          DLOGEN = (DELM/DMCZ)*SCEN/RMU

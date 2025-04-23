@@ -1,7 +1,7 @@
 C MHP 3/09 SUBROUTINE FOR CALCULATING ALEXANDER LOW T OPACITIES
       SUBROUTINE GETALEX06(DL,TL,X,Z,O,OL,QOD,QOT)
       use params, only : numx => numx06, numz => numz06, numxz => numxz06, numt => numt06, numd => numd06
-      use parmin90, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

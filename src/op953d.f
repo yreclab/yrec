@@ -58,13 +58,13 @@ C D LOG CAPPA/D LOG R
          CCD(J) = BT(1)*QC(1) + BT(2)*QC(2) + BT(3)*QC(3) + BT(4)*QC(4)
       END DO
 C INTERPOLATE FOR LOG CAPPA IN X.
-      OL = BX(1,1)*CC(1) + BX(1,2)*CC(2) + BX(1,3)*CC(3) + 
+      OL = BX(1,1)*CC(1) + BX(1,2)*CC(2) + BX(1,3)*CC(3) +
      *     BX(1,4)*CC(4)
 C INTERPOLATE FOR QOT IN X.
-      QOT = BX(1,1)*CCT(1) + BX(1,2)*CCT(2) + BX(1,3)*CCT(3) + 
+      QOT = BX(1,1)*CCT(1) + BX(1,2)*CCT(2) + BX(1,3)*CCT(3) +
      *      BX(1,4)*CCT(4)
 C INTERPOLATE FOR QOD IN X.
-      QOD = BX(1,1)*CCD(1) + BX(1,2)*CCD(2) + BX(1,3)*CCD(3) + 
+      QOD = BX(1,1)*CCD(1) + BX(1,2)*CCD(2) + BX(1,3)*CCD(3) +
      *      BX(1,4)*CCD(4)
 C CORRECT FROM DERIVATE AT FIXED R TO DERIVATIVE AT FIXED RHO.
       QOT = QOT - 3.0D0*QOD

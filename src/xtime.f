@@ -7,8 +7,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *   DELTSH,HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HR10,HR11,HR12,
      *   HR13,HF1,HF2,JXBEG)
       use params, only : json
-      use parmin90, only : CLSUN, CMSUN  ! COMMON/CONST/
-      use parmin90, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : CLSUN, CMSUN  ! COMMON/CONST/
+      use settings, only : CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

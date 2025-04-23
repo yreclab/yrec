@@ -9,13 +9,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V)
 
       use params, only : json, nts, nps
-      use parmin90, only : IFIRST  ! COMMON/LUNUM/
-      use parmin90, only : vnew  ! COMMON/VNEWCB/ DBG 1/96 VNEW REPLACES V
-      use parmin90, only : ISHORT, IOWR  ! COMMON/LUOUT/
-      use parmin90, only : CLSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
-      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
-      use parmin90, only : CMIXL, CSECYR  ! COMMON/CONST3/
+      use settings, only : IFIRST  ! COMMON/LUNUM/
+      use settings, only : vnew  ! COMMON/VNEWCB/ DBG 1/96 VNEW REPLACES V
+      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : CLSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
+      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : CMIXL, CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -64,8 +64,8 @@ C     MHP 10/24 ENSURE THAT ONLY HOMOGENEOUS MODELS HAVE THE MIXTURE ALTERED
       REAL*8 TESTMIX(15)
 C OPACITY COMMON BLOCKS - modified 3/09
       COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,  
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z 
+     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
+     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
       COMMON /ALEXO/OPECALEX,IALXO
       COMMON /ALEXMIX/XALEX,ZALEX
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
@@ -85,9 +85,9 @@ C SERIES AFTER THE INTEGRATION IS DONE.
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
 C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
-C      input to output model - starting with a code for th initial model 
+C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX     
+      COMMON /I2O/ COMPMIX
 C G Somers 10/14, Add spot common block
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
@@ -106,11 +106,11 @@ c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
      * 1.008D0,16.0D0,14.01D0,39.96D0,20.19D0,4.004D0/
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
-      
+
       SAVE
 
-      
-C If flag LARGE is set, model has failed to converge.  Terminate the run.      
+
+C If flag LARGE is set, model has failed to converge.  Terminate the run.
       IF(LARGE) THEN
 	    WRITE(ISHORT,1000)
  1000       FORMAT(1X,39('>'),40('<')/,
@@ -126,23 +126,23 @@ C INITIAL MODEL IS STORED IN LOGICAL UNIT IFIRST
 C Set flags for reading an input model
       IKUT = 0
       IREAD = IFIRST
-      
+
 C INITIALIZE VARIABLES
       VEL = 0.0D0
       QDT = -1.0D0
       QDP = 1.0D0
-      
+
 C Flag LFIRST(NK) tells where to get the starting stellar model for the current
-C step (step NK).  If LFIRST(NK) is true, read in the starting stellarmodel from 
+C step (step NK).  If LFIRST(NK) is true, read in the starting stellarmodel from
 C the file specified by LU IFIRST.  If LFIRST(NK) is false, as starting model use
-C the stellar model currently stored in memory.      
+C the stellar model currently stored in memory.
 
       IF(.NOT.LFIRST(NK)) THEN
-C Use the model currently in memory as the starting model.      
+C Use the model currently in memory as the starting model.
 C DBG 2/92 CHANGED SO WILL RESCALE ENVELOPE MASS ON EACH NEW RUN
          IF(IRESCA(NK).NE.1) CALL RSCALE(HL,HCOMP,HS,HSTOT,M,NK,
      *      SMASS,LC)
-C Now skip over the reading and processing of an input model file         
+C Now skip over the reading and processing of an input model file
          GOTO 3000
       ENDIF
 
@@ -155,7 +155,7 @@ C  Get file format of input model
       READ(IREAD,10) ATEMP
  10   FORMAT(A4)
 
-C ATEMP now contains a keyword describing the format of the input stellar 
+C ATEMP now contains a keyword describing the format of the input stellar
 C model.  We decide what kind of model format it has and process accordingly.
 
       IF(ATEMP .EQ. 'NMOD') THEN
@@ -232,10 +232,10 @@ c 80   CONTINUE
 
       ISTORE = 0
       FTRI = 1.0D0
-c Require recompute of envelope. No assurance of reliable 
+c Require recompute of envelope. No assurance of reliable
 c input triangle
        LNEW = .TRUE.
-       
+
 
 C GET XNEW AND ZNEW FROM HENYEY POINTS
 
@@ -260,7 +260,7 @@ C THIS IS DONE TO CONVERT A NON-ROTATING MODEL TO A ROTATING ONE.
       ENDIF
 C KEEP IREAD OPEN
       REWIND IREAD
-C End of the reading and processing of an input model file.      
+C End of the reading and processing of an input model file.
       IF(.NOT.LFIRST(NK))GOTO 3000
 C      IF(.NOT.LFIRST(NK).OR.NK.GT.1)GOTO 3000
 C     MHP 10/24 MACHINERY TO ALTER THE HEAVY ELEMENT MIXTURE
@@ -343,10 +343,10 @@ C     START WITH LIGHT ELEMENTS
  602  CONTINUE
  3000 CONTINUE
 
-C     The following code enables us to extend the model from the current 
+C     The following code enables us to extend the model from the current
 C     inner most shell to a point ncloser to center, if flag LCORE is set.
 C 9/98 MHP REPLACE AS FOLLOWS:
-C ADD INTEGER NUMBER OF POINTS USING THE DESIRED SPACING IN MASS,HPTTOL.  
+C ADD INTEGER NUMBER OF POINTS USING THE DESIRED SPACING IN MASS,HPTTOL.
 C USE STELLAR STRUCTURE EQUATIONS CONSISTENT WITH THE ASSUMPTIONS
 C IN THE MODEL, NAMELY CONSTANT ENERGY GENERATION RATE AND DENSITY
 C INTERIOR TO THE LOCATION OF THE CENTRAL FITTING POINT.
@@ -369,7 +369,7 @@ C     FCORE is factor to reduce inner mass shell.
      *              ", JSON = ", JSON
              WRITE(ISHORT,478) "STARIN:  ***** RUN TERMINATED *****"
   476        FORMAT(2A)
-  477        FORMAT(A, I8, A, I8)                   
+  477        FORMAT(A, I8, A, I8)
   478        FORMAT(A)
           ENDIF
           DS = HPTTOL(2)
@@ -385,7 +385,7 @@ c shift data for remaining points by the required number
                 HCOMP(J,I+MCORE) = HCOMP(J,I)
              END DO
              OMEGA(I+MCORE) = OMEGA(I)
-          END DO   
+          END DO
           MP1 = MCORE+1
 C MARCH INWARD IN MASS FROM THE INNERMOST MODEL POINT.
 C ASSUME EPSILON=CONSTANT AND DEL=CONSTANT
@@ -529,7 +529,7 @@ C CONVECTIVE OR RADIATIVE.
                   CALL MEQOS(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,
      *                 FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,
      *                 QDTP,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
-               ELSE 
+               ELSE
                   IF (LDH) THEN
                      XXDH = HCOMP(1,M)
                      YYDH = HCOMP(2,M)+HCOMP(4,M)
@@ -575,7 +575,7 @@ C	    SENV = SENV0
 	    IXX=0
 	    PLIM = HP(M)
 C DBG PULSE: DO NOT DO PULSE OUTPUT
-            LPULPT = .FALSE. 
+            LPULPT = .FALSE.
             IF (LDH) THEN
                XXDH = HCOMP(1,M)
                YYDH = HCOMP(2,M)+HCOMP(4,M)
@@ -741,7 +741,7 @@ C HS1 IS THE UNLOGGED HS; HS2 IS THE MASS OF THE SHELL(ALSO NOT LOG).
  120  CONTINUE
       HS1(M) = DS3
       HS2(M) = DEXP(CLN*HSTOT) - 0.5D0*(DS2+DS3)
-      
+
       IF(LROT) THEN
 C CALCULATE FP,FT,R0 AND ETA2 GIVEN OMEGA
 	 CALL FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
@@ -764,16 +764,16 @@ C GIVEN OMEGA AND I, FIND ANGULAR MOMENTUM AND ROTATIONAL K.E.
 	 SJTOT = SUMJ
 	 SKEROT = SUMKE
       ENDIF
-      
+
       IF(NK.GT.1) GOTO 630
-C SET UP MASS FRACTIONS AND NUMBER FRACTIONS OF ELEMENTS IN 
+C SET UP MASS FRACTIONS AND NUMBER FRACTIONS OF ELEMENTS IN
 C ENVELOPE.
 C DBG 1/96 V (ENVELOPE MASS FRACTIONS WAS NORMALLY READ IN VIA
 C RDLAOL. NOW THAT THESE OPACITIES ARE OBSOLETE VNEW IS INTRODUCED
 C HOLD THE RELATIVE MASS FRACTIONS OF THE ELEMENTS (SEE PARMIN).
 C TO MAINTAIN BACKWARD COMPATIBILITY IF LLAOL=T THEN USE V READ IN
 C VIA RDLAOL OTHERWISE USE VNEW.
-      IF (.NOT.LLAOL) THEN 
+      IF (.NOT.LLAOL) THEN
          DO I=1, 12
             V(I)=VNEW(I)
          END DO
@@ -813,7 +813,7 @@ C DBG 11/95 GENERATE NEW SURFACE OPACITY TABLES
       IF(LSCV)THEN
          CALL SETSCV
       ENDIF
- 
+
 C CLONE P,T,R,L ARRAY TO DUMMY ARRAY HPOLD.
 C HPOLD IS USED TO LIMIT THE TIMESTEP BASED ON CHANGES FROM
 C MODEL TO MODEL IN P,T,R,L.
@@ -879,7 +879,7 @@ C     *        DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
 C     *        VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
 C         SDEL(1,IM) = DELR
 C         SDEL(2,IM) = DEL
-C         SDEL(3,IM) = DELA 
+C         SDEL(3,IM) = DELA
 CC JVS 10/13 Always want SVEL
 C	 SVEL(IM) = VEL
 C 730  CONTINUE

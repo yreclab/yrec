@@ -1,15 +1,15 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     RHOOFP06
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       function rhoofp06(x,ztab,t6,p,irad)
       use params, only : mx, mv, nr => nr06, nt => nt06
 
       IMPLICIT REAL*8 (A-H,O-Z)
       common/lreadco/itime
-      common/aeos06/  xz(mx,mv,nt,nr),  
+      common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
@@ -20,7 +20,7 @@ c--------------------------------------------------------------------
       save
       rat=sigmacc
       pr=0D0
-      if(irad .eq. 1) pr=4D0/3D0*rat*t6**4   ! Mb 
+      if(irad .eq. 1) pr=4D0/3D0*rat*t6**4   ! Mb
       pnr=p-pr
 
       if (itime .ne. 12345678) then
@@ -60,17 +60,17 @@ c--------------------------------------------------------------------
           go to 11
           endif
    14     klo=ilo
-      
+
       pmax=xz(mlo,1,klo,nra(klo))*t6*rho(nra(klo))
       pmin=xz(mlo,1,klo,1)*t6*rho(1)
       if((pnr .gt. 1.25D0*pmax) .or. (pnr .lt. pmin)) then
-c      write (ISHORT,'(" The requested pressure-temperature not in", 
+c      write (ISHORT,'(" The requested pressure-temperature not in",
 c     x   " the OPAL 2006 EOS table")')
 c     stop
 c      write (ISHORT,'("pnr, pmax,pmin=",3e14.4)') pnr,pmax,pmin
-        goto 999     !RHOOFP06 error exit 
+        goto 999     !RHOOFP06 error exit
       endif
-      
+
       rhog1=rho(nra(klo))*pnr/pmax
       call esac06 (x,ztab,t6,rhog1,1,0,*999)
       p1=eos(1)
@@ -123,4 +123,4 @@ C      WRITE(ISHORT,'("RHOOFP06: FAILED TO FIND RHO")')
 
 
       end
-   
+

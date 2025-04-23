@@ -16,8 +16,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *QIW,HKEROT,HKEROT0)
 
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CLN  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CLN  ! COMMON/CONST1/
 
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
 C        ASSUMES GIVEN LOG(L/LSUN) AS BL
@@ -56,7 +56,7 @@ C MHP 10/02 ADDED MISSING DIMENSION STATEMENTS
      *          LCZ(JSON),QIW(JSON),MRZONE(13,2)
       SAVE
 
-      IF(NITER.LE.0) RETURN      
+      IF(NITER.LE.0) RETURN
       BL = DLOG10(HL(M))
 C ZERO COUNTERS
       KENV = 0
@@ -90,7 +90,7 @@ C FIND ENVELOPE MASS AND SET X AND Z TO ENVELOPE VALUES
      *               LNEW,LRESET,LSBC,KSAHA,KENV,KATM,HSTOT,BL,
      *               TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M)
       ENDIF
-C 7/91 ADD CALL TO MIX 
+C 7/91 ADD CALL TO MIX
       IF(ITLVL.GT.2 .AND. DELTS.GT.0.0D0)THEN
          NSPEC=11
          IF(LEXCOM)NSPEC=15

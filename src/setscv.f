@@ -1,11 +1,11 @@
-c     This is to evaluate the EOS with the new tables and call eqstat to 
+c     This is to evaluate the EOS with the new tables and call eqstat to
 c     compute the new equation of state and compare to the old one...
 
       SUBROUTINE SETSCV
 
       use params, only : nts, nps
-      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
-      use parmin90, only : CA3  ! COMMON/CONST2/
+      use settings, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : CA3  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -48,7 +48,7 @@ C NUMBER DENSITY OF HYDROGEN AND HELIUM
      *              (1.0D0 + 2.0D0*TABLEY(I,J,2) + TABLEY(I,J,3))
 C HYDROGEN AND HELIUM ELECTRON NUMBER DENSITIES
             HNUME = 0.5D0*HNUM*(1.0D0 - TABLEX(I,J,2) - TABLEX(I,J,3))
-            HENUME = CC13*HENUM*(2.0D0 - 2.0D0*TABLEY(I,J,2) - 
+            HENUME = CC13*HENUM*(2.0D0 - 2.0D0*TABLEY(I,J,2) -
      *               TABLEY(I,J,3))
             TOTE = HNUME + HENUME
             HNUME = MAX(HNUME,1.0D0)
@@ -127,7 +127,7 @@ C FOR GAS PRESSURE, CORRECT AS PER QDP
 C FOR RADIATION PRESSURE, USE QDT = QDP*QPT.  CORRECT QPT FOR
 C RADIATION PRESSURE AND USE THE CORRECTED QDP, QPT TO GET QDT.
             QDT0 = X*(D/DENX)*TABLEX(I,J,7)+Y*(D/DENY)*TABLEY(I,J,7)
-     *             +Z*(D/DENZ)*TABLEZ(I,J,10) 
+     *             +Z*(D/DENZ)*TABLEZ(I,J,10)
             QPT0 = -QDT0/QDP0
             SX = EXP(CLN*TABLEX(I,J,5))
             SY = EXP(CLN*TABLEY(I,J,5))
@@ -137,13 +137,13 @@ C ENTROPY OF MIXING.
             QSMIXT = FTD(1)*SMIX(IDT,J)+FTD(2)*SMIX(IDT+1,J)+
      *               FTD(3)*SMIX(IDT+2,J)
 C D LN S/ D LN T
-            QST0 = (X*SX*TABLEX(I,J,9) + Y*SY*TABLEY(I,J,9) + 
+            QST0 = (X*SX*TABLEX(I,J,9) + Y*SY*TABLEY(I,J,9) +
      *              QSMIXT)/S0
 C  CP = S*(D LN S/ D LN T)|P IS TABULATED. USE
-C  CP = DU/DT + P*(D LN RHO/D LN T)**2/RHO/T/(D LN RHO/ D LN P)      
+C  CP = DU/DT + P*(D LN RHO/D LN T)**2/RHO/T/(D LN RHO/ D LN P)
 C  TO INCLUDE THE EFFECTS OF RADIATION PRESSURE.
 C CP (GAS PRESSURE ONLY).
-            QCP0 = S0*QST0 + Z*(EXP(CLN*TABLEZ(I,J,7)) + 
+            QCP0 = S0*QST0 + Z*(EXP(CLN*TABLEZ(I,J,7)) +
      *             PGAS*TABLEZ(I,J,10)**2/TABLEZ(I,J,13)/DENZ/T)
 C NOW FIND DU/DT FROM THE ORIGINAL TABLE.
             QUT = QCP0 - PGAS*QDT0**2/QDP0/D/T

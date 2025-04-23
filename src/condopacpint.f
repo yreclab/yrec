@@ -13,21 +13,21 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       REAL*8 FXION(3)
       DATA AH1,AHe4,AOx /1.008D0,4.004D0,16D0/
       save
-      
+
 C Get fractional abundances in nubers of atoms of H1, He4 and metals (Ox)
       Y=1.0D0-X-Z
-      WtH1Base  = (X/AH1)  / (X/AH1 + Y/AHe4 + Z/AOx) 
-      WtHe4Base = (Y/AHe4) / (X/AH1 + Y/AHe4 + Z/AOx) 
-      WtOxBase  = (Z/AOx)  / (X/AH1 + Y/AHe4 + Z/AOx) 
+      WtH1Base  = (X/AH1)  / (X/AH1 + Y/AHe4 + Z/AOx)
+      WtHe4Base = (Y/AHe4) / (X/AH1 + Y/AHe4 + Z/AOx)
+      WtOxBase  = (Z/AOx)  / (X/AH1 + Y/AHe4 + Z/AOx)
 
-C In addition we now weight the H1, He and Ox by oncly 
-C considering those atoms H1 and He4 atomos which are 
-C charged. FXION(1) is the fraction of H1 atoms that are 
-C (singly) charged. FXION(2) is the fraction of He4 atoms 
-C that are singly charged and FXION(3) the fractoin that 
-C are doubly charged.  It is presumed that the metals (Ox) 
-C are fully ionized in first approximation. Because of 
-C their low abundance (tyically less than 2% divided by 
+C In addition we now weight the H1, He and Ox by oncly
+C considering those atoms H1 and He4 atomos which are
+C charged. FXION(1) is the fraction of H1 atoms that are
+C (singly) charged. FXION(2) is the fraction of He4 atoms
+C that are singly charged and FXION(3) the fractoin that
+C are doubly charged.  It is presumed that the metals (Ox)
+C are fully ionized in first approximation. Because of
+C their low abundance (tyically less than 2% divided by
 C the atomic mass
        WtH1 = WtH1Base * FXION(1) ! (FXION(1)/1D0 is the fraction
        WtHe4 = WtHe4Base * (FXION(2) + 2D0*FXION(3))/2D0
@@ -41,7 +41,7 @@ c       OCL = LOG10(OC)
        OC = 10D0**OCL
        QODC = OC
        QOTC = OC
-       
+
        RL = DL - 3.0D0*(TL-6.0D0)
 C     DO CONDUCTIVE OPACITY CORRECTION in fully ionized approximation
       IF(TL.GE.3.0D0.AND.TL.LE.9.0D0.AND.DL.LE.9.75D0) THEN
@@ -62,7 +62,7 @@ c     *             LOG10( X*CONDX + .5D0*Y*CONDY + .5D0*z*CONDZ)
 c           QODC = 2D0 * CONDL / ( 1D0 + X ) *
 c     *          (X*CONDX*QODCX +.5D0*Y*CONDY*QODCY +.5D0*Z*COBDZ*QODCZ)
 
-            QOTC = CONDL * (WtH1*QODCX + WtHe4*QODCY + WtOx*QODCZ)         
+            QOTC = CONDL * (WtH1*QODCX + WtHe4*QODCY + WtOx*QODCZ)
 c           QOTC = 2D0 * CONDL / ( 1D0 + X ) *
 c     *          (X*CONDX*QOTCX +.5D0*Y*CONDY*QOTCY +.5D0*Z*CONDZ*QOTCZ)
 

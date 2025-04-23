@@ -5,7 +5,7 @@ C GETY7 - Read a YREC7 format stellar model file into memory
 C
 C llp  4/16/03
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       SUBROUTINE GETYREC7(BL,CFENV,CMIXL,DAGE,DDAGE,FTRI,HCOMP,HD,HL,
      * HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
@@ -15,7 +15,7 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
       use params, only : json
-      use parmin90, only : CLSUN  ! COMMON/CONST/
+      use settings, only : CLSUN  ! COMMON/CONST/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT INTEGER*4 (I-K,M)
@@ -30,7 +30,7 @@ C Last two lines are MODEL2 add-ons
 
       save
 
-C Initialization 
+C Initialization
 
 C Zero the composition arrays (HCOMP) and the OMEGA array.
 C This is agreed upon protection in case they are inadvertently used in the program,
@@ -40,7 +40,7 @@ C but not present in the old YREC input data.
 	 DO J = 1, 15
 	    HCOMP(J,I) = 0D0
 	 ENDDO
-      ENDDO    
+      ENDDO
 
 C  Set Model2-sspecific strings to "?"
       ATM = " ? "
@@ -86,7 +86,7 @@ C get the LUMINOSITIES---PP(1-2-3)-CNO-HE-NU-GRAV
       READ(IREAD,40) (TLUMX(J),J=1,7)
  40   FORMAT(10X,7E10.3)
 
-C If TLUMX are in ergs, convert to solar units.  Decide by 
+C If TLUMX are in ergs, convert to solar units.  Decide by
 C comparing to 10**20. If larger, divide by CLSUN.
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
      *     DABS(TLUMX(6)),TLUMX(7))
@@ -97,7 +97,7 @@ C comparing to 10**20. If larger, divide by CLSUN.
       ENDIF
 
 C Get the ENVELOPE DATA
-C FTRI is 1,normally.  It is set to -1  if any of the record numbers 
+C FTRI is 1,normally.  It is set to -1  if any of the record numbers
 C for the envelope triangle records was set to -1 by WRTLST.
       FTRI = 1D0
       DO 80 I = 1,3
@@ -202,7 +202,7 @@ C CONVECTIVE SURFACE- ASSIGN LAST VALUE TO SHELLS JENV - M
 C Read in FOURTH PART:  - LOG J/M STORED , 8 SHELLS PER LINE
 
       IF(LROT) THEN
-C READ OMEGA IN. If OMEGA records are missing go to OMEGA BYPASS below 
+C READ OMEGA IN. If OMEGA records are missing go to OMEGA BYPASS below
 	READ(IREAD,500,END=9999)(OMEGAL(II),II = 1,M)
  500    FORMAT(0P8F10.7)
 	DO 510 I = 1,M
@@ -219,21 +219,21 @@ C KEEP IREAD OPEN
 
       RETURN
 
-C  OMEGA BYPASS      
+C  OMEGA BYPASS
 C Come here if OMEGA records are missing -- Can happen if
 C a new omega file is being generated (LWNEW is true in STARIN)
 
 9999  WRITE(ISHORT,9998) "GETYREC7: OMEGA records are missing from ",
      *  " input model file - OMEGA array zeroed"
-9998  FORMAT(2A)     
-      
+9998  FORMAT(2A)
+
       DO I  = 1, JSON
          OMEGA(I) = 0D0
-      ENDDO    
-      
+      ENDDO
+
 C KEEP IREAD OPEN
       REWIND IREAD
 
       RETURN
-      
+
       END

@@ -1,25 +1,25 @@
 C	Subroutine ALTABINIT
 
 C PURPOSE
-C To analyze the internal Allard-format tables provided by ALFILEIN, verifying them 
+C To analyze the internal Allard-format tables provided by ALFILEIN, verifying them
 C and creating needed additoinal tables and elements.
 
 C Several steps are taken:
-C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are 
-C    one row's width below the bottom and above the top of the table. Because the first level 
+C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are
+C    one row's width below the bottom and above the top of the table. Because the first level
 C    of interpolation is in GL, only a single minimum and maximum value of TEFFL are needed.
-C 2. For each row in GL, find the index of the smallest element (iGLmin) and the index of the 
+C 2. For each row in GL, find the index of the smallest element (iGLmin) and the index of the
 C    largest element (iGLmax). There is one pair of these for each TEFFL.
-C 3. For each row in GL, find the the minimum (GLmin) and maximum (GLmax) permissable value of 
-C    GL. These are one column's width less than the row minimum in GL and one column's width 
+C 3. For each row in GL, find the the minimum (GLmin) and maximum (GLmax) permissable value of
+C    GL. These are one column's width less than the row minimum in GL and one column's width
 C    greater than the column maximum. There is one pair of these for each TEFFL.
-C 4. Validate the table. (a) Ensure that there are no invalid elements inside the table, i.e.,  
-C    no invalid element between the row's iGLmin and iGLmax. This check is made for every TEFFL.  
+C 4. Validate the table. (a) Ensure that there are no invalid elements inside the table, i.e.,
+C    no invalid element between the row's iGLmin and iGLmax. This check is made for every TEFFL.
 C    (b) Ensure that every row has at least 4 valid entries and that there are at least 4 columns.
 
 
 	SUBROUTINE ALTABINIT
-       use parmin90, only : ISHORT  ! COMMON/LUOUT/
+       use settings, only : ISHORT  ! COMMON/LUOUT/
 
       PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -28,25 +28,25 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 	LOGICAL*4 LALTPTau100
       CHARACTER*256 FALLARD
 
-      COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP 
+      COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
      x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
      x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
       COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),      ! Shared: ALTABINIT and ALSURFP
      x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN, 
+      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
      x       IOATMA					           ! ALSURFP and PARMIN
 	COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
 	COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
-C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are 
-C    one row's width below the bottom and above the top of the table. Because the first level 
+C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are
+C    one row's width below the bottom and above the top of the table. Because the first level
 C    of interpolation is in GL, only a single minimum and maximum value of TEFFL are needed.
 	AL_TEFFLmin = TEFFLs(1)
 	AL_TEFFLmax = TEFFLs(nTEFF)
 	TEFFLmin = TEFFLs(1) - (TEFFLs(2)-TEFFLs(1))
 	TEFFLmax = TEFFLs(nTeff) + (TEFFLs(nTeff)-TEFFLs(nTeff-1))
-	
-C 2. For each row in GL, find the index of the smallest element (iGLmin) and the index of the 
+
+C 2. For each row in GL, find the index of the smallest element (iGLmin) and the index of the
 C    largest element (iGLmax). There is one pair of these for each TEFFL.
 	do i = 1, nTeff
 	   do j = 1, nGL
@@ -64,10 +64,10 @@ C    largest element (iGLmax). There is one pair of these for each TEFFL.
 	   enddo
   110    continue
 
-	enddo	
+	enddo
 
-C 3. For each row in GL, find the the minimum (GLmin) and maximum (GLmax) permissable value of 
-C    GL. These are one column's width less than the row minimum in GL and one column's width 
+C 3. For each row in GL, find the the minimum (GLmin) and maximum (GLmax) permissable value of
+C    GL. These are one column's width less than the row minimum in GL and one column's width
 C    greater than the column maximum. There is one pair of these for each TEFFL.
 
 	GLXmin = 999D0
@@ -80,9 +80,9 @@ C    greater than the column maximum. There is one pair of these for each TEFFL.
 	   GLmax(i) = GLs(j2) + (GLs(j2) - GLs(j2-1))
 	   if(GLmax(i) .gt. GLXmax) GLXmax = GLmax(i)
 	enddo
-	
-C 4. Validate the table. (a) Ensure that there are no invalid elements inside the table, i.e.,  
-C    no invalid element between the row's iGLmin and iGLmax. This check is made for every TEFFL.  
+
+C 4. Validate the table. (a) Ensure that there are no invalid elements inside the table, i.e.,
+C    no invalid element between the row's iGLmin and iGLmax. This check is made for every TEFFL.
 
 	LBadTable = .false.
 	do i = 1, nTeff
@@ -97,9 +97,9 @@ C    no invalid element between the row's iGLmin and iGLmax. This check is made 
             endif
 	   enddo
 	enddo
-	
+
 C    (b) Ensure that every row has at least 4 valid entries and that there are at least 4 columns.
-	if(nTeff .lt. 4) then 
+	if(nTeff .lt. 4) then
 	   LBadTable = .true.
 	   write(ISHORT,910) 'ALTABINIT: Bad input Allard Table: ',
      x      'Less than 4 rows: nTeff = ',nTeff
@@ -111,16 +111,16 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 	   if ((j2 - j1 + 1) .lt. 4) then
 	      LBadTable = .true.
 	      write(ISHORT,920) 'ALTABINIT: Bad input Allard Table: ',
-     x        'Row with less that 4 elements: i,#,Teff,GLMin,GLmax: ', 
+     x        'Row with less that 4 elements: i,#,Teff,GLMin,GLmax: ',
      x         i,j2-j1+1,10D0**TEFFLs(i),GLmin(i),GLmax(i)
  920		format(2A,2I4,2X,3F7.2)
          endif
 	enddo
-	
+
 	if (LBadTable) goto 9999		! If bad table, go to error exit
-	
+
 	return			! If good table, return
-	
+
  9999	continue
  	write(*,*)
  	write(*,*)'******** ALTABINIT: Program Terminated ********'
@@ -130,6 +130,6 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
  	write(ISHORT,*)
  	CALL ALPRINT
  	STOP
- 	
+
  	END
- 			
+

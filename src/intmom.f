@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE INTMOM(A,ETA2X,QR0R,R0R,HIM,QIWM)
-      use parmin90, only : CC23  ! COMMON/CONST1/
+      use settings, only : CC23  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       DIMENSION C(5)

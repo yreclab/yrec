@@ -1,7 +1,7 @@
 
 c ********* Added by Grant Newsham 9/06
 c
-c Currently sets up just hydrogen, helium, carbon and oxygen for 
+c Currently sets up just hydrogen, helium, carbon and oxygen for
 c use in neutrino loss calculations
 c
 c Returns not only neutrino loss (snu)  but the derivatives of the loss

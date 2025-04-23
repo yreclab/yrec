@@ -1,10 +1,10 @@
 C********************************************************************
       REAL*8 FUNCTION RHOOFP(X,ZTAB,T6,P,IRAD)
       use params, only : mx, mv, nr => nreos, nt => nteos
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
       COMMON/LREADCO/ITIME
-      COMMON/A/  XZ(MX,MV,NT,NR),  
+      COMMON/A/  XZ(MX,MV,NT,NR),
      .T6LIST(NR,NT),RHO(NR),T6A(NT),ESK(NT,NR),ESK2(NT,NR),DFSX(MX),
      . DFS(NT),DFSR(NR),XA(MX),M,MF
       COMMON/B/ ZZ(MX),IRI(10),INDEX(10),NTA(NR)
@@ -17,7 +17,7 @@ C********************************************************************
       SAVE
       RAT=SIGMACC
       PR=0.0D0
-C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB 
+C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB
       PNR=P-PR
 
       IF (ITIME .NE. 12345678) THEN
@@ -57,7 +57,7 @@ C      IF(IRAD .EQ. 1) PR=4.D0/3.D0*RAT*T6**4   ! MB
           GO TO 11
           ENDIF
    14     KLO=ILO
-      
+
       PMAX=XZ(MLO,1,KLO,NRA(KLO))*T6*RHO(NRA(KLO))+
      + IRAD*4.D0/3.D0*RAT*T6**4
       PMIN=XZ(MLO,1,KLO,1)*T6*RHO(1)+
@@ -69,7 +69,7 @@ C     STOP
 C      WRITE(ISHORT,'("PNR, PMAX,PMIN=",3E14.4)') PNR,PMAX,PMIN
       GO TO 999
       ENDIF
-      
+
       RHOG1=RHO(NRA(KLO))*PNR/PMAX
       CALL ESAC (X,ZTAB,T6,RHOG1,1,IRAD,*999)
       P1=EOS(1)

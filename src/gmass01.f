@@ -1,18 +1,18 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     GMASS01
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       function gmass01(x,z,amoles,eground,fracz,frac)
-      
+
       IMPLICIT REAL*8 (A-H,O-Z)
       dimension anum(6),frac(7), amas(7),eion(7)
       data (eion(i),i=1,6)/-3394.873554D0,-1974.86545D0,-1433.92718D0,
      x  -993.326315D0,-76.1959403D0,-15.29409D0/
       data (anum(i),i=1,6)/10.,8.,7.,6.,2.,1./
       SAVE
-      
+
       xc=0.247137766D0
       xn=.0620782D0
       xo=.52837118D0
@@ -28,7 +28,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       xc2=fracz*xc
       xn2=fracz*xn
       xo2=fracz*xo
-      xne2=fracz*xne 
+      xne2=fracz*xne
       xh=x/amas(7)
       xhe=(1D0-x -z)/amas(6)
       xtot=xh+xhe+xc2+xn2+xo2+xne2

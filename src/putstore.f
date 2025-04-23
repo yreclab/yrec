@@ -15,15 +15,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI)
 
 C  PUTSTORE PUTS THE MOST RECENT VERBOSE OUTPUT FILE INTO THE .STORE FILE,
-C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS. 
+C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS.
 
 C     WRITE MODEL OUT IN ASCII FORMAT
       use params, only : json, nts, nps
-      use parmin90, only : ISHORT, ISTOR  ! COMMON/LUOUT/
-      use parmin90, only : CLSUN  ! COMMON/CONST/
-      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
-      use parmin90, only : CGL  ! COMMON/CONST2/
-      use parmin90, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : ISHORT, ISTOR  ! COMMON/LUOUT/
+      use settings, only : CLSUN  ! COMMON/CONST/
+      use settings, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -40,10 +40,10 @@ C     WRITE MODEL OUT IN ASCII FORMAT
      * CFENV(9),TLUMX(8),OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),R0(JSON),
      * HJM(JSON),HI(JSON),ID(JSON),HS1(JSON)
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
-C      input to output model - starting with a code for th initial model 
+C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX     
-      
+      COMMON /I2O/ COMPMIX
+
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
       COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
@@ -60,8 +60,8 @@ C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C OPACITY COMMON BLOCKS - modified 3/09
       COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,  
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z 
+     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
+     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
       COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *   FLAOL, FPUREZ
@@ -70,7 +70,7 @@ C OPACITY COMMON BLOCKS - modified 3/09
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
      *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
-      
+
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
@@ -78,7 +78,7 @@ C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
       COMMON/SOUND/GAM1(JSON),LSOUND
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)      
+     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
       COMMON/ROTEN/DEROT(JSON)
 
       SAVE
@@ -138,14 +138,14 @@ C Determine high temperature opacities flag, HIK
          WRITE(ISHORT,7)
   7      FORMAT('*** YREC7 input file, flags, etc., have been ',
      *          'defaulted.  ***')
-      ENDIF	 
-     
+      ENDIF
+
 C write header records
       IF(DAGE .lt. 1d3) THEN
          WRITE(ISTOR,10) 'MOD2 ',MODEL,M,SMASS,TEFFL,BL,HSTOT,DAGE,
      *      DDAGE,HS(1),HS(M)
  10      FORMAT(A5,2I8,5F16.11,1PE18.10,0P2F16.12)
-      ELSE IF (DAGE .LT. 1D4) THEN 
+      ELSE IF (DAGE .LT. 1D4) THEN
          WRITE(ISTOR,11) 'MOD2 ',MODEL,M,SMASS,TEFFL,BL,HSTOT,DAGE,
      *      DDAGE,HS(1),HS(M)
  11      FORMAT(A5,2I8,4F16.12,F16.10,1PE18.10,0P2F16.12)
@@ -153,7 +153,7 @@ C write header records
          WRITE(ISTOR,12) 'MOD2 ',MODEL,M,SMASS,TEFFL,BL,HSTOT,DAGE,
      *      DDAGE,HS(1),HS(M)
  12      FORMAT(A5,2I8,4F16.12,F16.9,1PE18.10,0P2F16.12)
-      ELSE 
+      ELSE
          WRITE(ISTOR,13) 'MOD2 ',MODEL,M,SMASS,TEFFL,BL,HSTOT,DAGE,
      *      DDAGE,HS(1),HS(M)
  13      FORMAT(A5,2I8,4F16.12,F16.8,1PE18.10,0P2F16.12)
@@ -168,7 +168,7 @@ C write physics flags:
      &     3(1PE18.10),1X,6(L1,1X))
 
 C write luminosities and output flags
-C If TLUMX are in solar units, convert to ergs.  Decide by 
+C If TLUMX are in solar units, convert to ergs.  Decide by
 C comparing to 10**20, if smaller, multiply by CLSUN
 
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
@@ -190,7 +190,7 @@ C write ENVELOPE DATA
       ENDDO
    50 FORMAT('ENV',I2,5F16.12,1P3E20.12)
 
-      CALL PINDEX(JXBEG,JXEND,LSHELL,M,ID,IDM)   
+      CALL PINDEX(JXBEG,JXEND,LSHELL,M,ID,IDM)
 
       IF(LSTMOD)THEN
 C write column headings for all per shell information
@@ -212,7 +212,7 @@ C write out the requested information.
 	 CG=DEXP(CLN*CGL)
          DO II = 1,IDM
             I = ID(II)
-C write out the basic info           
+C write out the basic info
             WRITE(ISTOR,62,ADVANCE='no') I,HS(I),HR(I),HL(I),HP(I),
      *         HT(I),HD(I),OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
 C write out additional physics if desired

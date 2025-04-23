@@ -5,9 +5,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RSCALE(HL,HCOMP,HS,HSTOT,M,NK,SMASS,LC)
 C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
       use params, only : json
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CMSUN  ! COMMON/CONST/
-      use parmin90, only : CLN  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CMSUN  ! COMMON/CONST/
+      use settings, only : CLN  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -26,7 +26,7 @@ c      ISETMIX,ISETISO,
 c     * LMIXTURE,LISOTOPE,FRAC_C,FRAC_N,FRAC_O,R12_13,R14_15,R16_17,R16_18,ZXMIX,
 c     * XH2_INI,XHE3_INI,XLI6_INI,XLI7_INI,XBE9_INI,XB10_INI,XB11_INI
 C COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
-C DBG 5/94 ZRAMP stuff. 
+C DBG 5/94 ZRAMP stuff.
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *     IOLAOL2, IOOPAL2, NK2,
      *     LZRAMP, FLAOL2, FOPAL2
@@ -98,7 +98,7 @@ c ************
 c      write(*,*)'Entering MS change ',HSTOT-HS(M)
 c ************
 
-C  MAIN SEQUENCE RESCALING - MASS AND SINGLE ELEMENT. 
+C  MAIN SEQUENCE RESCALING - MASS AND SINGLE ELEMENT.
          IF(LNEWCP.AND.XNEWCP.GE.0.0D0) THEN
 C  RESCALE THE ABUNDANCE OF ONE ELEMENT OTHER THAN X,Y,Z
 C  JNEWCP = INDEX OF ELEMENT TO BE CHANGED IN MATRIX HCOMP
@@ -145,7 +145,7 @@ c ************
 
          IF(RESCAL(1,NK).GT.0.0D0.OR.RESCAL(4,NK).GT.0.0D0) THEN
 C  RESCALE MASS AND/OR CORE MASS
-C  FIND H-BURNING SHELL.         
+C  FIND H-BURNING SHELL.
 C
 
 C ************* Added call to FINDSHELL (gn - 10/05)**************
@@ -213,7 +213,7 @@ c            HSTOT = HSTOT + HSTOT1
             DO 70 I = JXEND+1,M
         HS(I)=DLOG10(10**HS(JXEND)+SFACTOR*(10**HS(I)-10**HS(JXEND)))
    70       CONTINUE
-            ENVOLD = ENVNEW      
+            ENVOLD = ENVNEW
 c *****
 c            write(*,*)'Mass difference ',DENV
 c            write(*,*)'HSTOT1 ',HSTOT1
@@ -273,7 +273,7 @@ c ************
          ENDIF
 c ******************************************************************
 
-         IF(RESCAL(4,NK).GT.0.0D0) THEN      
+         IF(RESCAL(4,NK).GT.0.0D0) THEN
 
 C RESCALE CORE MASS.
 C THE MASS OF THE H-BURNING SHELL IS HELD FIXED, AND MASS IS TRANSFERRED

@@ -109,7 +109,7 @@ C MHP 3/94 ADDED METAL DIFFUSION
          END DO
       ENDIF
       DO 70 I=1,M
- 
+
          HRU(I)=HRU(I)/CON_RAD
          HTU(I)=HTU(I)/CON_TEMP
          HS1(I)=HS1(I)/CON_MASS

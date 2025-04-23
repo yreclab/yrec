@@ -9,15 +9,15 @@
 *         DTK - d log kappa / d log T
 ***      (it is also possible to obtain all second derivatives)      ***
 
-C     This Subroutine interpolates thermal conductivity from 
-C     a precalculated table condall.d available at 
+C     This Subroutine interpolates thermal conductivity from
+C     a precalculated table condall.d available at
 C     http://www.ioffe.rssi.ru/astro/conduct
 C     For theoretical base of this calculation, see
 C      A.Y.Potekhin, D.A.Baiko, P.Haensel, D.G.Yakovlev, 1999
-C                  Astron. Astrophys. 346, 345.      
+C                  Astron. Astrophys. 346, 345.
 C     Extension from strongly- to weakly-degenerate regime
 C     has been done using the thermal averaging - for example
-C         A.Y.Potekhin, 1999, Astron. Astrophys. 351, 787.  
+C         A.Y.Potekhin, 1999, Astron. Astrophys. 351, 787.
 C     Please quote these publication when using this program
 C     SOURCE DATA FILE 'condall.d' MUST BE IN YOUR
 C      CURRENT DIRECTORY
@@ -31,7 +31,7 @@ C     e-mail: palex@astro.ioffe.rssi.ru
       dimension AT(MAXT),AR(MAXR),AZ(MAXZ),AKAP(MAXT,MAXR,MAXZ)
       data KRUN/-1/
 
-C The following three lines provide and interface to PARMIN in order to 
+C The following three lines provide and interface to PARMIN in order to
 C locate the Potekhin files.
       COMMON /MISCOPAC/IKUR2,FKUR2,IcondOpacP,FcondOpacp,LcondOpacP
       LOGICAL*4 LcondOpacP
@@ -61,7 +61,7 @@ c         print*,'Potekhin Conductivity File read in.'
       call HUNT(AT,MAXT,TLG,IT)
 
 C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
-	if (IT.eq.0.or.IT.eq.MAXT) then 
+	if (IT.eq.0.or.IT.eq.MAXT) then
 			print*, AZ
 			print*, MAXZ, TLG, IZ
 			stop'CONINTER: T out of range'
@@ -183,7 +183,7 @@ C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
 *   Numerical Receipes(Cambridge Univ., 1986)
 *     Given an array XX of length N, and given a value X,
 *     returns a value JLO such that X is between XX(JLO) and XX(JLO+1).
-*     XX must be monotonic, either increasing or decreasing. 
+*     XX must be monotonic, either increasing or decreasing.
 *     JLO=0 or JLO=N is returned to indicate that X is out of range.
 *     JLO on input is taken as the initial guess for JLO on output.
       implicit double precision (A-H), double precision (O-Z)

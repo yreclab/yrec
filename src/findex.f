@@ -15,7 +15,7 @@ C YCK 3/91
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION AX(NX)
       save
-      
+
 C FIND THE 'M'
       IF(M.LT.1.OR.M.GT.NX)M=1
       KIP=M
@@ -34,7 +34,7 @@ C FIND THE 'M'
                GOTO 213
             ENDIF
  212     CONTINUE
-         KIP = -NX 
+         KIP = -NX
       ENDIF
  213  M=KIP
 

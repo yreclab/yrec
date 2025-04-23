@@ -5,7 +5,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      *                ECOD1,ECOD2,EDXDR,THEA,THEZ,J)
 
       use params, only : json
-      use parmin90, only : CC13  ! COMMON/CONST1/
+      use settings, only : CC13  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -65,7 +65,7 @@ c        save the hydrogen concentration when X is diffused.
          IF(J.EQ.1) HYDCON(I) = CONCEN(1)
 c        now check whether the Thoul routine must be run. if not,
 c        write COD1 = COD2 = 0. If its the first shell in the depleted
-C        zone, permit the calculations so that AD is correct. 
+C        zone, permit the calculations so that AD is correct.
          IF(ESPEC(J,I).EQ.0.0.AND.I.NE.NPT)THEN
             IF(ESPEC(J,I+1).EQ.0.0)THEN
                ADS(I) = 0.0
@@ -79,14 +79,14 @@ c        calculate density of electrons (NE) from mass density (RHO):
          AC=0.D0
          DO II=1,NSPEC
 	    AC=AC+ATOMWT(II)*CONCEN(II)
-         ENDDO	
-         NE=RHO/(1.6726D-24*AC)	
-c        calculate interionic distance (AO): 
+         ENDDO
+         NE=RHO/(1.6726D-24*AC)
+c        calculate interionic distance (AO):
          NI=0.D0
          DO II=1,NSPEC-1
             NI=NI+CONCEN(II)*NE
          ENDDO
-         AO=(0.23873D0/NI)**CC13	
+         AO=(0.23873D0/NI)**CC13
 c        calculate Debye length (LAMBDAD):
          CZ=0.D0
          DO II=1,NSPEC
@@ -103,11 +103,11 @@ c        calculate Coulomb logarithms:
      *         *LOG(1.D0+0.18769D0*XIJ**1.2D0)
 	    ENDDO
          ENDDO
-c   
+c
 c        calculate the diffusion coefficients
-c   
+c
          CALL THDIFF(NSPEC,ATOMWT,ZSPEC,XFRAC,TCL,TAP,TAT,TAC)
-C   
+C
          HRU_I = ER(I)
          HTU_I = T*CON_TEMP
 c         FAC=FGRLI(KK)*HRU_I**2*HTU_I**2.5D0/LN_LAMBDA
@@ -117,7 +117,7 @@ c        collect the third diffusion terms for everything else.
          AP = -TAP(J)
          AT = -TAT(J)*EDELR(I)
          AH = -TAC(J,1)
-         AD = -TAC(J,J)   
+         AD = -TAC(J,J)
 c        store the numbers so the hydrogen gradient can finish
 c        being calculated; then use them later.
          FACS(I) = FAC

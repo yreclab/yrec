@@ -5,9 +5,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,
      *                  LC,RBCZ)
       use params, only : json
-      use parmin90, only : CLSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
-      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : CLSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
+      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -37,7 +37,7 @@ C
 C 1) 1 PSCA above the BCZ is in the interior model.
 C 2) 1 PSCA above the BCZ is in the envelope model.
 C 3) The BCZ is in the interior, but 1 PSCA above is in the envelope.
-C 
+C
 C If none of these are satisfied, TAUCZ is set to 0.0.
 C
 C If 1): Call ENVINT to determine PPHOT, TAUINT(NEW) to determine TAUCZ
@@ -73,9 +73,9 @@ C
 C CALL ENVINT
 C
       FPL = FP(M)
-      FTL = FT(M)	
+      FTL = FT(M)
       IDUM = 0
-      B = DEXP(CLN*BL)	
+      B = DEXP(CLN*BL)
       KATM = 0
       KENV = 0
       KSAHA = 0
@@ -86,7 +86,7 @@ C
       X = HCOMP(1,M)
       Z = HCOMP(3,M)
       RL = 0.5D0*(BL + CLSUNL - 4.0D0*TEFFL - C4PIL - CSIGL)
-      GL = CGL + HSTOT - RL - RL      	
+      GL = CGL + HSTOT - RL - RL
       PLIM = HP(M)
 C G Somers 10/14, FOR SPOTTED RUNS, FIND THE
 C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
@@ -97,7 +97,7 @@ C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
       ENDIF
       CALL ENVINT(B,FPL,FTL,GL,HSTOT,IXX,LPRT,LSBC0,
      *      PLIM,RL,ATEFFL,X,Z,DUM1,IDUM,KATM,KENV,KSAHA,
-     *      DUM2,DUM3,DUM4,LPULPT)	
+     *      DUM2,DUM3,DUM4,LPULPT)
 C PPHOT is now set, and structure variables are caluclated if
 C LCALCENV = .TRUE..
 C
@@ -129,7 +129,7 @@ C
       IF(LCALCENV.AND.LNEWTCZ)THEN
 C IF CHKPRS < 1, THEN STITCH THE ENVELOPE ONTO THE INTERIOR.
 C ENVELOPE WAS JUST INTEGRATED IN ENVINT ABOVE, SO USE THAT RUN.
-C THIS CODE BORROWED FROM STITCH.F. 
+C THIS CODE BORROWED FROM STITCH.F.
          MM = M+NUMENV-1
          DO I=M+1,MM
             DO J=1,15

@@ -1,24 +1,24 @@
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C
 C     T6RINTEOS01
-C 
+C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      
+
       subroutine t6rinteos01(slr,slt)
       use params, only : mx, mv, nr => nr01, nt => nt01
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
 
 c     The purpose of this subroutine is to interpolate in T6 and rho
-      
+
       IMPLICIT REAL*8 (A-H,O-Z)
-      
+
       common/eeeos/ epl(mx,nt,nr),xx(mx)
       common/aaeos/ q(4),h(4),xxh
-      common/aeos/  xz(mx,mv,nt,nr),  
+      common/aeos/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/bbeos/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      common/eeos/esact,eos(mv) 
+      common/eeos/esact,eos(mv)
       save
 
 c
@@ -57,7 +57,7 @@ c.....    eos(i) smoothed in left 3x4
           esact=esact*dix+esact2*(1D0-dix)
 c       endif   ! moved to loc a
         if(iq .eq. 3) then
- 
+
 c.....     eos(i) in upper-right 3x3.
           esactq2=quadeos01(is,iw,slt,q(2),q(3),q(4),t6a(k2),t6a(k3),
      x            t6a(k4))
@@ -74,7 +74,7 @@ c.....        eos(i) smoothed in both log(T6) and log(R)
         endif
         if (esact .gt. 1.D+15) then
           write(ISHORT,'("Interpolation indices out of range",
-     x              ";please report conditions.")') 
+     x              ";please report conditions.")')
           stop
         endif
 

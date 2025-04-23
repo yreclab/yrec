@@ -4,8 +4,8 @@ C
       SUBROUTINE GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA)
 
       use params, only : json
-      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
-   
+      use settings, only : CLN, CC13  ! COMMON/CONST1/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),

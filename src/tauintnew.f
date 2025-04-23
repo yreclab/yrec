@@ -2,8 +2,8 @@ C$$$$$$
       SUBROUTINE TAUINTNEW(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,MINT,SVEL,
      *                     DEL1,DEL2,HSTOT,RBCZ)
       use params, only : json
-      use parmin90, only : CMSUN, CRSUN  ! COMMON/CONST/
-      use parmin90, only : CLN  ! COMMON/CONST1/
+      use settings, only : CMSUN, CRSUN  ! COMMON/CONST/
+      use settings, only : CLN  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -19,7 +19,7 @@ C Needs access to this common block: grants knowledge of envellope
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON)
       DIMENSION HCOMP(15,JSON),HS2(JSON),LCZ(JSON),
      *     XSUM(15), HR(JSON), HP(JSON), HD(JSON), HG(JSON), HS1(JSON),
-     *     DEL1(JSON), DEL2(JSON), SVEL(JSON)  
+     *     DEL1(JSON), DEL2(JSON), SVEL(JSON)
 C G Somers; Adding vectors for cubic spline int.
       DIMENSION XDEL(4),XRAD(4),YRAD(4),YVEL(4),YPSC(4),YSPL(4)
       SAVE

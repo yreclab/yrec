@@ -22,8 +22,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE OEQOS(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
      1 BETA14,RMU,AMU,EMU,QDT,QDP,QCP,DELA,*)
       use params, only : ivarx, cnvs, zero
-      use parmin90, only : ISHORT  ! COMMON/LUOUT/
-      use parmin90, only : CGAS, CA3  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : CGAS, CA3  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -56,7 +56,7 @@ C
       IF(R.LE.-998.0D0)THEN
          RETURN 1
       ENDIF
-      D=R 
+      D=R
       D10=DLOG10(D)
 
       CALL ESAC(X,ZTAB,T6,R,IORDER,IRAD,*999)
@@ -67,7 +67,7 @@ C
       ENDIF
       QDP=1.0D0/EOS(6)
       QDT= -EOS(7)/ EOS(6)
-     
+
       QCP=1.0D6*EOS(5)*EOS(8)/EOS(6)
       DELA=1.0D0/EOS(9)
 

@@ -12,13 +12,13 @@ c  Input Arguments: TL, PL, X, Z, LDERIV, LATMO
 c
 c  Output Arguments: T, P, D, DL, BETA, BETAI, BETA14, FXION, RMU, AMU,
 c          EMU, QDT, QDP, QCP, DELA, QDTT, QDTP, QAT, QAP, QCPT, QCPP,
-c     
+c
 c  Update (Input and Output) Arguments: KSAHA
 c
 
       use params, only : nts, nps
-      use parmin90, only : CLN  ! COMMON/CONST1/
-      use parmin90, only : CGAS, CA3  ! COMMON/CONST2/
+      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CGAS, CA3  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -160,9 +160,9 @@ c  LLP 9/6/03 To get reasonable accuracy in numerical derivatives in
 c	the 4-5 decimal place SCV tables, appropriate sizes for the
 c	stepouts in the numerical derivatives must be obtained.  The
 c	row to row and column to column spacings are .20 in PL and
-c	.08 in TL. Maximum row to row changes are of the order of 
+c	.08 in TL. Maximum row to row changes are of the order of
 c	0.2000 out of 10.0000 (in density).  Maximum column to column
-c       changes changes are of the order of .0500 out of 3.5000 (in 
+c       changes changes are of the order of .0500 out of 3.5000 (in
 c	density.  It appears that stepouts of plus and minus half a
 c	row and column are needed to get appropriate accuracy for the
 c	derivatives.
@@ -181,7 +181,7 @@ c	derivatives.
             QDTT1 = (QDT1-QDT2)/dtl2/CLN
             QCPT1 = (DLOG10(QCP1)-DLOG10(QCP2))/dtl2
             QAT1 = (DLOG10(DELA1)-DLOG10(DELA2))/dtl2
-            
+
             T = 10.0D0**TL
             PPL = PL + dpl
             P = 10.0D0**PPL
@@ -279,7 +279,7 @@ C 1995 OPAL eqos
          IF(.NOT.LTAB)GOTO 998  ! Point is not in OPAL 1995 EOS table, so exit.
 
          IF(.NOT.LRAMP)THEN
-C  No ramping needed between OPAL 1995 EOS and Yale/SCV. Result is 
+C  No ramping needed between OPAL 1995 EOS and Yale/SCV. Result is
 C  fully in the OPAL 1995 table
             DL=D10o
             D=10.0D0**DL
@@ -294,7 +294,7 @@ C  fully in the OPAL 1995 table
             QCP=QCPo
             DELA=DELAo
          ELSE
-C  Ramping required. Result is on border between OPAL 1995 EOS and Yale/SCV. 
+C  Ramping required. Result is on border between OPAL 1995 EOS and Yale/SCV.
             DL=DL+FAC*(D10o-DL)
             D=10.0D0**DL
             BETA=BETA+FAC*(BETAo-BETA)
@@ -320,11 +320,11 @@ C 2001 OPAL eqos  LLP 6/17/03
          CALL EQBOUND01(T,D10o,DL0,FAC,LTAB,LRAMP)
 C eqbound01 determines whether or not the point is in the OPAL 2001 EOS table
 
-         IF(.NOT.LTAB)GOTO 998  ! Point is not in OPAL 2001 tabel, so exit. 
+         IF(.NOT.LTAB)GOTO 998  ! Point is not in OPAL 2001 tabel, so exit.
 C USE OPAL RESULTS IF NOT IN (RHO,T) REGIME WHERE RAMP
 C NEEDED
          IF(.NOT.LRAMP)THEN
-C  No ramping needed between OPAL 2001 EOS and Yale/SCV. Result is 
+C  No ramping needed between OPAL 2001 EOS and Yale/SCV. Result is
 C  fully in the OPAL 2001 table
             DL=D10o
             D=10.0D0**DL
@@ -339,7 +339,7 @@ C  fully in the OPAL 2001 table
             QCP=QCPo
             DELA=DELAo
          ELSE
-C  Ramping required. Result is on border between OPAL 2001 EOS and Yale/SCV. 
+C  Ramping required. Result is on border between OPAL 2001 EOS and Yale/SCV.
             DL=DL+FAC*(D10o-DL)
             D=10.0D0**DL
             BETA=BETA+FAC*(BETAo-BETA)
@@ -354,7 +354,7 @@ C  Ramping required. Result is on border between OPAL 2001 EOS and Yale/SCV.
             DELA=DELA+FAC*(DELAo-DELA)
          ENDIF
       ENDIF
-      ENDIF 
+      ENDIF
 
 C 2006 OPAL eqos  LLP 10/13/2996
       IF(LOPALE06)THEN
@@ -365,15 +365,15 @@ C 2006 OPAL eqos  LLP 10/13/2996
          CALL EQBOUND06(T,D10o,DL0,FAC,LTAB,LRAMP)
 C EQBOUND01 determines whether or not the point is in the OPAL 2006 EOS table
 C    If LTAB is true, point is in Opal 2006 table
-C    If LRAMP is true, point is in ramp area, and ramping is required. The ramp 
-C       factor FAC is the weight of the point for ramping purposes. 
+C    If LRAMP is true, point is in ramp area, and ramping is required. The ramp
+C       factor FAC is the weight of the point for ramping purposes.
 C    Also, to eliminate a point, one can set LRAMP to true and FAC to zero.
 
          IF(.NOT. LTAB) goto 998  ! Point is not in OPAL 2006 EOS table, so exit.
 
 C USE OPAL 2006 RESULTS ONLY IF NOT IN (RHO,T) REGIME WHERE RAMPING is NEEDED
          IF(.NOT.LRAMP)THEN
-C  No ramping needed between OPAL 2006 EOS and Yale/SCV. Result is 
+C  No ramping needed between OPAL 2006 EOS and Yale/SCV. Result is
 C  fully in the OPAL 2006 table
             DL=D10o
             D=10.0D0**DL
@@ -388,7 +388,7 @@ C  fully in the OPAL 2006 table
             QCP=QCPo
             DELA=DELAo
          ELSE
-C  Ramping required. Result is on border between OPAL 2006 EOS and Yale/SCV. 
+C  Ramping required. Result is on border between OPAL 2006 EOS and Yale/SCV.
             DL=DL+FAC*(D10o-DL)
             D=10.0D0**DL
             BETA=BETA+FAC*(BETAo-BETA)
@@ -403,7 +403,7 @@ C  Ramping required. Result is on border between OPAL 2006 EOS and Yale/SCV.
             DELA=DELA+FAC*(DELAo-DELA)
          ENDIF
       ENDIF
-      ENDIF 
+      ENDIF
 
 
  998  CONTINUE

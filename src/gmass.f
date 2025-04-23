@@ -22,7 +22,7 @@ C******************************************************************8
       XC2=FRACZ*XC
       XN2=FRACZ*XN
       XO2=FRACZ*XO
-      XNE2=FRACZ*XNE 
+      XNE2=FRACZ*XNE
       XH=X/AMAS(7)
       XHE=(1.D0-X -Z)/AMAS(6)
       XTOT=XH+XHE+XC2+XN2+XO2+XNE2

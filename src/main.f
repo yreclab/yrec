@@ -9,14 +9,14 @@ C initialize all variables, set up common blocks
 C*******
 
       use params, only : JSON, NUMTT, NUMD, NUMX, NUMZ, NUMXZ
-      use parmin90, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! COMMON/LUOUT/
-      use parmin90, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! COMMON/LUNUM/
-      use parmin90, only : FPMOD, FPENV, FPATM, FDYN  ! COMMON/LUFNM/
-      use parmin90, only : CLSUN, CLSUNL, CLNSUN, CRSUN, CRSUNL  ! COMMON/CONST/
-      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
-      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
-      use parmin90, only : CMIXL, CLNDP, CSECYR  ! COMMON/CONST3/
-      use parmin90, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
+      use settings, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! COMMON/LUOUT/
+      use settings, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! COMMON/LUNUM/
+      use settings, only : FPMOD, FPENV, FPATM, FDYN  ! COMMON/LUFNM/
+      use settings, only : CLSUN, CLSUNL, CLNSUN, CRSUN, CRSUNL  ! COMMON/CONST/
+      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
+      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : CMIXL, CLNDP, CSECYR  ! COMMON/CONST3/
+      use settings, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -103,7 +103,7 @@ C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C DBG 12/94 added calibrate stellar model
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR, 
+      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
      2      LSTAR, LTEFF, LPASSR,LCALST
 C MHP 7/96 common block added for sound speed
@@ -148,7 +148,7 @@ C JVS 02/11
 	COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
      *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT		 
+     *IJENT, IJDEL, LACOUT
 	INTEGER NAO
 	DATA NAO/1/
 C 10/11 He3+He3 luminosity info
@@ -179,7 +179,7 @@ C MHP 3/96 added data for base solar age, L
       SAVE
 
 C*******
-C START 
+C START
 C*******
 
 C LPUNCH is TRUE once first model is calculated
@@ -227,13 +227,13 @@ C scaled for a solar age of 4.57 Gyr
       ELSE
          FACAGE = 1.0D0
       ENDIF
-C DBG PULSE: save LPULSE flag, set LPULSE to F except on last model of 
+C DBG PULSE: save LPULSE flag, set LPULSE to F except on last model of
 C last run, then set LPULSE to saved value of LPULSE.
       LSAVPU = LPULSE
 C 02/11 JVS uncommented LPULSE=.FALSE.
 C      LPULSE = .FALSE.
 C MHP 1/93 add option to automatically calibrate solar model.
-C MHP 3/96 added counter for # of iterations per converged model and 
+C MHP 3/96 added counter for # of iterations per converged model and
 C starting estimate of ALPHA and X
       IF(LCALS)THEN
          CALL SETCAL(FACAGE)
@@ -249,7 +249,7 @@ C DBG 12/94 add option to automatically calculate a stellar model
 C of specified Teff and L
       IF (LCALST) THEN
          CALL SETSCAL
-      ENDIF	
+      ENDIF
 
 C**********
 C     RUN THROUGH THE KIND CARDS IN ORDER
@@ -259,7 +259,7 @@ C**********
 C         LPULSE=.FALSE.
          XENV0 = XENV0A(NK)
          ZENV0 = ZENV0A(NK)
-         CMIXL = CMIXLA(NK) 
+         CMIXL = CMIXLA(NK)
 	 LSENV0 = LSENV0A(NK)
 	 SENV0 = SENV0A(NK)
 	 LRESET = .FALSE.
@@ -393,14 +393,14 @@ C save mass in solar units
          XMSOL=SMASS
 C MHP 08/02 STORE STARTING CZ PROPERTIES
          JCZ = JENV
-         TAUCZ = 0.0D0	
+         TAUCZ = 0.0D0
 C write out headers of the appropriate output files
 	CALL WRTHEAD(SMASS)
 C DBG PULSE OUT 7/92
 C initialize variables for calculating when to dump pulse output
          POL1 = BL
          POT1 = TEFFL
-         POA1 = DAGE 
+         POA1 = DAGE
          POLEN = 0.0D0
 
 	 IF(LKUTHE) THEN
@@ -454,11 +454,11 @@ C DBG PULSE:  if last model of last run then set LPULSE to LSAVPU
             END IF
 
 C JVS 02/11: Also allow pulse output at particular ages along the way
-C 
-C  If the step is bracketing an age of interest, turn on output. This will 
-C for the step before and step after the age in AGEOUT. Once the info has 
+C
+C  If the step is bracketing an age of interest, turn on output. This will
+C for the step before and step after the age in AGEOUT. Once the info has
 C been printed out, AGEOUT is set to the next age.
-C 
+C
 C Turn on calcad:
 	IF (LACOUT) THEN
 		LADON=.TRUE.
@@ -466,8 +466,8 @@ C Turn on calcad:
 		LADON = .FALSE.
 	ENDIF
 C If output has been turned on for a previous step, keep it on for the next
-C step, but then turn it off.	
-	IF (LACOUT) THEN	
+C step, but then turn it off.
+	IF (LACOUT) THEN
 		IF (LJWRT) THEN
 			PRINT*, 'LJWRT on'
 			LPULSE = LSAVPU
@@ -475,13 +475,13 @@ C step, but then turn it off.
 			LCLCD =.TRUE.
 			LJLAST =.FALSE.
 			LJWRT=.FALSE.
-		ELSE IF (.NOT.LJWRT) THEN 
+		ELSE IF (.NOT.LJWRT) THEN
 			LCLCD=.FALSE.
-		ENDIF			
+		ENDIF
 C If this is the step before one of the ages of interest, print everything out.
 C Also, save model structure.
             IF(NAO.LT.6) THEN
-            	IF(DAGE+DDAGE/1.0D9-AGEOUT(NAO) .LE. 0.0D0 .AND. 
+            	IF(DAGE+DDAGE/1.0D9-AGEOUT(NAO) .LE. 0.0D0 .AND.
      *		DAGE+2.0D0*DDAGE/1.0D9-AGEOUT(NAO) .GE. 0.0D0 .AND. .NOT. LJWRT) THEN
 				PRINT*, 'AGEOUT reached'
 				LPULSE = LSAVPU
@@ -492,7 +492,7 @@ C Also, save model structure.
 		ENDIF
 	 ENDIF
 
-		
+
 C JVS end
 C
 C DBG PULSE:  if endage reached then set LPULSE to LSAVPU
@@ -502,7 +502,7 @@ C MHP 10/24 GENERALIZE CHECK
                  LPULSE = LSAVPU
 C MHP 7/96 compute sound speed for solar model
                  LSOUND = .TRUE.
-            END IF 
+            END IF
 
 
 CFD echo LSOUND
@@ -524,7 +524,7 @@ C STARIN called here for timestep cutting
 
 C skip this section if model not to be aged
 C MHP 7/98
-C need to add logic to permit resacling + time evolution for 
+C need to add logic to permit resacling + time evolution for
 C pre-main sequence models
             IF(IRESCA(NK).NE.2 .AND. MODEL.GE.0) THEN
                LAGE = .TRUE.
@@ -584,7 +584,7 @@ C rezone new model, except rezoning not performed for He flash calculations
 C STORE NEW CZ BASE
                JCZ = JENV
             ELSE
-C save old model for PTIME 
+C save old model for PTIME
                DO I=1, M
                   HPO(I) = HP(I)
                   HTO(I) = HT(I)
@@ -740,7 +740,7 @@ C MIXING AND THE STRUCTURE VARIABLES.  IT SHOULD NOT BE USED FOR MODELS
 C WHERE SEMI-CONVECTION IS IMPORTANT (ITERATING BETWEEN THE BURNING AND
 C STRUCTURE GENERATES OSCILLATIONS). IT SHOULD BE USED FOR HIGH-PRECISION
 C WORK (E.G. SOLAR MODELS).
-C Surface boundary conditions checked again since we've changed the 
+C Surface boundary conditions checked again since we've changed the
 C composition (and hence the structure) of the model in ITLVL=3
 C (to be implemented when I know the rest of it works!)
             NITER = NITER4
@@ -768,7 +768,7 @@ C G Somers 6/14, SET IMIX = .TRUE. SO THE CORRECT GRADS ARE USED.
       IMIX = .TRUE.
       CALL MIXCZ(HCOMP,HS2,HS1,LC,HR,HP,HD,HG,M,IMIX)
 C G Somers END
-		
+
 C MHP 9/94 STORE TOTAL AGE IN SAGE
             SAGE = DAGE
 C JVS 02/12 STITCH TOGETHER CONVERGED INTERIOR, ENVELOPE, AND ATMOSPHERE
@@ -794,7 +794,7 @@ C               IF(LENDAG(NK).AND.ENDAGE(NK)-DAGE*1.0D9.LE.1.0D0)THEN
                ENDIF
 C FIND THE NEW RUN OF OMEGA
 C JENV0 ADDED TO SR CALL.
-               LJDOT = LJDOT0 
+               LJDOT = LJDOT0
                CALL GETW(BL,DELTS,DWMAX,FP,FT,HCOMP,HD,HJM,HL,HP,HR,
      *              HS,HS1,HS2,HSTOT,HT,LC,LJDOT,M,MODEL,SJTOT,SMASS,
      *              TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0)
@@ -902,7 +902,7 @@ C TEST IF MODEL IS NEAR DESIRED Teff AND L. IF NOT RESCALE AND TRY AGAIN.
             IF(MOD(NK,2).EQ.0)THEN
 	       IF(MODELN.EQ.1) THEN
 	          TEFFI = 10.0D0**TEFFL
-	       ELSE 
+	       ELSE
 	          CALL CHKSCAL(BL, TEFFL, DAGE, NK)
 	          IF(LPASSR) GOTO 200
 	       END IF
@@ -922,7 +922,7 @@ C STORE LAST MODEL IN ISTOR IF LSTORE, LSTPCH, AND LPUNCH ARE .TRUE.
 	 ENDIF
 C 110  CONTINUE
 C G Somers END
-      
+
 C MHP 1/93 CHECK AUTOMATIC CALIBRATATION OF SOLAR MODEL.
 c MHP 5/96 changed solar calibration to perform solar models in 3 kind cards
          IF(LCALS)THEN
@@ -1032,7 +1032,7 @@ C INITIAL ALPHA,Y,Z,ALPHA; FINAL R, L
          YINI = 1.0D0 - RESCAL(2,NK-2) - RESCAL(3,NK-2)
          ZINI = RESCAL(3,NK-2)
          WRITE(ISNU,1521)CMIXLA(NK),YINI,ZINI,BL,RLL
- 1521    FORMAT(F7.4,2F8.5,1P2E10.3)  
+ 1521    FORMAT(F7.4,2F8.5,1P2E10.3)
 C CZ DEPTH (R,M), SURFACE Y, Z, Z/X (ADD T CZ BASE, RHO CZ BASE)
          WRITE(ISNU,1522)ENVR,ENVLM,HCOMP(2,M),HCOMP(3,M),ZTOX
  1522    FORMAT(F8.5,F9.6,2F8.5,F9.6)

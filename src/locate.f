@@ -24,9 +24,9 @@ C
       J = JL
       IF((J .EQ. 0) .AND. (X .GT. 0.99D0*XX(1)))THEN
          J = 1
-      END IF            
+      END IF
       IF((J .EQ. N) .AND. (X .LT. 1.01D0*XX(N)))THEN
          J = N-1
-      END IF    
+      END IF
       RETURN
       END
