@@ -15,14 +15,14 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
       use params, only : json
+      use parmin90, only : CLSUN  ! COMMON/CONST/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
       CHARACTER*6 EOS
       CHARACTER*5 ATEMP
       CHARACTER*4 ATM, LOK, HIK, COMPMIX
-
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
 
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),

@@ -49,6 +49,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)   
 	  use params, only : json, nts, nps
       use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use parmin90, only : CLSUNL, CRSUNL  ! COMMON/CONST/
+      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
+      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -75,9 +78,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
       COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
       COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
-	COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-	COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
 	COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,

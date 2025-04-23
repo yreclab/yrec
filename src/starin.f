@@ -10,9 +10,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use params, only : json, nts, nps
       use parmin90, only : IFIRST  ! COMMON/LUNUM/
-      ! COMMON/LUFNM/
       use parmin90, only : vnew  ! COMMON/VNEWCB/ DBG 1/96 VNEW REPLACES V
       use parmin90, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use parmin90, only : CLSUNL  ! COMMON/CONST/
+      use parmin90, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
+      use parmin90, only : CSIGL, CGL  ! COMMON/CONST2/
+      use parmin90, only : CMIXL, CSECYR  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -34,10 +37,6 @@ C DBGLAOL
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/COMP2/YENV,Y3ENV
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
       COMMON/HEFLSH/LKUTHE

@@ -7,6 +7,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *AMU,EMU,LDERIV,LATMO,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,
      *KSAHA)
       use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use parmin90, only : CLN  ! COMMON/CONST1/
+      use parmin90, only : CGAS, CMKH  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -14,8 +16,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       DIMENSION FX(12),FXION(3)
       DIMENSION SAHATT(11),FXT(11)
       DIMENSION SAHAU(13),SAHAT(11),SAHAK(11),SAHAX(11),FXS(11)
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
       DATA SAHAT,SAHET0,SAHET1/59630.,69450.,88710.,91330.,94570.,
      T 130630.,157800.,158000.,168630.,183080.,250200.,285270.,631370./
       DATA SAHAU/-.01,-.47,.60,.49,.08,.11,.0,-.04,.64,.99,1.03,.6,.0/

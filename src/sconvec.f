@@ -5,14 +5,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use params, only : json
       use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use parmin90, only : CLSUN  ! COMMON/CONST/
+      use parmin90, only : CLN, C4PI  ! COMMON/CONST1/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL
       REAL*8 OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL
       CHARACTER*256 FLAOL, FPUREZ
       COMMON/FLAG/LEXCOM
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST1/CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
 C DBGLAOL
       COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,

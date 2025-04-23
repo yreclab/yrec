@@ -31,6 +31,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      1 BETA14,RMU,AMU,EMU,QDT,QDP,QCP,DELA,*)
       use params, only : ivarx, cnvs, zero, mx, mv, nr => nr06, nt => nt06
       use parmin90, only : ISHORT  ! COMMON/LUOUT/
+      use parmin90, only : CGAS, CA3  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -39,8 +40,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       
       common/eeos06/esact,eos(mv)

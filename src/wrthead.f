@@ -6,6 +6,8 @@ C write the headers for all the appropriate output files
 
       SUBROUTINE WRTHEAD (SMASS)
       use parmin90, only : ITRACK, IOWR  ! COMMON/LUOUT/
+      use parmin90, only : CMSUN, CMBOL  ! COMMON/CONST/
+      use parmin90, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -18,8 +20,6 @@ C MHP 10/02 added proper dimensions for flaol2, fopal2
      *             LZRAMP, FLAOL2, FOPAL2
       COMMON/TRACK/ITRVER
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C COMMON/LUNUM/
       COMMON/CHRONE/LRWSH, LISO, IISO, FISO
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH

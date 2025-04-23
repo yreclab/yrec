@@ -14,11 +14,11 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
 C     WRITE MODEL OUT IN ASCII FORMAT
-      PARAMETER (JSON=5000)
+      use params, only : JSON
+      use parmin90, only : CLSUN  ! COMMON/CONST/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
       CHARACTER*4 ATM,HIK,LOK,COMPMIX
       CHARACTER*6 EOS

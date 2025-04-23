@@ -9,6 +9,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json
       use parmin90, only : IOPMOD  ! COMMON/LUNUM/
       use parmin90, only : IMODPT  ! COMMON/LUOUT/
+      use parmin90, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! COMMON/CONST/
+      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
+      use parmin90, only : CGAS, CSIGL, CGL  ! COMMON/CONST2/
+      use parmin90, only : CMIXL  ! COMMON/CONST3/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -19,10 +23,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
       COMMON/FLAG/LEXCOM
       COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX

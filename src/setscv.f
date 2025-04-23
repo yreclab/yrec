@@ -4,11 +4,12 @@ c     compute the new equation of state and compare to the old one...
       SUBROUTINE SETSCV
 
       use params, only : nts, nps
+      use parmin90, only : CLN, CC13  ! COMMON/CONST1/
+      use parmin90, only : CA3  ! COMMON/CONST2/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),

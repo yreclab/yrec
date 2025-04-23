@@ -6,10 +6,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
       SUBROUTINE LIBURN2(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)
       use params, only : json
+      use parmin90, only : CLN  ! COMMON/CONST1/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
       COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO

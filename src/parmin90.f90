@@ -21,6 +21,12 @@ module parmin90
   public :: flldat, fsnu, fscomp, fkur
   public :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
 
+  ! Variables from COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/, and COMMON/CONST3/
+  public :: clsun, clsunl, clnsun, cmsun, cmsunl, crsun, crsunl, cmbol
+  public :: cln, clni, c4pi, c4pil, c4pi3l, cc13, cc23, cpi
+  public :: cgas, ca3, ca3l, csig, csigl, cgl, cmkh, cmkhn
+  public :: cdelrl, cmixl, cmixl2, cmixl3, clndp, csecyr
+
   ! Variables from COMMON/MONTE/
   public :: lmonte, imbeg, imend
 
@@ -70,6 +76,15 @@ module parmin90
   character(len=256) :: fstor, fpmod, fpenv, fpatm, fdyn
   character(len=256) :: flldat, fsnu, fscomp, fkur
   character(len=256) :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
+
+  ! Variables from COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/, and COMMON/CONST3/
+  ! getnewenv.f: Physical constants.
+  real(dp) :: clsun = 3.8515e33_dp, clsunl, clnsun, cmsun, cmsunl, &
+            & crsun = 6.9598e10_dp, crsunl, cmbol
+  real(dp) :: cln, clni, c4pi, c4pil, c4pi3l, cc13, cc23, cpi
+  real(dp) :: cgas, ca3, ca3l, csig, csigl, cgl, cmkh, cmkhn
+  real(dp) :: cdelrl, cmixl = 1.4_dp, cmixl2, cmixl3, clndp, &
+            & csecyr  ! engeb.f: seconds per year
 
   ! Variables from COMMON/MONTE/
   ! MHP 8/96 Monte Carlo option for snus added.

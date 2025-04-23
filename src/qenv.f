@@ -7,6 +7,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
 
       use params, only : json
+      use parmin90, only : CLN, C4PIL  ! COMMON/CONST1/
+      use parmin90, only : CGL  ! COMMON/CONST2/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
@@ -20,8 +23,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *            SENV
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
