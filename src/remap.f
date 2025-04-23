@@ -6,15 +6,16 @@ C REMAP
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE REMAP
       use params, only : nt, ng, nta, nga, nts, nps, json
+      use settings, only : ATIME  ! COMMON/CTLIM/
+      use settings, only : DTWIND  ! COMMON/CT2/
+      use settings, only : LPTIME  ! COMMON/CT3/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
       COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
      1     NITER1,NITER2,NITER3
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
-      COMMON/CT2/DTWIND
-      COMMON/CT3/LPTIME
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK
 C MHP 6/14 DERIVATIVES ADDED
       COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC

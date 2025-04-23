@@ -9,11 +9,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json
       use settings, only : CLSUN, CMSUN  ! COMMON/CONST/
       use settings, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : ATIME  ! COMMON/CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CT3/LPTIME
       COMMON/FLAG/LEXCOM
 C MHP 10/02 ADDED MISSING DIMENSION STATEMENTS!
       DIMENSION HCOMP(15,JSON),HL(JSON),HS1(JSON),HT(JSON),HS2(JSON),

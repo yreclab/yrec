@@ -6,9 +6,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE FINDSH(HCOMP,HL,LC,M,JCORE,JENV,JXBEG,JXEND,JXMID,
      *                  LSHELL)
       use params, only : json
+      use settings, only : ATIME  ! COMMON/CTLIM/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       DIMENSION HCOMP(15,JSON),HL(JSON),LC(JSON)
       DATA DLMIN,DXMIN/1.0D-5,1.0D-5/
       SAVE

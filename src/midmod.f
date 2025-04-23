@@ -8,6 +8,7 @@ C$$$$$$
       use params, only : json
       use settings, only : CMSUN  ! COMMON/CONST/
       use settings, only : CLN, CC23  ! COMMON/CONST1/
+      use settings, only : TCUT  ! COMMON/CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -34,7 +35,6 @@ C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
       COMMON/OLDAB/HCOMPS(15,JSON)
 C MHP 05/02 ADDED FOR DEUTERIUM BURNING
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C MHP 06/02
 C KC 2025-04-22 Downgraded this to arrays as it was only used in midmod.f.

@@ -8,11 +8,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use params, only : json
       use settings, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : ATIME  ! COMMON/CTLIM/
+      use settings, only : LPTIME  ! COMMON/CT3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CT3/LPTIME
       COMMON/FLAG/LEXCOM
 	COMMON/GOVS/LTRIST
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW

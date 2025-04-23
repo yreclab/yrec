@@ -6,9 +6,10 @@
      *                  DCDT,DODT,DXDT,DYDT,XC12,XO16,X,Z)
 
       use params, only : json
+      use settings, only : TCUT  ! COMMON/CTLIM/
+
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
       DIMENSION XSUM(11)

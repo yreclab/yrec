@@ -6,11 +6,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *   HF1,HF2,QDP,QDT,JXBEG)
       use params, only : json
       use settings, only : CLSUN  ! COMMON/CONST/
+      use settings, only : ATIME  ! COMMON/CTLIM/
+      use settings, only : LPTIME  ! COMMON/CT3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CT3/LPTIME
 C MHP 10/02 added missing common block
       COMMON/NEWEPS/EALPCA,ENU
       COMMON/FLAG/LEXCOM

@@ -21,6 +21,7 @@ C*******
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
       use settings, only : CMIXL, CLNDP, CSECYR  ! COMMON/CONST3/
       use settings, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
+      use settings, only : LPTIME  ! COMMON/CT3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -139,8 +140,6 @@ C MHP 05/02 DEUTERIUM BURNING RATE ADDED
 C***MHP 1/04 inserted for test
 C      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
 C*** end test
-C LLP 8/07 Make LPTIME available for calibration
-      COMMON/CT3/LPTIME
 C MHP 2/04 ADDED FOR NEUTRINO FLUX TABLE
       COMMON/BE7/BE7MASSFRACTION
 C JVS 02/11

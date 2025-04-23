@@ -146,6 +146,7 @@ module settings
             & csecyr  ! engeb.f: seconds per year
 
   ! Variables from COMMON/CTLIM/, COMMON/CT2/, and COMMON/CT3/
+  ! parmin.f: atime(13) was orginally = 1.5.
   ! midmod.f: MHP 05/02 Added for deuterium burning (tcut)
   ! mix.f: MHP Common block added for G.S. (tcut)
   real(dp) :: atime(14) = [1.0e-3_dp, 2.0e-2_dp, 5.0e-1_dp, 2.0e-2_dp, 3.0e-1_dp, 1.5e-3_dp, &
