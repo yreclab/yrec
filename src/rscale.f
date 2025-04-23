@@ -7,14 +7,13 @@ C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
       use params, only : json
       use settings, only : ISHORT  ! COMMON/LUOUT/
       use settings, only : RESCAL  ! COMMON/CKIND/
+      use settings, only : XENV, ZENV, XNEW, ZNEW, STOTAL, SENV  ! COMMON/COMP/
       use settings, only : CMSUN  ! COMMON/CONST/
       use settings, only : CLN  ! COMMON/CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 FLAOL2, FOPAL2
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C MHP 5/91 COMMON BLOCK ADDED TO FIX CORE RESCALING.
       COMMON/LABEL/XENV0,ZENV0
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE HEAVY ELEMENT MIXTURE

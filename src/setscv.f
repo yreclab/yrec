@@ -4,6 +4,7 @@ c     compute the new equation of state and compare to the old one...
       SUBROUTINE SETSCV
 
       use params, only : nts, nps
+      use settings, only : XENV, ZENV  ! COMMON/COMP/
       use settings, only : CLN, CC13  ! COMMON/CONST1/
       use settings, only : CA3  ! COMMON/CONST2/
 
@@ -14,8 +15,6 @@ C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
      *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       DIMENSION ATOMWT(4),QR(3),FT(3),FTD(3),FP(3),FPD(3)
       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
       DATA CMH,CMHE,CBOLTZ/1.67357D-24,6.646442D-24,1.380658D-16/

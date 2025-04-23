@@ -17,6 +17,7 @@ c  Update (Input and Output) Arguments: KSAHA
 c
 
       use params, only : nts, nps
+      use settings, only : XENV, ZENV, AMUENV, FXENV  ! COMMON/COMP/
       use settings, only : CLN  ! COMMON/CONST1/
       use settings, only : CGAS, CA3  ! COMMON/CONST2/
 
@@ -24,8 +25,6 @@ c
       IMPLICIT LOGICAL*4(L)
       SAVE
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDY,

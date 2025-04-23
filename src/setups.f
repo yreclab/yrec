@@ -5,6 +5,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETUPS(V)
       use params, only : json, nt, ng, ntc, ngc, nts, nps, nta, nga
       use settings, only : IFERMI, FFERMI, ISHORT  ! COMMON/LUNUM/, COMMON/LUFNM/, COMMON/LUOUT/
+      use settings, only : XENV  ! COMMON/COMP/
       use settings, only : CLSUN, CLSUNL, CLNSUN, CMSUN, CMSUNL, CRSUN, CRSUNL, CMBOL  ! COMMON/CONST/
       use settings, only : CLN, CLNI, C4PI, C4PIL, C4PI3L, CC13, CC23, CPI  ! COMMON/CONST1/
       use settings, only : CGAS, CA3, CA3L, CSIG, CSIGL, CGL, CMKH  ! COMMON/CONST2/
@@ -29,8 +30,6 @@ C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
      1             YYDH,ZZDH,DHNUE(18),LDH
       DIMENSION V(12)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1     IOMHD7, IOMHD8

@@ -10,6 +10,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/
       use settings, only : IOPENV, IOPATM  ! COMMON/LUNUM/
       use settings, only : LSTATM, LSTENV  ! COMMON/CCOUT/
+      use settings, only : SENV  ! COMMON/COMP/
 C DBG pulse: constants needed for del and dela calculation
       use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
       use settings, only : CLN, CC23  ! COMMON/CONST1/
@@ -31,8 +32,6 @@ C DBG CHANGED MAXSTEP FROM 200 TO 2000 TO GIVE ATMOSPHERE INTEGRATER A CHANCE.
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *  FLAOL, FPUREZ
       COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM

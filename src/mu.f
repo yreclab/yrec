@@ -4,14 +4,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MU
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MU(T,P,D,X,Z,RMU,AMU,EMU,BETA)
+      use settings, only : XENV, ZENV, AMUENV  ! COMMON/COMP/
       use settings, only : CGAS  ! COMMON/CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
       DIMENSION ATOMWT(4)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       DATA NZP1/12/
       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/

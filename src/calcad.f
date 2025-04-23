@@ -49,6 +49,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *			LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)
 	  use params, only : json, nts, nps
       use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : STOTAL  ! COMMON/COMP/
       use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -80,8 +81,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
 	COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *SENV
  	COMMON/SOUND/GAM1(JSON),LSOUND
 	common/eeos06/esact,eos(10)
 	COMMON /LLOT95/ZTAB

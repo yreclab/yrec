@@ -12,6 +12,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : LSTORE, LSTENV  ! COMMON/CCOUT/
       use settings, only : NPENV  ! COMMON/CCOUT1/
       use settings, only : TRIDT, TRIDL, LNEW0  ! COMMON/CENV/
+      use settings, only : STOTAL  ! COMMON/COMP/
       use settings, only : CLSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -24,8 +25,6 @@ C BOTH LNEW AND LRESET ARE RESET TO .FALSE.
 
       DIMENSION LTRI(3),TRIT(3),TRIL(3),CFENV(9),PS(3),TS(3),RS(3),
      *     ESTORE(4),LC(JSON)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 	COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
 C MHP 9/01 ADDED COMMON BLOCK

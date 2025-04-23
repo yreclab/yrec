@@ -11,14 +11,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json
       use settings, only : FMILNE, IMILNE  ! COMMON/LUFNM/, COMMON/LUOUT/
       use settings, only : NPRTPT  ! COMMON/CCOUT1/
+      use settings, only : XENV, ZENV, STOTAL  ! COMMON/COMP/
       use settings, only : CLSUN, CMSUN  ! COMMON/CONST/
       use settings, only : CLN, C4PI  ! COMMON/CONST1/
       use settings, only : CGL  ! COMMON/CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),

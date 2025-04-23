@@ -7,6 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
 
       use params, only : json
+      use settings, only : STOTAL  ! COMMON/COMP/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CGL  ! COMMON/CONST2/
 
@@ -21,8 +22,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *            SENV
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,

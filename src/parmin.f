@@ -23,6 +23,7 @@ C MHP 6/98
       use settings, only : LDEBUG, LCORR, LMILNE, LTRACK, LSTPCH  ! COMMON/CCOUT2/
       use settings, only : TRIDT, TRIDL, SENV0, LSENV0, LNEW0  ! COMMON/CENV/
       use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! COMMON/CKIND/
+      use settings, only : ZENV  ! COMMON/COMP/
       use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
       use settings, only : CMIXL  ! COMMON/CONST3/
       use settings, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
@@ -50,8 +51,6 @@ C	and extra acoustic depth (calcad.f) output files
 	CHARACTER*256 EMPTY
 	INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/CT2/DTWIND
       COMMON/CT3/LPTIME

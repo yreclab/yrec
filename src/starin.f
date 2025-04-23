@@ -14,6 +14,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
       use settings, only : SENV0, LSENV0, LNEW0  ! COMMON/CENV/
       use settings, only : IRESCA, LFIRST  ! COMMON/CKIND/
+      use settings, only : XENV, ZENV, ZENVM, AMUENV, FXENV, XNEW, ZNEW, STOTAL, SENV  ! COMMON/COMP/
+      use settings, only : YENV, Y3ENV  ! COMMON/COMP2/
       use settings, only : CLSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -33,9 +35,6 @@ C DBGLAOL
       COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *  FLAOL, FPUREZ
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/COMP2/YENV,Y3ENV
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
       COMMON/HEFLSH/LKUTHE

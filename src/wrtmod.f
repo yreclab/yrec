@@ -10,6 +10,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : IOPMOD  ! COMMON/LUNUM/
       use settings, only : IMODPT  ! COMMON/LUOUT/
       use settings, only : LSTORE, LSTATM, LSTENV, LSCRIB  ! COMMON/CCOUT/
+      use settings, only : STOTAL  ! COMMON/COMP/
       use settings, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CGAS, CSIGL, CGL  ! COMMON/CONST2/
@@ -19,8 +20,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       IMPLICIT REAL*8(A-H,O-Z)
 
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
       COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
       COMMON/FLAG/LEXCOM
       COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
