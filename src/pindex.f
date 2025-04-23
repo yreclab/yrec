@@ -6,10 +6,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PINDEX(JXBEG,JXEND,LSHELL,M,ID,IDM)
 
       use params, only : json
+      use settings, only : NPRTPT  ! COMMON/CCOUT1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       DIMENSION ID(JSON)
       SAVE
 

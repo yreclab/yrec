@@ -13,6 +13,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : FSCOMP  ! COMMON/LUFNM/
       use settings, only : ILAST, ITRACK, ISHORT, ISTOR  ! COMMON/LUOUT/
       use settings, only : LSTORE  ! COMMON/CCOUT/
+      use settings, only : NPRTMOD  ! COMMON/CCOUT1/
       use settings, only : CLSUN, CLSUNL, CMSUN, CRSUN, CRSUNL, CMBOL  ! COMMON/CONST/
       use settings, only : CLN, C4PI, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -26,7 +27,6 @@ C JVS 10/13 for recalculation of taucz
 C end JVS
       COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
       COMMON/TRACK/ITRVER
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
