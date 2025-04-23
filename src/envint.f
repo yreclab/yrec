@@ -9,6 +9,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json, nt, ng, ntc, ngc, nta, nga
       use settings, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/
       use settings, only : IOPENV, IOPATM  ! COMMON/LUNUM/
+      use settings, only : LSTATM, LSTENV  ! COMMON/CCOUT/
 C DBG pulse: constants needed for del and dela calculation
       use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
       use settings, only : CLN, CC23  ! COMMON/CONST1/
@@ -84,10 +85,6 @@ C JVS Acoustic depth common block
      *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
      *IJENT, IJDEL, LACOUT
-
-C G Somers 11/14, ADD I/O COMMON BLOCK
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB
-C G Somers END
 
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP

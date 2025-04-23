@@ -9,6 +9,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use params, only : json
       use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : LSTORE, LSTENV  ! COMMON/CCOUT/
       use settings, only : CLSUNL  ! COMMON/CONST/
       use settings, only : CLN, C4PIL  ! COMMON/CONST1/
       use settings, only : CSIGL, CGL  ! COMMON/CONST2/
@@ -20,7 +21,6 @@ C BOTH LNEW AND LRESET ARE RESET TO .FALSE.
 
       DIMENSION LTRI(3),TRIT(3),TRIL(3),CFENV(9),PS(3),TS(3),RS(3),
      *     ESTORE(4),LC(JSON)
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,

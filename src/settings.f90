@@ -114,6 +114,7 @@ module settings
   integer, parameter :: imonte1 = 70, imonte2 = 71  ! MHP 6/98 Monte Carlo for snus
 
   ! Variables from COMMON/CCOUT/, COMMON/CCOUT1/, and COMMON/CCOUT2/
+  ! putstore.f: include common blocks with required physics and output flags
   ! envint.f: G Somers 11/14, add i/o common block
   logical :: lstore = .false., lstatm, lstenv, lstmod, lstphys, lstrot, lscrib = .true.
   integer :: npenv, nprtmod = 1, nprtpt = 1, npoint = 1
