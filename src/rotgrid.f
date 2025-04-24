@@ -6,11 +6,10 @@ C $$$$$$
       use settings, only : CLSUN  ! COMMON/CONST/
       use settings, only : CLN, C4PI  ! COMMON/CONST1/
       use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only: HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),NITER1,
-     *     NITER2,NITER3
       COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
       COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
      *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),

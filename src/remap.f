@@ -9,12 +9,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ATIME  ! COMMON/CTLIM/
       use settings, only : DTWIND  ! COMMON/CT2/
       use settings, only : LPTIME  ! COMMON/CT3/
+      use settings, only: HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
-     1     NITER1,NITER2,NITER3
       COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK
 C MHP 6/14 DERIVATIVES ADDED
