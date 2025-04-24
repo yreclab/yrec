@@ -47,30 +47,30 @@ C  CALCULATE FOR FIRST POINT(ALWAYS DONE)
 C  PRINT OUT EVERY NPRTPT POINTS;LAST POINT ALWAYS PRINTED.
       IEND = 1
       IF(NPRTPT.LE.M) THEN
-	 IBEG = MAX(2,NPRTPT)
-	 IEND = M - MOD(M,NPRTPT)
-	 DO 20 I = IBEG,IEND,NPRTPT
-	    D = DEXP(CLN*HD(I))
-	    P = DEXP(CLN*HP(I))
-	    R = DEXP(CLN*HR(I))
-	    U = C4PI*D*R**3/HS1(I)
-	    V = DEXP(CLN*CGL)*HS1(I)*D/(P*R)
-	    W = U*HS1(I)*(SESUM(I)+SEG(7,I))/(HL(I)*CLSUN)
-	    NP1 = 1.0D0/SDEL(2,I)
-	    WRITE(IMILNE,10)I,HS1(I),R,P,D,HCOMP(1,I),HL(I),
+       IBEG = MAX(2,NPRTPT)
+       IEND = M - MOD(M,NPRTPT)
+       DO 20 I = IBEG,IEND,NPRTPT
+          D = DEXP(CLN*HD(I))
+          P = DEXP(CLN*HP(I))
+          R = DEXP(CLN*HR(I))
+          U = C4PI*D*R**3/HS1(I)
+          V = DEXP(CLN*CGL)*HS1(I)*D/(P*R)
+          W = U*HS1(I)*(SESUM(I)+SEG(7,I))/(HL(I)*CLSUN)
+          NP1 = 1.0D0/SDEL(2,I)
+          WRITE(IMILNE,10)I,HS1(I),R,P,D,HCOMP(1,I),HL(I),
      *                      U,V,W,NP1
    20    CONTINUE
       ENDIF
       IF(IEND.LT.M) THEN
 C  PRINT OUT LAST POINT IF NPRTPT DOESNT DIVIDE EVENLY INTO M.
-	 D = DEXP(CLN*HD(M))
-	 P = DEXP(CLN*HP(M))
-	 R = DEXP(CLN*HR(M))
-	 U = C4PI*D*R**3/HS1(M)
-	 V = DEXP(CLN*CGL)*HS1(M)*D/(P*R)
-	 W = U*HS1(M)*(SESUM(M)+SEG(7,M))/(HL(M)*CLSUN)
-	 NP1 = 1.0D0/SDEL(2,M)
-	 WRITE(IMILNE,10)M,HS1(M),R,P,D,HCOMP(1,M),HL(M),
+       D = DEXP(CLN*HD(M))
+       P = DEXP(CLN*HP(M))
+       R = DEXP(CLN*HR(M))
+       U = C4PI*D*R**3/HS1(M)
+       V = DEXP(CLN*CGL)*HS1(M)*D/(P*R)
+       W = U*HS1(M)*(SESUM(M)+SEG(7,M))/(HL(M)*CLSUN)
+       NP1 = 1.0D0/SDEL(2,M)
+       WRITE(IMILNE,10)M,HS1(M),R,P,D,HCOMP(1,M),HL(M),
      *                   U,V,W,NP1
       ENDIF
       CLOSE(IMILNE)

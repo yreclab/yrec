@@ -66,7 +66,7 @@ c     *          (X*CONDX*QODCX +.5D0*Y*CONDY*QODCY +.5D0*Z*COBDZ*QODCZ)
 c           QOTC = 2D0 * CONDL / ( 1D0 + X ) *
 c     *          (X*CONDX*QOTCX +.5D0*Y*CONDY*QOTCY +.5D0*Z*CONDZ*QOTCZ)
 
-	   OCL = -3.5194D0+3.0D0*TL-DL-CONDL
+         OCL = -3.5194D0+3.0D0*TL-DL-CONDL
            QODC = -1.0D0-QODC
            QOTC = 3.0D0-QOTC
            LCONDO=.TRUE.

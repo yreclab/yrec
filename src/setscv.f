@@ -204,15 +204,15 @@ C DERIVATIVES OF LN CP
            QCPP = QR(1)*FPD(1)+QR(2)*FPD(2)+QR(3)*FPD(3)
            DO K = 1,3
               ii = IDT+K-1
-	      jj = min(NPTSX(ii),j)
-	      QR(K) = DLOG(TABLENV(ii,jj,5))
+            jj = min(NPTSX(ii),j)
+            QR(K) = DLOG(TABLENV(ii,jj,5))
            END DO
            QCPT = QR(1)*FTD(1)+QR(2)*FTD(2)+QR(3)*FTD(3)
 C DERIVATIVES OF DU/DT
            DO K = 1,3
               ii = IDT+K-1
-	      jj = min(NPTSX(ii),j)
-	      QR(K) = TABLENV(ii,jj,6)
+            jj = min(NPTSX(ii),j)
+            QR(K) = TABLENV(ii,jj,6)
               QR(K) = TABLENV(IDT+K-1,J,6)
            END DO
            QAT = QR(1)*FTD(1)+QR(2)*FTD(2)+QR(3)*FTD(3)

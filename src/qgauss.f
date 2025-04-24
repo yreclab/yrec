@@ -21,12 +21,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       GINVG = 0.0D0
       SPHIG = 0.0D0
       DO 10 J = 1,5
-	 DX = XR*X(J)
-	 CALL FUNC(XM+DX,G,S,R0,HS,AINT,Q,W2,A,I)
-	 CALL FUNC(XM-DX,G2,S2,R0,HS,AINT,Q,W2,A,I)
-	 G0G = G0G+W(J)*(G*S+G2*S2)
-	 GINVG = GINVG+W(J)*(S/G+S2/G2)
-	 SPHIG = SPHIG+W(J)*(S+S2)
+       DX = XR*X(J)
+       CALL FUNC(XM+DX,G,S,R0,HS,AINT,Q,W2,A,I)
+       CALL FUNC(XM-DX,G2,S2,R0,HS,AINT,Q,W2,A,I)
+       G0G = G0G+W(J)*(G*S+G2*S2)
+       GINVG = GINVG+W(J)*(S/G+S2/G2)
+       SPHIG = SPHIG+W(J)*(S+S2)
    10 CONTINUE
       G0G = G0G*XR
       GINVG = GINVG*XR

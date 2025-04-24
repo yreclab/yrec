@@ -16,8 +16,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C DBGLAOL
       REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
 
-	INTEGER DUM2, DUM4
-	REAL*8 DUM1, DUM3
+      INTEGER DUM2, DUM4
+      REAL*8 DUM1, DUM3
       CHARACTER*256 FLAOL, FPUREZ
       CHARACTER*256 FATM
       CHARACTER*256 FSCVH,FSCVHE,FSCVZ
@@ -151,20 +151,20 @@ C  OPEN DATA FILES
       K1 = 1
       DO 180 I=1,41
 C MHP 10/02 SHOULD BE INT(DVAL,ETC.)
-	 IF (DVAL(I+1).LE.DVAL(I)) THEN
-C	 IF (INT(DVAL(I+1)).LE.INT(DVAL(I))) THEN
-	    WRITE(ISHORT,1000) I
+       IF (DVAL(I+1).LE.DVAL(I)) THEN
+C       IF (INT(DVAL(I+1)).LE.INT(DVAL(I))) THEN
+          WRITE(ISHORT,1000) I
  1000       FORMAT(1X,39('>'),40('<')/1X,'ERROR IN SUBROUTINE SETUPS'/
      *      1X,'GLITCH IN FERMI TABLE ELEMENT',I4/1X,'RUN STOPPED')
-	    STOP
-	 ENDIF
-	 K = INT((DVAL(I+1) - DVAL(I))*20.0D0 + 0.10D0)
-	 K2 = K1 + K - 1
-	 IF (I.EQ.41)  K2 = 261
-	 DO 170 J=K1,K2
-	    IDEN(J) = I
+          STOP
+       ENDIF
+       K = INT((DVAL(I+1) - DVAL(I))*20.0D0 + 0.10D0)
+       K2 = K1 + K - 1
+       IF (I.EQ.41)  K2 = 261
+       DO 170 J=K1,K2
+          IDEN(J) = I
   170    CONTINUE
-	 K1 = K2 + 1
+       K1 = K2 + 1
   180 CONTINUE
 
 C  CLOSE EQUATION OF STATE FILE.
@@ -227,8 +227,8 @@ C MHP 6/97 ADDED OPTION FOR ALLARD MODEL ATMOSPHERES; USED INSTEAD OF
 C KURUCZ FOR TEFF < 10,000 K.
          IF(KTTAU .EQ. 4)THEN
 C            ATMZA = 0.02D0
-	    CALL ALFileIn	! Get Allard Atmospheres files and
-         ENDIF			! initialize tables. 9/23/08 LLP
+          CALL ALFileIn      ! Get Allard Atmospheres files and
+         ENDIF                  ! initialize tables. 9/23/08 LLP
 
 
 C JNT 6/14 ADD OPTION FOR NEW KURUCZ/CASTELLI ATMOSHPERES

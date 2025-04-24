@@ -174,8 +174,8 @@ C comparing to 10**20, if smaller, multiply by CLSUN
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
      *     DABS(TLUMX(6)),TLUMX(7))
       IF(CCCMAX.LE.1.0D20) THEN
-	 DO J = 1,7
-	    TLUMX(J) = TLUMX(J) * CLSUN
+       DO J = 1,7
+          TLUMX(J) = TLUMX(J) * CLSUN
          ENDDO
       ENDIF
       WRITE(ISTOR,40) (TLUMX(J),J=1,7)
@@ -209,7 +209,7 @@ C write column headings for all per shell information
      1'      V_GSF      V_SS       VTOT   ',/)
 
 C write out the requested information.
-	 CG=DEXP(CLN*CGL)
+       CG=DEXP(CLN*CGL)
          DO II = 1,IDM
             I = ID(II)
 C write out the basic info
@@ -217,7 +217,7 @@ C write out the basic info
      *         HT(I),HD(I),OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
 C write out additional physics if desired
             IF(LSTPHYS)THEN
-	       SG = DEXP(CLN*(CGL - 2.0D0*HR(I)))*HS1(I)
+             SG = DEXP(CLN*(CGL - 2.0D0*HR(I)))*HS1(I)
                WRITE(ISTOR,63,ADVANCE='no') SO(I),SG,SDEL(1,I),SDEL(2,I),
      *           SDEL(3,I),SVEL(I),GAM1(I),0.0,0.0,0.0,SBETA(I),SETA(I),
      *           (SEG(K,I),K=1,5),SESUM(I),SEG(6,I),SEG(7,I)
@@ -230,10 +230,10 @@ c     *           SBETA(I),SETA(I),(SEG(K,I),K=1,5),SESUM(I),SEG(6,I),SEG(7,I)
             ENDIF
 C write out additional rotation info if desired
             IF(LSTROT.AND.LROT)THEN
-	       FM = DEXP(CLN*HS(I))
-	       DUMA = CC13*OMEGA(I)**2/(CG*FM)*5.D0/(2.D0+ETA2(I))
-	       A = DUMA * R0(I)**3
-	       RPOLEQ = (1.0D0 - A)/(1.0D0 + 0.5D0*A)
+             FM = DEXP(CLN*HS(I))
+             DUMA = CC13*OMEGA(I)**2/(CG*FM)*5.D0/(2.D0+ETA2(I))
+             A = DUMA * R0(I)**3
+             RPOLEQ = (1.0D0 - A)/(1.0D0 + 0.5D0*A)
                VTOT = VES(I)+VGSF(I)+VSS(I)
                WRITE(ISTOR,64) A,RPOLEQ,FP(I),FT(I),HJM(I),HI(I),DEROT(I),
      *            VES(I),VGSF(I),VSS(I),VTOT
@@ -255,8 +255,8 @@ C     &     F9.5,F9.5,F9.5,F9.5,F9.5,F9.5,F9.5,E13.5,E13.5,E13.5)
 C now call wrtmod, with the goal of outputting the envelope and atmosphere, or
 C if required by LPULSE.
       IF(LSTATM.OR.LSTENV)THEN
-	 IF(LMILNE) CALL WRTMIL(HCOMP,HD,HL,HP,HR,HS1,M,MODEL)
-	 CALL WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,HL,
+       IF(LMILNE) CALL WRTMIL(HCOMP,HD,HL,HP,HR,HS1,M,MODEL)
+       CALL WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,HL,
      *   HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
      *   DAGE)
       ENDIF

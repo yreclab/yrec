@@ -28,7 +28,7 @@ C      IMPLICIT REAL*4 (A-H,O-Z)
       H = XA(KHI) - XA(KLO)
       IF (H .EQ. 0D0) THEN
            WRITE(ISHORT,*) 'ERROR IN SPLINT ROUTINE.'
-	   STOP
+         STOP
       ENDIF
       A = (XA(KHI)-X)/H
       B = (X - XA(KLO))/H

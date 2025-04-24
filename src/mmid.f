@@ -22,8 +22,8 @@ C  H IS THE SIZE OF EACH SMALL STEP.
       H = HTOT/DFLOAT(NSTEP)
 C  FIRST STEP
       DO 10 I = 1,NVAR
-	 YM(I) = Y(I)
-	 YN(I) = Y(I) + DYDX(I)*H
+       YM(I) = Y(I)
+       YN(I) = Y(I) + DYDX(I)*H
    10 CONTINUE
       X0 = XS + H
 C  YOUT TEMPORARILY USED FOR STORAGE OF DERIVATIVES.
@@ -32,18 +32,18 @@ C  YOUT TEMPORARILY USED FOR STORAGE OF DERIVATIVES.
       H2 = 2.0D0*H
 C  GENERAL STEP.
       DO 30 N = 2,NSTEP
-	 DO 20 I = 1,NVAR
-	    SWAP = YM(I) + H2*YOUT(I)
-	    YM(I) = YN(I)
-	    YN(I) = SWAP
+       DO 20 I = 1,NVAR
+          SWAP = YM(I) + H2*YOUT(I)
+          YM(I) = YN(I)
+          YN(I) = SWAP
    20    CONTINUE
-	 X0 = X0 + H
-	 CALL DERIV(X0,YN,YOUT,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,
+       X0 = X0 + H
+       CALL DERIV(X0,YN,YOUT,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,
      *              RL,TEFFL,X,Z,KOUNT,KSAHA)
    30 CONTINUE
 C  LAST STEP.
       DO 40 I = 1,NVAR
-	 YOUT(I) = 0.5D0*(YM(I) + YN(I) + H*YOUT(I))
+       YOUT(I) = 0.5D0*(YM(I) + YN(I) + H*YOUT(I))
    40 CONTINUE
       RETURN
       END

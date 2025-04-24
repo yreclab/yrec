@@ -37,11 +37,11 @@ C CALIBRATED SOLAR MODEL.  SET UP OUTPUT FLAGS AND EXIT
       ENDIF
 
 c Added code to use pre-determined partial derivatives    LLP  6/28/09
-      DLDX = -3.78D0		! empirical result:  -3.783    RMS error .070
-      DRDX = -0.89D0 		! empirical result:  -0.890    RMS error .048
-      DLDA = 0.0139D0		! empirical result:  +0.139    RMS error .0022
-      DRDA = -0.050D0		! empirical result:  -0.0504   RMS error .0059
-      GOTO 1234		! Bypass partial derivative code
+      DLDX = -3.78D0            ! empirical result:  -3.783    RMS error .070
+      DRDX = -0.89D0             ! empirical result:  -0.890    RMS error .048
+      DLDA = 0.0139D0            ! empirical result:  +0.139    RMS error .0022
+      DRDA = -0.050D0            ! empirical result:  -0.0504   RMS error .0059
+      GOTO 1234            ! Bypass partial derivative code
 c mhp 5/96 added change to compute solar calibration for 3 kind cards
       IF(N.EQ.3)THEN
 C     SET UP RUN TO DETERMINE DERIVATIVE OF L AND R WITH RESPECT TO X.

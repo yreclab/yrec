@@ -94,7 +94,7 @@ C  AMUENV IS(1/MEAN MOLECULAR WEIGHT PER ION OF THE SURFACE MIXTURE.)
          CP(IM) = QCP
          SQDT(IM) = QDT
 C JVS 10/13 Always want SVEL
-	   SVEL(IM) = VEL
+         SVEL(IM) = VEL
 C         IF(LC(IM))THEN
 C            SVEL(IM) = VEL
 C         ELSE

@@ -7,11 +7,11 @@ C$$$$$$
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-	COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-	COMMON/JTEST/ IMAX1, IMAX2, LJVS
+      COMMON/JTEST/ IMAX1, IMAX2, LJVS
 C Needs access to this common block: grants knowledge of envellope
-	COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
+      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON)
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
@@ -83,9 +83,9 @@ C FIND V
                   GOTO 85
                ENDIF
             END DO
-		! One pressure scale height overshoots edge of interior
-		! calculation. Stitch on the envelope for more room
-		DO K = 2,NUMENV
+            ! One pressure scale height overshoots edge of interior
+            ! calculation. Stitch on the envelope for more room
+            DO K = 2,NUMENV
                IF(ENVR(K).GT.RTESTL .AND. EVELS(K) .GT. 0.0)THEN
                   FX = (RTESTL-HR(M))/(ENVR(K)-HR(M))
                   CVEL = SVEL(M)+FX*(EVELS(K)-SVEL(M))
@@ -142,15 +142,15 @@ C DEFINE TAUCZ
       ENDIF
 
 C--------------------------------------------------------------
-C			OPEN(UNIT=100,FILE='diagnostic.out',STATUS='OLD')
-C			DO 1505 I=1,M
-C			IF (LCZ(I)) HOLD = 1.0
-C			IF (.NOT.LCZ(I)) HOLD = 0.0
-C					WRITE(100,1504), HS2(I), HS1(I), HR(I),HOLD,
-C     *			DEL1(I), DEL2(I), SVEL(I),
-C1505			CONTINUE
-C1504			FORMAT(1X,7E16.8)
-C			CLOSE(100)
+C                  OPEN(UNIT=100,FILE='diagnostic.out',STATUS='OLD')
+C                  DO 1505 I=1,M
+C                  IF (LCZ(I)) HOLD = 1.0
+C                  IF (.NOT.LCZ(I)) HOLD = 0.0
+C                              WRITE(100,1504), HS2(I), HS1(I), HR(I),HOLD,
+C     *                  DEL1(I), DEL2(I), SVEL(I),
+C1505                  CONTINUE
+C1504                  FORMAT(1X,7E16.8)
+C                  CLOSE(100)
 C----------------------------------------------------------------
 
 C END JVS

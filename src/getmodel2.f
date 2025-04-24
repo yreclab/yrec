@@ -57,8 +57,8 @@ C comparing to 10**20.  IF larger, divide by CLSUN.
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
      *     DABS(TLUMX(6)),TLUMX(7))
       IF(CCCMAX.GT.1.0D20) THEN
-	 DO J = 1,7
-	    TLUMX(J) = TLUMX(J)/CLSUN
+       DO J = 1,7
+          TLUMX(J) = TLUMX(J)/CLSUN
          ENDDO
       ENDIF
 

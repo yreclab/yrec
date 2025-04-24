@@ -32,29 +32,29 @@ C
 C     GET ATMOSPHERE OPACITY
 C
       LGOTATM = .FALSE.
-	IF(TL.LE.TMOLMAX)THEN
+      IF(TL.LE.TMOLMAX)THEN
          IF (LALEX06) THEN
             CALL GETALEX06(DL,TL,X,Z, SO, SOL,SQOD,SQOT)
 C             RR = DL - 3.0D0*(TL-6.0D0)
 C             WRITE(*,911)X,Z,RR,TL,SOL
 C 911         FORMAT(2f5.2,3f7.3)
-	    LGOTATM = .TRUE.
+          LGOTATM = .TRUE.
          ELSE IF (LALEX95) THEN
             CALL YALO3D(DL, TL, X, Z, SO, SOL, SQOD, SQOT)
-	    LGOTATM = .TRUE.
+          LGOTATM = .TRUE.
          ELSE IF (LKUR90) THEN
             CALL KURUCZ(DL, TL, SO, SOL, SQOD, SQOT, *100)
-	    IF (L2Z) THEN
-	       CALL KURUCZ2(DL, TL, SO1, SOL1, SQOD1, SQOT1, *100)
-	       SLOPE = (SOL-SOL1)/(ZKUR1-ZKUR2)
-  	       SOL = SOL1 + (Z-ZKUR2)*SLOPE
-	       SO = 10.0D0**SOL
-	       SLOPE = (SQOD-SQOD1)/(ZKUR1-ZKUR2)
-	       SQOD = SQOD1 + (Z-ZKUR2)*SLOPE
-	       SLOPE = (SQOT-SQOT1)/(ZKUR1-ZKUR2)
-	       SQOT = SQOT1 + (Z-ZKUR2)*SLOPE
-	     END IF
-	     LGOTATM = .TRUE.
+          IF (L2Z) THEN
+             CALL KURUCZ2(DL, TL, SO1, SOL1, SQOD1, SQOT1, *100)
+             SLOPE = (SOL-SOL1)/(ZKUR1-ZKUR2)
+               SOL = SOL1 + (Z-ZKUR2)*SLOPE
+             SO = 10.0D0**SOL
+             SLOPE = (SQOD-SQOD1)/(ZKUR1-ZKUR2)
+             SQOD = SQOD1 + (Z-ZKUR2)*SLOPE
+             SLOPE = (SQOT-SQOT1)/(ZKUR1-ZKUR2)
+             SQOT = SQOT1 + (Z-ZKUR2)*SLOPE
+           END IF
+           LGOTATM = .TRUE.
          END IF
       ENDIF
   100 CONTINUE
@@ -71,32 +71,32 @@ C and switched the ramp to above Z = 0.1.
 C      IF((Z .GT. 0.15D0) .OR.
 C     *     ((ABS(Z-ZENV) .GT. OPTOL).AND..NOT.L2Z)) THEN
          IF(.NOT.LPUREZ) THEN
-C	      WRITE(ISHORT, *)' ERROR: Z.NE.ZENV. NEED PURE Z',
+C            WRITE(ISHORT, *)' ERROR: Z.NE.ZENV. NEED PURE Z',
 C     *        ' TABLE TO CONTINUE. Z,ZENV=',Z, ZENV
-	      WRITE(ISHORT, *)' ERROR: Z>0.10 T > 5 X 10^7 K',
+            WRITE(ISHORT, *)' ERROR: Z>0.10 T > 5 X 10^7 K',
      *        ' NEED PURE Z TABLE TO CONTINUE. Z,LOG T=',Z, TL
               STOP
-	 END IF
-	 CALL GTPURZ(DL,TL,OZ,OLZ,QODZ,QOTZ)
+       END IF
+       CALL GTPURZ(DL,TL,OZ,OLZ,QODZ,QOTZ)
          IF (LOPAL95) THEN
 C MHP 7/12 INTERPOLATE TO MAXIMUM Z IN TABLE
              ZIT = 0.1D0
              CALL GETOPAL95(DL,TL,X,ZIT,O,OL,QOD,QOT)
-C	     ZIT=ZOPAL951
+C           ZIT=ZOPAL951
          ELSE IF (LOPAL92) THEN
-	     CALL YLLO3D(DL,TL,X,O,OL,QOD,QOT)
-	     ZIT=ZOPAL1
+           CALL YLLO3D(DL,TL,X,O,OL,QOD,QOT)
+           ZIT=ZOPAL1
          ELSE IF (LLAOL89) THEN
-	     CALL GTLAOL(DL,TL,X,O,OL,QOD,QOT)
-	     ZIT=ZLAOL1
+           CALL GTLAOL(DL,TL,X,O,OL,QOD,QOT)
+           ZIT=ZLAOL1
          END IF
-	 SLOPE = (OL-OLZ)/(ZIT-1.0D0)
-	 OL = OLZ + (Z-1.0D0)*SLOPE
-	 O = 10.0D0**OL
-	 SLOPE = (QOD-QODZ)/(ZIT-1.0D0)
-	 QOD = QODZ + (Z-1.0D0)*SLOPE
-	 SLOPE = (QOT-QOTZ)/(ZIT-1.0D0)
-	 QOT = QOTZ + (Z-1.0D0)*SLOPE
+       SLOPE = (OL-OLZ)/(ZIT-1.0D0)
+       OL = OLZ + (Z-1.0D0)*SLOPE
+       O = 10.0D0**OL
+       SLOPE = (QOD-QODZ)/(ZIT-1.0D0)
+       QOD = QODZ + (Z-1.0D0)*SLOPE
+       SLOPE = (QOT-QOTZ)/(ZIT-1.0D0)
+       QOT = QOTZ + (Z-1.0D0)*SLOPE
 C      ELSE
       ELSE IF((Z.GT.0.12D0) .OR. ((ABS(Z-ZENV) .GT. OPTOL)
      *   .AND..NOT.L2Z .AND. .NOT.LOPAL95))THEN
@@ -116,26 +116,26 @@ C      IF (LOPAL95) THEN
          CALL YLLO3D(DL,TL,X,O,OL,QOD,QOT)
          IF (L2Z) THEN
             CALL YLLO3D2(DL,TL,X,O1,OL1,QOD1,QOT1)
-	    SLOPE = (OL-OL1)/(ZOPAL1-ZOPAL2)
-	    OL = OL1 + (Z-ZOPAL2)*SLOPE
-	    O = 10.0D0**OL
-	    SLOPE = (QOD-QOD1)/(ZOPAL1-ZOPAL2)
-	    QOD = QOD1 + (Z-ZOPAL2)*SLOPE
-	    SLOPE = (QOT-QOT1)/(ZOPAL1-ZOPAL2)
-	    QOT = QOT1 + (Z-ZOPAL2)*SLOPE
-	 END IF
+          SLOPE = (OL-OL1)/(ZOPAL1-ZOPAL2)
+          OL = OL1 + (Z-ZOPAL2)*SLOPE
+          O = 10.0D0**OL
+          SLOPE = (QOD-QOD1)/(ZOPAL1-ZOPAL2)
+          QOD = QOD1 + (Z-ZOPAL2)*SLOPE
+          SLOPE = (QOT-QOT1)/(ZOPAL1-ZOPAL2)
+          QOT = QOT1 + (Z-ZOPAL2)*SLOPE
+       END IF
       ELSE IF (LLAOL89) THEN
          CALL GTLAOL(DL,TL,X,O,OL,QOD,QOT)
          IF (L2Z) THEN
-	    CALL GTLAOL2(DL,TL,X,O1,OL1,QOD1,QOT1)
-	    SLOPE = (OL-OL1)/(ZLAOL1-ZLAOL2)
-	    OL = OL1 + (Z-ZLAOL2)*SLOPE
-	    O = 10.0D0**OL
-	    SLOPE = (QOD-QOD1)/(ZLAOL1-ZLAOL2)
-	    QOD = QOD1 + (Z-ZLAOL2)*SLOPE
-	    SLOPE = (QOT-QOT1)/(ZLAOL1-ZLAOL2)
-	    QOT = QOT1 + (Z-ZLAOL2)*SLOPE
-	 END IF
+          CALL GTLAOL2(DL,TL,X,O1,OL1,QOD1,QOT1)
+          SLOPE = (OL-OL1)/(ZLAOL1-ZLAOL2)
+          OL = OL1 + (Z-ZLAOL2)*SLOPE
+          O = 10.0D0**OL
+          SLOPE = (QOD-QOD1)/(ZLAOL1-ZLAOL2)
+          QOD = QOD1 + (Z-ZLAOL2)*SLOPE
+          SLOPE = (QOT-QOT1)/(ZLAOL1-ZLAOL2)
+          QOT = QOT1 + (Z-ZLAOL2)*SLOPE
+       END IF
 C MHP 7/12 INSERT FINAL TRAP - NO OPACITY COMPUTED
 C SHOULD NOT BE ABLE TO GET HERE.
       ELSE
@@ -152,22 +152,22 @@ C     DO A RAMP BETWEEN SURFACE AND INTERIOR OPACITY
          IF( TL.GE.TMOLMIN) THEN
 C             RR = DL - 3.0D0*(TL-6.0D0)
 C             WRITE(*,*)RR,TL,OL,SOL
- 	     RMPWT = (TL-TMOLMIN)/(TMOLMAX-TMOLMIN)
- 	     O = RMPWT*O + (1.0D0-RMPWT)*SO
- 	     OL = DLOG10(O)
- 	     QOD = RMPWT*QOD + (1.0D0-RMPWT)*SQOD
- 	     QOT = RMPWT*QOT + (1.0D0-RMPWT)*SQOT
-	 ELSE
- 	     O = SO
- 	     OL = SOL
- 	     QOD = SQOD
- 	     QOT = SQOT
-	 END IF
+            RMPWT = (TL-TMOLMIN)/(TMOLMAX-TMOLMIN)
+            O = RMPWT*O + (1.0D0-RMPWT)*SO
+            OL = DLOG10(O)
+            QOD = RMPWT*QOD + (1.0D0-RMPWT)*SQOD
+            QOT = RMPWT*QOT + (1.0D0-RMPWT)*SQOT
+       ELSE
+            O = SO
+            OL = SOL
+            QOD = SQOD
+            QOT = SQOT
+       END IF
       END IF
 C     DO CONDUCTIVE OPACITY CORRECTION
       IF (LcondOpacP) THEN
 C Get Potekhin conductive opacity
-		CALL condOpacPInt(DL,TL,X,Z,OC,OCL,QODC,QOTC,FXION,LCONDO)
+            CALL condOpacPInt(DL,TL,X,Z,OC,OCL,QODC,QOTC,FXION,LCONDO)
       ELSE
          LCONDO = .FALSE.
       END IF
@@ -181,10 +181,10 @@ C try for Hubbard Lampe
             RETURN
          ELSE
 C Do Hubbard Lampe conductive opacity calculation
-	    COND = DLOG10(1.0D0-0.6D0*X) - 14.6196D0 -
+          COND = DLOG10(1.0D0-0.6D0*X) - 14.6196D0 -
      *             (3.5853D0+0.1386D0*DL)*DL +
      *             (5.1324D0-0.3219D0*TL)*TL + 0.3901D0*DL*TL
-	    OC = 10.0D0**COND
+          OC = 10.0D0**COND
             QODC = 0.3901D0*TL - 0.2772D0*DL - 3.5853D0
             QOTC = 0.3901D0*DL - 0.6438D0*TL + 5.1324D0
          ENDIF

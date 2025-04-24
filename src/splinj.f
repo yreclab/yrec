@@ -3,7 +3,7 @@ C$$$$$$
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C     PARAMETER (JSON=5000)
-	REAL*8 X(N),Y(N),Y2(N),U(N)
+      REAL*8 X(N),Y(N),Y2(N),U(N)
 C     SAVE
 C NATURAL SPLINE
       Y2(1) = 0.0D0

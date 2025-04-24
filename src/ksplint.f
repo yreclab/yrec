@@ -17,10 +17,10 @@ C$$$$$$
       ENDIF
 c      WRITE(*,*)KHI,KLO,XA(KHI),XA(KLO),X
       H = XA(KHI) - XA(KLO)
-	IF(H.EQ.0D0) THEN
-		PRINT*, 'Ksplint failure'
-		STOP
-	ENDIF
+      IF(H.EQ.0D0) THEN
+            PRINT*, 'Ksplint failure'
+            STOP
+      ENDIF
 C      IF(H.EQ.0D0) STOP 911
       A = (XA(KHI)-X)/H
       B = (X-XA(KLO))/H

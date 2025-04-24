@@ -37,9 +37,9 @@ C This is agreed upon protection in case they are inadvertently used in the prog
 C but not present in the old YREC input data.
       DO I  = 1, JSON
          OMEGA(I) = 0D0
-	 DO J = 1, 15
-	    HCOMP(J,I) = 0D0
-	 ENDDO
+       DO J = 1, 15
+          HCOMP(J,I) = 0D0
+       ENDDO
       ENDDO
 
 C  Set Model2-sspecific strings to "?"
@@ -91,8 +91,8 @@ C comparing to 10**20. If larger, divide by CLSUN.
       CCCMAX = DMAX1(TLUMX(1),TLUMX(2),TLUMX(3),TLUMX(4),TLUMX(5),
      *     DABS(TLUMX(6)),TLUMX(7))
       IF(CCCMAX.GT.1.0D20) THEN
-	 DO J = 1,7
-	    TLUMX(J) = TLUMX(J)/CLSUN
+       DO J = 1,7
+          TLUMX(J) = TLUMX(J)/CLSUN
          ENDDO
       ENDIF
 
@@ -101,111 +101,111 @@ C FTRI is 1,normally.  It is set to -1  if any of the record numbers
 C for the envelope triangle records was set to -1 by WRTLST.
       FTRI = 1D0
       DO 80 I = 1,3
-	 READ(IREAD,70) IO,TRIT(I),TRIL(I),PS(I),TS(I),RS(I),
+       READ(IREAD,70) IO,TRIT(I),TRIL(I),PS(I),TS(I),RS(I),
      *        (CFENV(I+I+I-3+J),J = 1,3)
  70      FORMAT(3X,I2,F7.5,4F8.5,3E12.5)
-	 IF(IO.LT.0) FTRI = -1D0
+       IF(IO.LT.0) FTRI = -1D0
  80   CONTINUE
 
 C READ IN HENYEY POINTS IN 4 PARTS
 C
 C Read FIRST PART:M,R,L,P,T,RHO,CONV(T/F),X,Y,AND Z - one line per shell
       DO 110 I = 1,M
-	 READ(IREAD,100) HS(I),HR(I),HL(I),HP(I),HT(I),HD(I),LC(I),
+       READ(IREAD,100) HS(I),HR(I),HL(I),HP(I),HT(I),HD(I),LC(I),
      *        IX,IZ
  100     FORMAT(0PF13.10,F10.7,1PE14.7,0PF10.7,2F10.7,L1,2I6)
-	 IF(HS(I).LT.0D0.OR.HS(I).GT.HSTOT) THEN
-	    WRITE(ISHORT,1000)
-	    WRITE(ISHORT,1050) I
+       IF(HS(I).LT.0D0.OR.HS(I).GT.HSTOT) THEN
+          WRITE(ISHORT,1000)
+          WRITE(ISHORT,1050) I
  1000       FORMAT(1X,39('>'),40('<')/1X,'RUN STOPPED')
  1050       FORMAT(' ERROR IN SUBROUTINE GETY7'/1X,'GLITCH IN SHELL',
      *      I3,', SHELL MASS LESS THAN ZERO OR GREATER THAN STAR MASS')
-	    STOP
-	 ENDIF
-	 HCOMP(1,I) = 1.0D-6*DFLOAT(IX)
-	 HCOMP(3,I) = 1.0D-6*DFLOAT(IZ)
+          STOP
+       ENDIF
+       HCOMP(1,I) = 1.0D-6*DFLOAT(IX)
+       HCOMP(3,I) = 1.0D-6*DFLOAT(IZ)
  110  CONTINUE
 
 C Read SECOND PART:ELEMENT ABUNDANCES: HE3,CNO CYCLE ELEMENTS.
 C ABUNDANCES IN SURFACE AND CENTRAL CONVECTION ZONES STORED WITH 1
 C VALUE PER ZONE RATHER THAN 1 VALUE PER SHELL
       IF(JENV.LE.JCORE) THEN
-	 READ(IREAD,200)(HCOMP(I,JCORE),I=4,11)
-	 READ(IREAD,200)(HCOMP(I,JENV),I=4,11)
+       READ(IREAD,200)(HCOMP(I,JCORE),I=4,11)
+       READ(IREAD,200)(HCOMP(I,JENV),I=4,11)
       ELSE
-	 DO 210 J = JCORE,JENV
-	    READ(IREAD,200) (HCOMP(I,J),I = 4,11)
+       DO 210 J = JCORE,JENV
+          READ(IREAD,200) (HCOMP(I,J),I = 4,11)
  200        FORMAT(8(1PE9.3,1X))
  210     CONTINUE
       ENDIF
       IF(JCORE.GT.1) THEN
 C CONVECTIVE CORE- ASSIGN FIRST COMPOSITION VALUE TO SHELLS 1-JCORE
-	 DO 230 J = 1,JCORE-1
-	    DO 220 I = 4,11
-	       HCOMP(I,J) = HCOMP(I,JCORE)
+       DO 230 J = 1,JCORE-1
+          DO 220 I = 4,11
+             HCOMP(I,J) = HCOMP(I,JCORE)
  220        CONTINUE
  230     CONTINUE
       ENDIF
       IF(JENV.LT.M) THEN
 C CONVECTIVE SURFACE- ASSIGN LAST COMPOSITION TO SHELLS JENV-M
-	 DO 250 J = JENV+1,M
-	    DO 240 I = 4,11
-	       HCOMP(I,J) = HCOMP(I,JENV)
+       DO 250 J = JENV+1,M
+          DO 240 I = 4,11
+             HCOMP(I,J) = HCOMP(I,JENV)
  240        CONTINUE
  250     CONTINUE
       ENDIF
 C DEFINE HE4 = 1 - X - Z - HE3.
       DO 260 I = 1,M
-	 HCOMP(2,I) = 1.0D0 - HCOMP(1,I) - HCOMP(3,I) - HCOMP(4,I)
+       HCOMP(2,I) = 1.0D0 - HCOMP(1,I) - HCOMP(3,I) - HCOMP(4,I)
  260  CONTINUE
 
 C READ IN H2,LI6,LI7,BE9 (EXTENDED COMPOSITION)
 
       IF(LEXCOM) THEN
-	 IF(JENV.EQ.1)THEN
+       IF(JENV.EQ.1)THEN
 C FULLY CONVECTIVE MODEL
-	    READ(IREAD,300)(HCOMP(I,1),I=12,15)
+          READ(IREAD,300)(HCOMP(I,1),I=12,15)
  300        FORMAT(4(1PE9.3,1X))
-	    DO 310 J = 1,M
-	       DO 305 I = 12,15
-		  HCOMP(I,J) = HCOMP(I,1)
+          DO 310 J = 1,M
+             DO 305 I = 12,15
+              HCOMP(I,J) = HCOMP(I,1)
  305           CONTINUE
  310        CONTINUE
-	 ELSE
+       ELSE
 C GENERAL CASE
 C THESE ABUNDANCES ARE READ IN WITH 2 SHELLS PER LINE
-	    DO 315 K = JCORE,JENV-1,2
-	       READ(IREAD,200)((HCOMP(I,J),I = 12,15),J = K,K+1)
+          DO 315 K = JCORE,JENV-1,2
+             READ(IREAD,200)((HCOMP(I,J),I = 12,15),J = K,K+1)
  315        CONTINUE
 C IF AN ODD NUMBER OF ABUNDANCES STORED, READ IN LAST VALUE
-	    KT = JENV-1 - JCORE
-	    IF(MOD(KT,2).NE.0)READ(IREAD,300)(HCOMP(I,K),I = 12,15)
-	    IF(JCORE.GT.1) THEN
+          KT = JENV-1 - JCORE
+          IF(MOD(KT,2).NE.0)READ(IREAD,300)(HCOMP(I,K),I = 12,15)
+          IF(JCORE.GT.1) THEN
 C CONVECTIVE CORE- ASSIGN FIRST VALUE TO SHELLS 1-JCORE
-	       DO 330 J = 1,JCORE-1
-		  DO 320 I = 12,15
-		     HCOMP(I,J) = HCOMP(I,JCORE)
+             DO 330 J = 1,JCORE-1
+              DO 320 I = 12,15
+                 HCOMP(I,J) = HCOMP(I,JCORE)
  320              CONTINUE
  330           CONTINUE
-	    ENDIF
-	    IF(JENV.LT.M) THEN
+          ENDIF
+          IF(JENV.LT.M) THEN
 C CONVECTIVE SURFACE- ASSIGN LAST VALUE TO SHELLS JENV - M
-	       DO 350 J = JENV+1,M
-		  DO 340 I = 12,15
-		     HCOMP(I,J) = HCOMP(I,JENV)
+             DO 350 J = JENV+1,M
+              DO 340 I = 12,15
+                 HCOMP(I,J) = HCOMP(I,JENV)
  340              CONTINUE
  350           CONTINUE
-	    ENDIF
-	 ENDIF
+          ENDIF
+       ENDIF
       ENDIF
 
 C Read in FOURTH PART:  - LOG J/M STORED , 8 SHELLS PER LINE
 
       IF(LROT) THEN
 C READ OMEGA IN. If OMEGA records are missing go to OMEGA BYPASS below
-	READ(IREAD,500,END=9999)(OMEGAL(II),II = 1,M)
+      READ(IREAD,500,END=9999)(OMEGAL(II),II = 1,M)
  500    FORMAT(0P8F10.7)
-	DO 510 I = 1,M
+      DO 510 I = 1,M
            IF(OMEGAL(I) .LT. 58.9D0) THEN
               OMEGA(I) = 10D0**(-OMEGAL(I))
            ELSE

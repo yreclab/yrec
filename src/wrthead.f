@@ -113,7 +113,7 @@ C G Somers END.
  1510       FORMAT(
      1' Jtot, K.E. Rotation, OMEGAsurf, OMEGAcenter')
          ELSE IF(ITRVER .EQ. 3) THEN
-	    WRITE(ITRACK, 1515)
+          WRITE(ITRACK, 1515)
  1515       FORMAT(
      1'#Model #, shells, AGE, log(L/Lsun), log(R/Rsun), log(g),',
      1' log(Teff), Mconv. core, Mconv. env., % Grav Energy, X env')

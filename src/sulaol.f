@@ -61,9 +61,9 @@ C OPACITY COMMON BLOCKS - modified 3/09
       END DO
 C DBG 4/94 Do SPLINE on second opacity table if ZRAMP
       IF (L2Z) THEN
-	 DO IT=1, NUMT
-	    OT2(IT) = LOG10(OT2(IT))
-	 END DO
+       DO IT=1, NUMT
+          OT2(IT) = LOG10(OT2(IT))
+       END DO
          DO IX=1, NXYZ2
             DO IT=1, NT2
                NUMS=0

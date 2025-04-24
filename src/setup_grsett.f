@@ -183,7 +183,7 @@ C         X = HCOMP(1,I)
 c                 calculate concentrations from mass fractions:
                   ZXA=0.D0
                   DO II=1,NSPEC-1
-	             ZXA=ZXA+ZSPEC(II)*XFRAC(II)/ATOMWT(II)
+                   ZXA=ZXA+ZSPEC(II)*XFRAC(II)/ATOMWT(II)
                   ENDDO
                   DO II=1,NSPEC-1
                      C(II)=XFRAC(II)/(ATOMWT(II)*ZXA)
@@ -192,7 +192,7 @@ c                 calculate concentrations from mass fractions:
 c                 calculate density of electrons (NE) from mass density (RHO):
                   AC=0.D0
                   DO II=1,NSPEC
-	             AC=AC+ATOMWT(II)*C(II)
+                   AC=AC+ATOMWT(II)*C(II)
                   ENDDO
                   NE=RHO/(1.6726D-24*AC)
 c                 calculate interionic distance (AO):
@@ -204,18 +204,18 @@ c                 calculate interionic distance (AO):
 c                 calculate Debye length (LAMBDAD):
                   CZ=0.D0
                   DO II=1,NSPEC
-	             CZ=CZ+C(II)*ZSPEC(II)**2
+                   CZ=CZ+C(II)*ZSPEC(II)**2
                   ENDDO
                   LAMBDAD=6.9010D0*SQRT(T/(NE*CZ))
 c                 calculate LAMBDA to use in Coulomb logarithm:
                   LAMBDA=MAX(LAMBDAD,AO)
 c                 calculate Coulomb logarithms:
                   DO II=1,NSPEC
-	             DO JJ=1,NSPEC
-	                XIJ=2.3939D3*T*LAMBDA/ABS(ZSPEC(II)*ZSPEC(JJ))
-	                TCL(II,JJ)=0.81245D0
+                   DO JJ=1,NSPEC
+                      XIJ=2.3939D3*T*LAMBDA/ABS(ZSPEC(II)*ZSPEC(JJ))
+                      TCL(II,JJ)=0.81245D0
      *                       *LOG(1.D0+0.18769D0*XIJ**1.2D0)
-	             ENDDO
+                   ENDDO
                   ENDDO
                ELSE
                   DO II = 1,NSPEC
@@ -275,7 +275,7 @@ C in D(D1)/DX
          IF(ILAMBDA.EQ.2)  THEN
            QCOD1X(I)=QCOD1X(I) + COD1(I)*1.5D0/
      *     (LN_LAMBDA*(3.0D0*X+1.0D0))
-	 END IF
+       END IF
    60 CONTINUE
  9999 CONTINUE
       RETURN

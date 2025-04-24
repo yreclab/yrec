@@ -62,12 +62,12 @@ c
 
 c***************************************************************************
 c    parameters:
-c	mx is the number of x's in the 2001 Opal EOS table
-c	mv is the maximum number of thermmodynamic variables in the 2001
-c		Opal EOS table.  Note that the input tables only contain 9.
-c	nr is the number of densities in the table.
-c	nt is the number of t6's associated with an x/density.  See
-c		below for more details about the table.
+c      mx is the number of x's in the 2001 Opal EOS table
+c      mv is the maximum number of thermmodynamic variables in the 2001
+c            Opal EOS table.  Note that the input tables only contain 9.
+c      nr is the number of densities in the table.
+c      nt is the number of t6's associated with an x/density.  See
+c            below for more details about the table.
 c***************************************************************************
 
       character blank*1
@@ -76,9 +76,9 @@ c***************************************************************************
 
 c***************************************************************************
 c    common lreadco definitions:
-c	itime is the first time switch.  It is initially true. After the
-c	first pass it is set to false.  When it is true, the tables are
-c	read and associated variables are initialized.
+c      itime is the first time switch.  It is initially true. After the
+c      first pass it is set to false.  When it is true, the tables are
+c      read and associated variables are initialized.
 c***************************************************************************
 
 
@@ -86,7 +86,7 @@ c***************************************************************************
 
 c***************************************************************************
 c    common eeeos06 definitions
-c	xx is an auxilliary array containing the same values of x as array xa.
+c      xx is an auxilliary array containing the same values of x as array xa.
 c***************************************************************************
 
       common/aaeos06/ q(4),h(4),xxh
@@ -99,58 +99,58 @@ c
 c  common aeos06 definitions:
 c
 c    xz is the array of thermodynamic variables, as a funtion of four arguments:
-c	arg 1: 	identifies the value of x in the corresponding array xa, ie,
-c		xz(1,*,*,*) refers to values at x=xa(1)=0.00, xz(2,*,*,*)
-c		refers to values at x=xa(2)=0.20, etc.
-c	arg 2:	identifies which thermodynamic variable.  xz(*,1,*,*) refers to
-c		the thermodynamic variable specified for eos(1) - by default the
-c		pressure, xz(*,2,*,*) refers to the thermodynamic variable
-c		specified for eos(2), etc.
-c	arg 3:	identifies the value of t6 in the corresponding array t6a
-c		(and t6list).  e.g., xz(*,*,1,*) refers to values at
-c		t6=t6a(1)=100, xz(*,*,2,*) refers to values at t6=t6a(2), etc.
-c	arg 4:	identifies the vaue of d, the density, in the corresponding
-c		array rho. eg, xz(*,*,*,1) refers to values at d=rho(1)=10**-14,
-c		xz(*,*,*,2) refers to values at d-rho(2), etc.
-c	Therefore, in the default eos case, xz(1,1,1,1) would be the pressure
-c	at x=0.00, t6=100, density=10**-14.
+c      arg 1:       identifies the value of x in the corresponding array xa, ie,
+c            xz(1,*,*,*) refers to values at x=xa(1)=0.00, xz(2,*,*,*)
+c            refers to values at x=xa(2)=0.20, etc.
+c      arg 2:      identifies which thermodynamic variable.  xz(*,1,*,*) refers to
+c            the thermodynamic variable specified for eos(1) - by default the
+c            pressure, xz(*,2,*,*) refers to the thermodynamic variable
+c            specified for eos(2), etc.
+c      arg 3:      identifies the value of t6 in the corresponding array t6a
+c            (and t6list).  e.g., xz(*,*,1,*) refers to values at
+c            t6=t6a(1)=100, xz(*,*,2,*) refers to values at t6=t6a(2), etc.
+c      arg 4:      identifies the vaue of d, the density, in the corresponding
+c            array rho. eg, xz(*,*,*,1) refers to values at d=rho(1)=10**-14,
+c            xz(*,*,*,2) refers to values at d-rho(2), etc.
+c      Therefore, in the default eos case, xz(1,1,1,1) would be the pressure
+c      at x=0.00, t6=100, density=10**-14.
 c
 c    t6list is the array of t6 (temperature in units of 10**6 degrees Kelvin)
-c	The arguments match the first and fourth arguments in array xz above,
-c	with the first argument being associated with a temperature and the
-c	second with a density.
+c      The arguments match the first and fourth arguments in array xz above,
+c      with the first argument being associated with a temperature and the
+c      second with a density.
 c
-c	In the first column, associated with the density of 10**-14,
-c	temperatures range from t6=100 in t6list(1,1) to t6=.002 in
-c	t6list(1,191).  In the last column, associated with a density
-c	of 10**7, temperatures range from t6=100 in t6list(169,1) to
-c	t6=22.5 in t6list(169,16).  About 10% of the table in vicinity
-c	of the lower right hand corner is empty.  The table is homogeneous
-c	in t6, in that for each row in the table, all non-empty elements
-c	have the same value of t6.  In row 1, all t6's are 100. In row
-c	191, all t6's in the non-empty part of the table are .002, etc.
+c      In the first column, associated with the density of 10**-14,
+c      temperatures range from t6=100 in t6list(1,1) to t6=.002 in
+c      t6list(1,191).  In the last column, associated with a density
+c      of 10**7, temperatures range from t6=100 in t6list(169,1) to
+c      t6=22.5 in t6list(169,16).  About 10% of the table in vicinity
+c      of the lower right hand corner is empty.  The table is homogeneous
+c      in t6, in that for each row in the table, all non-empty elements
+c      have the same value of t6.  In row 1, all t6's are 100. In row
+c      191, all t6's in the non-empty part of the table are .002, etc.
 c
 c    rho is to array of density in units of grams per cc.  This array has
-c	one argument, matching the fourth argument in array xz.  The
-c	first density in the table is for density 10**-14, and the last
-c	(169th) is for density 10**7.
+c      one argument, matching the fourth argument in array xz.  The
+c      first density in the table is for density 10**-14, and the last
+c      (169th) is for density 10**7.
 c
 c    t6a is an auxiliary array of temperatures.  It has the full range of
-c	temmperatures, from t6a(1)=100 to t6a(191)=.002.  (It exactly
-c	matches the first column of t6list)
+c      temmperatures, from t6a(1)=100 to t6a(191)=.002.  (It exactly
+c      matches the first column of t6list)
 c
 c    xa is the array of the tabulated values of x, eg, xa(1)=0.00, xa(2)=0.20,
-c	through xa(5)=0.80.
+c      through xa(5)=0.80.
 c
 c    dsfx is the first of three auxilliary arrays used in interpolation.
-c	dfsx(2)=1/(xa(2)-xa(1)), dfsx(3)=1/(xa(3)-x1(2), ...,
-c	dsfx(5)=1/(xa(5)-xa(4)).
+c      dfsx(2)=1/(xa(2)-xa(1)), dfsx(3)=1/(xa(3)-x1(2), ...,
+c      dsfx(5)=1/(xa(5)-xa(4)).
 c
 c    dfs is the second auxilliary array used in interpolation.
-c	dfs(2)=1/(t6a(2)-t6a(1), ..., dfs(191)=1/(t6a(191)-t6a(190)).
+c      dfs(2)=1/(t6a(2)-t6a(1), ..., dfs(191)=1/(t6a(191)-t6a(190)).
 c
 c    dfsr is the third auxilliary array used in interpolaltion.
-c	dfsr(2)=1/(rho(2)-rho(1)), ..., dfsr(169)=1/(rho(169)-rho(168)).
+c      dfsr(2)=1/(rho(2)-rho(1)), ..., dfsr(169)=1/(rho(169)-rho(168)).
 c
 c***************************************************************************
 
@@ -161,25 +161,25 @@ c
 c    common beos96 definitions
 c
 c    array index defines the order in which thermodynamic variables are
-c	returned in array eos and stored in array xz.  By default,
-c	index(1)=1, index(2)=2 ,  ..., index(10)=10.  For our purposes,
-c	I see no reason to change index.
+c      returned in array eos and stored in array xz.  By default,
+c      index(1)=1, index(2)=2 ,  ..., index(10)=10.  For our purposes,
+c      I see no reason to change index.
 c
 c    array iri provides the inverse mapping to array index.
-c	index(iri(i))=iri(index(1)=i, for i = 1, 2 ..., 10.
-c	in the default case, iri(1)=1, iri(2)=2, ..., iri(10)=10.
+c      index(iri(i))=iri(index(1)=i, for i = 1, 2 ..., 10.
+c      in the default case, iri(1)=1, iri(2)=2, ..., iri(10)=10.
 c
 c    array nta provides the index in array t6a of the lower limits of
-c	temperature in the xz array as a function of density.  For
-c	example, nta(1)=191, and t6a(nta(1))=t6a(191)=.002, the
-c	lowest temperature associated with the first density,
-c	rho(1)=10**-14.  At the highest density, in column 169,
-c	rho(169)=10**7. The associated nta(169)=16, identifies
-c	the lowest temperature for this density, and
-c	t6a(nta(169))=t6a(16)=22.5.
+c      temperature in the xz array as a function of density.  For
+c      example, nta(1)=191, and t6a(nta(1))=t6a(191)=.002, the
+c      lowest temperature associated with the first density,
+c      rho(1)=10**-14.  At the highest density, in column 169,
+c      rho(169)=10**7. The associated nta(169)=16, identifies
+c      the lowest temperature for this density, and
+c      t6a(nta(169))=t6a(16)=22.5.
 c
 c    array zz contains the values of z read in from the 2001 Opal EOS table.
-c	It can be used for checking purposes.
+c      It can be used for checking purposes.
 c
 c***************************************************************************
 
@@ -190,8 +190,8 @@ c***************************************************************************
 c    common eeos06 definitions:
 c
 c    array eos is an output array containing the values of the thermodynamic
-c	variables obtained by interpolation.  These interplated values
-c	are for the specified x, t6 and density.
+c      variables obtained by interpolation.  These interplated values
+c      are for the specified x, t6 and density.
 c***************************************************************************
 
             dimension frac(7)

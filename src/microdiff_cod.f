@@ -55,7 +55,7 @@ c make sure XFRAC = 0.0 isn't used for diff coefficients
 c        calculate concentrations from mass fractions:
          ZXA=0.D0
          DO II=1,NSPEC-1
-	       ZXA=ZXA+ZSPEC(II)*XFRAC(II)/ATOMWT(II)
+             ZXA=ZXA+ZSPEC(II)*XFRAC(II)/ATOMWT(II)
          ENDDO
          DO II=1,NSPEC-1
             CONCEN(II)=XFRAC(II)/(ATOMWT(II)*ZXA)
@@ -78,7 +78,7 @@ c        set relevant physical variables.
 c        calculate density of electrons (NE) from mass density (RHO):
          AC=0.D0
          DO II=1,NSPEC
-	    AC=AC+ATOMWT(II)*CONCEN(II)
+          AC=AC+ATOMWT(II)*CONCEN(II)
          ENDDO
          NE=RHO/(1.6726D-24*AC)
 c        calculate interionic distance (AO):
@@ -90,7 +90,7 @@ c        calculate interionic distance (AO):
 c        calculate Debye length (LAMBDAD):
          CZ=0.D0
          DO II=1,NSPEC
-	    CZ=CZ+CONCEN(II)*ZSPEC(II)**2
+          CZ=CZ+CONCEN(II)*ZSPEC(II)**2
          ENDDO
          LAMBDAD=6.9010D0*SQRT(T/(NE*CZ))
 c        calculate LAMBDA to use in Coulomb logarithm:
@@ -101,7 +101,7 @@ c        calculate Coulomb logarithms:
                XIJ=2.3939D3*T*LAMBDA/ABS(ZSPEC(II)*ZSPEC(JJ))
                TCL(II,JJ)=0.81245D0
      *         *LOG(1.D0+0.18769D0*XIJ**1.2D0)
-	    ENDDO
+          ENDDO
          ENDDO
 c
 c        calculate the diffusion coefficients

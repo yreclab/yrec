@@ -70,29 +70,29 @@ C IF LMHD USE MHD EQUATION OF STATE.
       AP = PL
       AT = TL
       IF(LSAVE .OR. LPUMOD) THEN
-	 AD = DL
-	 AO = O
-	 AFXION(1) = FXION(1)
-	 AFXION(2) = FXION(2)
-	 AFXION(3) = FXION(3)
-	 QTL = TL
-	 QT = DEXP(CLN*TL)
-	 QPL = PL
-	 QP = DEXP(CLN*PL)
-	 QDL = DL
-	 QD = DEXP(CLN*DL)
-	 QO = O
-	 QOL = OL
-	 QQDP = QDP
-	 QQED = 0.0D0
-	 QQOD = QOD
-	 QQOT = QOT
-	 QDEL = 0.0D0
-	 QQDT = QDT
-	 QDELA = DELA
-	 QQCP = QCP
-	 QRMU = RMU
-	 QEMU = EMU
+       AD = DL
+       AO = O
+       AFXION(1) = FXION(1)
+       AFXION(2) = FXION(2)
+       AFXION(3) = FXION(3)
+       QTL = TL
+       QT = DEXP(CLN*TL)
+       QPL = PL
+       QP = DEXP(CLN*PL)
+       QDL = DL
+       QD = DEXP(CLN*DL)
+       QO = O
+       QOL = OL
+       QQDP = QDP
+       QQED = 0.0D0
+       QQOD = QOD
+       QQOT = QOT
+       QDEL = 0.0D0
+       QQDT = QDT
+       QDELA = DELA
+       QQCP = QCP
+       QRMU = RMU
+       QEMU = EMU
       ENDIF
 
       RETURN

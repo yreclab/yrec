@@ -30,7 +30,7 @@ C  DR <= DRMIN.
       NPT=INT(DRTOT/DRMIN)
       IF(MOD(DRTOT,DRMIN).NE.0.0D0)NPT=NPT+1
 C JVS add additional trap to deal with models with NPT=1
-	IF (NPT .EQ. 1) NPT=NPT+1
+      IF (NPT .EQ. 1) NPT=NPT+1
 C  ENSURE THAT NUMBER OF POINTS DOES NOT EXCEED JSON.
 
       NPT=MIN(NPT,JSON)
@@ -39,14 +39,14 @@ C  ENSURE THAT NUMBER OF POINTS DOES NOT EXCEED JSON.
 C  SET UP VECTOR OF EQUALLY SPACED RADII AT ZONE MIDPOINTS.
       ER(1)=HRU(IBEGIN)+0.5D0*DR
 C JVS added logic trap (IF statement)
-	IF (NPT .EQ. 2) THEN
-		ER(2)=ER(1)+DR
-	ELSE
-      	DO 10 I = 2,NPT-1 ! old piece
-		IF(I-1 .EQ. 0) PRINT*, 'mte line 47'
-         	ER(I)=ER(I-1)+DR  ! old piece
-  10 		CONTINUE          ! old piece
-	ENDIF
+      IF (NPT .EQ. 2) THEN
+            ER(2)=ER(1)+DR
+      ELSE
+            DO 10 I = 2,NPT-1 ! old piece
+            IF(I-1 .EQ. 0) PRINT*, 'mte line 47'
+               ER(I)=ER(I-1)+DR  ! old piece
+  10             CONTINUE          ! old piece
+      ENDIF
 
 C  NOW USE 4-POINT LAGRANGIAN INTERPOLATION TO FIND RUN OF VARIABLES
 C  AT EQUALLY SPACED ZONE MIDPOINTS.

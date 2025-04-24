@@ -55,45 +55,45 @@ CCC H-SHELL VALUES
       LSHELL = .FALSE.
 C  IF CENTRAL X BELOW THRESHOLD THEN CALCULATE H SHELL VALUES
       IF(HCOMP(1,1).LE.ATIME(1)) THEN
-	 LSHELL = .TRUE.
-	 XMID = 0.50D0*HCOMP(1,M)
-	 XLEND = DLMIN*HL(M)
+       LSHELL = .TRUE.
+       XMID = 0.50D0*HCOMP(1,M)
+       XLEND = DLMIN*HL(M)
 C  FIND BEGINNING(JXBEG), MIDDLE(JXMID) AND END(JXEND) OF H SHELL
-	 DO 10 I = 1,M
-c	    IF(HCOMP(1,I).LE.1.0D-10) THEN  ! Changed after discussion with Marc
-	    IF(HCOMP(1,I).LE.ATIME(1)) THEN ! to force consistency with above LLP 9/24/08
-	       JXBEG = JXBEG+1
-	       JXMID = JXMID+1
-	    ELSE IF(HCOMP(1,I).LE.XMID) THEN
-	       JXMID = JXMID+1
-	    ELSE IF(HL(I) - HL(I-1).LT.XLEND) THEN
+       DO 10 I = 1,M
+c          IF(HCOMP(1,I).LE.1.0D-10) THEN  ! Changed after discussion with Marc
+          IF(HCOMP(1,I).LE.ATIME(1)) THEN ! to force consistency with above LLP 9/24/08
+             JXBEG = JXBEG+1
+             JXMID = JXMID+1
+          ELSE IF(HCOMP(1,I).LE.XMID) THEN
+             JXMID = JXMID+1
+          ELSE IF(HL(I) - HL(I-1).LT.XLEND) THEN
 c               write(*,*)'luminosity criteria'
-	       GOTO 20
-	    ELSE IF(HCOMP(1,M) - HCOMP(1,I).LT.DXMIN) THEN
+             GOTO 20
+          ELSE IF(HCOMP(1,M) - HCOMP(1,I).LT.DXMIN) THEN
 c               write(*,*)'composition criteria'
-	       GOTO 20
-	    ENDIF
+             GOTO 20
+          ENDIF
    10    CONTINUE
-	 I = M
+       I = M
    20    JXEND = I
       ENDIF
 CCC FIND BOUNDARY OF CENTRAL CONVECTION ZONE.
       DO 30 I = 1,M
-	 IF(.NOT.LC(I)) GOTO 40
+       IF(.NOT.LC(I)) GOTO 40
    30 CONTINUE
    40 IF(I.GT.1) THEN
-	 JCORE = I-1
+       JCORE = I-1
       ELSE
-	 JCORE = 1
+       JCORE = 1
       ENDIF
 CCC FIND BOUNDARY OF SURFACE C.Z.
       DO 50 I = M,1,-1
-	 IF(.NOT.LC(I)) GOTO 60
+       IF(.NOT.LC(I)) GOTO 60
    50 CONTINUE
    60 IF(I.LT.M) THEN
-	 JENV = I+1
+       JENV = I+1
       ELSE
-	 JENV = M
+       JENV = M
       ENDIF
 C  FOR A FULLY CONVECTIVE STAR (JENV=1),TURN THE CONVECTIVE CORE OFF(JCORE=1).
 C  THIS IS DONE BECAUSE JCORE IS USED IN COMPUTING THE NUCLEAR TIMESTEP,

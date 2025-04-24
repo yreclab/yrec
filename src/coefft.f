@@ -59,7 +59,7 @@ C CAPPA AND EPSILON
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 
 C JVS 10/11 Common block for He3+He3 luminosity
-	COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
+      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
 C JVS end
 
       DIMENSION FXION(3),EG(6),TLUMX(8),HD(JSON),HHA(4,2,JSON),
@@ -82,8 +82,8 @@ C FLUXTOT = TOTAL FLUX OF EACH OF THE NEUTRINOS PRODUCED IN THE SUN
       ENDIF
 C MHP 10/02 QFPR,QFTR NOT USED - OMIT
 c      IF(.NOT.LROT) THEN
-C	 QFPR = 0.0D0
-C	 QFTR = 0.0D0
+C       QFPR = 0.0D0
+C       QFTR = 0.0D0
 c      ENDIF
       LOCOND = .TRUE.
       LDERIV = .TRUE.
@@ -91,48 +91,48 @@ c      ENDIF
       LMIX = .FALSE.
       LNTRPY = DELTS.GT.0.0D0
       IF(LNTRPY) THEN
-	 DELTSI = 1.0D0/DELTS
-	 TIME = 3.1558D7
-	 TIMEI = 3.1688D-8
+       DELTSI = 1.0D0/DELTS
+       TIME = 3.1558D7
+       TIMEI = 3.1688D-8
       ENDIF
       DO 10 J = 1,8
-	 TLUMX(J) = 0.0D0
+       TLUMX(J) = 0.0D0
    10 CONTINUE
       IDT = 15
       DO 15 J = 1,4
-	 IDD(J) = 5
+       IDD(J) = 5
    15 CONTINUE
       DO 30 IM = 1,M
 C SET UP LOCAL VARIABLES FOR CALLS TO BASIC PHYSICS ROUTINES
-	 THL = 0.0D0
-	 SL = HS(IM)
-	 TL = HT(IM)
-	 PL = HP(IM)
-	 RL = HR(IM)
-	 B = HL(IM)
-	 X = HCOMP(1,IM)
-	 Y = HCOMP(2,IM)
-	 Z = HCOMP(3,IM)
-	 XHE3 = HCOMP(4,IM)
-	 XC12 = HCOMP(5,IM)
-	 XC13 = HCOMP(6,IM)
-	 XN14 = HCOMP(7,IM)
-	 XN15 = HCOMP(8,IM)
-	 XO16 = HCOMP(9,IM)
-	 XO17 = HCOMP(10,IM)
-	 XO18 = HCOMP(11,IM)
+       THL = 0.0D0
+       SL = HS(IM)
+       TL = HT(IM)
+       PL = HP(IM)
+       RL = HR(IM)
+       B = HL(IM)
+       X = HCOMP(1,IM)
+       Y = HCOMP(2,IM)
+       Z = HCOMP(3,IM)
+       XHE3 = HCOMP(4,IM)
+       XC12 = HCOMP(5,IM)
+       XC13 = HCOMP(6,IM)
+       XN14 = HCOMP(7,IM)
+       XN15 = HCOMP(8,IM)
+       XO16 = HCOMP(9,IM)
+       XO17 = HCOMP(10,IM)
+       XO18 = HCOMP(11,IM)
 C MHP 05/02 DEFINE THESE ALWAYS; THEY
 C ARE PASSED TO THE SR ANYWAY.
-C	 IF(LEXCOM) THEN
-	    XH2 = HCOMP(12,IM)
-	    XLI6 = HCOMP(13,IM)
-	    XLI7 = HCOMP(14,IM)
-	    XBE9 = HCOMP(15,IM)
-C	 ENDIF
-	 IU = IM
-	 DL = HD(IM)
-	 FPL = FP(IM)
- 	 FTL = FT(IM)
+C       IF(LEXCOM) THEN
+          XH2 = HCOMP(12,IM)
+          XLI6 = HCOMP(13,IM)
+          XLI7 = HCOMP(14,IM)
+          XBE9 = HCOMP(15,IM)
+C       ENDIF
+       IU = IM
+       DL = HD(IM)
+       FPL = FP(IM)
+        FTL = FT(IM)
 C YC   IF LMHD USE MHD EQUATION OF STATE.
          IF(LMHD)THEN
             CALL MEQOS(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
@@ -157,58 +157,58 @@ C DBG 12/95 GET OPACITY
          CALL TPGRAD(TL,T,PL,P,D,RL,SL,B,O,QDT,QDP,QOT,QOD,QCP,DEL,
      *        DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
      *        VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
-	 HD(IM) = DL
+       HD(IM) = DL
 C COMPUTE DERIVATIVES
-c	 IF(LROT) THEN
+c       IF(LROT) THEN
 C  CALCULATE D(LOG FP)/D(LOG R) AND D(LOG FT)/D(LOG R)
 c            IF(IM.GT.1) THEN
-c	       IF(IM.LT.M) THEN
-c		  QFPR = (DLOG(FP(IM+1)) - DLOG(FP(IM-1)))/
+c             IF(IM.LT.M) THEN
+c              QFPR = (DLOG(FP(IM+1)) - DLOG(FP(IM-1)))/
 c     *                 (CLN*(HR(IM+1) - HR(IM-1)))
-c		  QFTR = (DLOG(FT(IM+1)) - DLOG(FT(IM-1)))/
+c              QFTR = (DLOG(FT(IM+1)) - DLOG(FT(IM-1)))/
 c     *                 (CLN*(HR(IM+1) - HR(IM-1)))
-c	       ELSE
-c		  QFPR = (DLOG(FP(M)) - DLOG(FP(M-1)))/
+c             ELSE
+c              QFPR = (DLOG(FP(M)) - DLOG(FP(M-1)))/
 c     *                 (CLN*(HR(M) - HR(M-1)))
-c		  QFTR = (DLOG(FT(M)) - DLOG(FT(M-1)))/
+c              QFTR = (DLOG(FT(M)) - DLOG(FT(M-1)))/
 c     *                 (CLN*(HR(M) - HR(M-1)))
-c	       ENDIF
-c	    ELSE
-c	       QFPR = (DLOG(FP(2)) - DLOG(FP(1)))/
+c             ENDIF
+c          ELSE
+c             QFPR = (DLOG(FP(2)) - DLOG(FP(1)))/
 c     *              (CLN*(HR(2) - HR(1)))
-c	       QFTR = (DLOG(FT(2)) - DLOG(FT(1)))/
+c             QFTR = (DLOG(FT(2)) - DLOG(FT(1)))/
 c     *              (CLN*(HR(2) - HR(1)))
-c	    ENDIF
-c	 ENDIF
-	 QTEMP = C4PIL + RL + RL + RL
-	 QR =+DEXP(CLN*(SL - DL - QTEMP))
-	 QRR = - QR - QR - QR
-	 QRP = -QR*QDP
-	 QRT = -QR*QDT
-	 QP =-DEXP(CLN*(CGL + SL + SL - PL - QTEMP - RL ))*FP(IM)
-C	 QPR = -QP - QP - QP - QP*(1.0D0 - QFPR)
-	 QPR = -QP - QP - QP - QP
-	 QPP = -QP
-	 LC(IM) = LCONV
-	 QT = DEL*QP
-	 QTR = -QT - QT - QT - QT
-C	 QTR = -QT - QT - QT - QT*(1.0D0 - QFTR)
-	 IF(.NOT.LCONV) THEN
+c          ENDIF
+c       ENDIF
+       QTEMP = C4PIL + RL + RL + RL
+       QR =+DEXP(CLN*(SL - DL - QTEMP))
+       QRR = - QR - QR - QR
+       QRP = -QR*QDP
+       QRT = -QR*QDT
+       QP =-DEXP(CLN*(CGL + SL + SL - PL - QTEMP - RL ))*FP(IM)
+C       QPR = -QP - QP - QP - QP*(1.0D0 - QFPR)
+       QPR = -QP - QP - QP - QP
+       QPP = -QP
+       LC(IM) = LCONV
+       QT = DEL*QP
+       QTR = -QT - QT - QT - QT
+C       QTR = -QT - QT - QT - QT*(1.0D0 - QFTR)
+       IF(.NOT.LCONV) THEN
 C TEMPERATURE GRADIENT IS RADIATIVE
-	    QTL = CLNI*QT/B
-	    QTP = QT*QOD*QDP
-	    QTT = QT*(-4.0D0 + QOT + QOD*QDT)
-	 ELSE
+          QTL = CLNI*QT/B
+          QTP = QT*QOD*QDP
+          QTT = QT*(-4.0D0 + QOT + QOD*QDT)
+       ELSE
 C TEMPERATURE GRADIENT IS CONVECTIVE
-	    QTL = 0.0D0
-	    QTP = QT*(-1.0D0 + QACP)
-	    QTT = QT*QACT
-	    QTR = QTR + QT*QACR
-	 ENDIF
-	 QL = 0.0D0
-	 QLT = 0.0D0
-	 QLP = 0.0D0
-	 IF(TL.GT.TCUT(1)) THEN
+          QTL = 0.0D0
+          QTP = QT*(-1.0D0 + QACP)
+          QTT = QT*QACT
+          QTR = QTR + QT*QACR
+       ENDIF
+       QL = 0.0D0
+       QLT = 0.0D0
+       QLP = 0.0D0
+       IF(TL.GT.TCUT(1)) THEN
 C SET UP NUCLEAR ENERGY TERMS
             CALL ENGEB(EGG11,EGG22,EGG33,EGG44,EGG55,QED,QET,SUM1,DL,
      *           TL,QDT,QDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
@@ -235,8 +235,8 @@ C TO UNITS OF 10**10 ERGS BY MULTIPLYING BY THE MASS.
                THL = THL + (HS2(IM)/CLSUN)*EG(J)
  20         CONTINUE
 C JVS 10/11 Calculate the He3+He3 and sum of He3+He3 and He3+He4 luminosity
-		UMHE33(IM) = (HS2(IM)/CLSUN)*ENGHE3
-		UMHEAL(IM) = (HS2(IM)/CLSUN)*HE3ALL
+            UMHE33(IM) = (HS2(IM)/CLSUN)*ENGHE3
+            UMHEAL(IM) = (HS2(IM)/CLSUN)*HE3ALL
 C JVS end
             TLUMX(8)=TLUMX(8)+(HS2(IM)/CLSUN)*ECA
             THL = THL + (HS2(IM)/CLSUN)*ECA
@@ -339,7 +339,7 @@ C  ZERO OUT NUCLEAR ENERGY TERMS IF T < NUCLEAR CUTOFF.
             DO J = 1,6
                SEG(J,IM) = 0.0D0
            END DO
-	   ELSE
+         ELSE
 C         ELSE IF(LONG) THEN
 C  LONG OUTPUT NEEDED
             SESUM(IM) = EG(1)+EG(2)+EG(3)+EG(4)+EG(5)
@@ -352,7 +352,7 @@ C  LONG OUTPUT NEEDED
             ENDIF
             DO J = 1,5
                SEG(J,IM) = EG(J)*ESUMI
-        	END DO
+              END DO
 C  SHORT OUTPUT ONLY
 C         ELSE
 C            SESUM(IM) = EG(1)+EG(2)+EG(3)+EG(4)+EG(5)
@@ -368,7 +368,7 @@ C            SEG(7,IM) = HHC(IM)
          SDEL(3,IM) = DELA
          DO J = 1,3
             SFXION(J,IM) = FXION(J)
-	   END DO
+         END DO
          SVEL(IM) = VEL
 C MHP 02/12 COMMENTED CODE OUT, AS REPLICATED BELOW
 C         IF(LSOUND) THEN
@@ -381,7 +381,7 @@ C            PQDP(IM) = QDP
 C         ENDIF
 
 C JVS 01/11 always want gamma:
-		CHRH = 1.0D0/QDP
+            CHRH = 1.0D0/QDP
             CHT = -CHRH*QDT
             CV = QCP - EXP(CLN*(HP(IM)-HD(IM)-HT(IM)))*CHT**2/CHRH
             GAM1(IM) = CHRH*QCP/CV

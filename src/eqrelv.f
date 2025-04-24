@@ -95,10 +95,10 @@ C  IF INDEX UNCHANGED FROM PREVIOUS LOOP,SKIP THIS SECTION
       CDEN3 = -PR9*PR7
 C  INTERPOLATION IN Y IS NEWTONIAN(EQUAL SPACING IN Y)
       DO 20 NN = 1,3
-	 ID = ID1 + NN - 1
-	 DF1(1,NN) = DTABLE(1,ID,JT2) - DTABLE(1,ID,JT1)
-	 DF2(1,NN) = DTABLE(1,ID,JT3)-DTABLE(1,ID,JT2)-DF1(1,NN)
-	 FF(1,NN) = DTABLE(1,ID,JT1) + TTUD*DF1(1,NN) + TTCU*DF2(1,NN)
+       ID = ID1 + NN - 1
+       DF1(1,NN) = DTABLE(1,ID,JT2) - DTABLE(1,ID,JT1)
+       DF2(1,NN) = DTABLE(1,ID,JT3)-DTABLE(1,ID,JT2)-DF1(1,NN)
+       FF(1,NN) = DTABLE(1,ID,JT1) + TTUD*DF1(1,NN) + TTCU*DF2(1,NN)
    20 CONTINUE
       DPEL2 = 2.0D0*(FF(1,1)*CDEN1 + FF(1,2)*CDEN2 + FF(1,3)*CDEN3)
    30 DX1 = XX - DVAL(ID1)
@@ -163,26 +163,26 @@ c  limit range of changes in density to a factor of 10**4   llp  1/31/07
       if(corr .gt.  4D0) corr =  4d0
       if(corr .lt. -4D0) corr = -4D0
       IF(DABS(CORR).GE.1.0D-08) THEN
-	 DML = DML + CORR
-	 NDEN = NDEN + 1
-	 IF(NDEN.LE.20) GO TO 10
-	 WRITE(ISHORT,40) TL,PL,PTL,DML,CORR
+       DML = DML + CORR
+       NDEN = NDEN + 1
+       IF(NDEN.LE.20) GO TO 10
+       WRITE(ISHORT,40) TL,PL,PTL,DML,CORR
    40    FORMAT('EQRELV: Did not Converge: T,P,Pcalc,Dcalc,CORR',
      *          4F10.6,F20.12)
 c       PAUSE
-	 RETURN
+       RETURN
 c         STOP 'ERRELV failed'
       ENDIF
       DL = DL8
       D = D8
       DO 60 KK = 2,5
-	 DO 50 NN = 1,3
-	    ID = ID1 + NN - 1
-	    DF1(KK,NN) = DTABLE(KK,ID,JT2) - DTABLE(KK,ID,JT1)
-	    DF2(KK,NN)=(DTABLE(KK,ID,JT3)-DTABLE(KK,ID,JT2))-DF1(KK,NN)
-	    FF(KK,NN)=DTABLE(KK,ID,JT1)+TTUD*DF1(KK,NN)+TTCU*DF2(KK,NN)
+       DO 50 NN = 1,3
+          ID = ID1 + NN - 1
+          DF1(KK,NN) = DTABLE(KK,ID,JT2) - DTABLE(KK,ID,JT1)
+          DF2(KK,NN)=(DTABLE(KK,ID,JT3)-DTABLE(KK,ID,JT2))-DF1(KK,NN)
+          FF(KK,NN)=DTABLE(KK,ID,JT1)+TTUD*DF1(KK,NN)+TTCU*DF2(KK,NN)
    50    CONTINUE
-	 FFE(KK) = CL1*FF(KK,1) + CL2*FF(KK,2) + CL3*FF(KK,3)
+       FFE(KK) = CL1*FF(KK,1) + CL2*FF(KK,2) + CL3*FF(KK,3)
    60 CONTINUE
 C DERIVATIVES OF P
       PEQ = DEXP(CLN*FFE(3))

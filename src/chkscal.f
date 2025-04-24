@@ -86,13 +86,13 @@ C        L and R. Use age at R for final
 C        run to stop at that age. Do one more run
 C        stopping at interpolated age.
          LSTAR=.TRUE.
-	 LENDAG(NK+1) = .TRUE.
-	 ENDAGE(NK+1) = AGER*1.0D9
-	 LENDAG(NK+2) = .TRUE.
-	 ENDAGE(NK+2) = AGER*1.0D9
-	 RESCAL(2,NK+1) = RESCAL(2,NK-1)
-	 XENV0A(NK+1) = RESCAL(2,NK+1)
-	 XENV0A(NK+2) = XENV0A(NK+1)
+       LENDAG(NK+1) = .TRUE.
+       ENDAGE(NK+1) = AGER*1.0D9
+       LENDAG(NK+2) = .TRUE.
+       ENDAGE(NK+2) = AGER*1.0D9
+       RESCAL(2,NK+1) = RESCAL(2,NK-1)
+       XENV0A(NK+1) = RESCAL(2,NK+1)
+       XENV0A(NK+2) = XENV0A(NK+1)
 C
       WRITE(*,*) ' Have hit R* & L*, prepare final run to age:',
      1  AGER
@@ -104,31 +104,31 @@ C
 C           First time through. Save L and X at R*.
 C           Add 0.01 to Y. Start next run.
             BLRP = BLR
-	    XP = RESCAL(2,NK-1)
-	    X = XP - 0.01D0
-	    RESCAL(2,NK+1) = X
-	    XENV0A(NK+1) = X
-	    XENV0A(NK+2) = X
+          XP = RESCAL(2,NK-1)
+          X = XP - 0.01D0
+          RESCAL(2,NK+1) = X
+          XENV0A(NK+1) = X
+          XENV0A(NK+2) = X
 C
       WRITE(*,*) ' NK=2, Y=Y+0.01, Setup next run, X=', X
       WRITE(ITRACK,*) '#NK=2, Y=Y+0.01, Setup next run, X=', X
             RETURN
-	 ELSE
+       ELSE
 C           If NK=4,6,8,... (second and more times through) then
 C           Use current and previous values of L at R and X to calculate
 C           dX/dlogL. Save L.  Start next run.
             X = RESCAL(2, NK-1)
-	    XP = RESCAL(2, NK-3)
+          XP = RESCAL(2, NK-3)
             DXDL = (X-XP)/(BLR-BLRP)
-	    X = DXDL*(LOG10(XLS)-BLR)+X
+          X = DXDL*(LOG10(XLS)-BLR)+X
 C
       WRITE(*,*) ' Setup next run, NK, X =', NK, X
       WRITE(ITRACK, *) ' Setup next run, NK, X =', NK, X
-	    BLRP = BLR
-	    RESCAL(2,NK+1) = X
-	    XENV0A(NK+1) = X
-	    XENV0A(NK+2) = X
-	 END IF
+          BLRP = BLR
+          RESCAL(2,NK+1) = X
+          XENV0A(NK+1) = X
+          XENV0A(NK+2) = X
+       END IF
       ENDIF
       RETURN
       END

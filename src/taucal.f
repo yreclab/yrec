@@ -9,7 +9,7 @@ C$$$$$$
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       INTEGER*4 IMAX
-	COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
@@ -49,24 +49,24 @@ C         I = 0
 C   81    IMAX = I + 1
 
 C DEAL THE POSSIBILITY OF TWO OR MORE SURFACE CONVECTION ZONES IN THE ENVELOPE
-	  LFLAG = .FALSE.
-	  LTWOCZ = .FALSE.
-	  LCZEX = .FALSE. ! Flag for the existence of a CZ
+        LFLAG = .FALSE.
+        LTWOCZ = .FALSE.
+        LCZEX = .FALSE. ! Flag for the existence of a CZ
         DO 71 I = M-1,1,-1
             IF(.NOT.LCZ(I) .AND. .NOT. LFLAG .AND. LCZEX) THEN ! EXITING CZ
-			IMAX = I+1
-			LFLAG = .TRUE.
-		ELSE IF (LFLAG .AND. LCZ(I)) THEN ! TWO CZS WITH RADIATIVE ZONE BETWEEN
-			LFLAG = .FALSE.
-			LTWOCZ = .TRUE.
-			ICZTOP = I
-		ELSE IF( LCZ(I) .AND. .NOT. LCZEX) THEN !First convective point from surface
-			LCZEX = .TRUE.
-		ENDIF
+                  IMAX = I+1
+                  LFLAG = .TRUE.
+            ELSE IF (LFLAG .AND. LCZ(I)) THEN ! TWO CZS WITH RADIATIVE ZONE BETWEEN
+                  LFLAG = .FALSE.
+                  LTWOCZ = .TRUE.
+                  ICZTOP = I
+            ELSE IF( LCZ(I) .AND. .NOT. LCZEX) THEN !First convective point from surface
+                  LCZEX = .TRUE.
+            ENDIF
    71    CONTINUE
-	   IF(IMAX .LT. 1)THEN
-	        LALLCZ = .TRUE.
-	   ENDIF
+         IF(IMAX .LT. 1)THEN
+              LALLCZ = .TRUE.
+         ENDIF
 
       IF(LCZEX) THEN ! REPLACES "IF(LCZ(M)" THEN JVS 05/14
 
@@ -113,39 +113,39 @@ C INFER HP
 C JVS 03/14 WHEN THERE ARE TWO CZS, THE DEEPER ONE CAN BE ~HP THICK. IN
 C THIS CASE, WE"LL WANT AND AVERAGE CONVECTIVE VELOCITY ACROSS THE REGION
 C--------------------------------------------------------------
-		TOL = 0.5
-C		IF(ABS(1.0 - ((DEXP(CLN*(RTESTL-HR(IMAX))) - 1.0)/
+            TOL = 0.5
+C            IF(ABS(1.0 - ((DEXP(CLN*(RTESTL-HR(IMAX))) - 1.0)/
 C     *         (DEXP(CLN*(HR(ICZTOP)-HR(IMAX))) - 1.0))) .LT. TOL
 C     *          .AND. LTWOCZ) THEN
-		IF((ABS(1.0 - ((DEXP(CLN*(RTESTL-HR(IMAX))) - 1.0)/
+            IF((ABS(1.0 - ((DEXP(CLN*(RTESTL-HR(IMAX))) - 1.0)/
      *         (DEXP(CLN*(HR(ICZTOP)-HR(IMAX))) - 1.0))) .LT. TOL) .OR. LTWOCZ) THEN
-			! TAKE AVERAGE CONV VELOCITY
-			CVEAVG = 0.0
-C			DENOM = ABS(HS1(ICZTOP)-HS1(IMAX))/DEXP(CLN*STOTAL) ! MASS IN CZ
-			DENOM = 0.0
-			UMER = 0.0
-			CZWIDE = ABS(DEXP(CLN*HR(ICZTOP))-DEXP(CLN*HR(IMAX)))
-			DO J=IMAX,ICZTOP,1
-				DENOM = DENOM + HS2(J)
-				UMER = UMER+ 0.5d0*(SVEL(J)+SVEL(J+1))*HS2(J)
-			ENDDO
-			CVEAVG = UMER/DENOM
-			TAUCZ = CZWIDE/CVEAVG
-		ELSE
-C 		(ORIGINAL ROUTINE)
-C 		FIND V
-           	      DO K = IMAX+1,M
-               		IF(HR(K).GT.RTESTL)THEN
-                 	   		FX = (RTESTL-HR(K-1))/(HR(K)-HR(K-1))
-                 	   		CVEL = SVEL(K-1)+FX*(SVEL(K)-SVEL(K-1))
-                 	   		GOTO 85
-               		ENDIF
-              	END DO
-              	CVEL = SVEL(M)
- 85          	CONTINUE
-C            	DEFINE TAUCZ
-            	TAUCZ = PSCA/CVEL
-		ENDIF
+                  ! TAKE AVERAGE CONV VELOCITY
+                  CVEAVG = 0.0
+C                  DENOM = ABS(HS1(ICZTOP)-HS1(IMAX))/DEXP(CLN*STOTAL) ! MASS IN CZ
+                  DENOM = 0.0
+                  UMER = 0.0
+                  CZWIDE = ABS(DEXP(CLN*HR(ICZTOP))-DEXP(CLN*HR(IMAX)))
+                  DO J=IMAX,ICZTOP,1
+                        DENOM = DENOM + HS2(J)
+                        UMER = UMER+ 0.5d0*(SVEL(J)+SVEL(J+1))*HS2(J)
+                  ENDDO
+                  CVEAVG = UMER/DENOM
+                  TAUCZ = CZWIDE/CVEAVG
+            ELSE
+C             (ORIGINAL ROUTINE)
+C             FIND V
+                       DO K = IMAX+1,M
+                           IF(HR(K).GT.RTESTL)THEN
+                                      FX = (RTESTL-HR(K-1))/(HR(K)-HR(K-1))
+                                      CVEL = SVEL(K-1)+FX*(SVEL(K)-SVEL(K-1))
+                                      GOTO 85
+                           ENDIF
+                    END DO
+                    CVEL = SVEL(M)
+ 85                CONTINUE
+C                  DEFINE TAUCZ
+                  TAUCZ = PSCA/CVEL
+            ENDIF
 
 C JVS 10/11/13
 C         ELSE
@@ -191,7 +191,7 @@ C         ENDIF
       ELSE
          TAUCZ = 0.0D0
       ENDIF
-	print*, 'TauCal'
+      print*, 'TauCal'
 
 C END JVS
 

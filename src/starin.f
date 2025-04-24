@@ -110,12 +110,12 @@ c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
 
 C If flag LARGE is set, model has failed to converge.  Terminate the run.
       IF(LARGE) THEN
-	    WRITE(ISHORT,1000)
+          WRITE(ISHORT,1000)
  1000       FORMAT(1X,39('>'),40('<')/,
      *            "STARIN:        ***** RUN STOPPED *****")
-	    WRITE(ISHORT,1010)
+          WRITE(ISHORT,1010)
  1010       FORMAT("STARIN: ***** MODEL FAILED TO CONVERGE *****")
-  	    STOP
+            STOP
       ENDIF
 
 C THIS SUBROUTINE READS IN THE INITIAL STELLAR MODEL
@@ -198,34 +198,34 @@ C THEORY OF THE MODEL ARE THE SAME AS USER PARAMETERS
 C CHECKED ONLY FOR EVOLVED MODELS(MODEL NUMBER > 0)
 C 1/92 Changed to not stop just give warning.
       IF(MODEL.GT.0) THEN
-	 LMIXL = .TRUE.
+       LMIXL = .TRUE.
 C Jan 12, 1989 : in STARIN changed test to see if model has correct mixing
 C length from 1.0e-6 to 2.0e-3 because models only store
 C mixing length to four sig digits.
-	 IF(CMIXL0.GT.0.0D0) LMIXL = (DABS(CMIXL-CMIXL0).LT.2.0D-3)
+       IF(CMIXL0.GT.0.0D0) LMIXL = (DABS(CMIXL-CMIXL0).LT.2.0D-3)
 C MHP 9/03 FIXED TYPO
-	 IF(.NOT.LMIXL .OR. LEXCOM0.NEQV.LEXCOM) THEN
-	    WRITE(ISHORT,1040) CMIXL,CMIXL0,LEXCOM,LEXCP0
-	    WRITE(IOWR,1040) CMIXL,CMIXL0,LEXCOM,LEXCP0
+       IF(.NOT.LMIXL .OR. LEXCOM0.NEQV.LEXCOM) THEN
+          WRITE(ISHORT,1040) CMIXL,CMIXL0,LEXCOM,LEXCP0
+          WRITE(IOWR,1040) CMIXL,CMIXL0,LEXCOM,LEXCP0
  1040       FORMAT(1X,'ERROR IN SUBROUTINE STARIN'/1X,'USER PARAMETERS',
      *      ' OF WRONG TYPE FOR INITIAL MODEL'/1X,'MIXING LENGTH - USER'
      *      ,' DESIRES',F7.3,' MODEL MIX LENGTH',F7.3/1X,
      *      'EXTENDED COMP-USER DESIRES ',L1,' MODEL USED ',L1)
 C =>RUN STOPPED DUE TO INCONSISTENCY BETWEEN MODEL AND RUN PARMS
 c            STOP
-	 ENDIF
+       ENDIF
       ENDIF
 
 C ENVELOPE DATA (Now bypassed)
 C LNEW0 HAS BEEN READ IN, IF TRUE THEN RECOMPUTE ENVELOPE EVERY MODEL
 C STORED ENVELOPE RECORDS ONLY USED FOR HE FLASH CALCS
 c      IF(LNEW0) THEN
-c	 LNEW = .TRUE.
+c       LNEW = .TRUE.
 c      ELSE
-c	 LNEW = .NOT.LKUTHE
+c       LNEW = .NOT.LKUTHE
 c      ENDIF
 c      DO 80 I = 1,3
-c	 IF((.NOT.LNEW).AND.IABS(IO).NE.I) LNEW = .TRUE.
+c       IF((.NOT.LNEW).AND.IABS(IO).NE.I) LNEW = .TRUE.
 c 80   CONTINUE
 
       ISTORE = 0
@@ -243,13 +243,13 @@ C GET XNEW AND ZNEW FROM HENYEY POINTS
 C FOURTH PART:  - LOG J/M STORED
 
       IF(LROT) THEN
-	 IF(LWNEW) THEN
+       IF(LWNEW) THEN
 C GENERATE A SOLID BODY ROTATION CURVE WITH OMEGA = WNEW;
 C THIS IS DONE TO CONVERT A NON-ROTATING MODEL TO A ROTATING ONE.
-	    DO 540 I = 1,M
-	       OMEGA(I) = WNEW
+          DO 540 I = 1,M
+             OMEGA(I) = WNEW
  540        CONTINUE
-	 ENDIF
+       ENDIF
       ELSE
          DO 570 I = 1,JSON
             FP(I) = 1.0D0
@@ -415,21 +415,21 @@ C ASSUME COMPOSITION IS UNIFORM
                 HCOMP(J,I) = HCOMP(J,MP1)
              END DO
 C CALL EQUATION OF STATE TO GET CONSISTENT DENSITY
-C	     LDERIV = .FALSE.
-C	     LOCOND = .FALSE.
-C	     LATMO = .FALSE.
+C           LDERIV = .FALSE.
+C           LOCOND = .FALSE.
+C           LATMO = .FALSE.
 C             KSAHA = 0
-C	     X = HCOMP(1,I)
-C	     Z = HCOMP(3,I)
-C	     PL = HP(I)
+C           X = HCOMP(1,I)
+C           Z = HCOMP(3,I)
+C           PL = HP(I)
 C             P = EXP(CLN*PL)
 C             TL = HT(I)
 C             T = EXP(CLN*TL)
-C	     DL = HD(I+1)
+C           DL = HD(I+1)
 C             D = EXP(CLN*DL)
-C	     FPL = 1.0D0
-C	     FTL = 1.0D0
-C	     CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,
+C           FPL = 1.0D0
+C           FTL = 1.0D0
+C           CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,
 C     *                   RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,
 C     *                   QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
 C             HD(I) = DL
@@ -460,68 +460,68 @@ C IS INTEGRATED FROM THE SURFACE TO THE DESIRED FITTING POINT.
 C 1 NEW POINT IS ADDED, AND THE COMPOSITION OF THE NEW POINT
 C IS ASSUMED EQUAL TO THAT OF THE LAST OLD POINT.
       IF(LSENV0) THEN
-	 IF(SENV0.GT.0.0D0) SENV0 = -SENV0
+       IF(SENV0.GT.0.0D0) SENV0 = -SENV0
 C DBG 2/92 CHANGED MINIMUM FROM 1.0D-10 TO 1.0D-12
 C RESTRICT MIMIMUM ENVELOPE MASS;1.0D-12 CORRESPONDS TO TAU=2/3
 C FOR THIS PURPOSE(BASE OF ATMOSPHERE).
-	 IF(SENV0.GT.-1.0D-12) SENV0 = -1.D-12
-	 SENV = HS(M) - HSTOT
-	 SENV1 = SENV
-	 IF(SENV.EQ.SENV0) GOTO 599
-	 JEND = 11
-	 IF(LEXCOM) JEND = 15
-	 IF(SENV0.LT.SENV) THEN
+       IF(SENV0.GT.-1.0D-12) SENV0 = -1.D-12
+       SENV = HS(M) - HSTOT
+       SENV1 = SENV
+       IF(SENV.EQ.SENV0) GOTO 599
+       JEND = 11
+       IF(LEXCOM) JEND = 15
+       IF(SENV0.LT.SENV) THEN
 C NEW ENVELOPE DEEPER THAN THE OLD ONE
-	    HSEND = HSTOT + SENV0
-	    DO 575 I = M-1,1,-1
-	       IF(HS(I).LT.HSEND)GOTO 580
+          HSEND = HSTOT + SENV0
+          DO 575 I = M-1,1,-1
+             IF(HS(I).LT.HSEND)GOTO 580
  575        CONTINUE
 C ENVELOPE MASS DESIRED WITHIN FIRST POINT;PRINT NASTY MESSAGE
 C AND ABORT.
-	    WRITE(ISHORT,576)SENV0
+          WRITE(ISHORT,576)SENV0
  576        FORMAT(5X,'ERROR IN SUBROUTINE STARIN'/5X,'DESIRED',
      *      ' ENVELOPE MASS',1PE22.13,' TOO LARGE'/5X,'ENVELOPE',
      *      ' MASS NOT CHANGED')
-	    GOTO 599
+          GOTO 599
  580        M = I + 1
-	    SENV = SENV0
-	    FS = (HSEND - HS(I))/(HS(I+1) - HS(I))
-	    HS(M) = HSEND
-	    HD(M) = HD(I) + FS*(HD(I+1) - HD(I))
-	    HL(M) = HL(I) + FS*(HL(I+1) - HL(I))
-	    HP(M) = HP(I) + FS*(HP(I+1) - HP(I))
-	    HR(M) = HR(I) + FS*(HR(I+1) - HR(I))
-	    HT(M) = HT(I) + FS*(HT(I+1) - HT(I))
-	    DO 585 J = 1,JEND
-	       HCOMP(J,M) = HCOMP(J,I)
+          SENV = SENV0
+          FS = (HSEND - HS(I))/(HS(I+1) - HS(I))
+          HS(M) = HSEND
+          HD(M) = HD(I) + FS*(HD(I+1) - HD(I))
+          HL(M) = HL(I) + FS*(HL(I+1) - HL(I))
+          HP(M) = HP(I) + FS*(HP(I+1) - HP(I))
+          HR(M) = HR(I) + FS*(HR(I+1) - HR(I))
+          HT(M) = HT(I) + FS*(HT(I+1) - HT(I))
+          DO 585 J = 1,JEND
+             HCOMP(J,M) = HCOMP(J,I)
  585        CONTINUE
-	    XNEW = HCOMP(1,M)
-	    ZNEW = HCOMP(3,M)
-	    IF(LROT) OMEGA(M) = OMEGA(I) + FS*(OMEGA(I+1)-OMEGA(I))
-	    IF(LC(I).AND.LC(I+1))THEN
-	       LC(M) = .TRUE.
-	    ELSE IF(.NOT.LC(I).AND. .NOT.LC(I+1))THEN
-	       LC(M) = .FALSE.
-	    ELSE
+          XNEW = HCOMP(1,M)
+          ZNEW = HCOMP(3,M)
+          IF(LROT) OMEGA(M) = OMEGA(I) + FS*(OMEGA(I+1)-OMEGA(I))
+          IF(LC(I).AND.LC(I+1))THEN
+             LC(M) = .TRUE.
+          ELSE IF(.NOT.LC(I).AND. .NOT.LC(I+1))THEN
+             LC(M) = .FALSE.
+          ELSE
 C CALL BASIC PHYSICS ROUTINES TO DETERMINE IF THE NEW LAST SHELL IS
 C CONVECTIVE OR RADIATIVE.
-	       LDERIV = .FALSE.
-	       LOCOND = .FALSE.
-	       LATMO = .TRUE.
-	       KSAHA = 0
-	       X = HCOMP(1,M)
-	       Z = HCOMP(3,M)
-	       PL = HP(M)
-	       TL = HT(M)
-	       DL = HD(M)
-	       B = HL(M)
-	       RL = HR(M)
-	       SL = HS(M)
-	       FPL = 1.0D0
-	       FTL = 1.0D0
-	       IDT = 15
-	       DO 588 KK = 1,4
-		  IDD(KK) = 5
+             LDERIV = .FALSE.
+             LOCOND = .FALSE.
+             LATMO = .TRUE.
+             KSAHA = 0
+             X = HCOMP(1,M)
+             Z = HCOMP(3,M)
+             PL = HP(M)
+             TL = HT(M)
+             DL = HD(M)
+             B = HL(M)
+             RL = HR(M)
+             SL = HS(M)
+             FPL = 1.0D0
+             FTL = 1.0D0
+             IDT = 15
+             DO 588 KK = 1,4
+              IDD(KK) = 5
  588           CONTINUE
                IF (LMHD) THEN
                   CALL MEQOS(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,
@@ -547,8 +547,8 @@ C CONVECTIVE OR RADIATIVE.
      *              QACR,QCPT,QCPP,VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
                HD(M) = DL
                LC(M) = LCONV
-	    ENDIF
-	 ELSE
+          ENDIF
+       ELSE
 C DESIRED ENVELOPE MASS LESS THAN CURRENT VALUE.
             MM = M
             EMAX0 = ENVMAX
@@ -557,21 +557,21 @@ C DESIRED ENVELOPE MASS LESS THAN CURRENT VALUE.
             ENVMAX = HPTTOL(8)
             ENVMIN = HPTTOL(8)
             ENVBEG = HPTTOL(8)
-C	    SENV = SENV0
-	    LSBC0 = .FALSE.
-	    LPRT = .TRUE.
-	    KATM = 0
-	    KENV = 0
-	    KSAHA = 0
-	    B = DEXP(CLN*BL)
-	    RL = 0.5D0*(BL + CLSUNL - 4.0D0*TEFFL - C4PIL - CSIGL)
-	    GL = CGL + STOTAL - RL - RL
-	    X = HCOMP(1,M)
-	    Z = HCOMP(3,M)
-	    FPL = 1.0D0
-	    FTL = 1.0D0
-	    IXX=0
-	    PLIM = HP(M)
+C          SENV = SENV0
+          LSBC0 = .FALSE.
+          LPRT = .TRUE.
+          KATM = 0
+          KENV = 0
+          KSAHA = 0
+          B = DEXP(CLN*BL)
+          RL = 0.5D0*(BL + CLSUNL - 4.0D0*TEFFL - C4PIL - CSIGL)
+          GL = CGL + STOTAL - RL - RL
+          X = HCOMP(1,M)
+          Z = HCOMP(3,M)
+          FPL = 1.0D0
+          FTL = 1.0D0
+          IXX=0
+          PLIM = HP(M)
 C DBG PULSE: DO NOT DO PULSE OUTPUT
             LPULPT = .FALSE.
             IF (LDH) THEN
@@ -586,19 +586,19 @@ C MHP 10/02  define ISTORE - used in ENVINT
             IDUM = 0
 C G Somers 10/14, FOR SPOTTED RUNS, FIND THE
 C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
-	    IF(JENV.EQ.M.AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
+          IF(JENV.EQ.M.AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
                ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
-	    ELSE
-	       ATEFFL = TEFFL
-	    ENDIF
-	    CALL ENVINT(B,FPL,FTL,GL,HSTOT,IXX,LPRT,LSBC0,PLIM,RL,
+          ELSE
+             ATEFFL = TEFFL
+          ENDIF
+          CALL ENVINT(B,FPL,FTL,GL,HSTOT,IXX,LPRT,LSBC0,PLIM,RL,
      *           ATEFFL,X,Z,DUM1,IDUM,KATM,KENV,KSAHA,DUM2,
      *           DUM3,DUM4,LPULPT)
 C G Somers END
             ENVMAX = EMAX0
             ENVMIN = EMIN0
             ENVBEG = EBEG0
-	    SENV = SENV0
+          SENV = SENV0
             IF(M+NUMENV.GE.JSON) STOP 9999
 C ENFORCE CONSISTENCY WITH THE INTERIOR SOLUTION;
 C ADJUST THE (P, RHO, T, R) POINTS TO BE CONSISTENT
@@ -704,23 +704,23 @@ C ASSIGN THE BOUNDARY AT THE PHOTOSPHERE FOR ENVELOPE MASS BELOW 1.0D-12.
       WRITE(*,911)(J,HD(J),HL(J),HP(J),HR(J),HS(J)-STOTAL,
      *             HT(J),LC(J), J = MM,M)
  911  FORMAT(I5,1P6E16.8,L2)
-C	    M = M + 1
-C	    HS(M) = HSTOT + SENV
-C	    HD(M) = ED
-C	    HL(M) = HL(M-1)
-C	    HP(M) = EP
-C	    HR(M) = ER
-C	    HT(M) = ET
-C	    LC(M) = EVEL.GT.0.0D0
-C	    DO 590 J = 1,JEND
-C	       HCOMP(J,M) = HCOMP(J,M-1)
+C          M = M + 1
+C          HS(M) = HSTOT + SENV
+C          HD(M) = ED
+C          HL(M) = HL(M-1)
+C          HP(M) = EP
+C          HR(M) = ER
+C          HT(M) = ET
+C          LC(M) = EVEL.GT.0.0D0
+C          DO 590 J = 1,JEND
+C             HCOMP(J,M) = HCOMP(J,M-1)
 C 590        CONTINUE
-C	    XNEW = HCOMP(1,M)
-C	    ZNEW = HCOMP(3,M)
-C	    IF(LROT) OMEGA(M) = OMEGA(I) + FS*(OMEGA(I+1)-OMEGA(I))
-	 ENDIF
-	 LNEW = .TRUE.
-	 WRITE(ISHORT,597)SENV1,SENV
+C          XNEW = HCOMP(1,M)
+C          ZNEW = HCOMP(3,M)
+C          IF(LROT) OMEGA(M) = OMEGA(I) + FS*(OMEGA(I+1)-OMEGA(I))
+       ENDIF
+       LNEW = .TRUE.
+       WRITE(ISHORT,597)SENV1,SENV
  597     FORMAT(5X,'***** NEW ENVELOPE MASS CALCULATED *****'/8X,
      *        'OLD SENV ',1PE22.13,'  NEW SENV',E22.13)
  599     CONTINUE
@@ -731,36 +731,36 @@ C HS1 IS THE UNLOGGED HS; HS2 IS THE MASS OF THE SHELL(ALSO NOT LOG).
       DS3 = DEXP(CLN*HS(1))
       DS2 = - DS3
       DO 120 I = 2,M
-	 DS1 = DS2
-	 DS2 = DS3
-	 DS3 = DEXP(CLN*HS(I))
-	 HS1(I-1) = DS2
-	 HS2(I-1) = 0.5D0*(DS3-DS1)
+       DS1 = DS2
+       DS2 = DS3
+       DS3 = DEXP(CLN*HS(I))
+       HS1(I-1) = DS2
+       HS2(I-1) = 0.5D0*(DS3-DS1)
  120  CONTINUE
       HS1(M) = DS3
       HS2(M) = DEXP(CLN*HSTOT) - 0.5D0*(DS2+DS3)
 
       IF(LROT) THEN
 C CALCULATE FP,FT,R0 AND ETA2 GIVEN OMEGA
-	 CALL FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
+       CALL FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
 C FIND MOMENT OF INERTIA(HI)
-	 CALL MOMI(ETA2,HD,HR,HS,HS2,1,M,OMEGA,R0,HI,QIW,M)
+       CALL MOMI(ETA2,HD,HR,HS,HS2,1,M,OMEGA,R0,HI,QIW,M)
 C GIVEN OMEGA AND I, FIND ANGULAR MOMENTUM AND ROTATIONAL K.E.
-	 SUMJ = 0.0D0
-	 SUMKE = 0.0D0
-	 DO 550 I = 1,M
-	    HJ = OMEGA(I)*HI(I)
-	    HJM(I) = HJ/HS2(I)
-	    HKEROT(I) = 0.5D0*OMEGA(I)*HJ
-	    SUMJ = SUMJ + HJ
-	    SUMKE = SUMKE + HKEROT(I)
+       SUMJ = 0.0D0
+       SUMKE = 0.0D0
+       DO 550 I = 1,M
+          HJ = OMEGA(I)*HI(I)
+          HJM(I) = HJ/HS2(I)
+          HKEROT(I) = 0.5D0*OMEGA(I)*HJ
+          SUMJ = SUMJ + HJ
+          SUMKE = SUMKE + HKEROT(I)
  550     CONTINUE
-	 WRITE(ISHORT,560)SJTOT,SUMJ,SKEROT,SUMKE
+       WRITE(ISHORT,560)SJTOT,SUMJ,SKEROT,SUMKE
  560     FORMAT(1X,'TOTAL J OF STAR - PREVIOUS ',1PE21.13,' NEW ',
      *        1PE21.13/1X,'TOTAL ROTATIONAL K.E. OF STAR - PREVIOUS ',
      *        1PE21.13,' NEW ',1PE21.13)
-	 SJTOT = SUMJ
-	 SKEROT = SUMKE
+       SJTOT = SUMJ
+       SKEROT = SUMKE
       ENDIF
 
       IF(NK.GT.1) GOTO 630
@@ -793,15 +793,15 @@ C EVERYTHING BUT V(7)=H, AND V(12)=HE
       V(12) = (1.0D0-XENV-ZENV)/FV
       VSUM = 0.0D0
       DO 610 I = 1,12
-	 V(I) = FV*V(I)/ATOMWT(I)
-	 VSUM = VSUM + V(I)
+       V(I) = FV*V(I)/ATOMWT(I)
+       VSUM = VSUM + V(I)
  610  CONTINUE
       AMUENV = VSUM
       FV = 1.0D0/AMUENV
 C DBG 1/96 FXENV ARE NUMBER FRACTIONS OF ELEMENTS REQURIED
 C BY EOS ROUTINES (SEE EQSTAT AND EQSAHA)
       DO 620 I = 1,12
-	 FXENV(I) = V(I)*FV
+       FXENV(I) = V(I)*FV
  620  CONTINUE
 C     FIND SURFACE COMPOSITION OPACITY TABLE
 C     FIRST FIND INTERPOLATING FACTOR FOR COMPOSITION
@@ -821,11 +821,11 @@ C MODEL TO MODEL IN P,T,R,L.
          HRO(I) = HR(I)
          HLO(I) = HL(I)
 C  JVS 04/14 Added Teff to the list of saved values
-	   TEFFLO = TEFFL
+         TEFFLO = TEFFL
  710  CONTINUE
       IF(LROT) THEN
          DO 720 I = 1,M
-	    WOLD(I) = OMEGA(I)
+          WOLD(I) = OMEGA(I)
  720     CONTINUE
       ENDIF
 
@@ -879,7 +879,7 @@ C         SDEL(1,IM) = DELR
 C         SDEL(2,IM) = DEL
 C         SDEL(3,IM) = DELA
 CC JVS 10/13 Always want SVEL
-C	 SVEL(IM) = VEL
+C       SVEL(IM) = VEL
 C 730  CONTINUE
 C      endif
 

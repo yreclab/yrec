@@ -95,28 +95,28 @@ C SET UP FRACTIONAL ABUNDANCES
       DFX12 = (Z - ZENV)
       IF(DABS(DFX1) + DABS(DFX12) .LT. 1.0D-5) THEN
 C USE ENVELOPE ABUNDANCES
-	 AMU = AMUENV
-	 IF(LSAHA) THEN
-	    DO 10 I = 1,NZP1
-	       FX(I) = FXENV(I)
+       AMU = AMUENV
+       IF(LSAHA) THEN
+          DO 10 I = 1,NZP1
+             FX(I) = FXENV(I)
  10         CONTINUE
-	 ENDIF
+       ENDIF
       ELSE
-	 DFX1 = DFX1*ATOMWT(1)
-	 DFX12 = DFX12*ATOMWT(3)
-	 DFX4 = (XENV+ZENV -X-Z)*ATOMWT(2)
+       DFX1 = DFX1*ATOMWT(1)
+       DFX12 = DFX12*ATOMWT(3)
+       DFX4 = (XENV+ZENV -X-Z)*ATOMWT(2)
 C ASSUME EXCESS Z(METALS) IS IN THE FORM OF CARBON(12)
-	 AMU = AMUENV + DFX1 + DFX4 + DFX12
-	 AMUI = 1.0D0/AMU
-	 IF(LSAHA) THEN
-	    FMU = AMUENV*AMUI
-	    DO 20 I = 1,NZP1
-	       FX(I) = FMU*FXENV(I)
+       AMU = AMUENV + DFX1 + DFX4 + DFX12
+       AMUI = 1.0D0/AMU
+       IF(LSAHA) THEN
+          FMU = AMUENV*AMUI
+          DO 20 I = 1,NZP1
+             FX(I) = FMU*FXENV(I)
  20         CONTINUE
-	    FX(6) = FX(6) + DFX12*AMUI
-	    FX(7) = FX(7) + DFX1*AMUI
-	    FX(12) = FX(12)+ DFX4*AMUI
-	 ENDIF
+          FX(6) = FX(6) + DFX12*AMUI
+          FX(7) = FX(7) + DFX1*AMUI
+          FX(12) = FX(12)+ DFX4*AMUI
+       ENDIF
       ENDIF
       ENDIF
 C COMPUTE RADIATION PRESSURE
@@ -135,14 +135,14 @@ C COMPUTE RADIATION PRESSURE
       ETA = 0.0D0
       IF(.NOT.LSAHA) THEN
 C COMPUTE VALUES FOR FULLY IONIZED GAS AND RETURN
-	 EMU = X*ATOMWT(1) + (1.0D0-X)*ATOMWT(4)
-	 RMU = CGAS*(AMU+EMU)
-	 FXION(1) = 1.0D0
-	 FXION(2) = 0.0D0
-	 FXION(3) = 1.0D0
-	 CALL EQRELV(TL,T,PL,P,DL,D,BETA,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
+       EMU = X*ATOMWT(1) + (1.0D0-X)*ATOMWT(4)
+       RMU = CGAS*(AMU+EMU)
+       FXION(1) = 1.0D0
+       FXION(2) = 0.0D0
+       FXION(3) = 1.0D0
+       CALL EQRELV(TL,T,PL,P,DL,D,BETA,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
      *        QDTT,QDTP,QAT,QAP,QCPT,QCPP,X)
-	 GOTO 200
+       GOTO 200
       ENDIF
 C CHECK IF SAUMON, CHABRIER, AND VAN HORN EQUATION OF STATE NEEDED.
 C THIS EOS REPLACES THE CALL TO EQSAHA, EXCEPT FOR DERIVATIVE PURPOSES.
@@ -156,15 +156,15 @@ C THIS EOS REPLACES THE CALL TO EQSAHA, EXCEPT FOR DERIVATIVE PURPOSES.
          LSCVD = .FALSE.   ! Do not do SCV derivatives
          IF(LSCVD .AND. LCALC)THEN
 c  LLP 9/6/03 To get reasonable accuracy in numerical derivatives in
-c	the 4-5 decimal place SCV tables, appropriate sizes for the
-c	stepouts in the numerical derivatives must be obtained.  The
-c	row to row and column to column spacings are .20 in PL and
-c	.08 in TL. Maximum row to row changes are of the order of
-c	0.2000 out of 10.0000 (in density).  Maximum column to column
+c      the 4-5 decimal place SCV tables, appropriate sizes for the
+c      stepouts in the numerical derivatives must be obtained.  The
+c      row to row and column to column spacings are .20 in PL and
+c      .08 in TL. Maximum row to row changes are of the order of
+c      0.2000 out of 10.0000 (in density).  Maximum column to column
 c       changes changes are of the order of .0500 out of 3.5000 (in
-c	density.  It appears that stepouts of plus and minus half a
-c	row and column are needed to get appropriate accuracy for the
-c	derivatives.
+c      density.  It appears that stepouts of plus and minus half a
+c      row and column are needed to get appropriate accuracy for the
+c      derivatives.
 
             dpl = .010d0
             dtl = .040d0
@@ -215,8 +215,8 @@ C STORE EQSAHA VALUES FOR INTERPOLATION WITH EQRELV VALUES
       QCP0 = QCP
       DELA0 = DELA
       IF(LDERIV) THEN
-	 QDTT0 = QDTT
-	 QDTP0 = QDTP
+       QDTT0 = QDTT
+       QDTP0 = QDTP
          QCPT0 = QCPT
          QCPP0 = QCPP
          QAT0 = QAT

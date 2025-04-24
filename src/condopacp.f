@@ -36,7 +36,7 @@ C locate the Potekhin files.
       COMMON /MISCOPAC/IKUR2,FKUR2,IcondOpacP,FcondOpacp,LcondOpacP
       LOGICAL*4 LcondOpacP
       CHARACTER*256 FKUR2,FcondOpacP
-	if (KRUN.ne.12345) then ! Reading
+      if (KRUN.ne.12345) then ! Reading
          IP = IcondOpacP
          open(IP,file=FcondOpacP,status='OLD')
 c         print*,'Reading thermal conductivity data...'
@@ -47,7 +47,7 @@ c         print*,'Reading thermal conductivity data...'
           do IR=1,MAXR
              read(IP,*) AR(IR),(AKAP(IT,IR,IZ),IT=1,MAXT)
           enddo
-	enddo
+      enddo
          close(IP)
          KRUN=12345
          IZ=MAXZ/2+1
@@ -61,11 +61,11 @@ c         print*,'Potekhin Conductivity File read in.'
       call HUNT(AT,MAXT,TLG,IT)
 
 C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
-	if (IT.eq.0.or.IT.eq.MAXT) then
-			print*, AZ
-			print*, MAXZ, TLG, IZ
-			stop'CONINTER: T out of range'
-	endif
+      if (IT.eq.0.or.IT.eq.MAXT) then
+                  print*, AZ
+                  print*, MAXZ, TLG, IZ
+                  stop'CONINTER: T out of range'
+      endif
 
       call HUNT(AR,MAXR,RLG,IR)
       if (IR.eq.0.or.IR.eq.MAXR) stop'CONINTER: rho out of range'

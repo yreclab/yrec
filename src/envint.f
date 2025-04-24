@@ -59,8 +59,8 @@ C MHP 6/97 ADDED ALLARD MODEL ATMOSPHERES
 C      COMMON/ATMOS3/ATMZA,ATMPLA(NTA,NGA),
 C     *ATMTLA(NTA),ATMGLA(NGA),FALLARD,IOATMA
       COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
-     x       IOATMA					           ! ALSURFP and PARMIN
-	COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
+     x       IOATMA                                         ! ALSURFP and PARMIN
+      COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
@@ -71,16 +71,16 @@ C SERIES AFTER THE INTEGRATION IS DONE.
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-	COMMON/ENVCZ/ENVRCZ,RINT
+      COMMON/ENVCZ/ENVRCZ,RINT
 
 C MHP 08/02 ADDED VECTOR FOR STORING THE OVERTURN TIMESCALE OF THE
 C SURFACE CONVECTION ZONE
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-	DIMENSION FXION(3),PS(3),RS(3),TS(3),ESTORE(4)
+      DIMENSION FXION(3),PS(3),RS(3),TS(3),ESTORE(4)
       DIMENSION Y(3),DYDX(3),YSCAL(3),YSTART(3),ERRSUM(3),ERR(3)
 
 C JVS Acoustic depth common block
-  	COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
+        COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
      *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
      *IJENT, IJDEL, LACOUT
@@ -107,7 +107,7 @@ C DBG PULSE TURN ON DERIVATIVE CALCULATOR
       LOCOND = .FALSE.
 
 C JVS 10/07/13 Always calculate derivatives
-	LDERIV = .TRUE.
+      LDERIV = .TRUE.
 
 C G Somers 11/14 WRITE ATMOSHPHERE HEADER TO .STORE FILE, AND ADDED
 C I/O FLAGS TO THE ATMOSPHERE CALLS
@@ -147,7 +147,7 @@ C Start gray atmosphere bounary conditions
 C GUESS THE TEMPERATURE FOR AN OPTICAL DEPTH NEAR ZERO.
       IDT = 15
       DO 5 JJ = 1,4
-	 IDD(JJ) = 5
+       IDD(JJ) = 5
     5 CONTINUE
       ERRSUM(1) = 0.0D0
       IF(KTTAU .EQ. 0) THEN
@@ -189,13 +189,13 @@ C DBG 12/95 GET OPACITY
       DYDX(1) = DEXP(CLN*(GL+X0-OL-PL))
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
       IF(LPRT.AND.LSTATM) THEN
-	 WRITE(ISTOR,10)
+       WRITE(ISTOR,10)
          BETA = 1.0D0 - CA3*(T**2)**2/P
          CHRH = 1.0D0/QDP
          CHT = -CHRH*QDT
          CV = QCPP - EXP(CLN*(PL-DL-TL))*CHT**2/CHRH
          GAM1 = CHRH*QCPP/CV
-	 WRITE(ISTOR,20)X0,PL,TL,DL,O,(FXION(I),I=1,3),KSAHA,KATM,
+       WRITE(ISTOR,20)X0,PL,TL,DL,O,(FXION(I),I=1,3),KSAHA,KATM,
      *                   GAM1,QDP,QDT,BETA,QCPP,CV
    10    FORMAT(6X,'TAU',9X,'P',10X,'T',10X,'D',11X,'O',9X,
      *         'HII  HEII HEIII   SAHA   KATM')
@@ -203,33 +203,33 @@ c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
       ENDIF
 C DBG PULSE INITIAL POINT FOR PULSATION
       IF (LPULPT.AND.LPRT) THEN
-	  QQED = 0.0D0
-	  QESUM = 0.0D0
-	  QQET = 0.0D0
-	  QFS = 1.0D0
-	  TAUP = DEXP(CLN*X0)
-	  OP = O
-	  DP = DEXP(CLN*DL)
-	  DELTR = 0.0D0
-	  PELPF = CGAS * T * D * EMU
+        QQED = 0.0D0
+        QESUM = 0.0D0
+        QQET = 0.0D0
+        QFS = 1.0D0
+        TAUP = DEXP(CLN*X0)
+        OP = O
+        DP = DEXP(CLN*DL)
+        DELTR = 0.0D0
+        PELPF = CGAS * T * D * EMU
 C FROM FIRST LINES OF TPGRAD
-	  DELR = O*B*DEXP(CLN*(PL-HSTOT-4.0D0*TL+CLSUNL-CGL+
+        DELR = O*B*DEXP(CLN*(PL-HSTOT-4.0D0*TL+CLSUNL-CGL+
      *           CDELRL))*FTL/FPL
-	  IF (DELR-DELA .LE. 1.0D-6) THEN
-	      DEL = DELR
-	  ELSE
-	      DEL = DELA
-	  END IF
-	  IF(IPVER.EQ.1) THEN
+        IF (DELR-DELA .LE. 1.0D-6) THEN
+            DEL = DELR
+        ELSE
+            DEL = DELA
+        END IF
+        IF(IPVER.EQ.1) THEN
 C MHP 10/02 TYPO - QED SHOULD HAVE BEEN QQED
 C     *         PL, QESUM,O,QDP,QED,
-	     WRITE(IOPATM,5001)DELTR,QFS,B,TL,DL,
+           WRITE(IOPATM,5001)DELTR,QFS,B,TL,DL,
      *         PL, QESUM,O,QDP,QQED,
      *         QQET,QOD,QOT,DEL,DELA,
      *         QCP,RMU,QDT,PELPF
 C     *         PL, TAUP ,O,QDP,QED,
           ELSE IF (IPVER.EQ.2 .OR. IPVER.EQ.3) THEN
-	     WRITE(IOPATM,6001)DELTR,QFS,B,TL,DL,
+           WRITE(IOPATM,6001)DELTR,QFS,B,TL,DL,
      *         PL, TAUP ,O,QDP,QQED,
      *         QQET,QOD,QOT,DEL,DELA,
      *         QCP,RMU,QDT,PELPF
@@ -257,9 +257,9 @@ C TAU = 2/3 AT TEFF.
 
       if  (x0 .gt. xlim) then ! Check that starting point is before endpoint
          write(ishort,*)"ENVINT: X0>XLIM, X0,XLIM:",x0,xlim
-	 write(ishort,*)"ENVINT: get new X0 by dividing ATMD0 by 10"
-	 atmdx = atmdx / 10D0   ! If not before, divide starting density by 10
-	 goto 1998              ! and retry.
+       write(ishort,*)"ENVINT: get new X0 by dividing ATMD0 by 10"
+       atmdx = atmdx / 10D0   ! If not before, divide starting density by 10
+       goto 1998              ! and retry.
       endif
 
       HMAX = ATMMAX
@@ -272,91 +272,91 @@ C TAU = 2/3 AT TEFF.
 C INTEGRATION LOOP.
       DO 40 NSTEP = 1,MAXSTP
 C YSCAL IS THE ARRAY THAT THE NUMERICAL ERRORS ARE SCALED AGAINST.
-	 DO 30 I = 1,NV
-	    YSCAL(I) = DABS(Y(I)) + DABS(H*DYDX(I))+TINY
+       DO 30 I = 1,NV
+          YSCAL(I) = DABS(Y(I)) + DABS(H*DYDX(I))+TINY
    30    CONTINUE
 C ENSURE THAT STEP DOESN'T EXCEED MAXIMUM STEP SIZE OR GO PAST
 C THE LIMIT OF THE INTEGRATION.
-	 IF((X0-XLIM)*(X0+H-XLIM).LT.0.0D0) H = XLIM - X0
-	 IF(H.GT.HMAX) H = HMAX
+       IF((X0-XLIM)*(X0+H-XLIM).LT.0.0D0) H = XLIM - X0
+       IF(H.GT.HMAX) H = HMAX
 C INTEGRATE THE ATMOSPHERE FROM TAU TO TAU + H
 C H IS THE ATTEMPTED STEP,HDID IS THE ONE PERFORMED, AND HNEXT IS THE
 C PREDICTED NEXT STEP.
-	 CALL BSSTEP(Y,DYDX,NV,X0,H,EPS,YSCAL,HDID,
+       CALL BSSTEP(Y,DYDX,NV,X0,H,EPS,YSCAL,HDID,
      x      HNEXT,QATM, B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LPRT,RL,
      X      TEFFL,X,Z,KATM,KSAHA,ERR)
 C FIND DP/DTAU AT THE START OF THE NEXT STEP.
-	 ERRSUM(1) = ERRSUM(1) + ERR(1)
-	 CALL QATM(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
+       ERRSUM(1) = ERRSUM(1) + ERR(1)
+       CALL QATM(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
      *             LPRT,RL,TEFFL,X,Z,KATM,KSAHA)
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
-	 IF(LPRT.AND.LSTATM) THEN
+       IF(LPRT.AND.LSTATM) THEN
             BETA = 1.0D0 - CA3*EXP(CLN*(4.0D0*AT-AP))
             CHRH = 1.0D0/QQDP
             CHT = -CHRH*QQDT
             CV = QQCP - EXP(CLN*(AP-AD-AT))*CHT**2/CHRH
             GAM1 = CHRH*QQCP/CV
-	    WRITE(ISTOR,20)TAU,AP,AT,AD,AO,(AFXION(I),I=1,3),
+          WRITE(ISTOR,20)TAU,AP,AT,AD,AO,(AFXION(I),I=1,3),
      *               KSAHA,KATM,GAM1,QQDP,QQDT,BETA,QQCP,CV
-	 ENDIF
-	 IF(HDID.EQ.H) THEN
-	    NOK = NOK + 1
-	 ELSE
-	    NBAD = NBAD + 1
-	 ENDIF
+       ENDIF
+       IF(HDID.EQ.H) THEN
+          NOK = NOK + 1
+       ELSE
+          NBAD = NBAD + 1
+       ENDIF
 C DBG PULSE ATMOSPHERE VALUES FOR PULSATION
 C JVS 02/11 - Added LCLCD option to IF statement
-	 IF (LPULPT.AND.LPRT .OR. LCLCD) THEN
-	    QQED = 0.0D0
-	    QESUM = 0.0D0
-	    QQET = 0.0D0
-	    QFS = 1.0D0
-	    ON = QO
-	    DN = DEXP(CLN*QDL)
-	    TAUN = DEXP(CLN*TAU)
+       IF (LPULPT.AND.LPRT .OR. LCLCD) THEN
+          QQED = 0.0D0
+          QESUM = 0.0D0
+          QQET = 0.0D0
+          QFS = 1.0D0
+          ON = QO
+          DN = DEXP(CLN*QDL)
+          TAUN = DEXP(CLN*TAU)
 C SEE J.P. COX PRINC. OF STELL. STRUC. P590
-	    DELTR =  (TAUN - TAUP)/(((DN*ON)+(DP*OP))/2)
-	    PELPF = CGAS * QT * QD * QEMU
-	    OP = ON
+          DELTR =  (TAUN - TAUP)/(((DN*ON)+(DP*OP))/2)
+          PELPF = CGAS * QT * QD * QEMU
+          OP = ON
 CFROM FIRST LINES OF TPGRAD
-	    DELR = QO*B*DEXP(CLN*(QPL-HSTOT-4.0D0*QTL+CLSUNL-CGL+
+          DELR = QO*B*DEXP(CLN*(QPL-HSTOT-4.0D0*QTL+CLSUNL-CGL+
      *           CDELRL))*FTL/FPL
-	    IF (DELR-QDELA .LE. 1.0D-6) THEN
-	      DEL = DELR
-	    ELSE
-	      DEL = QDELA
-	    END IF
-	    IF (LPULPT.AND.LPRT) THEN
-		    IF (IPVER.EQ.1) THEN
-	     		  WRITE(IOPATM,5001)DELTR,QFS,B,QTL,QDL,
-     *       		  QPL, QESUM ,QO,QQDP,QQED,
-     *       		  QQET,QQOD,QQOT,DEL,QDELA,
-     *       		  QQCP,QRMU,QQDT,PELPF
-           		 ELSE IF (IPVER.EQ.2.OR.IPVER.EQ.3) THEN
-	      		 WRITE(IOPATM,6001)DELTR,QFS,B,QTL,QDL,
-     *       		  QPL, TAUN ,QO,QQDP,QQED,
-     *      		   QQET,QQOD,QQOT,DEL,QDELA,
-     *      		   QQCP,QRMU,QQDT,PELPF
-          	       END IF
-		END IF
+          IF (DELR-QDELA .LE. 1.0D-6) THEN
+            DEL = DELR
+          ELSE
+            DEL = QDELA
+          END IF
+          IF (LPULPT.AND.LPRT) THEN
+                IF (IPVER.EQ.1) THEN
+                         WRITE(IOPATM,5001)DELTR,QFS,B,QTL,QDL,
+     *                     QPL, QESUM ,QO,QQDP,QQED,
+     *                     QQET,QQOD,QQOT,DEL,QDELA,
+     *                     QQCP,QRMU,QQDT,PELPF
+                        ELSE IF (IPVER.EQ.2.OR.IPVER.EQ.3) THEN
+                         WRITE(IOPATM,6001)DELTR,QFS,B,QTL,QDL,
+     *                     QPL, TAUN ,QO,QQDP,QQED,
+     *                     QQET,QQOD,QQOT,DEL,QDELA,
+     *                     QQCP,QRMU,QQDT,PELPF
+                       END IF
+            END IF
 
 
-	    TAUP = TAUN
-	    DP = DN
-	 END IF
+          TAUP = TAUN
+          DP = DN
+       END IF
 C DBG END
 
 
 C  CHECK IF INTEGRATION COMPLETE
-	 IF(DABS(X0 - XLIM).LE.STOLER) THEN
-	    WRITE(ISHORT,35)NOK,NBAD,ERRSUM(1)
+       IF(DABS(X0 - XLIM).LE.STOLER) THEN
+          WRITE(ISHORT,35)NOK,NBAD,ERRSUM(1)
    35       FORMAT(1X,'ATMOSPHERE INTEGRATION COMPLETE',1X,
      *            'NUMBER OF STEPS ACCEPTED',I5,' REJECTED',
      *            I5/5X,'MAXIMUM RELATIVE ERROR IN P ',1PE22.13)
-	    GOTO 200
-	 ENDIF
-	 IF(HNEXT.LT.HMIN) HNEXT = HMIN
-	 H = HNEXT
+          GOTO 200
+       ENDIF
+       IF(HNEXT.LT.HMIN) HNEXT = HMIN
+       H = HNEXT
 40    CONTINUE
 C INTEGRATION HAS FAILED TO FINISH IN MAXSTP STEPS;
 C PRINT NASTY MESSAGE AND QUIT.
@@ -397,19 +397,19 @@ C DBG
 C  IF ENVELOPE MASS(SENV) SMALL ENOUGH,SKIP ENVELOPE INTEGRATION.
 C DBG 2/92 CHANGED FROM 1.0D-10 to 1.0D-12
       IF(SENV.GT.-1.0D-12) THEN
-	 IF(LSBC) THEN
-	    PS(IE) = AP
-	    RS(IE) = RL
-	    TS(IE) = AT
-	    IF(LPRT)WRITE(ISTOR,230)PS(IE),TS(IE),RS(IE),SENV
-	 ENDIF
+       IF(LSBC) THEN
+          PS(IE) = AP
+          RS(IE) = RL
+          TS(IE) = AT
+          IF(LPRT)WRITE(ISTOR,230)PS(IE),TS(IE),RS(IE),SENV
+       ENDIF
  230     FORMAT(4X,3F16.12,8X,F16.12)
-	 GOTO 300
+       GOTO 300
       ENDIF
 C  INITIALIZE VARIABLES AND SET NUMERICAL PARAMETERS.
       LATMO = .FALSE.
       DO 235 I = 1,3
-	 ERRSUM(I) = 0.0D0
+       ERRSUM(I) = 0.0D0
  235  CONTINUE
       NOK = 0
       NBAD = 0
@@ -444,18 +444,18 @@ C         REWIND IOPENV
          QQET = 0.0D0
          PELPF = CGAS * QT * QD * QEMU
          IF(IPVER.EQ.1) THEN
-	    WRITE(IOPENV,5001)RL,QFS,B,QTL,QDL,
+          WRITE(IOPENV,5001)RL,QFS,B,QTL,QDL,
      *           QPL, QESUM,QO,QQDP,QQED,
      *           QQET,QQOD,QQOT,QDEL,QDELA,
      *           QQCP,QRMU,QQDT,PELPF
          ELSE IF (IPVER.EQ.2) THEN
-	    WRITE(IOPENV,6001)RL,QFS,B,QTL,QDL,
+          WRITE(IOPENV,6001)RL,QFS,B,QTL,QDL,
      *           QPL, QESUM,QO,QQDP,QQED,
      *           QQET,QQOD,QQOT,QDEL,QDELA,
      *           QQCP,QRMU,QQDT,PELPF
          ELSE IF (IPVER.EQ.3) THEN
 C DBG 7/95 Appended mixing length info at end of first three lines
-	    WRITE(IOPENV,6003)RL,QFS,B,QTL,QDL,ALFMLT,
+          WRITE(IOPENV,6003)RL,QFS,B,QTL,QDL,ALFMLT,
      *           QPL, QESUM,QO,QQDP,QQED,PHMLT,
      *           QQET,QQOD,QQOT,QDEL,QDELA,CMXMLT,
      *           QQCP,QRMU,QQDT,PELPF
@@ -464,7 +464,7 @@ C DBG 7/95 Appended mixing length info at end of first three lines
 C DBG
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
       IF(LPRT.AND.LSTENV) THEN
-	 WRITE(ISTOR,240) 'GRAV  ','P   ','T   ','DEPTH    ','M      ',
+       WRITE(ISTOR,240) 'GRAV  ','P   ','T   ','DEPTH    ','M      ',
      *       'D    ','O   ','BETA','DELR  ','DELA','DEL ','HII ',
      *       'HEII','HEIII','V   ','GAM1   ','QQDP   '
  240     FORMAT(1X,3A10,2A14,2A10,A7,A9,5A6,A9,2A12)
@@ -477,15 +477,15 @@ c     *           1PE10.2,0PF7.3,1PE9.2,0P3F6.3,2F6.3,1PE9.2,
 c     *           0P2F12.8)
 
 
-	 SRAD = DEXP(CLN*RL)
-	 DE = (RSURF-SRAD)/RSURF
-	 SGL = CGL+HSTOT-2.0D0*RL
-	 EG = DEXP(CLN*SGL)
+       SRAD = DEXP(CLN*RL)
+       DE = (RSURF-SRAD)/RSURF
+       SGL = CGL+HSTOT-2.0D0*RL
+       EG = DEXP(CLN*SGL)
          CHRH = 1.0D0/QQDP
          CHT = -CHRH*QQDT
          CV = QQCP - EXP(CLN*(EP-ED-ET))*CHT**2/CHRH
          GAM1 = CHRH*QQCP/CV
-	 WRITE(ISTOR,260)EG,EP,ET,DE,ES,ED,EO,EBETA,
+       WRITE(ISTOR,260)EG,EP,ET,DE,ES,ED,EO,EBETA,
      *        (EDEL(K),K=1,3),(EFXION(K),K=1,3),EVEL,
      *        GAM1,QQDP
       ENDIF
@@ -515,55 +515,55 @@ C JVS 10/10
       IF(LCENV(1))LSURCZ = .TRUE.
       NUMENV = 1
       DO 220 NSTEP = 1,MAXSTP
-	 XSTART = X0
-	 DO 210 I = 1,NV
-	    YSTART(I) = Y(I)
-	    YSCAL(I) = DABS(Y(I)) + DABS(H*DYDX(I))+TINY
+       XSTART = X0
+       DO 210 I = 1,NV
+          YSTART(I) = Y(I)
+          YSCAL(I) = DABS(Y(I)) + DABS(H*DYDX(I))+TINY
  210     CONTINUE
-	 SEST = Y(1) + H*DYDX(1)
-	 IF(SENV - Y(1).GT.0.0D0 .OR. SENV - SEST.GT.0.0D0) THEN
+       SEST = Y(1) + H*DYDX(1)
+       IF(SENV - Y(1).GT.0.0D0 .OR. SENV - SEST.GT.0.0D0) THEN
 C  IF THE INTEGRATION HAS OVERSHOT THE FITTING POINT, OR THE NEXT
 C  STEP WILL DO SO,LIMIT STEP SIZE OR INTEGRATE BACKWARDS TO THE
 C  CORRECT MASS.
-	    H = (SENV - Y(1))/DYDX(1)
-	 ENDIF
+          H = (SENV - Y(1))/DYDX(1)
+       ENDIF
 C  ENSURE THAT STEP DOESN'T EXCEED MAXIMUM STEP SIZE
-	 IF(H.LT.0.0D0) THEN
-	    IF(H.LT.-HMAX) H = -HMAX
-	 ELSE
-	    IF(H.GT.HMAX)  H = HMAX
-	 ENDIF
+       IF(H.LT.0.0D0) THEN
+          IF(H.LT.-HMAX) H = -HMAX
+       ELSE
+          IF(H.GT.HMAX)  H = HMAX
+       ENDIF
 C  PLIM IS AN ESTIMATE OF THE ENDING PRESSURE FOR THE INTEGRATION,
 C  BASED ON THE PRESSURE OF THE LAST MODEL POINT.
 C  THE FIRST TIME THE INTEGRATOR TRIES TO PASS IT,LIMIT THE STEP
 C  IN PRESSURE.
-	 IF(LTEST) THEN
-	    IF(X0 + H.GT.PLIM) THEN
-	       H = PLIM - X0
-	       LTEST = .FALSE.
-	    ENDIF
-	 ENDIF
+       IF(LTEST) THEN
+          IF(X0 + H.GT.PLIM) THEN
+             H = PLIM - X0
+             LTEST = .FALSE.
+          ENDIF
+       ENDIF
 C  INTEGRATE THE EQUATIONS FROM X0 TO X0 + H
 C  H IS THE ATTEMPTED STEP,HDID IS THE ONE PERFORMED, AND HNEXT IS THE
 C  PREDICTED NEXT STEP.
 
-	 CALL BSSTEP(Y,DYDX,NV,X0,H,EPS,YSCAL,HDID,HNEXT,QENV,
+       CALL BSSTEP(Y,DYDX,NV,X0,H,EPS,YSCAL,HDID,HNEXT,QENV,
      *        B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LPRT,RL,
      *        TEFFL,X,Z,KENV,KSAHA,ERR)
-	 DO 255 K = 1,3
-	    ERRSUM(K) = ERRSUM(K) + ERR(K)
+       DO 255 K = 1,3
+          ERRSUM(K) = ERRSUM(K) + ERR(K)
  255     CONTINUE
 C  FIND DY/DX AT THE START OF THE NEXT STEP.
 
-	 CALL QENV(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
+       CALL QENV(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
      *        LPRT,RL,TEFFL,X,Z,KENV,KSAHA)
 C DBG PULSE
          IF (LPULPT.AND.LPRT) THEN
-	    QQED = 0.0D0
-	    QESUM = 0.0D0
-	    QQET = 0.0D0
-	    PELPF = CGAS * QT * QD * QEMU
-	    IF(IPVER.EQ.1) THEN
+          QQED = 0.0D0
+          QESUM = 0.0D0
+          QQET = 0.0D0
+          PELPF = CGAS * QT * QD * QEMU
+          IF(IPVER.EQ.1) THEN
                WRITE(IOPENV,5001)RL,QFS,B,QTL,QDL,
      *              QPL, QESUM,QO,QQDP,QQED,
      *              QQET,QQOD,QQOT,QDEL,QDELA,
@@ -583,29 +583,29 @@ C DBG 7/95 Appended mixing length info at end of first three lines
          END IF
 C DBG END
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
-	 IF(LPRT.AND.LSTENV) THEN
-	    SRAD = DEXP(CLN*RL)
-	    DE = (RSURF-SRAD)/RSURF
-	    SGL = CGL+HSTOT-2.0D0*RL
-	    EG = DEXP(CLN*SGL)
+       IF(LPRT.AND.LSTENV) THEN
+          SRAD = DEXP(CLN*RL)
+          DE = (RSURF-SRAD)/RSURF
+          SGL = CGL+HSTOT-2.0D0*RL
+          EG = DEXP(CLN*SGL)
             CHRH = 1.0D0/QQDP
             CHT = -CHRH*QQDT
             CV = QQCP - EXP(CLN*(EP-ED-ET))*CHT**2/CHRH
             GAM1 = CHRH*QQCP/CV
-	    WRITE(ISTOR,260)EG,EP,ET,DE,ES,ED,EO,EBETA,
+          WRITE(ISTOR,260)EG,EP,ET,DE,ES,ED,EO,EBETA,
      *           (EDEL(K),K=1,3),(EFXION(K),K=1,3),EVEL,
      *           GAM1,QQDP
  260        FORMAT(1X,1PE10.3,0P2F10.7,1P2E14.7,0P1F10.7,
      *           1PE10.2,0PF7.3,1PE9.2,0P3F6.3,2F6.3,1PE9.2,
      *           0P2F12.8)
-	 ENDIF
-	 IF(HDID.EQ.H) THEN
-	    NOK = NOK + 1
-	 ELSE
-	    NBAD = NBAD + 1
-	 ENDIF
+       ENDIF
+       IF(HDID.EQ.H) THEN
+          NOK = NOK + 1
+       ELSE
+          NBAD = NBAD + 1
+       ENDIF
 C  CHECK IF INTEGRATION COMPLETE
-	 SDIF = SENV - Y(1)
+       SDIF = SENV - Y(1)
 C 07/02 STORE ENVELOPE TERMS IF THE INTEGRATION
 C HAS NOT OVERSHOT THE FITTING POINT.
          IF(SDIF.LE.STOLER)THEN
@@ -619,11 +619,11 @@ C HAS NOT OVERSHOT THE FITTING POINT.
             ENVZ(NUMENV) = Z
             LCENV(NUMENV) = EVEL.GT.0.0D0
 C JVS 08/13 ADD RUN FOR CZ CALCULATION
-		EDELS(1,NUMENV) = EDEL(1)
-		EDELS(2,NUMENV) = EDEL(2)
-		EDELS(3,NUMENV) = EDEL(3)
-		EVELS(NUMENV) = EVEL
-		EBETAS(NUMENV) = EBETA
+            EDELS(1,NUMENV) = EDEL(1)
+            EDELS(2,NUMENV) = EDEL(2)
+            EDELS(3,NUMENV) = EDEL(3)
+            EVELS(NUMENV) = EVEL
+            EBETAS(NUMENV) = EBETA
 
             IF(.NOT.LSURCZ)THEN
                IF(LCENV(NUMENV))THEN
@@ -635,28 +635,28 @@ C JVS 08/13 ADD RUN FOR CZ CALCULATION
                TAUCZENV = TAUCZENV + DR/EVEL
             ENDIF
          ENDIF
-	 IF(DABS(SDIF).LE.STOLER)THEN
+       IF(DABS(SDIF).LE.STOLER)THEN
 C            WRITE(*,*)TAUCZENV/CSECYR
-	    IF(LSBC) THEN
-	       WT0 = SDIF/(YSTART(1)-Y(1))
-	       PS(IE) = X0 + WT0*(XSTART - X0)
-	       RS(IE) = Y(3) + WT0*(YSTART(3) - Y(3))
-	       TS(IE) = Y(2) + WT0*(YSTART(2) - Y(2))
-	       IF(LPRT)WRITE(ISHORT,230)PS(IE),TS(IE),RS(IE),SENV
-	    ENDIF
-	    GOTO 300
-	 ELSE IF(.NOT.LLSTORE) THEN
-	    IF(Y(2).GE.TENV .AND. LSBC) THEN
-	       LLSTORE = .TRUE.
-	       ISTORE = IE
-	       ESTORE(1) = X0
-	       ESTORE(2) = Y(2)
-	       ESTORE(3) = Y(3)
-	       ESTORE(4) = Y(1)
-	    ENDIF
-	 ENDIF
-	 IF(HNEXT.LT.HMIN) HNEXT = HMIN
-	 H = HNEXT
+          IF(LSBC) THEN
+             WT0 = SDIF/(YSTART(1)-Y(1))
+             PS(IE) = X0 + WT0*(XSTART - X0)
+             RS(IE) = Y(3) + WT0*(YSTART(3) - Y(3))
+             TS(IE) = Y(2) + WT0*(YSTART(2) - Y(2))
+             IF(LPRT)WRITE(ISHORT,230)PS(IE),TS(IE),RS(IE),SENV
+          ENDIF
+          GOTO 300
+       ELSE IF(.NOT.LLSTORE) THEN
+          IF(Y(2).GE.TENV .AND. LSBC) THEN
+             LLSTORE = .TRUE.
+             ISTORE = IE
+             ESTORE(1) = X0
+             ESTORE(2) = Y(2)
+             ESTORE(3) = Y(3)
+             ESTORE(4) = Y(1)
+          ENDIF
+       ENDIF
+       IF(HNEXT.LT.HMIN) HNEXT = HMIN
+       H = HNEXT
  220  CONTINUE
 C INTEGRATION HAS FAILED TO FINISH IN MAXSTP STEPS;
 C PRINT NASTY MESSAGE AND QUIT.
@@ -697,26 +697,26 @@ C 07/02 NOW INVERT THE ENVELOPE VECTOR.
             LCENV(I1) = LCENV(I2)
             LCENV(I2) = LDUM
 C 08/13 JVS ADDED DEL VECTORS
-		DUM1 = EDELS(1,I1)
-		EDELS(1,I1) = EDELS(1,I2)
+            DUM1 = EDELS(1,I1)
+            EDELS(1,I1) = EDELS(1,I2)
             EDELS(1,I2) = DUM1
-		DUM1 = EDELS(2,I1)
-		EDELS(2,I1) = EDELS(2,I2)
+            DUM1 = EDELS(2,I1)
+            EDELS(2,I1) = EDELS(2,I2)
             EDELS(2,I2) = DUM1
-		DUM1 = EDELS(3,I1)
-		EDELS(3,I1) = EDELS(3,I2)
+            DUM1 = EDELS(3,I1)
+            EDELS(3,I1) = EDELS(3,I2)
             EDELS(3,I2) = DUM1
-		DUM1 = EVELS(I1)
-		EVELS(I1) = EVELS(I2)
+            DUM1 = EVELS(I1)
+            EVELS(I1) = EVELS(I2)
             EVELS(I2) = DUM1
-		DUM1 = EBETAS(I1)
-		EBETAS(I1) = EBETAS(I2)
+            DUM1 = EBETAS(I1)
+            EBETAS(I1) = EBETAS(I2)
             EBETAS(I2) = DUM1
 
          END DO
  310     CONTINUE
 C JVS 07/12 Save the last envelope point pressure
-C	PPHOT = ENVP(NUMENV) ! G Somers 3/17, MOVED PPHOT DEF HIGHER UP
+C      PPHOT = ENVP(NUMENV) ! G Somers 3/17, MOVED PPHOT DEF HIGHER UP
 C END JVS
       ENDIF
 C DBG PULSE WRITE END OF DATA INDICATOR
@@ -743,37 +743,37 @@ C
 C G Somers 3/17, SKIP TAUCAL CALL IF USING NEW TAUCZ ROUTINES
         IF(LNEWTCZ)GOTO 555
 C G Somers END
-	JENV = 0.0
-	DO I=1,NUMENV
-		IF (JENV .EQ. 0.0 .AND. LCENV(I) ) JENV = I
-	END DO
+      JENV = 0.0
+      DO I=1,NUMENV
+            IF (JENV .EQ. 0.0 .AND. LCENV(I) ) JENV = I
+      END DO
 
-	IF (JENV .GT. 1) THEN
-		! Calculate the the location of the base sof the surface CZ in radius
-	      DD2 = EDELS(1,JENV-1)-EDELS(2,JENV-1)
+      IF (JENV .GT. 1) THEN
+            ! Calculate the the location of the base sof the surface CZ in radius
+            DD2 = EDELS(1,JENV-1)-EDELS(2,JENV-1)
             DD1 = EDELS(1,JENV)-EDELS(2,JENV)
             FX = DD2/(DD2-DD1)
 
-		ENVCZL = ENVR(JENV-1)+FX*(ENVR(JENV)-ENVR(JENV-1))-CRSUNL
-		ENVRCZ = EXP(CLN*ENVCZL)
+            ENVCZL = ENVR(JENV-1)+FX*(ENVR(JENV)-ENVR(JENV-1))-CRSUNL
+            ENVRCZ = EXP(CLN*ENVCZL)
 
-		DO I=1,NUMENV
-			ENVS1(I) = DEXP(CLN*(ENVS(I)+HSTOT))
+            DO I=1,NUMENV
+                  ENVS1(I) = DEXP(CLN*(ENVS(I)+HSTOT))
 
-			IF (I.EQ.NUMENV) THEN
-				ENVS2(I) = 0.0
-			ELSE
-				ENVS2(I)=DEXP(CLN*ENVS(I+1))-DEXP(CLN*ENVS(I))
-			ENDIF
+                  IF (I.EQ.NUMENV) THEN
+                        ENVS2(I) = 0.0
+                  ELSE
+                        ENVS2(I)=DEXP(CLN*ENVS(I+1))-DEXP(CLN*ENVS(I))
+                  ENDIF
 
-			EDEL1(I) = EDELS(1,I)
-			EDEL2(I) = EDELS(2,I)
-		END DO
+                  EDEL1(I) = EDELS(1,I)
+                  EDEL2(I) = EDELS(2,I)
+            END DO
 
-		CALL TAUCAL(ENVX,ENVS2,ENVS1,LCENV,ENVR,ENVP,ENVD,ENVG,NUMENV,
+            CALL TAUCAL(ENVX,ENVS2,ENVS1,LCENV,ENVR,ENVP,ENVD,ENVG,NUMENV,
      *            EVELS, EDEL1,EDEL2)
-	ENDIF
+      ENDIF
 
-555	CONTINUE
+555      CONTINUE
       RETURN
       END

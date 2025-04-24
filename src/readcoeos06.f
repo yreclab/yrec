@@ -51,8 +51,8 @@ c     x    alogr(nr,nt)
           enddo
         enddo
         do j = 1,mv
-	  eos(j) = 1D0
-	enddo
+        eos(j) = 1D0
+      enddo
         itimeco=12345678
         endif
 

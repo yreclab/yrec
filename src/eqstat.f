@@ -140,13 +140,13 @@ c error term when one sided derivatives are used is of order h.
      *   LDERIV2,LATMO,KSAHA)
       ELSE
          LDERIV2=.FALSE.  ! We either already have numerical derivatives
-	                  ! or do not need any derivatives.
+                        ! or do not need any derivatives.
                           ! Call eqstat2 and request no derivatives
          CALL EQSTAT2(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
      *   AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTTx,QDTPx,QATx,QAPx,QCPTx,
      *   QCPPx,LDERIV2,LATMO,KSAHA)
 c            Note that the QDTT,QDTP,QAT,QAP,QCPT,QCPP OUTPUTS are to
-c 	     dummy variables so they can not affect the previously
+c            dummy variables so they can not affect the previously
 c            calculated second derivatives.
       ENDIF
 
