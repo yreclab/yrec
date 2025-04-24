@@ -9,16 +9,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,LPUNCH,
      * FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,NKK)
       use params, only : json
-      use settings, only : ISCOMP  ! COMMON/LUNUM/
-      use settings, only : FSCOMP  ! COMMON/LUFNM/
-      use settings, only : ILAST, ITRACK, ISHORT, ISTOR  ! COMMON/LUOUT/
-      use settings, only : LSTORE  ! COMMON/CCOUT/
-      use settings, only : NPRTMOD  ! COMMON/CCOUT1/
-      use settings, only : LMILNE, LTRACK  ! COMMON/CCOUT2/
-      use settings, only : XNEW, ZNEW, STOTAL  ! COMMON/COMP/
-      use settings, only : CLSUN, CLSUNL, CMSUN, CRSUN, CRSUNL, CMBOL  ! COMMON/CONST/
-      use settings, only : CLN, C4PI, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : ISCOMP  ! /LUNUM/
+      use settings, only : FSCOMP  ! /LUFNM/
+      use settings, only : ILAST, ITRACK, ISHORT, ISTOR  ! /LUOUT/
+      use settings, only : LSTORE  ! /CCOUT/
+      use settings, only : NPRTMOD  ! /CCOUT1/
+      use settings, only : LMILNE, LTRACK  ! /CCOUT2/
+      use settings, only : XNEW, ZNEW, STOTAL  ! /COMP/
+      use settings, only : CLSUN, CLSUNL, CMSUN, CRSUN, CRSUNL, CMBOL  ! /CONST/
+      use settings, only : CLN, C4PI, C4PIL, C4PI3L, CC13, CC23  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

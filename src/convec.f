@@ -4,7 +4,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CONVEC(HCOMP,HD,HP,HR,HS,HT,LC,M,MRZONE,MXZONE,MXZON0,
      *                  JCORE,JENV,NRZONE,NZONE,NZONE0)
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

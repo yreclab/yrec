@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE SETCAL(FACAGE)
-      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST  ! COMMON/CKIND/
+      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST  ! /CKIND/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

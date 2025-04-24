@@ -7,16 +7,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT)
       use params, only : json, nt, ng, ntc, ngc, nta, nga
-      use settings, only : ISHORT, ISTOR, IOWR  ! COMMON/LUOUT/
-      use settings, only : IOPENV, IOPATM  ! COMMON/LUNUM/
-      use settings, only : LSTATM, LSTENV  ! COMMON/CCOUT/
-      use settings, only : SENV  ! COMMON/COMP/
+      use settings, only : ISHORT, ISTOR, IOWR  ! /LUOUT/
+      use settings, only : IOPENV, IOPATM  ! /LUNUM/
+      use settings, only : LSTATM, LSTENV  ! /CCOUT/
+      use settings, only : SENV  ! /COMP/
 C DBG pulse: constants needed for del and dela calculation
-      use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
-      use settings, only : CLN, CC23  ! COMMON/CONST1/
-      use settings, only : CGAS, CA3, CGL  ! COMMON/CONST2/
-      use settings, only : CDELRL, CSECYR  ! COMMON/CONST3/
-      use settings, only : TENV  ! COMMON/CTLIM/
+      use settings, only : CLSUNL, CRSUNL  ! /CONST/
+      use settings, only : CLN, CC23  ! /CONST1/
+      use settings, only : CGAS, CA3, CGL  ! /CONST2/
+      use settings, only : CDELRL, CSECYR  ! /CONST3/
+      use settings, only : TENV  ! /CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine t6rinteos01(slr,slt)
       use params, only : mx, mv, nr => nr01, nt => nt01
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
 c     The purpose of this subroutine is to interpolate in T6 and rho
 

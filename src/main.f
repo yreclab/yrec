@@ -9,20 +9,21 @@ C initialize all variables, set up common blocks
 C*******
 
       use params, only : JSON, NUMTT, NUMD, NUMX, NUMZ, NUMXZ
-      use settings, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! COMMON/LUOUT/
-      use settings, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! COMMON/LUNUM/
-      use settings, only : FPMOD, FPENV, FPATM, FDYN  ! COMMON/LUFNM/
-      use settings, only : LSTORE  ! COMMON/CCOUT/
-      use settings, only : LSTPCH  ! COMMON/CCOUT2/
-      use settings, only : SENV0, LSENV0, LNEW0  ! COMMON/CENV/
-      use settings, only : RESCAL, NMODLS, IRESCA, NUMRUN  ! COMMON/CKIND/
-      use settings, only : CLSUN, CLSUNL, CLNSUN, CRSUN, CRSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only : CMIXL, CLNDP, CSECYR  ! COMMON/CONST3/
-      use settings, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
-      use settings, only : LPTIME  ! COMMON/CT3/
-      use settings, only: FCORR0, FCORRI, FCORR, NITER1, NITER2, NITER3  ! /CTOL/
+      use settings, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! /LUOUT/
+      use settings, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! /LUNUM/
+      use settings, only : FPMOD, FPENV, FPATM, FDYN  ! /LUFNM/
+      use settings, only : LSTORE  ! /CCOUT/
+      use settings, only : LSTPCH  ! /CCOUT2/
+      use settings, only : SENV0, LSENV0, LNEW0  ! /CENV/
+      use settings, only : RESCAL, NMODLS, IRESCA, NUMRUN  ! /CKIND/
+      use settings, only : CLSUN, CLSUNL, CLNSUN, CRSUN, CRSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : CMIXL, CLNDP, CSECYR  ! /CONST3/
+      use settings, only : LMONTE, IMBEG, IMEND  ! /MONTE/
+      use settings, only : LPTIME  ! /CT3/
+      use settings, only : FCORR0, FCORRI, FCORR, NITER1, NITER2, NITER3  ! /CTOL/
+      use settings, only : ITDIF1  ! /DIFUS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -37,9 +38,6 @@ C DBGLAOL
       COMMON/TRACK/ITRVER
       COMMON/LABEL/XENV0,ZENV0
 C 11/91 COMMON BLOCKS ADDED FOR PRESSURE SCALE HEIGHT CALC. FOR LIBURN
-C MHP 05/02 ADDED OPTION TO ITERATE BETWEEN ROTATION AND
-C STRUCTURE CALCULATIONS - SET ITDIF1 GREATER THAN 1
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
       COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
      *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
       COMMON/LIOV/PSCAL0,PSCAL1

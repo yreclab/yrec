@@ -1,8 +1,8 @@
 C$$$$$$
       SUBROUTINE GETGRID(HL,HP,HS,IBEG,IEND,M)
       use params, only : json
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only: HPTTOL  ! /CTOL/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : HPTTOL  ! /CTOL/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C OUTPUT VARIABLES

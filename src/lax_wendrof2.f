@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE LAX_WENDROF2(DT,ECOD1_H,EM_H,EX,NPT,STOT,LDOLI)
       use params, only : json
-      use settings, only : C4PI  ! COMMON/CONST1/
+      use settings, only : C4PI  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -7,14 +7,14 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *HL,HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
      * DAGE)
       use params, only : json
-      use settings, only : IOPMOD  ! COMMON/LUNUM/
-      use settings, only : IMODPT  ! COMMON/LUOUT/
-      use settings, only : LSTORE, LSTATM, LSTENV, LSCRIB  ! COMMON/CCOUT/
-      use settings, only : STOTAL  ! COMMON/COMP/
-      use settings, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CGAS, CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : IOPMOD  ! /LUNUM/
+      use settings, only : IMODPT  ! /LUOUT/
+      use settings, only : LSTORE, LSTATM, LSTENV, LSCRIB  ! /CCOUT/
+      use settings, only : STOTAL  ! /COMP/
+      use settings, only : CLSUNL, CMSUN, CRSUN, CRSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CGAS, CSIGL, CGL  ! /CONST2/
+      use settings, only : CMIXL  ! /CONST3/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)

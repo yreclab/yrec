@@ -79,7 +79,7 @@ C     T100L.
 C       If LPRT  is .TRUE. print Log(P) at the associated Log(Teff) to ISHORT and IMODPT.
 
       SUBROUTINE ALSURFP(TEFFL,GL,LPRT,LAlFail)
-      use settings, only : ISHORT, IMODPT, ISTOR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IMODPT, ISTOR  ! /LUOUT/
 
       PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)

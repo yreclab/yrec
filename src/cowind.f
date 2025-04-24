@@ -3,9 +3,9 @@ C$$$$$$
      *                  TEFFL,WOLD,WIND1,WIND2)
 
       use params, only : json
-      use settings, only : CLSUNL, CRSUN  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : CLSUNL, CRSUN  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

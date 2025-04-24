@@ -3,8 +3,8 @@ C $$$$$$
      *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CLN, CC13  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

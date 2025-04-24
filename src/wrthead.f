@@ -5,11 +5,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C write the headers for all the appropriate output files
 
       SUBROUTINE WRTHEAD (SMASS)
-      use settings, only : ITRACK, IOWR  ! COMMON/LUOUT/
-      use settings, only : NMODLS, IRESCA, LFIRST  ! COMMON/CKIND/
-      use settings, only : LTRACK  ! COMMON/CCOUT2/
-      use settings, only : CMSUN, CMBOL  ! COMMON/CONST/
-      use settings, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : ITRACK, IOWR  ! /LUOUT/
+      use settings, only : NMODLS, IRESCA, LFIRST  ! /CKIND/
+      use settings, only : LTRACK  ! /CCOUT2/
+      use settings, only : CMSUN, CMBOL  ! /CONST/
+      use settings, only : CMIXL  ! /CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

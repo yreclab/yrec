@@ -10,10 +10,10 @@ C   llp  06/15/2009
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
       use params, only : json
-      use settings, only : CLSUNL, CMSUN, CRSUN  ! COMMON/CONST/
-      use settings, only : C4PI, C4PIL  ! COMMON/CONST1/
-      use settings, only : CA3, CSIG, CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : CLSUNL, CMSUN, CRSUN  ! /CONST/
+      use settings, only : C4PI, C4PIL  ! /CONST1/
+      use settings, only : CA3, CSIG, CSIGL, CGL  ! /CONST2/
+      use settings, only : CSECYR  ! /CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

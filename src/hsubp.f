@@ -4,8 +4,8 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE HSUBP (HCOMP,HD,HP,HR,HS,HT,JEDGE,PSCAHE)
 
       use params, only : json
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

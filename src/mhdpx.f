@@ -19,7 +19,7 @@ C MHDPX
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDPX(PL,TL,XC,RL)
       use params, only : nchem0
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

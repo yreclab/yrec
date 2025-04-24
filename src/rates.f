@@ -79,8 +79,8 @@ C  FOR OTHER ARRAYS IN THE PROGRAM.
 C IU IS THE SHELL NUMBER.
 
       use params, only : json
-      use settings, only : CLN, CC13  ! COMMON/CONST1/
-      use settings, only : TCUT  ! COMMON/CTLIM/
+      use settings, only : CLN, CC13  ! /CONST1/
+      use settings, only : TCUT  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)

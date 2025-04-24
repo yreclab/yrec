@@ -3,7 +3,7 @@ C $$$$$$
      *               QIW,R0,M)
 
       use params, only : json
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

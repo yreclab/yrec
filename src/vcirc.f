@@ -3,8 +3,8 @@ C $$$$$$
      *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP)
 
       use params, only : json
-      use settings, only : CLN, CC13, CC23  ! COMMON/CONST1/
-      use settings, only : CGAS  ! COMMON/CONST2/
+      use settings, only : CLN, CC13, CC23  ! /CONST1/
+      use settings, only : CGAS  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

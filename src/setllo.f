@@ -4,8 +4,8 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C SETLLO
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE SETLLO
-      use settings, only : ILLDAT  ! COMMON/LUNUM/
-      use settings, only : FLLDAT  ! COMMON/LUFNM/
+      use settings, only : ILLDAT  ! /LUNUM/
+      use settings, only : FLLDAT  ! /LUFNM/
 
 C DBG 5/94 Modified to read in second opacity table at different Z
 

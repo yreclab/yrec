@@ -7,9 +7,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
 
       use params, only : json
-      use settings, only : STOTAL  ! COMMON/COMP/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : STOTAL  ! /COMP/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

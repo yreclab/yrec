@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       function rhoofp01(x,ztab,t6,p,irad)
       use params, only : mx, mv, nr => nr01, nt => nt01
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
 

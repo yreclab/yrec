@@ -6,7 +6,7 @@ C TABLE SIZES AND APPROPRIATELY SIZED COMMON BLOCK
 
 C PARAMETERS NTC AND NGC FOR TABULATED SURFACE PRESSURES.
       use params, only : nt, ng, ntc, ngc
-      use settings, only : ISHORT, ISTOR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, ISTOR  ! /LUOUT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

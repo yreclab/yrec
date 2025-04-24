@@ -16,11 +16,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *QIW,HKEROT,HKEROT0)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : LCORR  ! COMMON/CCOUT2/
-      use settings, only : XNEW, ZNEW, SENV  ! COMMON/COMP/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only: HTOLER, FCORR0, FCORRI, FCORR  ! /CTOL/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : LCORR  ! /CCOUT2/
+      use settings, only : XNEW, ZNEW, SENV  ! /COMP/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : HTOLER, FCORR0, FCORRI, FCORR  ! /CTOL/
 
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
 C        ASSUMES GIVEN LOG(L/LSUN) AS BL

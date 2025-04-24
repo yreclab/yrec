@@ -6,9 +6,9 @@ C$$$$$$
      *            NZONE)
 
       use params, only : json
-      use settings, only : CMSUN  ! COMMON/CONST/
-      use settings, only : CLN, CC23  ! COMMON/CONST1/
-      use settings, only : TCUT  ! COMMON/CTLIM/
+      use settings, only : CMSUN  ! /CONST/
+      use settings, only : CLN, CC23  ! /CONST1/
+      use settings, only : TCUT  ! /CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

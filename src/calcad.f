@@ -48,11 +48,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT,
      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)
         use params, only : json, nts, nps
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : STOTAL  ! COMMON/COMP/
-      use settings, only : CLSUNL, CRSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : STOTAL  ! /COMP/
+      use settings, only : CLSUNL, CRSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

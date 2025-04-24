@@ -3,8 +3,8 @@ C EQUATION OF STATE.
       SUBROUTINE EQSCVE(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
      *AMU,EMU,ETA,QDT,QDP,QCP,DELA,LCALC)
       use params, only : nts, nps
-      use settings, only : XENV, ZENV  ! COMMON/COMP/
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : XENV, ZENV  ! /COMP/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

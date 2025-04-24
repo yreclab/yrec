@@ -12,7 +12,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      1 BETA14,FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,
      2 QDTT,QDPT,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
       use params, only : ivarx, cnvs, zero
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
 
 C     LATMO,KSAHA NEEDED FOR EQSAHA
       IMPLICIT REAL*8 (A-H,O-Z)

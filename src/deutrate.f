@@ -3,7 +3,7 @@ C DEUTRATE - COMPUTE THE RATE OF NONEQUILIBRIUM DEUTERIUM BURNING
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE DEUTRATE(DL,TL,X,XH2,I,ITLVL)
       use params, only : json
-      use settings, only : CLN, CC13  ! COMMON/CONST1/
+      use settings, only : CLN, CC13  ! /CONST1/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ

@@ -4,8 +4,8 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GRSETT(DT,HCOMP,HQPR,HR,HD,HS1,HT,LC,M,STOT)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : C4PI  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : C4PI  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

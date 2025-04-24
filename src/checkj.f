@@ -5,12 +5,12 @@ C MHP 10/02 ECOD, ECOD2 NO LONGER USED; OMITTED FROM CALL
      *                  QIW,R0,WSAV,ID,IDM,LOKAD)
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
       use params, only : json
-      use settings, only : ISHORT, IMODPT  ! COMMON/LUOUT/
-      use settings, only : NPRTPT  ! COMMON/CCOUT1/
+      use settings, only : ISHORT, IMODPT  ! /LUOUT/
+      use settings, only : NPRTPT  ! /CCOUT1/
+      use settings, only : DJOK, ITDIF2  ! /DIFUS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
       COMMON/ERRMOM/TOLERI
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
      *     ETA2X(JSON)

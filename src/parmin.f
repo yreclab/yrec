@@ -5,32 +5,33 @@ C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
       use params, only : nt, ng, ntc, ngc, nts, nps, json
-      use settings, only : VNEW  ! COMMON/VNEWCB/
+      use settings, only : VNEW  ! /VNEWCB/
       use settings, only : ILAST, IDEBUG, ITRACK, ISHORT,
-     1    IMILNE, IMODPT, ISTOR, IOWR  ! COMMON/LUOUT/
+     1    IMILNE, IMODPT, ISTOR, IOWR  ! /LUOUT/
       use settings, only : IFIRST, IRUN, ISTAND, IFERMI,
      1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR  ! COMMON/LUNUM/
+     2    ILLDAT, ISNU, ISCOMP, IKUR  ! /LUNUM/
       use settings, only : FLAST, FFIRST, FFERMI,
      1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
      2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
      3    FLLDAT, FSNU, FSCOMP, FKUR,
-     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8  ! COMMON/LUFNM/
+     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8  ! /LUFNM/
 C MHP 6/98
-      use settings, only : FMONTE1, FMONTE2, IMONTE1, IMONTE2  ! COMMON/IOMONTE/
-      use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT, LSCRIB  ! COMMON/CCOUT/
-      use settings, only : NPENV, NPRTMOD, NPRTPT, NPOINT  ! COMMON/CCOUT1/
-      use settings, only : LDEBUG, LCORR, LMILNE, LTRACK, LSTPCH  ! COMMON/CCOUT2/
-      use settings, only : TRIDT, TRIDL, SENV0, LSENV0, LNEW0  ! COMMON/CENV/
-      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! COMMON/CKIND/
-      use settings, only : ZENV  ! COMMON/COMP/
-      use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
-      use settings, only : CMIXL  ! COMMON/CONST3/
-      use settings, only : ATIME, TCUT, TSCUT, TENV0, TENV1, TENV, TGCUT  ! COMMON/CTLIM/
-      use settings, only : DTWIND  ! COMMON/CT2/
-      use settings, only : LPTIME  ! COMMON/CT3/
-      use settings, only : LMONTE, IMBEG, IMEND  ! COMMON/MONTE/
-      use settings, only: HTOLER, FCORR0, FCORRI, HPTTOL, NITER1, NITER2, NITER3  ! /CTOL/
+      use settings, only : FMONTE1, FMONTE2, IMONTE1, IMONTE2  ! /IOMONTE/
+      use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT, LSCRIB  ! /CCOUT/
+      use settings, only : NPENV, NPRTMOD, NPRTPT, NPOINT  ! /CCOUT1/
+      use settings, only : LDEBUG, LCORR, LMILNE, LTRACK, LSTPCH  ! /CCOUT2/
+      use settings, only : TRIDT, TRIDL, SENV0, LSENV0, LNEW0  ! /CENV/
+      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! /CKIND/
+      use settings, only : ZENV  ! /COMP/
+      use settings, only : CLSUN, CRSUN  ! /CONST/
+      use settings, only : CMIXL  ! /CONST3/
+      use settings, only : ATIME, TCUT, TSCUT, TENV0, TENV1, TENV, TGCUT  ! /CTLIM/
+      use settings, only : DTWIND  ! /CT2/
+      use settings, only : LPTIME  ! /CT3/
+      use settings, only : LMONTE, IMBEG, IMEND  ! /MONTE/
+      use settings, only : HTOLER, FCORR0, FCORRI, HPTTOL, NITER1, NITER2, NITER3  ! /CTOL/
+      use settings, only : DTDIF, DJOK, ITDIF1, ITDIF2  ! /DIFUS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -55,7 +56,6 @@ C      and extra acoustic depth (calcad.f) output files
       CHARACTER*256 EMPTY
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
       COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
      *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
@@ -374,7 +374,6 @@ C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
      *     1.0D-1,5.0D-1/
       DATA ENVERR,ENVBEG,ENVMIN,ENVMAX/3.0D-4,1.0D-1,1.0D-1,5.0D-1/
       DATA STOLR0,IMAX,NUSE/1.0D-3,11,7/
-      DATA DTDIF,DJOK,ITDIF1,ITDIF2/1.0D-2,1.0D-4,1,1/
       DATA LNEWCP,ANEWCP,XNEWCP/.FALSE.,'   ',1.3D1/
 C MHP 10/24 ADDED NEW MIXTURE CONTROL ISETISO CONTROLS CNO ISOTOPE RATIOS AND
 C LIGHT ELEMENT ABUNDANCES D,HE3,LI6,LI7,BE9,B10,B11 (1=USED)

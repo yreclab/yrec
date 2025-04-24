@@ -9,18 +9,18 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V)
 
       use params, only : json, nts, nps
-      use settings, only : IFIRST  ! COMMON/LUNUM/
-      use settings, only : vnew  ! COMMON/VNEWCB/ DBG 1/96 VNEW REPLACES V
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
-      use settings, only : SENV0, LSENV0, LNEW0  ! COMMON/CENV/
-      use settings, only : IRESCA, LFIRST  ! COMMON/CKIND/
-      use settings, only : XENV, ZENV, ZENVM, AMUENV, FXENV, XNEW, ZNEW, STOTAL, SENV  ! COMMON/COMP/
-      use settings, only : YENV, Y3ENV  ! COMMON/COMP2/
-      use settings, only : CLSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only : CMIXL, CSECYR  ! COMMON/CONST3/
-      use settings, only: HPTTOL  ! /CTOL/
+      use settings, only : IFIRST  ! /LUNUM/
+      use settings, only : vnew  ! /VNEWCB/ DBG 1/96 VNEW REPLACES V
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
+      use settings, only : SENV0, LSENV0, LNEW0  ! /CENV/
+      use settings, only : IRESCA, LFIRST  ! /CKIND/
+      use settings, only : XENV, ZENV, ZENVM, AMUENV, FXENV, XNEW, ZNEW, STOTAL, SENV  ! /COMP/
+      use settings, only : YENV, Y3ENV  ! /COMP2/
+      use settings, only : CLSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL, C4PI3L, CC13, CC23  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : CMIXL, CSECYR  ! /CONST3/
+      use settings, only : HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

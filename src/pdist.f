@@ -7,9 +7,9 @@ C calculates the distance the star has travelled in the HR diagram
 C if far enough, output pulsation model
 
       SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN)
-      use settings, only : IOPMOD, IOPENV, IOPATM  ! COMMON/LUNUM/
-      use settings, only : FPMOD, FPENV, FPATM  ! COMMON/LUFNM/
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : IOPMOD, IOPENV, IOPATM  ! /LUNUM/
+      use settings, only : FPMOD, FPENV, FPATM  ! /LUFNM/
+      use settings, only : ISHORT  ! /LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -5,10 +5,10 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      *            IBEGIN,IEND,LALLCZ,ODEN,OTEM)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CRSUN  ! COMMON/CONST/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CRSUN  ! /CONST/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CSECYR  ! /CONST3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

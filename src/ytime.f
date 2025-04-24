@@ -5,9 +5,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *   HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HR10,HR11,HR12,HR13,
      *   HF1,HF2,QDP,QDT,JXBEG)
       use params, only : json
-      use settings, only : CLSUN  ! COMMON/CONST/
-      use settings, only : ATIME  ! COMMON/CTLIM/
-      use settings, only : LPTIME  ! COMMON/CT3/
+      use settings, only : CLSUN  ! /CONST/
+      use settings, only : ATIME  ! /CTLIM/
+      use settings, only : LPTIME  ! /CT3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

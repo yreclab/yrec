@@ -2,8 +2,8 @@ C $$$$$$
       SUBROUTINE FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
 
       use params, only : json
-      use settings, only : CLN, C4PI, C4PIL, CC13  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLN, C4PI, C4PIL, CC13  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)

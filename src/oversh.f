@@ -10,8 +10,8 @@ C  GIVEN CONVECTIVE REGION AND LOCATES THE BOUNDARIES OF OVERSHOOT
 C  REGIONS BASED ON THE USER-SPECIFIED EXTENT.
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

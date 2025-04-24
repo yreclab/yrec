@@ -8,10 +8,11 @@ C $$$$$$
      *                  COD2,HV,LOK)
 C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
       use params, only : json
-      use settings, only : NPRTMOD  ! COMMON/CCOUT1/
-      use settings, only : LSCRIB  ! COMMON/CCOUT/
-      use settings, only : CLSUN  ! COMMON/CONST/
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : NPRTMOD  ! /CCOUT1/
+      use settings, only : LSCRIB  ! /CCOUT/
+      use settings, only : CLSUN  ! /CONST/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : ITDIF2  ! /DIFUS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -20,7 +21,6 @@ C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
      *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
 C MHP 6/00 ADDED FLAG FOR CALL TO NDIFCOM
       COMMON/FLAG/LEXCOM
 C 3/92 COMMON BLOCK ADDED FOR CENTERED DW/DLNR.

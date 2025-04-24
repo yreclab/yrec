@@ -2,9 +2,9 @@ C $$$$$$
       SUBROUTINE PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,LCZ,M,TEFFL)
 
       use params, only : json
-      use settings, only : XENV, ZENV, AMUENV  ! COMMON/COMP/
-      use settings, only : YENV, Y3ENV  ! COMMON/COMP2/
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : XENV, ZENV, AMUENV  ! /COMP/
+      use settings, only : YENV, Y3ENV  ! /COMP2/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

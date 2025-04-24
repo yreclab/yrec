@@ -1,7 +1,7 @@
       SUBROUTINE SURFP(TEFFL,GL,LPRT)
 
       use params, only : nt, ng, ntc, ngc
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 FATM

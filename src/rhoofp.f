@@ -1,7 +1,7 @@
 C********************************************************************
       REAL*8 FUNCTION RHOOFP(X,ZTAB,T6,P,IRAD)
       use params, only : mx, mv, nr => nreos, nt => nteos
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
       COMMON/LREADCO/ITIME
       COMMON/A/  XZ(MX,MV,NT,NR),

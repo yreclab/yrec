@@ -30,8 +30,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE OEQOS01(T10,T,P10,P,D10,D,XC,Z,BETA,BETAI,
      1 BETA14,RMU,AMU,EMU,QDT,QDP,QCP,DELA,*)
       use params, only : ivarx, cnvs, zero, mx, mv, nr => nr01, nt => nt01
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CGAS, CA3  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CGAS, CA3  ! /CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

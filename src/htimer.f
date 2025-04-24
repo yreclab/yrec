@@ -7,9 +7,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * JXMID,TLUMX,DAGE,DDAGE,QDT,QDP,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)
 
       use params, only : json
-      use settings, only : CSECYR  ! COMMON/CONST3/
-      use settings, only : ATIME  ! COMMON/CTLIM/
-      use settings, only : LPTIME  ! COMMON/CT3/
+      use settings, only : CSECYR  ! /CONST3/
+      use settings, only : ATIME  ! /CTLIM/
+      use settings, only : LPTIME  ! /CT3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

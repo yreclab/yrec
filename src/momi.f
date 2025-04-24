@@ -2,8 +2,8 @@ C $$$$$$
       SUBROUTINE MOMI(ETA2,HD,HR,HS,HS2,JSTART,JEND,OMEGA,R0,HI,QIW,M)
 
       use params, only : json
-      use settings, only : CLN, CC13, CC23  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLN, CC13, CC23  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

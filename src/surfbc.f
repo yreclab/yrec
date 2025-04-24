@@ -8,14 +8,14 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *       TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : LSTORE, LSTENV  ! COMMON/CCOUT/
-      use settings, only : NPENV  ! COMMON/CCOUT1/
-      use settings, only : TRIDT, TRIDL, LNEW0  ! COMMON/CENV/
-      use settings, only : STOTAL  ! COMMON/COMP/
-      use settings, only : CLSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : LSTORE, LSTENV  ! /CCOUT/
+      use settings, only : NPENV  ! /CCOUT1/
+      use settings, only : TRIDT, TRIDL, LNEW0  ! /CENV/
+      use settings, only : STOTAL  ! /COMP/
+      use settings, only : CLSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
 
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
 C INPUTS   LRESET = .T.  REDO ALL 3 ENVELOPES AND RETRIANGULATE IF NEED

@@ -1,13 +1,13 @@
 C $$$$$$
       SUBROUTINE CHECKC(HCOMP,IT,LPRT,M,DT,IREDO,LOK,LREDO)
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : XENV, ZENV, AMUENV  ! COMMON/COMP/
-      use settings, only : YENV, Y3ENV  ! COMMON/COMP2/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : XENV, ZENV, AMUENV  ! /COMP/
+      use settings, only : YENV, Y3ENV  ! /COMP2/
+      use settings, only : ITDIF2  ! /DIFUS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
       COMMON/FLAG/LEXCOM
       COMMON/MDPHY/HAMU(JSON),CP(JSON),DELM(JSON),DELAM(JSON),
      *     DELRM(JSON),SESUM(JSON),OM(JSON),SQDT(JSON),

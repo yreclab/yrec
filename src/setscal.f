@@ -5,11 +5,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SETSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETSCAL
-      use settings, only : ITRACK  ! COMMON/LUOUT/
-      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! COMMON/CKIND/
-      use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
-      use settings, only : C4PI  ! COMMON/CONST1/
-      use settings, only : CSIG  ! COMMON/CONST2/
+      use settings, only : ITRACK  ! /LUOUT/
+      use settings, only : RESCAL, NMODLS, IRESCA, LFIRST, NUMRUN  ! /CKIND/
+      use settings, only : CLSUN, CRSUN  ! /CONST/
+      use settings, only : C4PI  ! /CONST1/
+      use settings, only : CSIG  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

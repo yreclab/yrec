@@ -13,8 +13,8 @@ C  CONVERGED MODEL) AND STORE MODELS D(EVERY NPUNCH MODELS)
 
 C     WRITE MODEL OUT IN ASCII FORMAT
       use params, only : json, nts, nps
-      use settings, only : ILAST, ISHORT, IOWR  ! COMMON/LUOUT/
-      use settings, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : ILAST, ISHORT, IOWR  ! /LUOUT/
+      use settings, only : CMIXL  ! /CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

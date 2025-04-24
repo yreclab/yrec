@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine readcoeos06
       use params, only : mx, mv, nr => nr06, nt => nt06
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 

@@ -4,9 +4,9 @@ c     compute the new equation of state and compare to the old one...
       SUBROUTINE SETSCV
 
       use params, only : nts, nps
-      use settings, only : XENV, ZENV  ! COMMON/COMP/
-      use settings, only : CLN, CC13  ! COMMON/CONST1/
-      use settings, only : CA3  ! COMMON/CONST2/
+      use settings, only : XENV, ZENV  ! /COMP/
+      use settings, only : CLN, CC13  ! /CONST1/
+      use settings, only : CA3  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

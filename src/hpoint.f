@@ -9,15 +9,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * BL,DELTS,FP,FT,HG,QIW,SMASS,TEFFL)
 
       use params, only : json
-      use settings, only : IDEBUG, ISHORT  ! COMMON/LUOUT/
-      use settings, only : NPOINT  ! COMMON/CCOUT1/
-      use settings, only : LDEBUG  ! COMMON/CCOUT2/
-      use settings, only : XNEW, ZNEW, SENV  ! COMMON/COMP/
-      use settings, only : CLN, CC23  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only : CLNDP  ! COMMON/CONST3/
-      use settings, only : TENV0, TENV1  ! COMMON/CTLIM/
-      use settings, only: HPTTOL  ! /CTOL/
+      use settings, only : IDEBUG, ISHORT  ! /LUOUT/
+      use settings, only : NPOINT  ! /CCOUT1/
+      use settings, only : LDEBUG  ! /CCOUT2/
+      use settings, only : XNEW, ZNEW, SENV  ! /COMP/
+      use settings, only : CLN, CC23  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : CLNDP  ! /CONST3/
+      use settings, only : TENV0, TENV1  ! /CTLIM/
+      use settings, only : HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

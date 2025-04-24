@@ -3,9 +3,9 @@ C $$$$$$
      *                  QWRMAX)
 
       use params, only : json
-      use settings, only : CLSUN  ! COMMON/CONST/
-      use settings, only : CLN, C4PI, CC13, CC23, CPI  ! COMMON/CONST1/
-      use settings, only : CGAS, CA3, CSIG, CGL  ! COMMON/CONST2/
+      use settings, only : CLSUN  ! /CONST/
+      use settings, only : CLN, C4PI, CC13, CC23, CPI  ! /CONST1/
+      use settings, only : CGAS, CA3, CSIG, CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

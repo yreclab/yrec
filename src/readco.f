@@ -2,7 +2,7 @@ C
 C**********************************************************************
       SUBROUTINE READCO
       use params, only : mx, mv, nr => nreos, nt => nteos
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
 C..... THE PURPOSE OF THIS SUBROUTINE IS TO READ THE DATA TABLES
       SAVE

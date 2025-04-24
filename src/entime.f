@@ -6,8 +6,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENTIME(DELTS,HL,HP,HR,HT,TEFFL,M,EDELT)
 
       use params, only : json
-      use settings, only : TRIDT, TRIDL  ! COMMON/CENV/
-      use settings, only : ATIME  ! COMMON/CTLIM/
+      use settings, only : TRIDT, TRIDL  ! /CENV/
+      use settings, only : ATIME  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

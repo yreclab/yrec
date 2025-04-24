@@ -9,12 +9,12 @@ C WRTMIL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE WRTMIL(HCOMP,HD,HL,HP,HR,HS1,M,MODEL)
       use params, only : json
-      use settings, only : FMILNE, IMILNE  ! COMMON/LUFNM/, COMMON/LUOUT/
-      use settings, only : NPRTPT  ! COMMON/CCOUT1/
-      use settings, only : XENV, ZENV, STOTAL  ! COMMON/COMP/
-      use settings, only : CLSUN, CMSUN  ! COMMON/CONST/
-      use settings, only : CLN, C4PI  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : FMILNE, IMILNE  ! /LUFNM/, /LUOUT/
+      use settings, only : NPRTPT  ! /CCOUT1/
+      use settings, only : XENV, ZENV, STOTAL  ! /COMP/
+      use settings, only : CLSUN, CMSUN  ! /CONST/
+      use settings, only : CLN, C4PI  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

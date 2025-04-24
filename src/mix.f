@@ -28,11 +28,11 @@ C CONTAIN NEUTRINO FLUXES FOR SOLAR NEUTRINO CALCULATIONS.
      *     MXZONE,MXZON0,TEFFL)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only : CSECYR  ! COMMON/CONST3/
-      use settings, only : TCUT  ! COMMON/CTLIM/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : CSECYR  ! /CONST3/
+      use settings, only : TCUT  ! /CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -2,7 +2,7 @@
 C***********************************************************************
       SUBROUTINE T6RINTERP(SLR,SLT)
       use params, only : mx, mv, nr => nreos, nt => nteos
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
       IMPLICIT REAL*8 (A-H,O-Z)
 C     THE PURPOSE OF THIS SUBROUTINE IS TO INTERPOLATE IN T6 AND RHO
       SAVE

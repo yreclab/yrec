@@ -8,12 +8,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
 
       use params, only : json
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CLSUNL  ! COMMON/CONST/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! COMMON/CONST3/
-      use settings, only : TGCUT  ! COMMON/CTLIM/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CLSUNL  ! /CONST/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! /CONST3/
+      use settings, only : TGCUT  ! /CTLIM/
 
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
 C COMPUTES RADIATIVE GRADIENT AND COMPARES WITH ADIABATIC GRADIENT

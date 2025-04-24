@@ -19,14 +19,14 @@ C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS.
 
 C     WRITE MODEL OUT IN ASCII FORMAT
       use params, only : json, nts, nps
-      use settings, only : ISHORT, ISTOR  ! COMMON/LUOUT/
-      use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT  ! COMMON/CCOUT/
+      use settings, only : ISHORT, ISTOR  ! /LUOUT/
+      use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT  ! /CCOUT/
 C KC 2025-04-23 LMILNE was not imported but was used in this source file.
 C      use settings, only : LMILNE  ! COMMON/CCOUT2/
-      use settings, only : CLSUN  ! COMMON/CONST/
-      use settings, only : CLN, CC13  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only : CMIXL  ! COMMON/CONST3/
+      use settings, only : CLSUN  ! /CONST/
+      use settings, only : CLN, CC13  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : CMIXL  ! /CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

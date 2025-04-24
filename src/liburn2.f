@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
       SUBROUTINE LIBURN2(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)
       use params, only : json
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -4,7 +4,7 @@ C EQUATION OF STATE.
      *AMU,EMU,ETA,QDT,QDP,QCP,DELA,LCALC)
 
       use params, only : nts, nps
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

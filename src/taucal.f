@@ -1,10 +1,10 @@
 C$$$$$$
       SUBROUTINE TAUCAL(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,SVEL,DEL1,DEL2,MINT)
       use params, only : json
-      use settings, only : STOTAL  ! COMMON/COMP/
-      use settings, only : CMSUN  ! COMMON/CONST/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : STOTAL  ! /COMP/
+      use settings, only : CMSUN  ! /CONST/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

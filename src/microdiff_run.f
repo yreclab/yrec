@@ -6,8 +6,8 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      *               EDELR_H,ESPEC_H,EDXDR_H,THEA,THEZ,J)
 
       use params, only : json
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
-      use settings, only : C4PI  ! COMMON/CONST1/
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
+      use settings, only : C4PI  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

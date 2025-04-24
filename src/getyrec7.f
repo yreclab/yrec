@@ -15,7 +15,7 @@ C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
       use params, only : json
-      use settings, only : CLSUN  ! COMMON/CONST/
+      use settings, only : CLSUN  ! /CONST/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT INTEGER*4 (I-K,M)

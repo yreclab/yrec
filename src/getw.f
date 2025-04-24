@@ -17,11 +17,12 @@ C 11/91 JENV0 ADDED TO CALL.
      *             HS1,HS2,HSTOT,HT,LC,LJDOT,M,MODEL,SJTOT,SMASS,
      *                 TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0)
       use params, only : json
-      use settings, only : CLSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only : CLNDP  ! COMMON/CONST3/
-      use settings, only : DTWIND  ! COMMON/CT2/
+      use settings, only : CLSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : CLNDP  ! /CONST3/
+      use settings, only : DTWIND  ! /CT2/
+      use settings, only : DTDIF  ! /DIFUS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -43,7 +44,6 @@ C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
      *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
       COMMON/FLAG/LEXCOM
       COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
      *     DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),

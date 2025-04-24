@@ -8,11 +8,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES
 C ADDED (COMMON BLOCK NEWENG).
       use params, only : json
-      use settings, only : CLSUN, CLNSUN  ! COMMON/CONST/
-      use settings, only : CLN, CLNI, C4PIL, C4PI3L, CC13  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only : CSECYR  ! COMMON/CONST3/
-      use settings, only : TCUT  ! COMMON/CTLIM/
+      use settings, only : CLSUN, CLNSUN  ! /CONST/
+      use settings, only : CLN, CLNI, C4PIL, C4PI3L, CC13  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : CSECYR  ! /CONST3/
+      use settings, only : TCUT  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

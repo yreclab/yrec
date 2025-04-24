@@ -2,8 +2,8 @@ C$$$$$$
       SUBROUTINE TAUINTNEW(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,MINT,SVEL,
      *                     DEL1,DEL2,HSTOT,RBCZ)
       use params, only : json
-      use settings, only : CMSUN, CRSUN  ! COMMON/CONST/
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CMSUN, CRSUN  ! /CONST/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

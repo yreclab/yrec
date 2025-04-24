@@ -20,7 +20,7 @@ C
       SUBROUTINE ALXTBL
       use params, only : numx => numxalx, numz => numzalx, numxz => numxzalx,
      +                   numt => numtalx, numd => numdalx, numxt => numxtalx
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

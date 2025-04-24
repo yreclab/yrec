@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine t6rinteos06(slr,slt)
       use params, only : mx, mv, nr => nr06, nt => nt06
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
 c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in
 c     T6 and rho

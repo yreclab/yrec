@@ -3,7 +3,7 @@ C DBURN - COMPUTE THE ABUNDANCE CHANGES RESULTING FROM DEUTERIUM BURNING
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE DBURNM(IBEGIN,IEND,M,HS2,HCOMP,DT,DRATEM,DRATEM0,FAC2)
       use params, only : json
-      use settings, only : CSECYR  ! COMMON/CONST3/
+      use settings, only : CSECYR  ! /CONST3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

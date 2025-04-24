@@ -23,7 +23,7 @@ c  Update (Input and Output) Arguments: KSAHA
 c
 
       use params, only : nts, nps
-      use settings, only : CLN  ! COMMON/CONST1/
+      use settings, only : CLN  ! /CONST1/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

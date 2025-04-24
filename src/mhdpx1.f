@@ -5,7 +5,7 @@ C MHDPX1
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDPX1(PL,TL,X)
       use params, only : ivarx
-      use settings, only : ISHORT, IOWR  ! COMMON/LUOUT/
+      use settings, only : ISHORT, IOWR  ! /LUOUT/
 C
 C     MHDST MUST BE CALLED IN MAIN.
 C     INTERPOLATION IN TABLES WITH DIFFERENT X AND FIXED Z

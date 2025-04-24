@@ -3,6 +3,7 @@ C MHP 06/02
       SUBROUTINE DADCOEFT(DR,DT,EI,EJ,EW,NTOT,WIND1,WIND2,DJ,
      *                    ECOD2,SUMDJ,LFIX,LOKAD)
       use params, only : json
+      use settings, only : DJOK, ITDIF2  ! /DIFUS/
       PARAMETER (NMAX=8000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -20,8 +21,6 @@ C time change of theta
 C KC 2025-04-22 Downgraded this to arrays as it was only used in dadcoeft.f.
 C      COMMON/DIFADDT/ETHVN(JSON),ETHVP(JSON),EWST(JSON),EQWRST(JSON)
       DIMENSION EWST(JSON),EQWRST(JSON)
-C CONVERGENCE CRITERION
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
 C VALUES OF D CHI/DR AT THE ZONE EDGES AND ZONE CENTERS
 C KC 2025-04-22 Downgraded this to array as it was only used in dadcoeft.f.
 C      COMMON/EGRIDCHI/QCHIRE(JSON),QCHIRC(JSON)

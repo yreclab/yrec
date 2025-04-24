@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE CHKCAL(BL,RL,N,SOLZX)
-      use settings, only : IOWR  ! COMMON/LUOUT/
-      use settings, only : RESCAL  ! COMMON/CKIND/
+      use settings, only : IOWR  ! /LUOUT/
+      use settings, only : RESCAL  ! /CKIND/
 
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK

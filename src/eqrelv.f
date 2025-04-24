@@ -15,9 +15,9 @@ C     BETWEEN THE NONDEGENERATE AND DEGERNATE ELECTRON GAS CASES OF THE
 C     D.H. CORRECTION IS USED (THIS IS NOT CORRECT BUT, HOPEFULLY IS
 C     CLOSE ENOUGH.  CONSTANT TERM CDH IS CALCULATED IN SETUPS.
 
-      use settings, only : ISHORT  ! COMMON/LUOUT/
-      use settings, only : CLN, CLNI  ! COMMON/CONST1/
-      use settings, only : CGAS  ! COMMON/CONST2/
+      use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : CLN, CLNI  ! /CONST1/
+      use settings, only : CGAS  ! /CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

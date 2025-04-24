@@ -3,8 +3,8 @@ C      SUBROUTINE FOR WRITING MONTE CARLO OUTPUT
      *DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,JENV,
      *TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,RLL,ICONV,NK,NN)
       use params, only : json
-      use settings, only : IMONTE1, IMONTE2  ! COMMON/IOMONTE/
-      use settings, only : RESCAL  ! COMMON/CKIND/
+      use settings, only : IMONTE1, IMONTE2  ! /IOMONTE/
+      use settings, only : RESCAL  ! /CKIND/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

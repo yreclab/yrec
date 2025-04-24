@@ -17,10 +17,10 @@ c  Update (Input and Output) Arguments: KSAHA
 c
 
       use params, only : nts, nps
-      use settings, only : XENV, ZENV, AMUENV, FXENV  ! COMMON/COMP/
-      use settings, only : CLN  ! COMMON/CONST1/
-      use settings, only : CGAS, CA3  ! COMMON/CONST2/
-      use settings, only : TSCUT  ! COMMON/CTLIM/
+      use settings, only : XENV, ZENV, AMUENV, FXENV  ! /COMP/
+      use settings, only : CLN  ! /CONST1/
+      use settings, only : CGAS, CA3  ! /CONST2/
+      use settings, only : TSCUT  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

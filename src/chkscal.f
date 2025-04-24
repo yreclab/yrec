@@ -4,11 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C CHKSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CHKSCAL(BL, TEFFL, DAGE, NK)
-      use settings, only : ITRACK  ! COMMON/LUOUT/
-      use settings, only : RESCAL  ! COMMON/CKIND/
-      use settings, only : CLSUN, CRSUN  ! COMMON/CONST/
-      use settings, only : C4PI  ! COMMON/CONST1/
-      use settings, only : CSIG  ! COMMON/CONST2/
+      use settings, only : ITRACK  ! /LUOUT/
+      use settings, only : RESCAL  ! /CKIND/
+      use settings, only : CLSUN, CRSUN  ! /CONST/
+      use settings, only : C4PI  ! /CONST1/
+      use settings, only : CSIG  ! /CONST2/
 
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK

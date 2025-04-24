@@ -1,8 +1,8 @@
 C$$$$$$
       SUBROUTINE WTIME(DELTS,M,OMEGA,DELTSW,DWMAX)
       use params, only : json
-      use settings, only : ATIME  ! COMMON/CTLIM/
-      use settings, only : DTWIND  ! COMMON/CT2/
+      use settings, only : ATIME  ! /CTLIM/
+      use settings, only : DTWIND  ! /CT2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

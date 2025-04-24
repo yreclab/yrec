@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine esac01 (xh,ztab,t6,r,iorder,irad,*)
       use params, only : mx, mv, nr => nr01, nt => nt01
-      use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ISHORT  ! /LUOUT/
 
 c      The purpose of this subroutine is to interpolate
 c      the equation of state and its derivatives in X, T6, density

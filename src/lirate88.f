@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE LIRATE88(HCOMP,HD,HT,M,J)
 
       use params, only : json
-      use settings, only : CLN, CC13, CC23  ! COMMON/CONST1/
+      use settings, only : CLN, CC13, CC23  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

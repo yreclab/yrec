@@ -4,8 +4,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MU
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MU(T,P,D,X,Z,RMU,AMU,EMU,BETA)
-      use settings, only : XENV, ZENV, AMUENV  ! COMMON/COMP/
-      use settings, only : CGAS  ! COMMON/CONST2/
+      use settings, only : XENV, ZENV, AMUENV  ! /COMP/
+      use settings, only : CGAS  ! /CONST2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

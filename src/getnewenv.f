@@ -7,11 +7,11 @@ C THE DESIRED ENVELOPE MASS
      *                     HSTOT,HT,LC,ETA2,HG,HI,HJM,QIW,R0,
      *                     HKEROT,BL,SJTOT,SKEROT,TEFFL,M,LNEW)
       use params, only : json
-      use settings, only : STOTAL, SENV  ! COMMON/COMP/
-      use settings, only : CLSUNL  ! COMMON/CONST/
-      use settings, only : CLN, C4PIL, CC23  ! COMMON/CONST1/
-      use settings, only : CSIGL, CGL  ! COMMON/CONST2/
-      use settings, only: HPTTOL  ! /CTOL/
+      use settings, only : STOTAL, SENV  ! /COMP/
+      use settings, only : CLSUNL  ! /CONST/
+      use settings, only : CLN, C4PIL, CC23  ! /CONST1/
+      use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

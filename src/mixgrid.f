@@ -3,10 +3,10 @@ C $$$$$$
      *                   HSTOT,IBEG,IEND,LCZ,M,
      *                   ECOD2,EM,LDUM2)
       use params, only : json
-      use settings, only : CLSUN  ! COMMON/CONST/
-      use settings, only : CLN, C4PI  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
-      use settings, only: HPTTOL  ! /CTOL/
+      use settings, only : CLSUN  ! /CONST/
+      use settings, only : CLN, C4PI  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
+      use settings, only : HPTTOL  ! /CTOL/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

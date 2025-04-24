@@ -5,7 +5,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      *                ECOD1,ECOD2,EDXDR,THEA,THEZ,J)
 
       use params, only : json
-      use settings, only : CC13  ! COMMON/CONST1/
+      use settings, only : CC13  ! /CONST1/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

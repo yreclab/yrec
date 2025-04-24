@@ -4,12 +4,12 @@ C SETUPS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETUPS(V)
       use params, only : json, nt, ng, ntc, ngc, nts, nps, nta, nga
-      use settings, only : IFERMI, FFERMI, ISHORT  ! COMMON/LUNUM/, COMMON/LUFNM/, COMMON/LUOUT/
-      use settings, only : XENV  ! COMMON/COMP/
-      use settings, only : CLSUN, CLSUNL, CLNSUN, CMSUN, CMSUNL, CRSUN, CRSUNL, CMBOL  ! COMMON/CONST/
-      use settings, only : CLN, CLNI, C4PI, C4PIL, C4PI3L, CC13, CC23, CPI  ! COMMON/CONST1/
-      use settings, only : CGAS, CA3, CA3L, CSIG, CSIGL, CGL, CMKH  ! COMMON/CONST2/
-      use settings, only : CDELRL, CMIXL2, CMIXL3, CLNDP, CSECYR  ! COMMON/CONST3/
+      use settings, only : IFERMI, FFERMI, ISHORT  ! /LUNUM/, /LUFNM/, /LUOUT/
+      use settings, only : XENV  ! /COMP/
+      use settings, only : CLSUN, CLSUNL, CLNSUN, CMSUN, CMSUNL, CRSUN, CRSUNL, CMBOL  ! /CONST/
+      use settings, only : CLN, CLNI, C4PI, C4PIL, C4PI3L, CC13, CC23, CPI  ! /CONST1/
+      use settings, only : CGAS, CA3, CA3L, CSIG, CSIGL, CGL, CMKH  ! /CONST2/
+      use settings, only : CDELRL, CMIXL2, CMIXL3, CLNDP, CSECYR  ! /CONST3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

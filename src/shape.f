@@ -2,8 +2,8 @@ C $$$$$$
       SUBROUTINE SHAPE(HD,HR,HS,JSTART,JEND,OMEGA,ETA2,R0)
 
       use params, only : json
-      use settings, only : CLN, C4PI3L, CC13  ! COMMON/CONST1/
-      use settings, only : CGL  ! COMMON/CONST2/
+      use settings, only : CLN, C4PI3L, CC13  ! /CONST1/
+      use settings, only : CGL  ! /CONST2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
