@@ -53,8 +53,8 @@ while IFS= read -r line; do
       echo >> "$test".diff
     done
 
-    if [ $(cat "$test".diff | wc -l) \> \
-         $(($(ls -1q ../standard/"$test".* | wc -l) * 2)) ]; then
+    if (( $(cat "$test".diff | wc -l) > \
+          $(($(ls -1q ../standard/"$test".* | wc -l) * 2)) )); then
       echo "Differences found in $test"
     else
       echo "No differences found in $test"
