@@ -14,6 +14,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CGL  ! /CONST2/
       use settings, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! /CONST3/
       use settings, only : TGCUT  ! /CTLIM/
+      use settings, only : IOV1, IOV2, IOVIM, LADOV  ! /DPMIX/
 
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
 C COMPUTES RADIATIVE GRADIENT AND COMPARES WITH ADIABATIC GRADIENT
@@ -25,8 +26,6 @@ C         DEL = ACTUAL GRADIENT
 C          QACT,QACP = NAT-LOG DERIVATIVES OF THE CONVECTIVE GRADIENT
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *     VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)

@@ -10,6 +10,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : STOTAL  ! /COMP/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
+      use settings, only : IOVIM  ! /DPMIX/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -26,8 +27,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/FLAG/LEXCOM
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1           IOMHD7, IOMHD8
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
       SAVE
 
       PL = X0

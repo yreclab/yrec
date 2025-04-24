@@ -57,6 +57,31 @@ module settings
   ! Variables from /DIFUS/
   public :: dtdif, djok, itdif1, itdif2
 
+  ! Variables from /DPMIX/
+  public :: dpenv, alphac, alphae, alpham, betac, iov1, iov2, iovim
+  public :: lovstc, lovste, lovstm, lsemic, ladov, lovmax
+
+  ! Variables from /ENVGEN/
+  public :: atmstp, envstp, lenvg
+
+  ! Variables from /FLAG/
+  public :: lexcom
+
+  ! Variables from /HEFLSH/
+  public :: lkuthe
+
+  ! Variables from /INTATM/
+  public :: atmerr, atmd0, atmbeg, atmmin, atmmax
+
+  ! Variables from /INTENV/
+  public :: enverr, envbeg, envmin, envmax
+
+  ! Variables from /INTPAR/
+  public :: stolr0, imax, nuse
+
+  ! Variables from /LABEL/
+  public :: xenv0, zenv0
+
   ! Variables from /MONTE/
   public :: lmonte, imbeg, imend
 
@@ -173,6 +198,38 @@ module settings
   ! dadcoeft.f: convergence criterion
   real(dp) :: dtdif = 1.0e-2_dp, djok = 1.0e-4_dp
   integer :: itdif1 = 1, itdif2 = 1
+
+  ! Variables from /DPMIX/
+  ! liburn.f: MHP 10/91 Common block added for overshoot.
+  real(dp) :: dpenv = 1.0_dp, alphac = 0.0_dp, alphae = 0.0_dp, &
+            & alpham = 0.0_dp, betac = 0.15_dp
+  integer :: iov1, iov2, iovim
+  ! parmin.f: 7/91 lsemic (semi-convection) added to common block.
+  logical :: lovstc = .false., lovste = .false., lovstm = .false., &
+           & lsemic = .false., ladov = .false., lovmax = .false.
+
+  ! Variables from /ENVGEN/
+  real(dp) :: atmstp, envstp
+  logical :: lenvg
+
+  ! Variables from /FLAG/
+  logical :: lexcom
+
+  ! Variables from /HEFLSH/
+  logical :: lkuthe
+
+  ! Variables from /INTATM/
+  real(dp) :: atmerr, atmd0, atmbeg, atmmin, atmmax
+
+  ! Variables from /INTENV/
+  real(dp) :: enverr, envbeg, envmin, envmax
+
+  ! Variables from /INTPAR/
+  real(dp) :: stolr0
+  integer :: imax, nuse
+
+  ! Variables from /LABEL/
+  real(dp) :: xenv0, zenv0
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.

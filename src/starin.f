@@ -21,6 +21,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CSIGL, CGL  ! /CONST2/
       use settings, only : CMIXL, CSECYR  ! /CONST3/
       use settings, only : HPTTOL  ! /CTOL/
+      use settings, only : IOVIM  ! /DPMIX/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -51,8 +52,6 @@ C DBGLAOL
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
      1     YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *     IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
      *HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),LC(JSON),
      *HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),QIW(JSON),

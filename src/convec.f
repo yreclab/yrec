@@ -5,11 +5,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                  JCORE,JENV,NRZONE,NZONE,NZONE0)
       use params, only : json
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : LOVSTC, LOVSTE, LOVSTM  ! /DPMIX/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
 
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HR(JSON),HS(JSON),
      *          HT(JSON),LC(JSON),MRZONE(13,2),MXZONE(12,2),MXZON0(12,2)

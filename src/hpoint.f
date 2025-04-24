@@ -18,6 +18,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLNDP  ! /CONST3/
       use settings, only : TENV0, TENV1  ! /CTLIM/
       use settings, only : HPTTOL  ! /CTOL/
+      use settings, only : ALPHAE, LOVSTE  ! /DPMIX/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -32,8 +33,6 @@ C MHP 10/02 ADDED MRZONE,MXZONE TO DIMENSION STATEMENTS
      * MRZONE(13,2),MXZONE(12,2)
       DIMENSION PS(3),RS(3),ESTORE(4)
       COMMON/BURN/HCOMPM(15,JSON)
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
       COMMON/FLAG/LEXCOM
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),
