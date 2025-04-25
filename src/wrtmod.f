@@ -16,13 +16,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CGAS, CSIGL, CGL  ! /CONST2/
       use settings, only : CMIXL  ! /CONST3/
       use settings, only : ATMSTP, ENVSTP  ! /ENVGEN/
+      use settings, only : ATMBEG, ATMMIN, ATMMAX  ! /INTATM/
+      use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
+      use settings, only : XENV0, ZENV0  ! /LABEL/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
 
-      COMMON/LABEL/XENV0,ZENV0
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)

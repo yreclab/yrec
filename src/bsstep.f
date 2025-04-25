@@ -6,11 +6,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE BSSTEP(Y,DYDX,NV,X0,HTRY,EPS,YSCAL,HDID,HNEXT,DERIV,
      *                  B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,RL,
      *                  TEFFL,X,Z,KOUNT,KSAHA,ERR)
+      use settings, only : IMAX, NUSE  ! /INTPAR/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       PARAMETER (ONE=1.0D0,SHRINK=0.95D0,GROW=1.2D0)
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
       DIMENSION Y(3),DYDX(3),YSCAL(3),YERR(3),YSAV(3),DYSAV(3),
      *          YSEQ(3),NSEQ(11),ERR(3)
       EXTERNAL DERIV

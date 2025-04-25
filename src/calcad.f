@@ -54,6 +54,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/
       use settings, only : ATMSTP, ENVSTP  ! /ENVGEN/
+      use settings, only : ATMBEG, ATMMIN, ATMMAX  ! /INTATM/
+      use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -78,8 +80,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
        COMMON/SOUND/GAM1(JSON),LSOUND

@@ -137,17 +137,24 @@ module settings
   logical :: lkuthe = .false.
 
   ! Variables from /INTATM/
-  real(dp) :: atmerr, atmd0, atmbeg, atmmin, atmmax
+  real(dp) :: atmerr = 3.0e-4_dp, atmd0 = 1.0e-10_dp, atmbeg = 1.0e-1_dp, &
+            & atmmin = 1.0e-1_dp, atmmax = 5.0e-1_dp
 
   ! Variables from /INTENV/
-  real(dp) :: enverr, envbeg, envmin, envmax
+  ! getnewenv.f: tolerances for the envelope integration; temporarily assign new
+  !              values for the integration to find the new points and then reset.
+  ! starin.f: MHP 07/02 added for envelope integration when changing the
+  !           outer fitting point
+  real(dp) :: enverr = 3.0e-4_dp, envbeg = 1.0e-1_dp, &
+            & envmin = 1.0e-1_dp, envmax = 5.0e-1_dp
 
   ! Variables from /INTPAR/
-  real(dp) :: stolr0
-  integer :: imax, nuse
+  real(dp) :: stolr0 = 1.0e-3_dp
+  integer :: imax = 11, nuse = 7
 
   ! Variables from /LABEL/
-  real(dp) :: xenv0, zenv0
+  ! rscale.f: MHP 5/91 common block added to fix core rescaling.
+  real(dp) :: xenv0 = 0.7, zenv0 = 0.02
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
