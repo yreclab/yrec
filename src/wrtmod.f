@@ -19,6 +19,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ATMBEG, ATMMIN, ATMMAX  ! /INTATM/
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : XENV0, ZENV0  ! /LABEL/
+      use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -35,10 +36,6 @@ C DBG PULSE
      *      QT, QP, QQDT, QEMU, QD, QFS
 C MHP 7/96 COMMON BLOCK INSERTED FOR SOUND SPEED
       COMMON/SOUND/GAM1(JSON),LSOUND
-C DBG
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)

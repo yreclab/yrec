@@ -7,6 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLSUN  ! /CONST/
       use settings, only : CLN, C4PI  ! /CONST1/
+      use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -17,9 +18,6 @@ C DBGLAOL
       COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *  FLAOL, FPUREZ
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HR(JSON),HS(JSON),
      *          HT(JSON),MXZONE(12,2),FXION(3),HL(JSON)
       SAVE

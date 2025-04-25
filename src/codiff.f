@@ -6,6 +6,8 @@ C      MECHANISMS (COMMON BLOCK VMULT2)
 
       use params, only : json
       use settings, only : C4PI  ! /CONST1/
+      use settings, only : FW, FC  ! /VMULT/
+      use settings, only : FESC, FSSC, FGSFC  ! /VMULT2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -18,10 +20,6 @@ C      MECHANISMS (COMMON BLOCK VMULT2)
      *     THDIF(JSON),SVEL(JSON),VISC(JSON),EPSM(JSON)
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
-      COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-C KC 2025-04-22 Commented this out as it was not used.
-C      COMMON/ADVEC/FADV(JSON),FADV0(JSON)
       COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
 C MHP 9/93
       COMMON/NOTRAN/LNOJ

@@ -208,22 +208,28 @@ module settings
   real(dp) :: end_dcen(50) = 0.0_dp, end_xcen(50) = 0.0_dp, end_ycen(50) = 0.0_dp
 
   ! Variables from /VMULT/
-  real(dp) :: fw, fc, fo, fes, fgsf, fmu, fss, rcrit
+  real(dp) :: fw = 1.0_dp, fc = 1.0_dp, fo = 1.0_dp, fes = 1.0_dp, &
+            & fgsf = 1.0_dp, fmu = 1.0_dp, fss = 1.0_dp, rcrit = 1.0e3_dp
 
   ! Variables from /DEBHU/
-  real(dp) :: cdh, etadh0, etadh1
-  real(dp) :: zdh(18), xxdh, yydh, zzdh
-  real(dp) :: dhnue(18)
-  logical :: ldh
+  ! DBG 7/92 Common block added to compute Debye–Hückel correction.
+  ! getnewenv.f: Terms needed to compute the Debye–Hückel correction in the E.o.S.
+  ! eqrelv.f: DBG 7/92 cdh is constant term defined in setups
+  !           ramp function between no electron degeneracy eta .lt. etadh0
+  !           and full electron degeneracy eta .gt. etadh1 version of D.H.
+  !           correction.
+  !           If ldh = .true. then apply D.H. correction.
+  !           zdh is array of relative mass fractions of laol metal mixture
+  !           summed to 1.0.
+  real(dp) :: cdh, etadh0 = -1.0_dp, etadh1 = 1.0_dp
+  real(dp) :: zdh(18), xxdh, yydh, zzdh, dhnue(18)
+  logical :: ldh = .false.
 
   ! Variables from /VMULT2/
-  real(dp) :: fesc, fssc, fgsfc
-  integer :: ies, igsf, imu
-
-  ! Variables from /GRAVST/
-  real(dp) :: grtol
-  integer :: ilambda, niter_gs
-  logical :: ldify
+  ! MHP 10/90 Different fc for different mechanisms introduced.
+  ! Also option for smoothing velocities for length scale calculations.
+  real(dp) :: fesc = 1.0_dp, fssc = 1.0_dp, fgsfc = 1.0_dp
+  integer :: ies = 1, igsf = 1, imu = 1
 
   ! Variables from /NEWENG/
   integer :: niter4
@@ -236,6 +242,11 @@ module settings
   ! Variables from /LOPAL95/
   character(256) :: fliv95
   integer :: iliv95
+
+  ! Variables from /GRAVST/
+  real(dp) :: grtol
+  integer :: ilambda, niter_gs
+  logical :: ldify
 
   ! Variables from /GRAVS2/
   real(dp) :: dt_gs, xmin, ymin

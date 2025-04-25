@@ -7,6 +7,7 @@ C $$$$$$
       use settings, only : CLN, C4PI  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : HPTTOL  ! /CTOL/
+      use settings, only : FW  ! /VMULT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -19,7 +20,6 @@ C MHP 05/02
       COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
       COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
       COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
 C INPUT VARIABLES
       DIMENSION HD(JSON),HI(JSON),HJMSAV(JSON),HL(JSON),HP(JSON),
      *          HR(JSON),HRU(JSON),HS(JSON),HS1(JSON),HS2(JSON),

@@ -5,13 +5,13 @@ C
 
       use params, only : json
       use settings, only : CLN, CC13  ! /CONST1/
+      use settings, only : FC  ! /VMULT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
      *              EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
      *              QDTM(JSON),RM(JSON),TM(JSON)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
       COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
       DIMENSION HD(JSON),HRU(JSON),HV(JSON),
      *          OMEGA(JSON),ALPHA(JSON),V(JSON)

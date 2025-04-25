@@ -24,6 +24,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : LEXCOM  ! /FLAG/
       use settings, only : LKUTHE  ! /HEFLSH/
       use settings, only : LROT  ! /ROT/
+      use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
 
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
 C        ASSUMES GIVEN LOG(L/LSUN) AS BL
@@ -36,9 +37,6 @@ C          LARGE = .T. IF CORRECTIONS ARE TOO LARGE
       COMMON/NEWENG/NITER4,LNEWS,LSNU
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
       DIMENSION MXZONE(12,2),MXZON0(12,2)
       DIMENSION TRIT(3),TRIL(3),CFENV(9),PS(3),TS(3),RS(3),ESTORE(4),
      *TLUMX(8),FP(JSON),FT(JSON),ETA2(JSON),OMEGA(JSON),R0(JSON)
