@@ -8,6 +8,7 @@ c MHP 7/98 MODIFIED TO READ IN ALL METAL ABUNDACES FOR OPACITY TABLES.
       use params, only : numt => numtt, numd, numx, numz, numxz
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : FLIV95, ILIV95  ! /LOPAL95/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       SAVE

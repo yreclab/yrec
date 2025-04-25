@@ -31,6 +31,7 @@ C*******
       use settings, only : LROT, LINSTB  ! /ROT/
       use settings, only : ENDAGE, LENDAG, END_DCEN, END_XCEN, END_YCEN  ! /SETT/
       use settings, only : NITER4, LNEWS, LSNU  ! /NEWENG/
+      use settings, only : FGRZ  ! /GRAVS3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -94,7 +95,6 @@ C MHP 1/93 add common blocks for automatic calibration of solar models.
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
       COMMON/CALS2/TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLZX,CALSOLAGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C DBG 12/94 added calibrate stellar model
       COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,

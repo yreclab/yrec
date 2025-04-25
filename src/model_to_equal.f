@@ -4,10 +4,9 @@ C $$$$$$
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
      *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT)
       use params, only : json
+      use settings, only : LDIFZ  ! /GRAVS3/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C MHP 3/94 ADDED METAL DIFFUSION.
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
       COMMON/GRAVSZ/COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
       COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
      *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),

@@ -21,6 +21,7 @@ c
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGAS, CA3  ! /CONST2/
       use settings, only : TSCUT  ! /CTLIM/
+      use settings, only : LDIFZ  ! /GRAVS3/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -34,8 +35,6 @@ C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
       CHARACTER*256 FOPALE,fopale01,fopale06
       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
      x     lopale06,lNumDeriv
-C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),

@@ -2,11 +2,10 @@ C $$$$$$
       SUBROUTINE LAX_WENDROF2(DT,ECOD1_H,EM_H,EX,NPT,STOT,LDOLI)
       use params, only : json
       use settings, only : C4PI  ! /CONST1/
+      use settings, only : LDIFZ  ! /GRAVS3/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
       COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
      *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),
      *              EZ_H(JSON)

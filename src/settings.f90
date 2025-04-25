@@ -207,9 +207,13 @@ module settings
   logical :: lendag(50), lsetdt(50)
   real(dp) :: end_dcen(50) = 0.0_dp, end_xcen(50) = 0.0_dp, end_ycen(50) = 0.0_dp
 
-  ! Variables from /VMULT/
+  ! Variables from /VMULT/ and /VMULT2/
   real(dp) :: fw = 1.0_dp, fc = 1.0_dp, fo = 1.0_dp, fes = 1.0_dp, &
             & fgsf = 1.0_dp, fmu = 1.0_dp, fss = 1.0_dp, rcrit = 1.0e3_dp
+  ! MHP 10/90 Different fc for different mechanisms introduced.
+  ! Also option for smoothing velocities for length scale calculations.
+  real(dp) :: fesc = 1.0_dp, fssc = 1.0_dp, fgsfc = 1.0_dp
+  integer :: ies = 1, igsf = 1, imu = 1
 
   ! Variables from /DEBHU/
   ! DBG 7/92 Common block added to compute Debye–Hückel correction.
@@ -224,12 +228,6 @@ module settings
   real(dp) :: cdh, etadh0 = -1.0_dp, etadh1 = 1.0_dp
   real(dp) :: zdh(18), xxdh, yydh, zzdh, dhnue(18)
   logical :: ldh = .false.
-
-  ! Variables from /VMULT2/
-  ! MHP 10/90 Different fc for different mechanisms introduced.
-  ! Also option for smoothing velocities for length scale calculations.
-  real(dp) :: fesc = 1.0_dp, fssc = 1.0_dp, fgsfc = 1.0_dp
-  integer :: ies = 1, igsf = 1, imu = 1
 
   ! Variables from /NEWENG/
   ! mix.f: MHP 6/91 Common block for new mixing and semi-convection.
@@ -253,21 +251,20 @@ module settings
   character(256) :: fliv95
   integer, parameter :: iliv95 = 48  ! YCK input: OPAL95 opacity table
 
-  ! Variables from /GRAVST/
-  real(dp) :: grtol
-  integer :: ilambda, niter_gs
-  logical :: ldify
-
-  ! Variables from /GRAVS2/
-  real(dp) :: dt_gs, xmin, ymin
-  logical :: lthoulfit
-
-  ! Variables from /GRAVS3/
-  real(dp) :: fgry, fgrz
-  logical :: lthoul, ldifz
-
-  ! Variables from /GRAVS4/
-  logical :: lnewdif, ldifli
+  ! Variables from /GRAVST/, /GRAVS2/, /GRAVS3/, and /GRAVS4/
+  ! MHP 5/90 Add common block for gravitational settling.
+  ! MHP 5/90 New data statements for new parameters
+  real(dp) :: grtol = 1.0e-8_dp
+  integer :: ilambda = 1, niter_gs = 10
+  logical :: ldify = .false.
+  ! MHP 6/90 Additional common block for settling.
+  real(dp) :: dt_gs = 0.1_dp, xmin = 1.0e-3_dp, ymin = 1.0e-3_dp
+  logical :: lthoulfit = .false.
+  ! MHP 3/94 Added metal diffusion
+  real(dp) :: fgry = 1.0_dp, fgrz = 1.0_dp
+  logical :: lthoul = .false., ldifz = .false.
+  ! ges 6/15 New common block for light diffusion and new diff routine.
+  logical :: lnewdif = .false., ldifli = .false.
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
