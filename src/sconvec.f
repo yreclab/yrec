@@ -13,7 +13,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C DBGLAOL
       REAL*8 OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL
       CHARACTER*256 FLAOL, FPUREZ
-      COMMON/FLAG/LEXCOM
 C DBGLAOL
       COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,

@@ -8,12 +8,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLSUN  ! /CONST/
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : LPTIME  ! /CT3/
+      use settings, only : LEXCOM  ! /FLAG/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 10/02 added missing common block
       COMMON/NEWEPS/EALPCA,ENU
-      COMMON/FLAG/LEXCOM
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HS1(JSON),
      * HT(JSON),EG(6)
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),

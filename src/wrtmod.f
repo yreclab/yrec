@@ -15,13 +15,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CGAS, CSIGL, CGL  ! /CONST2/
       use settings, only : CMIXL  ! /CONST3/
+      use settings, only : ATMSTP, ENVSTP  ! /ENVGEN/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
 
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
-      COMMON/FLAG/LEXCOM
       COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
       COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW

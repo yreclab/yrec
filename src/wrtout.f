@@ -19,6 +19,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLSUN, CLSUNL, CMSUN, CRSUN, CRSUNL, CMBOL  ! /CONST/
       use settings, only : CLN, C4PI, C4PIL, C4PI3L, CC13, CC23  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : LEXCOM  ! /FLAG/
+      use settings, only : LKUTHE  ! /HEFLSH/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -29,8 +31,6 @@ C JVS 10/13 for recalculation of taucz
 C end JVS
       COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
       COMMON/TRACK/ITRVER
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
       COMMON/LABEL/XENV0,ZENV0
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),

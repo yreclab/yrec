@@ -5,10 +5,10 @@ C$$$$$$
       use settings, only : ZENVM, STOTAL  ! /COMP/
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
+      use settings, only : LEXCOM  ! /FLAG/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/FLAG/LEXCOM
 C JVS 02/12 COMMON BLOCKS ADDED FOR THE CALCULATION OF TAUCZ
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),

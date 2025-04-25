@@ -3,9 +3,9 @@ C $$$$$$
      *                   HT,HV,IMAX,IMIN,JENV0,JENV1,LOK,LCZ,M,MRZONE,
      *                   MXZONE,NRZONE,NZONE)
       use params, only : json
+      use settings, only : LEXCOM  ! /FLAG/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/FLAG/LEXCOM
       COMMON/LIOV/PSCAL0,PSCAL1
       COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
       COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)

@@ -19,6 +19,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : TENV0, TENV1  ! /CTLIM/
       use settings, only : HPTTOL  ! /CTOL/
       use settings, only : ALPHAE, LOVSTE  ! /DPMIX/
+      use settings, only : LEXCOM  ! /FLAG/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -34,7 +35,6 @@ C MHP 10/02 ADDED MRZONE,MXZONE TO DIMENSION STATEMENTS
       DIMENSION PS(3),RS(3),ESTORE(4)
       COMMON/BURN/HCOMPM(15,JSON)
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
-      COMMON/FLAG/LEXCOM
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),
      *     HDO(JSON),HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),

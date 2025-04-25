@@ -13,7 +13,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/FLAG/LEXCOM
 C MHP 10/02 ADDED MISSING DIMENSION STATEMENTS!
       DIMENSION HCOMP(15,JSON),HL(JSON),HS1(JSON),HT(JSON),HS2(JSON),
      * HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),HR6(JSON),

@@ -1,91 +1,7 @@
 module settings
-  use iso_fortran_env, only : dp => real64
+  use, intrinsic :: iso_fortran_env, only : dp => real64
   implicit none
-  private
-
-  ! Variables from /VNEWCB/
-  public :: vnew
-
-  ! Variables from /LUOUT/
-  public :: ilast, idebug, itrack, ishort, imilne, imodpt, istor, iowr
-
-  ! Variables from /LUNUM/
-  public :: ifirst, irun, istand, ifermi
-  public :: iopmod, iopenv, iopatm, idyn
-  public :: illdat, isnu, iscomp, ikur
-
-  ! Variables from /LUFNM/
-  public :: flast, ffirst, frun, fstand, ffermi
-  public :: fdebug, ftrack, fshort, fmilne, fmodpt
-  public :: fstor, fpmod, fpenv, fpatm, fdyn
-  public :: flldat, fsnu, fscomp, fkur
-  public :: fmhd1, fmhd2, fmhd3, fmhd4, fmhd5, fmhd6, fmhd7, fmhd8
-
-  ! Variables from /IOMONTE/
-  public :: fmonte1, fmonte2, imonte1, imonte2
-
-  ! Variables from /CCOUT/, /CCOUT1/, and /CCOUT2/
-  public :: lstore, lstatm, lstenv, lstmod, lstphys, lstrot, lscrib
-  public :: npenv, nprtmod, nprtpt, npoint
-  public :: ldebug, lcorr, lmilne, ltrack, lstpch
-
-  ! Variables from /CENV/
-  public :: tridt, tridl, senv0, lsenv0, lnew0
-
-  ! Variables from /CKIND/
-  public :: rescal, nmodls, iresca, lfirst, numrun
-
-  ! Variables from /COMP/ and /COMP2/
-  public :: xenv, zenv, zenvm, amuenv, fxenv, xnew, znew, stotal, senv
-  public :: yenv, y3env
-
-  ! Variables from /CONST/, /CONST1/, /CONST2/, and /CONST3/
-  public :: clsun, clsunl, clnsun, cmsun, cmsunl, crsun, crsunl, cmbol
-  public :: cln, clni, c4pi, c4pil, c4pi3l, cc13, cc23, cpi
-  public :: cgas, ca3, ca3l, csig, csigl, cgl, cmkh, cmkhn
-  public :: cdelrl, cmixl, cmixl2, cmixl3, clndp, csecyr
-
-  ! Variables from /CTLIM/, /CT2/, and /CT3/
-  public :: atime, tcut, tscut, tenv0, tenv1, tenv, tgcut
-  public :: dtwind
-  public :: lptime
-
-  ! Variables from /CTOL/
-  public :: htoler, fcorr0, fcorri, fcorr, hpttol
-  public :: niter1, niter2, niter3
-
-  ! Variables from /DIFUS/
-  public :: dtdif, djok, itdif1, itdif2
-
-  ! Variables from /DPMIX/
-  public :: dpenv, alphac, alphae, alpham, betac, iov1, iov2, iovim
-  public :: lovstc, lovste, lovstm, lsemic, ladov, lovmax
-
-  ! Variables from /ENVGEN/
-  public :: atmstp, envstp, lenvg
-
-  ! Variables from /FLAG/
-  public :: lexcom
-
-  ! Variables from /HEFLSH/
-  public :: lkuthe
-
-  ! Variables from /INTATM/
-  public :: atmerr, atmd0, atmbeg, atmmin, atmmax
-
-  ! Variables from /INTENV/
-  public :: enverr, envbeg, envmin, envmax
-
-  ! Variables from /INTPAR/
-  public :: stolr0, imax, nuse
-
-  ! Variables from /LABEL/
-  public :: xenv0, zenv0
-
-  ! Variables from /MONTE/
-  public :: lmonte, imbeg, imend
-
-  !> ----------------------------------------------------------------------- <!
+  public
 
   ! Variables from /VNEWCB/
   ! DBG 1/96 The array v, read in via rdlaol, contained the mass fractions
@@ -209,14 +125,16 @@ module settings
            & lsemic = .false., ladov = .false., lovmax = .false.
 
   ! Variables from /ENVGEN/
-  real(dp) :: atmstp, envstp
-  logical :: lenvg
+  real(dp) :: atmstp = 0.5, envstp = 0.5
+  logical :: lenvg = .false.
 
   ! Variables from /FLAG/
-  logical :: lexcom
+  ! getnewenv.f: extended composition flag
+  ! seculr.f: MHP 6/00 added flag for call to ndifcom
+  logical :: lexcom = .false.
 
   ! Variables from /HEFLSH/
-  logical :: lkuthe
+  logical :: lkuthe = .false.
 
   ! Variables from /INTATM/
   real(dp) :: atmerr, atmd0, atmbeg, atmmin, atmmax

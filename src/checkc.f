@@ -5,10 +5,10 @@ C $$$$$$
       use settings, only : XENV, ZENV, AMUENV  ! /COMP/
       use settings, only : YENV, Y3ENV  ! /COMP2/
       use settings, only : ITDIF2  ! /DIFUS/
+      use settings, only : LEXCOM  ! /FLAG/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/FLAG/LEXCOM
       COMMON/MDPHY/HAMU(JSON),CP(JSON),DELM(JSON),DELAM(JSON),
      *     DELRM(JSON),SESUM(JSON),OM(JSON),SQDT(JSON),
      *     THDIF(JSON),SVEL(JSON),VISC(JSON),EPSM(JSON)

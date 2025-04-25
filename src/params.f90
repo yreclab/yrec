@@ -1,15 +1,7 @@
 module params
-  use iso_fortran_env, only : dp => real64
+  use, intrinsic :: iso_fortran_env, only : dp => real64
   implicit none
-
-  private
-  public :: json  ! max # of shells
-  public :: numtt, numd, numx, numz, numxz  ! opal95, op95, and ll95
-  public :: nt, ng, ntc, ngc, nta, nga, nts, nps  ! surface pressures
-  public :: mx, mv, nreos, nteos, nr01, nt01, nr06, nt06  ! OPAL EOS tables
-  public :: ivarx, nchem0, cnvs, zero  ! EOS tables
-  public :: numxalx, numzalx, numxzalx, numtalx, numdalx, numxtalx
-  public :: numx06, numz06, numxz06, numt06, numd06  ! Alexander low T opacities
+  public
 
   ! the array size, i.e. max # of shells is specified in the 
   ! parameter statement.  it defines JSON.  to change the array

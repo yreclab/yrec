@@ -53,6 +53,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLSUNL, CRSUNL  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : ATMSTP, ENVSTP  ! /ENVGEN/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -84,7 +85,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        COMMON/SOUND/GAM1(JSON),LSOUND
       common/eeos06/esact,eos(10)
       COMMON /LLOT95/ZTAB
-      COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50)

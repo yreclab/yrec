@@ -24,7 +24,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/FLAG/LEXCOM
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1           IOMHD7, IOMHD8
       SAVE
