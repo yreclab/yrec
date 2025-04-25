@@ -11,6 +11,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLN, CC23  ! /CONST1/
       use settings, only : CA3  ! /CONST2/
       use settings, only : CSECYR  ! /CONST3/
+      use settings, only : WALPCZ, LROT  ! /ROT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -18,7 +19,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/DISK/SAGE,TDISK,PDISK,LDISK
       COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
      *               LREIMER,LMDOT
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
 C KC 2025-04-22 Downgraded this to variables as it was only used in dadcoeft.f.

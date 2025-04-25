@@ -26,6 +26,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : LMIXTURE, LISOTOPE, FRAC_C, FRAC_N, FRAC_O, R12_13, R16_18,
      *    XH2_INI, XHE3_INI, XLI6_INI, XLI7_INI, XBE9_INI  ! /NEWMX/
+      use settings, only : IDT, IDD  ! /OPTAB/
+      use settings, only : WNEW, LROT, LWNEW  ! /ROT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -46,8 +48,6 @@ C DBGLAOL
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
      *     ETA2X(JSON)
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1     IOMHD7, IOMHD8
       COMMON/CORE/LCORE,MCORE,FCORE

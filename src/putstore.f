@@ -29,6 +29,7 @@ C      use settings, only : LMILNE  ! COMMON/CCOUT2/
       use settings, only : CMIXL  ! /CONST3/
       use settings, only : LOVSTC, LOVSTE, LOVSTM, LSEMIC  ! /DPMIX/
       use settings, only : LEXCOM  ! /FLAG/
+      use settings, only : LROT, LINSTB  ! /ROT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -37,7 +38,6 @@ C      use settings, only : LMILNE  ! COMMON/CCOUT2/
       CHARACTER*256 FLAOL, FPUREZ
       CHARACTER*256 FOPALE,FOPALE01,FcondOpacP,FOPALE06
 
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      * HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      * CFENV(9),TLUMX(8),OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),R0(JSON),

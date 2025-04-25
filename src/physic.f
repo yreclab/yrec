@@ -6,11 +6,11 @@ C $$$$$$
       use settings, only : YENV, Y3ENV  ! /COMP2/
       use settings, only : CLN  ! /CONST1/
       use settings, only : IOVIM  ! /DPMIX/
+      use settings, only : IDT, IDD  ! /OPTAB/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),

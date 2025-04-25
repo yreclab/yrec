@@ -22,6 +22,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : LEXCOM  ! /FLAG/
       use settings, only : LKUTHE  ! /HEFLSH/
       use settings, only : XENV0, ZENV0  ! /LABEL/
+      use settings, only : LROT  ! /ROT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -32,7 +33,6 @@ C JVS 10/13 for recalculation of taucz
 C end JVS
       COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
       COMMON/TRACK/ITRVER
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
 C DBG PULSE

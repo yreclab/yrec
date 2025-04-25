@@ -188,19 +188,24 @@ module settings
             & xbe9_ini = 1.595e-10_dp, xb10_ini = 1.002e-9_dp, xb11_ini = 4.405e-9_dp
 
   ! Variables from /OPTAB/
-  real(dp) :: optol, zsi
-  integer :: idt
-  integer :: idd(4)
+  real(dp) :: optol = 1.0e-8_dp, zsi = 0.0_dp
+  integer :: idt, idd(4)
 
   ! Variables from /ROT/
-  real(dp) :: wnew, walpcz, acfpft
-  integer :: itfp1, itfp2
-  logical :: lrot, linstb, lwnew
+  ! getnewenv.f: lrot needed to know if you have to compute rotation terms.
+  ! mixcz.f: MHP 02/12 added rotation information.  hg vector is not defined for
+  !          spherical models and is used for taucz; added information so that
+  !          taucz is properly computed for such models.
+  real(dp) :: wnew = 0.0_dp, walpcz = 0.0_dp, acfpft = 1.0e-36_dp
+  integer :: itfp1 = 5, itfp2 = 20
+  logical :: lrot = .false., linstb = .false., lwnew = .false.
 
   ! Variables from /SETT/
-  real(dp) :: endage(50), setdt(50)
+  ! MHP 10/24 Added stop criteria for central H,D,and He4
+  ! parmin.f: MHP 10/24 Added new defaults for end conditions on central D,X,Y
+  real(dp) :: endage(50) = 0.0_dp, setdt(50) = 0.0_dp
   logical :: lendag(50), lsetdt(50)
-  real(dp) :: end_dcen(50), end_xcen(50), end_ycen(50)
+  real(dp) :: end_dcen(50) = 0.0_dp, end_xcen(50) = 0.0_dp, end_ycen(50) = 0.0_dp
 
   ! Variables from /VMULT/
   real(dp) :: fw, fc, fo, fes, fgsf, fmu, fss, rcrit

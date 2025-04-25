@@ -20,6 +20,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : HPTTOL  ! /CTOL/
       use settings, only : ALPHAE, LOVSTE  ! /DPMIX/
       use settings, only : LEXCOM  ! /FLAG/
+      use settings, only : LROT  ! /ROT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -47,8 +48,6 @@ C Time change of theta
       COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
      *               DDELM(JSON),FESTIME(JSON),THP(JSON),
      *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),

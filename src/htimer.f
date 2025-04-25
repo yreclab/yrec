@@ -10,15 +10,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CSECYR  ! /CONST3/
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : LPTIME  ! /CT3/
+      use settings, only : LROT  ! /ROT/
+      use settings, only : ENDAGE, SETDT, LENDAG, LSETDT  ! /SETT/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/GOVS/LTRIST
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
-C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
       DIMENSION HD(JSON),HL(JSON),HS1(JSON),HT(JSON),LC(JSON),
      *     HCOMP(15,JSON),EG(6),TLUMX(8),HP(JSON),HR(JSON),OMEGA(JSON)
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),

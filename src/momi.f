@@ -4,10 +4,10 @@ C $$$$$$
       use params, only : json
       use settings, only : CLN, CC13, CC23  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
+      use settings, only : WALPCZ  ! /ROT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       DIMENSION HD(JSON),HR(JSON),HS2(JSON),R0(JSON),ETA2(JSON),HI(JSON)
       DIMENSION OMEGA(JSON),HS(JSON),QIW(JSON)
       SAVE

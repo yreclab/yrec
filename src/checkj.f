@@ -8,13 +8,13 @@ C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
       use settings, only : ISHORT, IMODPT  ! /LUOUT/
       use settings, only : NPRTPT  ! /CCOUT1/
       use settings, only : DJOK, ITDIF2  ! /DIFUS/
+      use settings, only : ACFPFT  ! /ROT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/ERRMOM/TOLERI
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
      *     ETA2X(JSON)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
 C MHP 7/93

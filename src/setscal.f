@@ -10,14 +10,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLSUN, CRSUN  ! /CONST/
       use settings, only : C4PI  ! /CONST1/
       use settings, only : CSIG  ! /CONST2/
+      use settings, only : ENDAGE, SETDT, LENDAG, LSETDT  ! /SETT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 FLAOL2, FOPAL2
-C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
-C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
       COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
      1 SENV0A(50)
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),

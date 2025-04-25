@@ -4,11 +4,11 @@ C$$$$$$
       use settings, only : CMSUN  ! /CONST/
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
+      use settings, only : LROT  ! /ROT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/JTEST/ IMAX1, IMAX2, LJVS
 C Needs access to this common block: grants knowledge of envellope
       COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),

@@ -23,6 +23,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : HTOLER, FCORR0, FCORRI, FCORR  ! /CTOL/
       use settings, only : LEXCOM  ! /FLAG/
       use settings, only : LKUTHE  ! /HEFLSH/
+      use settings, only : LROT  ! /ROT/
 
 C INPUTS ASSUMES GIVEN LOG(TE) AS TEFFL
 C        ASSUMES GIVEN LOG(L/LSUN) AS BL
@@ -32,7 +33,6 @@ C OUTPUTS  LFINI = .T. IF MODEL HAS CONVERGED
 C          LARGE = .T. IF CORRECTIONS ARE TOO LARGE
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
       COMMON/NEWENG/NITER4,LNEWS,LSNU
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
