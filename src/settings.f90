@@ -232,16 +232,26 @@ module settings
   integer :: ies = 1, igsf = 1, imu = 1
 
   ! Variables from /NEWENG/
-  integer :: niter4
-  logical :: lnews, lsnu
+  ! mix.f: MHP 6/91 Common block for new mixing and semi-convection.
+  !        These are parmin parameters in mark6.
+  ! coefft.f: MHP 5/91 Add common block for energy from alpha capture reactions
+  !           and losses from neutrino-cooled cores in evovled stars.
+  ! engeb.f: 7/91 Common block added to skip flux calculations if lsnu=f
+  ! parmin.f: MHP 5/90 Add common block for new treatment of
+  !           entropy term(lnews),and the calculation
+  !           of solar neutrinos(lsnu).Also allows a fourth level of iteration(niter4).
+  integer :: niter4 = 0
+  logical :: lnews = .false., lsnu = .false.
 
   ! Variables from /BURTOL/
-  real(dp) :: cmin, abstol, reltol
-  integer :: kemmax
+  ! MHP 7/91 Added common block for numerical parameters in kemcom.
+  real(dp) :: cmin = 1.0e-20_dp, abstol = 1.0e-5_dp, reltol = 1.0e-4_dp
+  integer :: kemmax = 50
 
   ! Variables from /LOPAL95/
+  ! YCK >>> OPAL95
   character(256) :: fliv95
-  integer :: iliv95
+  integer, parameter :: iliv95 = 48  ! YCK input: OPAL95 opacity table
 
   ! Variables from /GRAVST/
   real(dp) :: grtol

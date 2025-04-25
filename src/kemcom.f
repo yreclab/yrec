@@ -7,10 +7,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use params, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : TCUT  ! /CTLIM/
+      use settings, only : CMIN, ABSTOL, RELTOL, KEMMAX  ! /BURTOL/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/BURTOL/CMIN,ABSTOL,RELTOL,KEMMAX
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
       DIMENSION A(56),B(7),W(7),XSUM(11)

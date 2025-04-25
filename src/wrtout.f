@@ -24,6 +24,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : XENV0, ZENV0  ! /LABEL/
       use settings, only : LROT  ! /ROT/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
+      use settings, only : LSNU  ! /NEWENG/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -44,7 +45,6 @@ C*** MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.
       COMMON/GRAVST/GRTOL,ILAMBDA,NITER_GS,LDIFY
 C*** MHP 7/91 ADD COMMON BLOCKS FOR SOLAR NEUTRINO I/O.
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
 C DBG 11/11/91
       COMMON/CHRONE/LRWSH, LISO, IISO, FISO
       COMMON/ROTPRT/LPRT0
