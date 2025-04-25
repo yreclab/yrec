@@ -13,7 +13,7 @@ module settings
   ! change them via the physics namelist. v is set equal to vnew in
   !  starin except when llaol=t (to maintain backward compatibility.
   !            Na          Al          Mg          Fe
-  !            Si          C           H           O
+  !            Si          !           H           O
   !            N           Ar          Ne          He
   real(dp) :: vnew(12) = [0.001999_dp, 0.003238_dp, 0.037573_dp, 0.071794_dp, &
                        &  0.040520_dp, 0.173285_dp, 0.000000_dp, 0.482273_dp, &
@@ -155,6 +155,93 @@ module settings
   ! Variables from /LABEL/
   ! rscale.f: MHP 5/91 common block added to fix core rescaling.
   real(dp) :: xenv0 = 0.7, zenv0 = 0.02
+
+  ! Variables from /NEWCMP/
+  ! parmin.f: mhp 10/24 Added new controls for altering the CNO mass fractions
+  !           isotopic ratios(C,N,O) and D/He3/Li/Be/B abundances.
+  !           These controls only alter the mixture in the starting model and only
+  !           if the model is chemically unevolved. Postprocessing tools should be used for the
+  !           core He burning phase.
+  ! rscale.f: mhp 10/24 added new controls for altering the heavy element mixture
+  !           they are used in starin. the old entries (xnewcp->anewcp) are used here
+  !                common/newcmp/xnewcp,inewcp,lnewcp,lrel,acomp
+  real(dp) :: xnewcp = 1.3e1_dp
+  integer :: inewcp
+  logical :: lnewcp = .false., lrel
+
+  ! Variables from /NEWMX/
+  ! mhp 10/24 Added new mixture control isetiso controls cno isotope ratios and
+  ! light element abundances D,He3,Li6,Li7,Be9,B10,B11 (1=used)
+  ! isetmix controls C+N+O mass fractions (1=used)
+  ! amix and aiso are strings identifying either a preset mixture or a custom one ('CUS')
+  ! supported amix at present are 'GS98','AAG21',M22M','M22P'. supported aiso is 'L21'.
+  ! For a custom mixture you can enter individual values.
+  ! to be added - amix from atomic opacity tables (inewmix=2) and other mixtures/isotopes
+  integer :: isetmix = 0, isetiso = 0
+  logical :: lmixture, lisotope
+  ! GS98 default CNO fractions of metals Grevesse&Sauval 1998 SSRv 85,161
+  real(dp) :: frac_c = 0.172148_dp, frac_n = 0.050426_dp, frac_o = 0.468195_dp
+  ! L21 default isotope data Lodders et al. 2021 SSRv 217,44
+  real(dp) :: r12_13 = 88.27_dp, r14_15 = 411.9_dp, r16_17 = 471.4_dp, &
+            & r16_18 = 2693.0_dp, zxmix = 0.02292_dp
+  real(dp) :: xh2_ini = 2.781e-5_dp, xhe3_ini = 3.461e-5_dp, xli6_ini = 7.187e-10_dp, xli7_ini = 1.025e-8_dp, &
+            & xbe9_ini = 1.595e-10_dp, xb10_ini = 1.002e-9_dp, xb11_ini = 4.405e-9_dp
+
+  ! Variables from /OPTAB/
+  real(dp) :: optol, zsi
+  integer :: idt
+  integer :: idd(4)
+
+  ! Variables from /ROT/
+  real(dp) :: wnew, walpcz, acfpft
+  integer :: itfp1, itfp2
+  logical :: lrot, linstb, lwnew
+
+  ! Variables from /SETT/
+  real(dp) :: endage(50), setdt(50)
+  logical :: lendag(50), lsetdt(50)
+  real(dp) :: end_dcen(50), end_xcen(50), end_ycen(50)
+
+  ! Variables from /VMULT/
+  real(dp) :: fw, fc, fo, fes, fgsf, fmu, fss, rcrit
+
+  ! Variables from /DEBHU/
+  real(dp) :: cdh, etadh0, etadh1
+  real(dp) :: zdh(18), xxdh, yydh, zzdh
+  real(dp) :: dhnue(18)
+  logical :: ldh
+
+  ! Variables from /VMULT2/
+  real(dp) :: fesc, fssc, fgsfc
+  integer :: ies, igsf, imu
+
+  ! Variables from /GRAVST/
+  real(dp) :: grtol
+  integer :: ilambda, niter_gs
+  logical :: ldify
+
+  ! Variables from /NEWENG/
+  integer :: niter4
+  logical :: lnews, lsnu
+
+  ! Variables from /BURTOL/
+  real(dp) :: cmin, abstol, reltol
+  integer :: kemmax
+
+  ! Variables from /LOPAL95/
+  character(256) :: fliv95
+  integer :: iliv95
+
+  ! Variables from /GRAVS2/
+  real(dp) :: dt_gs, xmin, ymin
+  logical :: lthoulfit
+
+  ! Variables from /GRAVS3/
+  real(dp) :: fgry, fgrz
+  logical :: lthoul, ldifz
+
+  ! Variables from /GRAVS4/
+  logical :: lnewdif, ldifli
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
