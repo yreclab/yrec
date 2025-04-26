@@ -42,6 +42,7 @@ C*******
       use settings, only : NK  ! /ZRAMP/
       use settings, only : LSTAR, LPASSR, LCALST  ! /CALSTAR/
       use settings, only : SSTANDARD  ! /CROSS/
+      use settings, only : SAGE  ! /DISK/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -59,9 +60,6 @@ C 7/91 FLAG TO TOGGLE BETWEEN NEW/OLD RATES ADDED.
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
 C MHP 9/94
       COMMON/ROTPRT/LPRT0
-C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
-C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
 C DBG 4/26/94 Tired of not have access to current age of model so...
       COMMON/THEAGE/DAGE
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),

@@ -82,6 +82,7 @@ C IU IS THE SHELL NUMBER.
       use settings, only : CLN, CC13  ! /CONST1/
       use settings, only : TCUT  ! /CTLIM/
       use settings, only : SSTANDARD, QS0E, QQS0EE, FO16, FC12  ! /CROSS/
+      use settings, only : WEAKSCREENING  ! /WEAK/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)
@@ -91,7 +92,6 @@ C IU IS THE SHELL NUMBER.
       DIMENSION XFRAC(13),RATE(13),UTOT(13),ZPRD(13),Z53(13),Z43(13),
      1 Z23(13),Z86(13),Q1(8),Q2(8),Q3(8),Q4(8),Q5(8),Q6(7),Q7(7),Q8(7)
       DIMENSION ANUC(13), ZNUC(13)
-      COMMON/WEAK/WEAKSCREENING
 
 C ***************************
 C ANUC ARE ATOMIC MASS UNITS.

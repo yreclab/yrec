@@ -477,4 +477,21 @@ module settings
   ! Variables from /ALATM04/
   character(len=256) :: fallard
 
+  ! Variables from /DISK/
+  ! MHP 9/94 Added disk locking option - flag, time over which locking
+  ! is enforced, and period at which locking is set are options.
+  real(dp) :: sage, tdisk = 0.0e0_dp, pdisk = 7.2722e-6_dp
+  logical :: ldisk = .false.
+
+  ! Variables from /WEAK/
+  real(dp) :: weakscreening = 0.03_dp
+
+  ! Variables from /SBROT/
+  ! MHP 3/99 Added flag to treat the entire star as 'convective'
+  ! for angular momentum purposes.
+  ! parmin.f: MHP 3/99 OPtion for sb rotation enfored in the entire star at
+  !           all times
+  ! midmod.f: MHP 3/09 Added flag to enforce solid body rotation at all times.
+  logical :: lsolid = .false.
+
 end module settings

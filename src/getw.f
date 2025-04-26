@@ -26,6 +26,8 @@ C 11/91 JENV0 ADDED TO CALL.
       use settings, only : ALPHAE, LOVSTE  ! /DPMIX/
       use settings, only : LEXCOM  ! /FLAG/
       use settings, only : LINSTB  ! /ROT/
+      use settings, only : SAGE, TDISK, LDISK  ! /DISK/
+      use settings, only : LSOLID  ! /SBROT/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -67,10 +69,6 @@ C BARRIER.
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
       COMMON/QUADRU/QUAD(JSON),GG(JSON)
       COMMON/ROTPRT/LPRT0
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
-C FOR ANGULAR MOMENTUM PURPOSES.
-      COMMON/SBROT/LSOLID
 C MHP 06/02
 C Time change of theta
       COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),

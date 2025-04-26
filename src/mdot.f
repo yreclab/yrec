@@ -12,11 +12,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CA3  ! /CONST2/
       use settings, only : CSECYR  ! /CONST3/
       use settings, only : WALPCZ, LROT  ! /ROT/
+      use settings, only : SAGE, TDISK, LDISK  ! /DISK/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
       COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
      *               LREIMER,LMDOT
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
