@@ -10,6 +10,8 @@ C if far enough, output pulsation model
       use settings, only : IOPMOD, IOPENV, IOPATM  ! /LUNUM/
       use settings, only : FPMOD, FPENV, FPATM  ! /LUFNM/
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : LPULSE  ! /PULSE/
+      use settings, only : POA, POB, POC, POMAX  ! /PO/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -18,8 +20,6 @@ C if far enough, output pulsation model
       CHARACTER*256 FLAOL2, FOPAL2
 C MHP 10/02 added proper dimensions to last 2 variables
       COMMON/THEAGE/DAGE
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
 
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *             IOLAOL2, IOOPAL2, NK,

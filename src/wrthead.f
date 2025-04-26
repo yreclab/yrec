@@ -11,6 +11,7 @@ C write the headers for all the appropriate output files
       use settings, only : CMSUN, CMBOL  ! /CONST/
       use settings, only : CMIXL  ! /CONST3/
       use settings, only : XENV0, ZENV0  ! /LABEL/
+      use settings, only : ITRVER  ! /TRACK/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -19,8 +20,6 @@ C MHP 10/02 added proper dimensions for flaol2, fopal2
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *             IOLAOL2, IOOPAL2, NK,
      *             LZRAMP, FLAOL2, FOPAL2
-      COMMON/TRACK/ITRVER
-C COMMON/LUNUM/
       COMMON/CHRONE/LRWSH, LISO, IISO, FISO
       SAVE
 

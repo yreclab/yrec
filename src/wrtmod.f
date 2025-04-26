@@ -20,14 +20,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : XENV0, ZENV0  ! /LABEL/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
+      use settings, only : XMSOL, LPULSE, IPVER  ! /PULSE/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
 
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
-C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD

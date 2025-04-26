@@ -25,6 +25,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : LROT  ! /ROT/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
       use settings, only : LSNU  ! /NEWENG/
+      use settings, only : LPULSE  ! /PULSE/
+      use settings, only : ITRVER  ! /TRACK/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -34,11 +36,8 @@ C JVS 10/13 for recalculation of taucz
       REAL*8 DEL1(JSON), DEL2(JSON)
 C end JVS
       COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
-      COMMON/TRACK/ITRVER
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)
-C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1           IOMHD7, IOMHD8
 C*** MHP 7/91 ADD COMMON BLOCKS FOR SOLAR NEUTRINO I/O.

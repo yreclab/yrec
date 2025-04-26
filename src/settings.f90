@@ -266,6 +266,36 @@ module settings
   ! ges 6/15 New common block for light diffusion and new diff routine.
   logical :: lnewdif = .false., ldifli = .false.
 
+  ! Variables from /PULSE/
+  ! DBG Pulse
+  ! DBG Pulse data card for pulsation
+  real(dp) :: xmsol
+  logical :: lpulse = .false.
+  integer :: ipver = 1
+
+  ! Variables from /PO/
+  ! DBG Pulse out 7/92
+  ! Variables used to control output of pulsation models.  Model
+  ! output after has traveled pomax in hr diagram
+  ! lpout and pomax added to control common block, rest in physics
+  real(dp) :: poa = 1.0_dp, pob = 10.0_dp, poc = 0.0_dp, pomax = 0.1_dp
+  logical :: lpout = .false.
+
+  ! Variables from /TRACK/
+  integer :: itrver = 1
+
+  ! Variables from /ATMOS/
+  ! surfbc.f: MHP 9/01 Added common block
+  !           needed to switch to gray atmosphere from Kurucz/Ah above log
+  !           Teff = 3.95
+  ! putstore.f: LLP 3/19/03 Add required COMMON blocks such that header flags
+  !                 ATM, EOS, HIK and LOK can be determined.
+  ! parmmin.f: MHP 06/13 Added memory of whether the choice of atmospheres has
+  !            been changed during the run, and what the original setting was
+  real(dp) :: hras
+  integer :: kttau = 0, kttau0
+  logical :: lttau
+
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
   ! parmin.f: MHP data for Monte Carlo option, etc

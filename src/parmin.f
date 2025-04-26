@@ -4,7 +4,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
-      use params, only : nt, ng, ntc, ngc, nts, nps, json
+      use params, only : NT, NG, NTC, NGC, NTS, NPS, JSON
       use settings, only : VNEW  ! /VNEWCB/
       use settings, only : ILAST, IDEBUG, ITRACK, ISHORT,
      1    IMILNE, IMODPT, ISTOR, IOWR  ! /LUOUT/
@@ -57,6 +57,10 @@ C MHP 6/98
       use settings, only : FGRY, FGRZ, LTHOUL, LDIFZ  ! /GRAVS3/
       use settings, only : LNEWDIF, LDIFLI  ! /GRAVS4/
       use settings, only : GRTOL, ILAMBDA, NITER_GS, LDIFY  ! /GRAVST/
+      use settings, only : LPULSE, IPVER  ! /PULSE/
+      use settings, only : POA, POB, POC, POMAX, LPOUT  ! /PO/
+      use settings, only : ITRVER  ! /TRACK/
+      use settings, only : KTTAU, KTTAU0, LTTAU  ! /ATMOS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -82,15 +86,6 @@ C      and extra acoustic depth (calcad.f) output files
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
 
-C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-C DBG PULSE OUT 7/92
-C VARIABLES USED TO CONTROL OUTPUT OF PULSATION MODELS.  MODEL
-C OUTPUT AFTER HAS TRAVELED POMAX IN HR DIAGRAM
-C LPOUT AND POMAX ADDED TO CONTROL COMMON BLOCK, REST IN PHYSICS
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
-      COMMON/TRACK/ITRVER
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1           IOMHD7, IOMHD8
       COMMON/CORE/LCORE,MCORE,FCORE
@@ -358,11 +353,6 @@ C END JVS
       DATA LJDOT0,ALFA,FK/.TRUE.,1.5D0,1.0D0/
 C MHP 8/17 INITIALIZED WMAX_SUN
       DATA WMAX,WMAX_SUN/3.0D-4,1000.0/
-C DBG PULSE DATA CARD FOR PULSATION
-      DATA LPULSE/.FALSE./
-      DATA IPVER/1/
-      DATA ITRVER/1/
-      DATA KTTAU/0/
 C YC  If LMHD is TRUE use MHD equation of state tables.  LU numbers
 C     are stored in IOMHDi.
 C DBG If LCORE is TRUE then calculate shells interior to start up
@@ -375,8 +365,6 @@ C DBG 11/11/91
       DATA LRWSH,LISO/.FALSE.,.FALSE./
 C 3/92 DBG
       DATA LNULOS1/.FALSE./
-C DBG PULSE OUT 7/92
-      DATA POMAX,POA,POB,POC,LPOUT/0.1D0,1.0D0,10.0D0,0.0D0,.FALSE./
 C MHP 06/13 ADDED FLAG TO CALIBRATE TO SOLAR Z/X, SOLAR Z/X, SOLAR AGE
       DATA TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLAGE,CALSOLZX/1.0D-5,
      *     1.0D-4,1.0D-3,.FALSE.,.FALSE.,4.57D9,0.02292D0/

@@ -32,6 +32,9 @@ C*******
       use settings, only : ENDAGE, LENDAG, END_DCEN, END_XCEN, END_YCEN  ! /SETT/
       use settings, only : NITER4, LNEWS, LSNU  ! /NEWENG/
       use settings, only : FGRZ  ! /GRAVS3/
+      use settings, only : XMSOL, LPULSE  ! /PULSE/
+      use settings, only : LPOUT  ! /PO/
+      use settings, only : KTTAU  ! /ATMOS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -43,7 +46,6 @@ C DBGLAOL
       COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
      *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
      *   FLAOL, FPUREZ
-      COMMON/TRACK/ITRVER
 C 11/91 COMMON BLOCKS ADDED FOR PRESSURE SCALE HEIGHT CALC. FOR LIBURN
       COMMON/LIOV/PSCAL0,PSCAL1
       COMMON/PREVCZ/RBASE0,BLI6OLD,BLI7OLD,BBE9OLD,JENVOS
@@ -61,8 +63,6 @@ C MHP 9/94
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
       COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
       COMMON/CHRONE/LRWSH, LISO, IISO, FISO
 C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
 C a set of runs.
@@ -85,11 +85,6 @@ C JVS 02/12; KC 2025-04-22 Commented this out as it was not used.
 C      COMMON/STCH/HCOMPF(15,JSON),HRF(JSON),HPF(JSON),HDF(JSON),
 C     * HSF(JSON),HTF(JSON)
 
-C DBG PULSE OUT 7/92
-C variables used to contral output of pulsation models.  model
-C output after has traveled pomax in HR diagram
-C LPOUT and POMAX added to control common block, rest in physics
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
 C MHP 1/93 add common blocks for automatic calibration of solar models.
       COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE

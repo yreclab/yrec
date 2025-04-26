@@ -16,6 +16,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLSUNL  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/
+      use settings, only : KTTAU, KTTAU0, LTTAU  ! /ATMOS/
 
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
 C INPUTS   LRESET = .T.  REDO ALL 3 ENVELOPES AND RETRIANGULATE IF NEED
@@ -27,10 +28,6 @@ C BOTH LNEW AND LRESET ARE RESET TO .FALSE.
      *     ESTORE(4),LC(JSON)
       COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
-C MHP 9/01 ADDED COMMON BLOCK
-C NEEDED TO SWITCH TO GRAY ATMOSPHERE FROM KURUCZ/AH ABOVE LOG
-C TEFF = 3.95
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
       DATA NUMENV/0/
 
 C G Somers 10/14, Add spot common block

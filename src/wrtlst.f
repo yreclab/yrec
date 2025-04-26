@@ -21,6 +21,7 @@ C     WRITE MODEL OUT IN ASCII FORMAT
       use settings, only : LDH  ! /DEBHU/
       use settings, only : LDIFZ  ! /GRAVS3/
       use settings, only : LDIFY  ! /GRAVST/
+      use settings, only : KTTAU  ! /ATMOS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -37,9 +38,6 @@ C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
       COMMON /I2O/ COMPMIX
 
-C llp 3/19/03 Add required COMMON blocks such that header flags
-C     ATM, EOS, HIK and LOK can be determined.
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
 c      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,

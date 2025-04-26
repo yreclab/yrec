@@ -11,6 +11,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CGAS, CA3, CA3L, CSIG, CSIGL, CGL, CMKH  ! /CONST2/
       use settings, only : CDELRL, CMIXL2, CMIXL3, CLNDP, CSECYR  ! /CONST3/
       use settings, only : CDH, DHNUE  ! /DEBHU/
+      use settings, only : HRAS, KTTAU  ! /ATMOS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -31,7 +32,6 @@ C DBGLAOL
       COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
       COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
      1     IOMHD7, IOMHD8
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
       COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
      *              ATMGL(NG),ATMZ,IOATM,FATM
 C JNT 06/14
