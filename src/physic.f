@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,LCZ,M,TEFFL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : XENV, ZENV, AMUENV  ! /COMP/
       use settings, only : YENV, Y3ENV  ! /COMP2/
       use settings, only : CLN  ! /CONST1/

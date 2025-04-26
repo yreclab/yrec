@@ -4,11 +4,12 @@ C MHP 10/02 ECOD, ECOD2 NO LONGER USED; OMITTED FROM CALL
      *                  LPRT,M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,
      *                  QIW,R0,WSAV,ID,IDM,LOKAD)
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT, IMODPT  ! /LUOUT/
       use settings, only : NPRTPT  ! /CCOUT1/
       use settings, only : DJOK, ITDIF2  ! /DIFUS/
       use settings, only : ACFPFT  ! /ROT/
+      use mmodel, only : LDIFAD  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -17,8 +18,6 @@ C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
      *     ETA2X(JSON)
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-C MHP 7/93
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
 C MHP 3/93
       COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
 C MHP 11/94

@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE HTIMER(DELTS,DELTSH,M,HD,HL,HS1,HS2,HT,LC,HCOMP,JCORE,
      * JXMID,TLUMX,DAGE,DDAGE,QDT,QDP,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CSECYR  ! /CONST3/
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : LPTIME  ! /CT3/

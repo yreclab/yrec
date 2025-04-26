@@ -3,7 +3,7 @@ C FUNC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE FUNC(X,G,S,R0,HS,AINT,Q,W2,A,I)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, C4PI, CC13  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
 

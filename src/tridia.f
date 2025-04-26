@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE TRIDIA(N,EI,EJ,DJ,SUMDJ)
 
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8 (A-H,O-Z)
       COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
       DIMENSION EI(JSON),EJ(JSON),DJ(JSON),U0(JSON)

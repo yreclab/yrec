@@ -3,7 +3,7 @@ C     HSUBP
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE HSUBP (HCOMP,HD,HP,HR,HS,HT,JEDGE,PSCAHE)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/

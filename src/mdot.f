@@ -5,7 +5,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MDOT(DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,HSTOT,
      *                HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *                EACC,ETHAV,SUMDM,SENVOLD)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : STOTAL, SENV  ! /COMP/
       use settings, only : CMSUN  ! /CONST/
       use settings, only : CLN, CC23  ! /CONST1/

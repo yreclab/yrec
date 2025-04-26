@@ -2,7 +2,7 @@ C$$$$$$
       SUBROUTINE MCOWIND(BL,DT,HICZ,IT,OMEGAS,SMASS,
      *                  TEFFL,WOLD,WIND1,WIND2)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUNL, CMSUN, CRSUN  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/

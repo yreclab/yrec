@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QENV(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : STOTAL  ! /COMP/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CGL  ! /CONST2/

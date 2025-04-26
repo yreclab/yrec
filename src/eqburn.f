@@ -5,7 +5,7 @@
      *                  HR10,HR11,HR12,HS2,HT,IBEGIN,IEND,
      *                  DCDT,DODT,DXDT,DYDT,XC12,XO16,X,Z)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : TCUT  ! /CTLIM/
 
       IMPLICIT REAL*8(A-H,O-Z)

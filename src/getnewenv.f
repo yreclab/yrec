@@ -6,7 +6,7 @@ C THE DESIRED ENVELOPE MASS
       SUBROUTINE GETNEWENV(SENVOLD,HCOMP,HD,HL,HP,HR,HS,HS1,HS2,
      *                     HSTOT,HT,LC,ETA2,HG,HI,HJM,QIW,R0,
      *                     HKEROT,BL,SJTOT,SKEROT,TEFFL,M,LNEW)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : STOTAL, SENV  ! /COMP/
       use settings, only : CLSUNL  ! /CONST/
       use settings, only : CLN, C4PIL, CC23  ! /CONST1/

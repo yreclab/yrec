@@ -3,7 +3,7 @@ C QGAUSS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QGAUSS(G0G,GINVG,SPHIG,B,R0,HS,AINT,Q,W2,A,I)
 
-      use params, only : json
+      use mmodel, only : json
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

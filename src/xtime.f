@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE XTIME(HD,HCOMP,HL,HS1,HS2,HT,HYDLUM,JCORE,JXMID,M,
      *   DELTSH,HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HR10,HR11,HR12,
      *   HR13,HF1,HF2,JXBEG)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN, CMSUN  ! /CONST/
       use settings, only : CSECYR  ! /CONST3/
       use settings, only : ATIME  ! /CTLIM/

@@ -5,7 +5,7 @@ C 2) SOLVE FOR BURNING IN EACH CONVECTION ZONE.
      *                  NRZONE,NZONE
      *                  ,HSTOT,HD,HS,HR,HP,LC,HS1)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/

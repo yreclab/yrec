@@ -3,7 +3,7 @@ C $$$$$$
      *                          IBEGIN,IEND,M,QCOD1X,QCOD2X,DR,
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
      *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : LDIFZ  ! /GRAVS3/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

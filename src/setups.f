@@ -3,7 +3,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SETUPS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETUPS(V)
-      use params, only : json, nt, ng, ntc, ngc, nts, nps, nta, nga
+      use params, only : nt, ng, ntc, ngc, nts, nps, nta, nga
+      use mmodel, only : json
       use settings, only : IFERMI, FFERMI, ISHORT  ! /LUNUM/, /LUFNM/, /LUOUT/
       use settings, only : XENV  ! /COMP/
       use settings, only : CLSUN, CLSUNL, CLNSUN, CMSUN, CMSUNL, CRSUN, CRSUNL, CMBOL  ! /CONST/

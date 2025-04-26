@@ -9,7 +9,7 @@ C   llp  06/15/2009
       SUBROUTINE MASSLOSS(BL,DAGE,DELTS,HCOMP,HD,HJM,HP,HR,HS,
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUNL, CMSUN, CRSUN  ! /CONST/
       use settings, only : C4PI, C4PIL  ! /CONST1/
       use settings, only : CA3, CSIG, CSIGL, CGL  ! /CONST2/

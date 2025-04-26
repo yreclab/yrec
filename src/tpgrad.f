@@ -7,7 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *DEL,DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
      *VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLSUNL  ! /CONST/
       use settings, only : CLN  ! /CONST1/

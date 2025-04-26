@@ -10,7 +10,7 @@ C APPROXIMATION FOR A T-TAU RELATION.
 C IT ALSO RETURNS TL,O, AND FXION FOR OUTPUT PURPOSES
 C   Q(TAU) = 0.6666667
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, CC23  ! /CONST1/
       use settings, only : HRAS, KTTAU  ! /ATMOS/
       use settings, only : LMHD  ! /MHD/

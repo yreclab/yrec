@@ -2,7 +2,7 @@ C $$$$$$
 C MHP 06/02
       SUBROUTINE DADCOEFT(DR,DT,EI,EJ,EW,NTOT,WIND1,WIND2,DJ,
      *                    ECOD2,SUMDJ,LFIX,LOKAD)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : DJOK, ITDIF2  ! /DIFUS/
       use settings, only : FW, FC  ! /VMULT/
       use settings, only : FESC, FSSC, FGSFC  ! /VMULT2/

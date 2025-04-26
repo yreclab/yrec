@@ -2,10 +2,11 @@ C $$$$$$
       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,LCZ,M,HRU,
      *                  QWRMAX)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN  ! /CONST/
       use settings, only : CLN, C4PI, CC13, CC23, CPI  ! /CONST1/
       use settings, only : CGAS, CA3, CSIG, CGL  ! /CONST2/
+      use mmodel, only : LDIFAD  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -41,7 +42,6 @@ C HIGHER ORDER TERMS IN M.C. VELOCITY
      *              FV1A(JSON),FV1B(JSON),FV2A(JSON),FV2B(JSON),
      *              EV0(JSON),EV1A(JSON),EV1B(JSON),EV2A(JSON),
      *              EV2B(JSON),DSS(JSON),DGSF(JSON),ESS(JSON),EGSF(JSON)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
       DIMENSION HD(JSON),HG(JSON),HL(JSON),HP(JSON),HR(JSON),HS1(JSON),
      *          HT(JSON),LCZ(JSON),HRU(JSON),QWRMAX(JSON),
      *          CPM(JSON),OPM(JSON)

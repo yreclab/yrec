@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE SHAPE(HD,HR,HS,JSTART,JEND,OMEGA,ETA2,R0)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, C4PI3L, CC13  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : ACFPFT, ITFP1, ITFP2  ! /ROT/

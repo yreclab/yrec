@@ -8,7 +8,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,JENV,
      *TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,LPUNCH,
      * FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,NKK)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISCOMP  ! /LUNUM/
       use settings, only : FSCOMP  ! /LUFNM/
       use settings, only : ILAST, ITRACK, ISHORT, ISTOR  ! /LUOUT/

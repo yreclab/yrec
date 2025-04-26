@@ -3,7 +3,7 @@ C CONVEC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CONVEC(HCOMP,HD,HP,HR,HS,HT,LC,M,MRZONE,MXZONE,MXZON0,
      *                  JCORE,JENV,NRZONE,NZONE,NZONE0)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : LOVSTC, LOVSTE, LOVSTM  ! /DPMIX/
 

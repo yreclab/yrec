@@ -4,7 +4,7 @@ C $$$$$$
      *               EX,EY,EZ,ELI,EM_H,ER_H,EDEN_H,ETEM_H,EHQPR_H,EDELR_H,
      *               EX_H,EY_H,EZ_H,ELI_H)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : LDIFLI  ! /GRAVS4/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

@@ -137,7 +137,7 @@ C  FOR OTHER ARRAYS IN THE PROGRAM.
 C  IU IS THE SHELL NUMBER.
 
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, CC13, CC23  ! /CONST1/
       use settings, only : TCUT  ! /CTLIM/
       use settings, only : LSNU  ! /NEWENG/

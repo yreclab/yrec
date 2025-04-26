@@ -5,7 +5,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C REMAP
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE REMAP
-      use params, only : nt, ng, nta, nga, nts, nps, json
+      use params, only : nt, ng, nta, nga, nts, nps
+      use mmodel, only : json
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : DTWIND  ! /CT2/
       use settings, only : LPTIME  ! /CT3/

@@ -7,7 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)
 C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES
 C ADDED (COMMON BLOCK NEWENG).
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN, CLNSUN  ! /CONST/
       use settings, only : CLN, CLNI, C4PIL, C4PI3L, CC13  ! /CONST1/
       use settings, only : CGL  ! /CONST2/

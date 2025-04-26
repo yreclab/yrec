@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE MIXGRID(COD2,HD,HL,HP,HR,HS,HS1,HS2,
      *                   HSTOT,IBEG,IEND,LCZ,M,
      *                   ECOD2,EM,LDUM2)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN  ! /CONST/
       use settings, only : CLN, C4PI  ! /CONST1/
       use settings, only : CGL  ! /CONST2/

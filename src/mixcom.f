@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE MIXCOM(DT,ECOD2,EM,HS2,IBEG,IEND,LCZ,LOK,M,HCOMP,
      *           JBEG,JEND)
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT

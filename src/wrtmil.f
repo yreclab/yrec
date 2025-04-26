@@ -8,7 +8,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C WRTMIL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE WRTMIL(HCOMP,HD,HL,HP,HR,HS1,M,MODEL)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : FMILNE, IMILNE  ! /LUFNM/, /LUOUT/
       use settings, only : NPRTPT  ! /CCOUT1/
       use settings, only : XENV, ZENV, STOTAL  ! /COMP/

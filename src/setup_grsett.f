@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE SETUP_GRSETT(DT,HQPR,HR,HD,HS1,HT,LC,M,STOT,COD1,COD2,
      *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLN, CC13  ! /CONST1/
       use settings, only : XMIN, YMIN, LTHOULFIT  ! /GRAVS2/

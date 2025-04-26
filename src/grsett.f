@@ -3,7 +3,7 @@ C GRESETT
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GRSETT(DT,HCOMP,HQPR,HR,HD,HS1,HT,LC,M,STOT)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : C4PI  ! /CONST1/
       use settings, only : LDIFZ  ! /GRAVS3/

@@ -3,11 +3,6 @@ module params
   implicit none
   public
 
-  ! the array size, i.e. max # of shells is specified in the 
-  ! parameter statement.  it defines JSON.  to change the array
-  ! size do a global change on "JSON=2000" or whatever.
-  integer, parameter :: json = 5000
-
   ! table dimensions for opal95, op95, and ll95 (KC 2025-04-19)
   integer, parameter :: numtt = 70, numd = 19, numx = 10, numz = 13, numxz = 126
 

@@ -12,7 +12,8 @@ C  WRTLST WRITES THE CONVERGED MODEL TO LAST MODEL A(STORES LAST
 C  CONVERGED MODEL) AND STORE MODELS D(EVERY NPUNCH MODELS)
 
 C     WRITE MODEL OUT IN ASCII FORMAT
-      use params, only : json, nts, nps
+      use params, only : nts, nps
+      use mmodel, only : json
       use settings, only : ILAST, ISHORT, IOWR  ! /LUOUT/
       use settings, only : CMIXL  ! /CONST3/
       use settings, only : LOVSTC, LOVSTE, LOVSTM, LSEMIC  ! /DPMIX/

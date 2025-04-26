@@ -7,7 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *       LNEW,LRESET,LSBC,KSAHA,KENV,KATM,HSTOT,BL,
      *       TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : LSTORE, LSTENV  ! /CCOUT/
       use settings, only : NPENV  ! /CCOUT1/

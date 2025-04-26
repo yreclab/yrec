@@ -4,7 +4,7 @@ C                           G Somers, 3/17                         C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,
      *                  LC,RBCZ)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUNL  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/

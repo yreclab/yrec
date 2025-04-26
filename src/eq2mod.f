@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE EQ2MOD(DJ,EJ,HS2,IBEG,IEND,LCZ,M,SUMDJ,HJM)
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       COMMON/SPLIN/XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON)

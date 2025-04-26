@@ -5,7 +5,7 @@ C ENTIME
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENTIME(DELTS,HL,HP,HR,HT,TEFFL,M,EDELT)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : TRIDT, TRIDL  ! /CENV/
       use settings, only : ATIME  ! /CTLIM/
 

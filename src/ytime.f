@@ -4,7 +4,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE YTIME(EG,HCOMP,HD,HL,HS1,HT,JCORE,M,DELTSY,
      *   HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HR10,HR11,HR12,HR13,
      *   HF1,HF2,QDP,QDT,JXBEG)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN  ! /CONST/
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : LPTIME  ! /CT3/

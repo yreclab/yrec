@@ -1,6 +1,6 @@
 C$$$$$$
       SUBROUTINE TAUCAL(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,SVEL,DEL1,DEL2,MINT)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : STOTAL  ! /COMP/
       use settings, only : CMSUN  ! /CONST/
       use settings, only : CLN  ! /CONST1/

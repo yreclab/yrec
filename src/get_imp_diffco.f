@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE GET_IMP_DIFFCO(ALPHA,ECOD2_H,EX_H,EQCOD2X_H,A,B,C,NPT)
 
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION ALPHA(JSON),ECOD2_H(JSON),EX_H(JSON),EQCOD2X_H(JSON),

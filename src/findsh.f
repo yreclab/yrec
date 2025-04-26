@@ -5,7 +5,7 @@ C FINDSH
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE FINDSH(HCOMP,HL,LC,M,JCORE,JENV,JXBEG,JXEND,JXMID,
      *                  LSHELL)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ATIME  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)

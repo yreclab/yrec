@@ -5,7 +5,7 @@ C$$$$$$
      *            LCZM,LCZSUR,OMEGAM,R0M,QIWM,MRZONE,MXZONE,NRZONE,
      *            NZONE)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CMSUN  ! /CONST/
       use settings, only : CLN, CC23  ! /CONST1/
       use settings, only : TCUT  ! /CTLIM/

@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE MICRODIFF_ETM(DT,ER,EDELX,EDELZ,EDELLI,IBEGIN,IEND,NPT,
      *     HCOMP,HQPR,HRU,HS1,HTU,M,STOT,NLIGHT,CSLIGHT)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : LDIFZ  ! /GRAVS3/
       use settings, only : LDIFLI  ! /GRAVS4/
       IMPLICIT REAL*8(A-H,O-Z)

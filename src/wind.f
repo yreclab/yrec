@@ -4,7 +4,7 @@ C MHP 10/02 UNUSED LFIRST REMOVED FROM CALL
      *                SJTOT,SMASS,TEFFL,HICZ,HJM)
 C     *                SJTOT,SMASS,TEFFL,HICZ,HJM,LFIRST)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUNL, CRSUN  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/

@@ -3,7 +3,7 @@ C SCONVEC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SCONVEC(DELTS,HCOMP,HD,HL,HP,HR,HS,HT,M,MXZONE,NZONE,TEFFL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLSUN  ! /CONST/
       use settings, only : CLN, C4PI  ! /CONST1/

@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,
      *HL,HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
      * DAGE)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : IOPMOD  ! /LUNUM/
       use settings, only : IMODPT  ! /LUOUT/
       use settings, only : LSTORE, LSTATM, LSTENV, LSCRIB  ! /CCOUT/

@@ -47,7 +47,8 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT,
      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)
-        use params, only : json, nts, nps
+        use params, only : nts, nps
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : STOTAL  ! /COMP/
       use settings, only : CLSUNL, CRSUNL  ! /CONST/

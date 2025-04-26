@@ -3,7 +3,7 @@ C MICRODIFF
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE MICRODIFF(DT,HCOMP,HQPR,HR,HD,HS1,HT,LC,M,STOT)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : LDIFZ  ! /GRAVS3/
       use settings, only : LDIFLI  ! /GRAVS4/
       use settings, only : LDIFY  ! /GRAVST/

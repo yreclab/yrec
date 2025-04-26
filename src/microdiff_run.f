@@ -5,7 +5,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      *               EHQPR,EDELR,ESPEC,EDXDR,EM_H,ER_H,EDEN_H,ETEM_H,EHQPR_H,
      *               EDELR_H,ESPEC_H,EDXDR_H,THEA,THEZ,J)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT, IOWR  ! /LUOUT/
       use settings, only : C4PI  ! /CONST1/
       use settings, only : GRTOL, NITER_GS  ! /GRAVST/

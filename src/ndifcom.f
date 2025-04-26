@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE NDIFCOM(DT,COD2,ECOD2,EM,HD,HL,HP,HR,HS,HS1,HS2,
      *                   HSTOT,HV,IBEG,IEND,IMAX,IMIN,LCZ,LOK,M,NTOT,
      *                   HCOMP,JBEG,JEND)
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION COD2(JSON),ECOD2(JSON),EM(JSON),HD(JSON),HL(JSON),

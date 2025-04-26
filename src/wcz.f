@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE WCZ(HD,HJM,HR,HS,HS2,ISTART,IEND,ETA2,HI,OMEGA,
      *               QIW,R0,M)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN  ! /CONST1/
       use settings, only : WALPCZ  ! /ROT/
 

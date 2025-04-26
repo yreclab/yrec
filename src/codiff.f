@@ -4,11 +4,12 @@ C $$$$$$
 C 2/91 SUBROUTINE ALTERED TO ALLOW DIFFERENT FC'S FOR DIFFERENT
 C      MECHANISMS (COMMON BLOCK VMULT2)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : C4PI  ! /CONST1/
       use settings, only : FW, FC  ! /VMULT/
       use settings, only : FESC, FSSC, FGSFC  ! /VMULT2/
       use settings, only : LNOJ  ! /NOTRAN/
+      use mmodel, only : VFC, LVFC  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -21,7 +22,6 @@ C      MECHANISMS (COMMON BLOCK VMULT2)
      *     THDIF(JSON),SVEL(JSON),VISC(JSON),EPSM(JSON)
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
       DIMENSION HRU(JSON),HV(JSON),COD(JSON),LC(JSON),LCZ(JSON),
      *  RMID(JSON),COD2(JSON)
 C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT

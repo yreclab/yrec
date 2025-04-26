@@ -7,7 +7,7 @@ C $$$$$$
      *                  MRZONE,MXZONE,NRZONE,NZONE,
      *                  COD2,HV,LOK)
 C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
-      use params, only : json
+      use mmodel, only : json
       use settings, only : NPRTMOD  ! /CCOUT1/
       use settings, only : LSCRIB  ! /CCOUT/
       use settings, only : CLSUN  ! /CONST/
@@ -15,6 +15,7 @@ C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
       use settings, only : ITDIF2  ! /DIFUS/
       use settings, only : LEXCOM  ! /FLAG/
       use settings, only : LNOJ  ! /NOTRAN/
+      use mmodel, only : VFC, LVFC, LDIFAD  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -32,8 +33,6 @@ C 3/92 COMMON BLOCK ADDED FOR CENTERED DW/DLNR.
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
       COMMON/OLDAB/HCOMPS(15,JSON)
-C ADD OPTION FOR VARIABLE FC.
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
       COMMON/ROTPRT/LPRT0
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.

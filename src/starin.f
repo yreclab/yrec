@@ -8,7 +8,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V)
 
-      use params, only : json, nts, nps
+      use params, only : nts, nps
+      use mmodel, only : json
       use settings, only : IFIRST  ! /LUNUM/
       use settings, only : vnew  ! /VNEWCB/ DBG 1/96 VNEW REPLACES V
       use settings, only : ISHORT, IOWR  ! /LUOUT/

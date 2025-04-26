@@ -1,6 +1,6 @@
       SUBROUTINE GETQUA(HD,HG,HRU,OMEGA,M)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
 

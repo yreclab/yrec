@@ -8,7 +8,8 @@ C*******
 C initialize all variables, set up common blocks
 C*******
 
-      use params, only : JSON, NUMTT, NUMD, NUMX, NUMZ, NUMXZ
+      use params, only : NUMTT, NUMD, NUMX, NUMZ, NUMXZ
+      use mmodel, only : json
       use settings, only : ILAST, IDEBUG, ITRACK, ISHORT, IMODPT, ISTOR, IOWR  ! /LUOUT/
       use settings, only : IFIRST, IOPMOD, IOPENV, IOPATM, IDYN, ISNU  ! /LUNUM/
       use settings, only : FPMOD, FPENV, FPATM, FDYN  ! /LUFNM/

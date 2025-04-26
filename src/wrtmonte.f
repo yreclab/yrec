@@ -2,7 +2,7 @@ C      SUBROUTINE FOR WRITING MONTE CARLO OUTPUT
       SUBROUTINE WRTMONTE(HCOMP,HD,HL,HP,HR,HS,HT,LC,M,MODEL,DAGE,
      *DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,JENV,
      *TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,RLL,ICONV,NK,NN)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : IMONTE1, IMONTE2  ! /IOMONTE/
       use settings, only : RESCAL  ! /CKIND/
       use settings, only : CMIXLA  ! /NEWXYM/

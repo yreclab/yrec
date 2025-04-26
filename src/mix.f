@@ -27,7 +27,7 @@ C CONTAIN NEUTRINO FLUXES FOR SOLAR NEUTRINO CALCULATIONS.
      *     HT,ITLVL,LC,M,QDT,QDP,DDAGE,JCORE,JENV,
      *     MXZONE,MXZON0,TEFFL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/

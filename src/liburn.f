@@ -5,7 +5,7 @@ C LIBURN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
       SUBROUTINE LIBURN(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLN  ! /CONST1/
       use settings, only : LOVSTE  ! /DPMIX/

@@ -3,7 +3,7 @@
 C $$$$$$
       SUBROUTINE GETROT(HD,HJM,HR,HS,HS2,LCZ,M,ETA2,HI,OMEGA,QIW,R0)
 
-      use params, only : json
+      use mmodel, only : json
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HD(JSON),HJM(JSON),HR(JSON),HS(JSON),HS2(JSON),

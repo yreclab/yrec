@@ -15,7 +15,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *OMEGA,R0,ITDONE,HG,HI,HJM, ITLVL,LCZ,MRZONE,MXZONE,NRZONE,NZONE,
      *QIW,HKEROT,HKEROT0)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : LCORR  ! /CCOUT2/
       use settings, only : XNEW, ZNEW, SENV  ! /COMP/

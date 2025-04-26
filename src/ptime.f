@@ -5,7 +5,7 @@ C PTIME
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PTIME(DELTS,HL,HP,HR,HT,M,PDELT)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ATIME  ! /CTLIM/
 
       IMPLICIT REAL*8 (A-H,O-Z)

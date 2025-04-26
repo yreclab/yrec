@@ -9,7 +9,7 @@ C  THIS SR COMPUTES THE LOCAL PRESSURE SCALE HEIGHT AT BOTH EDGES OF A
 C  GIVEN CONVECTIVE REGION AND LOCATES THE BOUNDARIES OF OVERSHOOT
 C  REGIONS BASED ON THE USER-SPECIFIED EXTENT.
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : CLN  ! /CONST1/
       use settings, only : ALPHAC, ALPHAE, ALPHAM, BETAC, IOV1, IOV2, LOVSTC, LOVSTE, LOVSTM, LOVMAX  ! /DPMIX/

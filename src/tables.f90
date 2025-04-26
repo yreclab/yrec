@@ -1,6 +1,6 @@
 module tables
   use, intrinsic :: iso_fortran_env, only : dp => real64
-  use params, only : nt, ng, ntc, ngc  ! , nts, nps, json
+  use params, only : nt, ng, ntc, ngc  ! , nts, nps
   implicit none
   public
 

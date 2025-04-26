@@ -4,7 +4,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE KEMCOM(HT,IBEGIN,IEND,HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,
      *HR9,HR10,HR11,HR12,HR13,HF1,HS2,HCOMP,DDAGE,ITLVL)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : TCUT  ! /CTLIM/
       use settings, only : CMIN, ABSTOL, RELTOL, KEMMAX  ! /BURTOL/

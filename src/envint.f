@@ -6,7 +6,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENVINT(B,FPL,FTL,GL,HSTOT,IE,LPRT,LSBC,PLIM,RL,TEFFL,
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT)
-      use params, only : json, nt, ng, ntc, ngc, nta, nga
+      use params, only : nt, ng, ntc, ngc, nta, nga
+      use mmodel, only : json
       use settings, only : ISHORT, ISTOR, IOWR  ! /LUOUT/
       use settings, only : IOPENV, IOPATM  ! /LUNUM/
       use settings, only : LSTATM, LSTENV  ! /CCOUT/

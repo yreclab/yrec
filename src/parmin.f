@@ -4,7 +4,8 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
-      use params, only : NT, NG, NTC, NGC, NTS, NPS, JSON
+      use params, only : NT, NG, NTC, NGC, NTS, NPS
+      use mmodel, only : json
       use settings, only : VNEW  ! /VNEWCB/
       use settings, only : ILAST, IDEBUG, ITRACK, ISHORT,
      1    IMILNE, IMODPT, ISTOR, IOWR  ! /LUOUT/
@@ -79,6 +80,7 @@ C MHP 6/98
       use settings, only : FALEX06  ! /ALEX06/
       use settings, only : XALEX, ZALEX  ! /ALEXMIX/
       use settings, only : LNOJ  ! /NOTRAN/
+      use mmodel, only : LVFC, LDIFAD  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -99,7 +101,6 @@ C      and extra acoustic depth (calcad.f) output files
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
 
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
 C 8/96 MHP NEW COMMON BLOCK FOR NUCLEAR REACTION RATES.
 C      COMMON/CROSS/SSTANDARD(17)
 C MHP 9/14 EXTENDED TO PERMIT USER RESCALING OF DERIVATES OF REACTION
@@ -280,9 +281,6 @@ c
       DATA WEAKSCREENING/0.03D0/
       DATA SSTANDARD/0.9828,1.0485,0.9815,0.9241,1.3818,1.0542,1.0,
      $ 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0108,0.7819,0.2875/
-C MHP 7/93 VARIABLE FC OPTION
-C MHP 9/94 COMBINED DIFFUSION/ADVECTION OPTION
-      DATA LVFC,LDIFAD/.FALSE.,.FALSE./
       DATA TDISK,PDISK,LDISK/0.0D0,7.2722D-6,.FALSE./
       DATA KINDRN/50*1/
       DATA RSCLM, RSCLX, RSCLZ, RSCLCM

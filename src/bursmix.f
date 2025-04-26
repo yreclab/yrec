@@ -2,7 +2,7 @@ C $$$$$$
       SUBROUTINE BURSMIX(COD2,DELTS,HCOMP,HD,HL,HP,HR,HS,HS1,HS2,HSTOT,
      *                   HT,HV,IMAX,IMIN,JENV0,JENV1,LOK,LCZ,M,MRZONE,
      *                   MXZONE,NRZONE,NZONE)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : LEXCOM  ! /FLAG/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

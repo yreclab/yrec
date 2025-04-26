@@ -18,7 +18,8 @@ C  PUTSTORE PUTS THE MOST RECENT VERBOSE OUTPUT FILE INTO THE .STORE FILE,
 C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS.
 
 C     WRITE MODEL OUT IN ASCII FORMAT
-      use params, only : json, nts, nps
+      use params, only : nts, nps
+      use mmodel, only : json
       use settings, only : ISHORT, ISTOR  ! /LUOUT/
       use settings, only : LSTORE, LSTATM, LSTENV, LSTMOD, LSTPHYS, LSTROT  ! /CCOUT/
 C KC 2025-04-23 LMILNE was not imported but was used in this source file.

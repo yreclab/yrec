@@ -1,6 +1,6 @@
 C$$$$$$
       SUBROUTINE WTIME(DELTS,M,OMEGA,DELTSW,DWMAX)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ATIME  ! /CTLIM/
       use settings, only : DTWIND  ! /CT2/
 

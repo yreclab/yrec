@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE CCOEFT(COD,DR,DT,ECOMP,EM,NTOT)
-      use params, only : json
+      use mmodel, only : json
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)

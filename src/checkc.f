@@ -1,6 +1,6 @@
 C $$$$$$
       SUBROUTINE CHECKC(HCOMP,IT,LPRT,M,DT,IREDO,LOK,LREDO)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : XENV, ZENV, AMUENV  ! /COMP/
       use settings, only : YENV, Y3ENV  ! /COMP2/

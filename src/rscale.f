@@ -4,7 +4,7 @@ C RSCALE
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RSCALE(HL,HCOMP,HS,HSTOT,M,NK,SMASS,LC)
 C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
-      use params, only : json
+      use mmodel, only : json
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : RESCAL  ! /CKIND/
       use settings, only : XENV, ZENV, XNEW, ZNEW, STOTAL, SENV  ! /COMP/

@@ -1,7 +1,7 @@
 C $$$$$$
       SUBROUTINE MOMI(ETA2,HD,HR,HS,HS2,JSTART,JEND,OMEGA,R0,HI,QIW,M)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, CC13, CC23  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : WALPCZ  ! /ROT/

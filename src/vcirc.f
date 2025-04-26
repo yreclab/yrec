@@ -2,12 +2,13 @@ C $$$$$$
       SUBROUTINE VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,
      *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLN, CC13, CC23  ! /CONST1/
       use settings, only : CGAS  ! /CONST2/
       use settings, only : FES, FGSF, FSS, RCRIT  ! /VMULT/
       use settings, only : IGSF  ! /VMULT2/
       use settings, only : LNOJ  ! /NOTRAN/
+      use mmodel, only : LDIFAD  ! /VARFC/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -31,7 +32,6 @@ C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
 C 3/93 QUADRUPOLE DRIVING TERM ADDED.
       COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
       COMMON/QUADRU/QUAD(JSON),GG(JSON)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
 C MHP 11/94 ADVECTIVE VELOCITY AND DIFFUSIVE COMPONENT.
       COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
 C MHP 06/02

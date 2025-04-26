@@ -14,7 +14,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUN  ! /CONST/
 
       IMPLICIT REAL*8 (A-H,O-Z)

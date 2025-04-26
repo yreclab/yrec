@@ -16,7 +16,7 @@ C 11/91 JENV0 ADDED TO CALL.
       SUBROUTINE GETW(BL,DELTS,DWMAX,FP,FT,HCOMP,HD,HJM,HL,HP,HR,HS,
      *             HS1,HS2,HSTOT,HT,LC,LJDOT,M,MODEL,SJTOT,SMASS,
      *                 TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0)
-      use params, only : json
+      use mmodel, only : json
       use settings, only : CLSUNL  ! /CONST/
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/

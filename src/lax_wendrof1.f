@@ -1,6 +1,6 @@
       SUBROUTINE LAX_WENDROF1(DT,ECOD1,EM,NPT,STOT,EX_H,LDOLI)
 
-      use params, only : json
+      use mmodel, only : json
       use settings, only : C4PI  ! /CONST1/
       use settings, only : LDIFZ  ! /GRAVS3/
 
