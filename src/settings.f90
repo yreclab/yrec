@@ -494,4 +494,61 @@ module settings
   ! midmod.f: MHP 3/09 Added flag to enforce solid body rotation at all times.
   logical :: lsolid = .false.
 
+  ! Variables from /MASSCHG/
+  ! mix.f: Added for mass accretion
+  ! calcad.f: Added for experimantal mass loss section
+  ! parmin.f: MHP 10/01 Added common block for mass loss/accretion
+  real(dp) :: dmdt0 = -1.0e-14_dp, fczdmdt = 0.1_dp, ftotdmdt = 1.0e-2_dp
+  real(dp) :: compacc(15) = [0.71668_dp, 0.265721_dp, 0.01757_dp, 2.9e-5_dp, 3.013e-3_dp, &
+                           & 3.385e-5_dp, 9.346e-4_dp, 0.0_dp, 8.462e-3_dp, 0.0_dp, &
+                           & 1.696e-5_dp, 0.0_dp, 2.0e-9_dp, 2.0e-9_dp, 3.0e-11_dp]
+  real(dp) :: creim = -4.0e-13_dp
+  logical :: lreimer = .false., lmdot = .false.
+
+  ! Variables from /MASSCHG3/
+  ! MHP 8/10 Added option to scale mass loss rate by rotation; requires rotating model
+  ! MHP 8/10 Added scaled solar wind mass loss option
+  ! MHP 2/12 Moved into pmm torque model, retained mdot switch
+  logical :: lsolwind = .false.
+  real(dp) :: dmsun = -2.0e-14, dmwsun = 2.863e-6, dmwmax = 9.054e-5
+
+  ! Variables from /CMIXING/
+  ! FD 10/09 Added common block for extra mixing. it mimic some mixing by affecting
+  !         the settling coefficient directly (in setup_grsett.f)
+  ! FD 10/09 Mimic mixing options - acting on setling and differential settling
+  real(dp) :: cstmixing = 1.0_dp, cstdiffmix = 1.0_dp
+
+  ! Variables from /GOVS/
+  ! JVS 04/14 Common block for additional timestep governors
+  logical :: ltrist = .false.
+
+  ! Variables from /PMMWIND/
+  character(len=3) :: awind
+  logical :: lmwind, lrossby, lbscale
+  real(dp) :: pmma, pmmb, pmmc, pmmd, pmmm
+  real(dp) :: pmmjd, pmmmd, pmmsolp, pmmsolw, pmmsoltau
+
+  ! Variables from /CWIND/
+  real(dp) :: wmax, exmd, exw, extau, exr, exm, exl, expr
+  real(dp) :: constfactor, structfactor, excen, c_2
+  logical :: ljdot0
+
+  ! Variables from /OVRTRN/
+  logical :: lnewtcz, lcalcenv
+  real(dp) :: taucz, taucz0, pphot, pphot0, fracstep
+
+  ! Variables from /MAG/
+  logical :: lcodm
+  real(dp) :: codm
+
+  ! Variables from /BURNSCS/
+  ! G Somers 6/14 Allow variable Li/Be destruction cross sections
+  real(dp) :: sli6, sli7, sbe91, sbe92, sbe93
+
+  ! Variables from /SPOTS/
+  ! calcad.f: G Somers 10/14, Add spot common block
+  real(dp) :: spotf, spotx
+  logical :: lsdepth
+
+
 end module settings

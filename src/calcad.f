@@ -87,12 +87,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        COMMON/SOUND/GAM1(JSON),LSOUND
       common/eeos06/esact,eos(10)
       COMMON /LLOT95/ZTAB
-C Added for experimantal mass loss section
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
-C G Somers 10/14, Add spot common block
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-C G Somers END
       SAVE
 
 

@@ -15,4 +15,12 @@ module mmodel
   real(dp) :: vfc(json)
   logical :: lvfc = .false., ldifad = .false.
 
+  ! Variables from /ACDPTH/
+  ! JVS 02/11 Acoustic depth calc common block
+  real(dp) :: tauczn, deladj(json), tauhe, tnorm, tcz, whe
+  real(dp) :: acatmr(json), acatmd(json), acatmp(json), acatmt(json), tatmos
+  real(dp) :: ageout(5) = [0.5_dp, 1.0_dp, 5.0_dp, 10.0_dp, 20.0_dp]
+  integer :: iclcd, iacat, ijlast, ijvs, ijent, ijdel
+  logical :: lclcd, ljlast, ljwrt, ladon, laoly, lacout
+
 end module mmodel

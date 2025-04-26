@@ -20,6 +20,7 @@ C ADDED (COMMON BLOCK NEWENG).
       use settings, only : LSNU  ! /NEWENG/
       use settings, only : LPULSE  ! /PULSE/
       use settings, only : LMHD  ! /MHD/
+      use settings, only : DMDT0, LMDOT  ! /MASSCHG/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -45,8 +46,6 @@ C MHP 06/02 COMMON BLOCK ADDED FOR DERIVATIVES OF
 C CAPPA AND EPSILON
       COMMON/ROTDER/SQOD(JSON),SQOT(JSON),SQED(JSON),SQET(JSON),
      *              FRACNUC(JSON)
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 
 C JVS 10/11 Common block for He3+He3 luminosity
