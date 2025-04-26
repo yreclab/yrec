@@ -314,7 +314,7 @@ module settings
   ! Variables from /CHRONE/
   ! DBG 11/11/91 Added to namelist
   logical :: lrwsh = .false., liso = .false.
-  integer :: iiso
+  integer, parameter :: iiso = 37  ! output: isochrone information
   character(256) :: fiso
 
   ! Variables from /NEWXYM/
@@ -381,18 +381,25 @@ module settings
   logical :: lcondopacp = .false.
 
   ! Variables from /ALEXO/
-  character(256) :: opecalex(7)
+  ! Alex low T opacity
+  ! switch
+  character(256) :: opecalex(7) = [character(256) :: 'OPACALEXANDER.X00', &
+                                 & 'OPACALEXANDER.X01', 'OPACALEXANDER.X02', 'OPACALEXANDER.X035', &
+                                 & 'OPACALEXANDER.X05', 'OPACALEXANDER.X07', 'OPACALEXANDER.X08']
   integer, parameter :: ialxo = 39  ! YCK input: Alex low T opacities
 
   ! Variables from /ALEX06/
+  ! 2006 version added 3/09
+  ! readalex06.f: Alex low t opacity common blocks
   character(256) :: falex06
-  integer :: ialex06
+  integer, parameter :: ialex06 = 90  ! 3/09 Input file for 2006 Alexander opacities
 
   ! Variables from /ALEXMIX/
-  real(dp) :: xalex, zalex
+  real(dp) :: xalex = 0.7, zalex = 0.02
 
   ! Variables from /NOTRAN/
-  logical :: lnoj
+  ! MHP 9/93
+  logical :: lnoj = .false.
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.

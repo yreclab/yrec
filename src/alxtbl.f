@@ -22,11 +22,10 @@ C
      +                   numt => numtalx, numd => numdalx, numxt => numxtalx
       use settings, only : ISHORT  ! /LUOUT/
       use settings, only : ZALEX1  ! /NEWOPAC/
+      use settings, only : OPECALEX, IALXO  ! /ALEXO/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      CHARACTER*256 OPECALEX(NUMX)
-      COMMON /ALEXO/OPECALEX,IALXO
 C     ALEX LOW T OPACITY
       COMMON /GALOT/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ)
       COMMON /ALOT/CAPALEX(NUMXT,NUMT,NUMD),XE,ZE,IX,IT,ID
