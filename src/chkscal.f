@@ -10,13 +10,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : C4PI  ! /CONST1/
       use settings, only : CSIG  ! /CONST2/
       use settings, only : ENDAGE, LENDAG  ! /SETT/
+      use settings, only : XENV0A  ! /NEWXYM/
 
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     1 SENV0A(50)
       COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
      2      LSTAR, LTEFF, LPASSR,LCALST

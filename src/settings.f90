@@ -296,6 +296,43 @@ module settings
   integer :: kttau = 0, kttau0
   logical :: lttau
 
+  ! Variables from /MHD/
+  ! YC  If LMHD is TRUE use MHD equation of state tables.  LU numbers
+  !     are stored in IOMHDi.
+  logical :: lmhd = .false.
+  integer :: iomhd1, iomhd2, iomhd3, iomhd4, iomhd5, iomhd6, iomhd7, iomhd8
+
+  ! Variables from /CORE/
+  ! DBG If LCORE is TRUE then calculate shells interior to start up
+  !     model's inner most shell.
+  logical :: lcore = .false.
+  integer :: mcore = 0
+  real(dp) :: fcore = 1.0_dp
+
+  ! Variables from /CHRONE/
+  ! DBG 11/11/91 Added to namelist
+  logical :: lrwsh = .false., liso = .false.
+  integer :: iiso
+  character(256) :: fiso
+
+  ! Variables from /NEWXYM/
+  ! DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
+  ! a set of runs.
+  real(dp) :: xenv0a(50), zenv0a(50), cmixla(50), senv0a(50) = 1.26e-4_dp
+  logical :: lsenv0a(50) = .false.
+
+  ! Variables from /NULOSS/
+  ! 9/06 GN --- New neutrino loss common block
+  logical :: lnulos1 = .false.  ! 3/92 DBG
+  real(dp) :: dsnudt, dsnudd
+
+  ! Variables from /CALS2/
+  ! mhp 1/93 Add option to automatically calibrate solar model.
+  ! mhp 6/13 Add option to calibrate solar Z/X, solar Z/X, solar age
+  real(dp) :: toll = 1.0e-5_dp, tolr = 1.0e-4_dp, tolz = 1.0e-3_dp
+  logical :: lcals = .false., lcalsolzx = .false.
+  real(dp) :: calsolzx = 0.02292e0_dp, calsolage = 4.57e9_dp
+
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
   ! parmin.f: MHP data for Monte Carlo option, etc

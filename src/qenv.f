@@ -11,6 +11,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : IOVIM  ! /DPMIX/
+      use settings, only : LMHD  ! /MHD/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -23,8 +24,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       SAVE
 
       PL = X0

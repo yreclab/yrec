@@ -35,12 +35,15 @@ C*******
       use settings, only : XMSOL, LPULSE  ! /PULSE/
       use settings, only : LPOUT  ! /PO/
       use settings, only : KTTAU  ! /ATMOS/
+      use settings, only : LRWSH, FISO  ! /CHRONE/
+      use settings, only : XENV0A, ZENV0A, CMIXLA, LSENV0A, SENV0A  ! /NEWXYM/
+      use settings, only : LCALS  ! /CALS2/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL - to save space make tables single precision
       REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
-      CHARACTER*256 FISO, FLAOL, FPUREZ
+      CHARACTER*256 FLAOL, FPUREZ
       CHARACTER*256 FLAOL2, FOPAL2
 C DBGLAOL
       COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
@@ -63,11 +66,6 @@ C MHP 9/94
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
       COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/CHRONE/LRWSH, LISO, IISO, FISO
-C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
-C a set of runs.
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     * SENV0A(50)
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *     IOLAOL2, IOOPAL2, NK, LZRAMP, FLAOL2, FOPAL2
 C DBG 4/26/94 Tired of not have access to current age of model so...
@@ -87,9 +85,6 @@ C     * HSF(JSON),HTF(JSON)
 
 C MHP 1/93 add common blocks for automatic calibration of solar models.
       COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
-C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
-      COMMON/CALS2/TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLZX,CALSOLAGE
-C      COMMON/CALS2/TOLL,TOLR,LCALS
 C DBG 12/94 added calibrate stellar model
       COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,

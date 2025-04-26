@@ -8,6 +8,7 @@ C $$$$$$
       use settings, only : IOVIM  ! /DPMIX/
       use settings, only : IDT, IDD  ! /OPTAB/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
+      use settings, only : LMHD  ! /MHD/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -17,8 +18,6 @@ C $$$$$$
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
      *     VISC(JSON)
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1     IOMHD7, IOMHD8
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HG(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HT(JSON),LC(JSON),
      *     FXION(3),FP(JSON),FT(JSON),ATOMWT(4),LCZ(JSON),

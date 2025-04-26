@@ -5,14 +5,13 @@ C MHDTBL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MHDTBL
       use settings, only : FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8  ! /LUFNM/
+      use settings, only : IOMHD1, IOMHD2, IOMHD3, IOMHD4, IOMHD5, IOMHD6, IOMHD7, IOMHD8  ! /MHD/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
 C     FOR SET TABLES
 
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       DATA UMOD /2.302585092994046 D0/
       SAVE
 

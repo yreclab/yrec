@@ -23,6 +23,7 @@ C DBG pulse: constants needed for del and dela calculation
       use settings, only : IDT, IDD  ! /OPTAB/
       use settings, only : IPVER  ! /PULSE/
       use settings, only : HRAS, KTTAU, LTTAU  ! /ATMOS/
+      use settings, only : LMHD  ! /MHD/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -46,8 +47,6 @@ C DBG CHANGED MAXSTEP FROM 200 TO 2000 TO GIVE ATMOSPHERE INTEGRATER A CHANCE.
       COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
      *              ATMGL(NG),ATMZ,IOATM,FATM
 C JNT 6/14 ADD FOR KURUCZ/CASTELLI 2004 ATMOSPHERES

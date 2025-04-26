@@ -13,6 +13,7 @@ C   Q(TAU) = 0.6666667
       use params, only : json
       use settings, only : CLN, CC23  ! /CONST1/
       use settings, only : HRAS, KTTAU  ! /ATMOS/
+      use settings, only : LMHD  ! /MHD/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -29,8 +30,6 @@ C   Q(TAU) = 0.6666667
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       SAVE
 
 C EDDINGTON APPROXIMATION

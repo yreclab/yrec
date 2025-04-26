@@ -11,12 +11,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : C4PI  ! /CONST1/
       use settings, only : CSIG  ! /CONST2/
       use settings, only : ENDAGE, SETDT, LENDAG, LSETDT  ! /SETT/
+      use settings, only : XENV0A, ZENV0A, CMIXLA, LSENV0A, SENV0A  ! /NEWXYM/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 FLAOL2, FOPAL2
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     1 SENV0A(50)
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
      *             IOLAOL2, IOOPAL2, NK,
      *             LZRAMP, FLAOL2, FOPAL2
