@@ -25,6 +25,7 @@ C DBG pulse: constants needed for del and dela calculation
       use settings, only : IPVER  ! /PULSE/
       use settings, only : HRAS, KTTAU, LTTAU  ! /ATMOS/
       use settings, only : LMHD  ! /MHD/
+      use mmodel, only : LCLCD  ! /ACDPTH/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -61,11 +62,6 @@ C SURFACE CONVECTION ZONE
       DIMENSION FXION(3),PS(3),RS(3),TS(3),ESTORE(4)
       DIMENSION Y(3),DYDX(3),YSCAL(3),YSTART(3),ERRSUM(3),ERR(3)
 
-C JVS Acoustic depth common block
-        COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
-     *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
-     *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT
 
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP

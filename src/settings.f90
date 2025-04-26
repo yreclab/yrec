@@ -550,5 +550,4 @@ module settings
   real(dp) :: spotf, spotx
   logical :: lsdepth
 
-
 end module settings

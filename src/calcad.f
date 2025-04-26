@@ -58,6 +58,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ATMBEG, ATMMIN, ATMMAX  ! /INTATM/
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : LOPALE06  ! /OPALEOS/
+      use mmodel, only : TAUCZN, DELADJ, TAUHE, TNORM, TCZ, WHE, ICLCD, TATMOS, LCLCD  ! /ACDPTH/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -66,7 +67,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
       REAL*8 ABEG0,AMIN0,AMAX0,EBEG0,EMIN0,EMAX0
       REAL*8 STARR(JSON),START(JSON),STARD(JSON),STARX(JSON),STARP(JSON),
-     *       STARZ(JSON),STARC(JSON),TNORM,TCZ,TAUCZN,STARCZ(JSON),STARRZ(JSON)
+     *       STARZ(JSON),STARC(JSON),STARCZ(JSON),STARRZ(JSON)
       REAL*8 ATMOSX, ATMOST(JSON),ATMOSD(JSON),ATMOSP(JSON),ADELAD(JSON),ATMOSC(JSON),
      *       ATGAM1(JSON), ATMOSR(JSON),GM1(JSON)
       INTEGER I, K, N, U, ICZ, NN, IENDJ, FLG, V, IATCNT, KTSAV
@@ -75,10 +76,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * FT(JSON),FP(JSON), HCOMP(15,JSON), HT(JSON), HL(JSON)
       LOGICAL LTEST,LPULPTJ,LPRTJ,LSBC0J
 
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
-     *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
-     *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT
       COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON),EBETAS(JSON)
