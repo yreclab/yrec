@@ -13,22 +13,18 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CDH, DHNUE  ! /DEBHU/
       use settings, only : HRAS, KTTAU  ! /ATMOS/
       use settings, only : LMHD  ! /MHD/
+      use tables, only : ATMPL, ATMTL, ATMGL, ATMZ, IOATM, FATM  ! /ATMOS2/
+      use tables, only : ATMPLC, ATMTLC, ATMGLC  ! /ATMOS2C/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
       INTEGER DUM2, DUM4
       REAL*8 DUM1, DUM3
-      CHARACTER*256 FATM
       CHARACTER*256 FSCVH,FSCVHE,FSCVZ
 
       DIMENSION V(12)
       COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-     *              ATMGL(NG),ATMZ,IOATM,FATM
-C JNT 06/14
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
 C MHP 8/92 COMMON BLOCK ADDED FOR LOWER EDGE OF TABLE IN LOG G.
       COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES

@@ -2,13 +2,11 @@
 
       use params, only : nt, ng, ntc, ngc
       use settings, only : ISHORT, IOWR  ! /LUOUT/
+      use tables, only : ATMPL, ATMTL, ATMGL  ! /ATMOS2/
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      CHARACTER*256 FATM
 
       COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-     *              ATMGL(NG),ATMZ,IOATM,FATM
       COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
       DIMENSION QT(4),QG(4),PP(4),DUM(3),QGG(3),QS(3),PTAB(4),
      *          YT(4),YG(4)

@@ -14,16 +14,14 @@ module tables
   character(256) :: flaol, fpurez
 
   ! Variables from /ATMOS2/
-  real(dp) :: atmpl(nt, ng)
-  real(dp) :: atmtl(nt)
-  real(dp) :: atmgl(ng)
-  real(dp) :: atmz
+  ! JMH 8/18/91
+  real(dp) :: atmpl(nt, ng), atmtl(nt), atmgl(ng), atmz
   integer :: ioatm
   character(256) :: fatm
 
   ! Variables from /ATMOS2C/
-  real(dp) :: atmplc(ntc, ngc)
-  real(dp) :: atmtlc(ntc)
-  real(dp) :: atmglc(ngc)
+  ! parmin.f: JNT 6/14 Same as ATMOS2 but for Kurucz/Castelli2004 atmospheres
+  ! envint.f: JNT 6/14 Add for Kurucz/Castelli 2004 atmospheres
+  real(dp) :: atmplc(ntc, ngc), atmtlc(ntc), atmglc(ngc)
 
 end module tables

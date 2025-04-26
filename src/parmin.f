@@ -68,6 +68,7 @@ C MHP 6/98
       use settings, only : LNULOS1  ! /NULOSS/
       use settings, only : TOLL, TOLR, TOLZ, LCALS, LCALSOLZX, CALSOLZX, CALSOLAGE  ! /CALS2/
       use tables, only : TOLLAOL, LPUREZ, FPUREZ  ! /NWLAOL/
+      use tables, only : IOATM, FATM  ! /ATMOS2/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -81,7 +82,6 @@ C MHP 10/24 MIXTURE TYPE FOR NEW HEAVY ELEMENT MIXTURE MACHINERY
       REAL*8 ZXMIXT(4),FRAC_CT(4),FRAC_NT(4),FRAC_OT(4)
       DIMENSION KINDRN(50),RSCLM(50),RSCLX(50),RSCLZ(50),
      1          RSCLCM(50)
-      CHARACTER*256 FATM
       CHARACTER*256 FALLARD,FSCVH,FSCVHE,FSCVZ
 C JVS 02/11 PARAMETERS for command line yrec input file specification
 C      and extra acoustic depth (calcad.f) output files
@@ -90,12 +90,6 @@ C      and extra acoustic depth (calcad.f) output files
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
 
-C JMH 8/18/91
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-     *              ATMGL(NG),ATMZ,IOATM,FATM
-C JNT 6/14 SAME AS ATMOS2 BUT FOR KURUCZ/CASTELLI2004 ATMOSPHERES
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
 
 C DBG 4/94 ADDED PARAMETERS TO CONTROL RAMP Z IN CORE
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
