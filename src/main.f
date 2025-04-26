@@ -41,6 +41,7 @@ C*******
       use settings, only : LCALS  ! /CALS2/
       use settings, only : NK  ! /ZRAMP/
       use settings, only : LSTAR, LPASSR, LCALST  ! /CALSTAR/
+      use settings, only : SSTANDARD  ! /CROSS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -81,10 +82,6 @@ C MHP 1/93 add common blocks for automatic calibration of solar models.
 C MHP 7/96 common block added for sound speed
       COMMON/SOUND/GAM1(JSON),LSOUND
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-C MHP 6/14 DERIVATIVES ADDED TO COMMON BLOCK.  NOT USED FOR DERIVATIVES
-C IN THE MONTE CARLO.
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
-C      COMMON/CROSS/SSTANDARD(17)
 C MHP 8/96
 C added monte carlo parameters for metal diffusion, solar L, solar age.
       COMMON/MONTE2/S11(1000),S33(1000),S34(1000),S17(1000),

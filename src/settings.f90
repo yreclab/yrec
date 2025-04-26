@@ -5,7 +5,7 @@ module settings
 
   ! Variables from /VNEWCB/
   ! DBG 1/96 The array v, read in via rdlaol, contained the mass fractions
-  ! of the envelope elements. It was used in starin to define fxenv,
+  ! of the envelope elements. It was used in starin to define fxenv, &
   ! which are the number fraction of the envelope elements. fxenv was
   ! then updated in eqstat and eqsaha. Here we define vnew passed
   ! in a common block vnewcb. It is identical to v except that the numbers
@@ -359,7 +359,7 @@ module settings
   !           LLP 2001 OPAL eos Mar 2003
   !           LLP 2006 OPAL eos Oct 2006
   !           LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-  ! parmin.f: LLP >>> OPAL 2001 EOS, Potekhin Conductive Opacities,
+  ! parmin.f: LLP >>> OPAL 2001 EOS, Potekhin Conductive Opacities, &
   !           OPAL 2006 EOS, Use Numerical Derivitives switches
   character(256) :: fopale, fopale01, fopale06
   logical :: lopale = .false., lopale01 = .false., lopale06 = .false., lnumderiv = .false.
@@ -400,6 +400,59 @@ module settings
   ! Variables from /NOTRAN/
   ! MHP 9/93
   logical :: lnoj = .false.
+
+  ! Variables from /CROSS/
+  ! parmin.f: 8/96 MHP New common block for nuclear reaction rates.
+  ! main.f: MHP 6/14 Derivatives added to common block.  Not used for derivatives
+  !         in the Monte Carlo.
+  ! parmin.f: MHP 9/14 Extended to permit user rescaling of derivates of reaction
+  !           rates and the branching ration for n15
+  !           Changed slightly 3He-3He on 9/25/97 to take account of the S'.
+  !            Previously (6/16/97) used S at Gamow Peak. Agrees with Workshop paper.
+  real(dp) :: sstandard(17) = [0.9828, 1.0485, 0.9815, 0.9241, 1.3818, 1.0542, 1.0, &
+                             & 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0108, 0.7819, 0.2875]
+  real(dp) :: qs0e(8), qqs0ee(8), fo16, fc12
+  logical :: lnewnuc = .false.
+
+  ! Variables from /NEWCROSS/
+  ! MHP 8/14 Default cross-sections are taken from the Solar Fusion II paper
+  ! Reference Adelberger et al. 2011. Units are KeV b
+  real(dp) :: s0_1_1 = 4.01e-22_dp, s0_3_3 = 5.21e3_dp, s0_3_4 = 5.6e-1_dp, &
+            & s0_1_12 = 1.34_dp, s0_1_13 = 7.6_dp
+  ! Note: pep is the proportionality constant relative to pp
+  ! Note: Be7+e- is the proportionality constant in the linear term
+  ! The code uses T9, not T6, so any expression in terms of T/10^6 k
+  ! needs to be divided by 1000^0.5 (for both pep and Be7+e-)
+  real(dp) :: s0_1_14 = 1.66_dp, s0_1_16 = 1.06e1_dp, &
+            & s0_pep = 3.5734e-6_dp, s0_1_be7e = 1.7709e-10_dp
+  real(dp) :: s0_1_be7p = 0.0208_dp, s0_hep = 8.6e-20_dp, &
+            & s0_1_15_c12alp = 7.3e4_dp, s0_1_15_o16 = 3.6e1_dp
+  ! Reference first derrivatives of cross-sections (Adelberger et al. 2011)
+  ! units are b
+  real(dp) :: s0p_1_1 = 4.49e-24_dp, s0p_3_3 = -4.9_dp, &
+            & s0p_3_4 = -3.6e-4_dp, s0p_1_12 = 2.6e-3_dp
+  real(dp) :: s0p_1_13 = -7.83e-3_dp, s0p_1_14 = -3.3e-3_dp, &
+            & s0p_1_16 = -5.4e-2_dp, s0p_1_be7p = -3.12e-5_dp
+  ! Reference second derivatives of cross sections (Adelberger et al. 2011)
+  real(dp) :: s0pp_1_12 = 8.3e-5_dp, s0pp_1_13 = 7.29e-4_dp, &
+            & s0pp_1_16 = 0.0_dp, s0pp_1_be7p = -2.288e-7_dp
+
+  ! Variables from /NEWPARAM/
+  ! 10/14 MHP New parameters - replacing dtdif,dtwind, hpttol & atime vectors
+  real(dp) :: flag_dx = 0.05_dp, flag_dw = 0.10_dp, flag_dz = 0.05_dp
+  logical :: lstruct_time = .false.
+  real(dp) :: time_core_min = 1.0e-3_dp, time_dl = 2.0e-2_dp, time_dp = 4.0e-2_dp, &
+            & time_dr = 2.0e-2_dp, time_dt = 2.0e-2_dp, time_dw_global = 8.0e-2_dp
+  real(dp) :: time_dw_mix = 8.0e-2_dp, time_dx_core_frac = 0.5_dp, &
+            & time_dx_core_tot = 2.0e-2_dp, time_dx_shell = 0.1_dp
+  real(dp) :: time_dx_total = 1.5e-3_dp, time_dy_core_frac = 0.5_dp, time_dy_core_tot = 2.0e-2_dp
+  real(dp) :: time_dy_shell = 0.1_dp, time_dy_total = 1.5e-3_dp, time_max_dt_frac = 1.5_dp
+  real(dp) :: tol_czbase_fine_width = 0.0_dp
+  real(dp) :: tol_dl_max = 0.02_dp, tol_dm_max = 0.08_dp, &
+            & tol_dm_min = 1.0e-8_dp, tol_dp_core_max = 0.05_dp
+  real(dp) :: tol_dp_czbase_max = 0.05_dp, tol_dp_env_max = 0.05_dp, &
+            & tol_dx_max = 1.0_dp, tol_dz_max = 1.0_dp
+  logical :: lnewvars = .false.
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.
