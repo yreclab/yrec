@@ -11,14 +11,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CSIG  ! /CONST2/
       use settings, only : ENDAGE, LENDAG  ! /SETT/
       use settings, only : XENV0A  ! /NEWXYM/
+      use settings, only : XLS, XLSTOL, SR, BLI, ALRI, AGER, BLR, BLRP, AGEI, LSTAR, LPASSR  ! /CALSTAR/
 
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
-     1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
-     2      LSTAR, LTEFF, LPASSR,LCALST
       SAVE
 C     LSTAR     T - have got a star at Teff and L
 C     LPASSR    T - on run have just passed Teff

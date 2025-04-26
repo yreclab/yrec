@@ -7,14 +7,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       subroutine readcoeos01
       use params, only : mx, mv, nr => nr01, nt => nt01
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : IOPALE, FOPALE01  ! /OPALEOS/
 
 c..... The purpose of this subroutine is to read the data tables
 
       IMPLICIT REAL*8 (A-H,O-Z)
 
       real*8 moles
-      LOGICAL*4 LOPALE, lopale01,lopale06,LNumDeriv
-      CHARACTER*256 FOPALE,fopale01,fopale06
       character*1 blank
       common/aaeos/ q(4),h(4),xxh
       common/aeos/  xz(mx,mv,nt,nr),
@@ -28,8 +27,6 @@ c      common/eeeeos/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
 c     x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
       dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    rhogr(mx,nr),frac(mx,6),alogr(nr,nt)
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     x     lopale06,LNumDeriv
 C mhp 7/2003
       COMMON/RMPOPEOS01/RMX(NT),KRA(NT),KT
       DATA (KRA(I),I=1,NT)/16*169,168,167,166,165,2*164,163,2*162,

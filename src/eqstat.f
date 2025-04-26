@@ -24,19 +24,11 @@ c
 
       use params, only : nts, nps
       use settings, only : CLN  ! /CONST1/
+      use settings, only : LNumDeriv  ! /OPALEOS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-C YCK 2/95 OPAL eos
-C LLP 2001 OPAL eos Mar 2003
-C LLP 2006 OPAL eos Oct 2006
-C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-      LOGICAL*4 LOPALE, lopale01,lopale06,lNumDeriv
-      CHARACTER*256 FOPALE,fopale01,fopale06
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     x     lopale06,lNumDeriv
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),

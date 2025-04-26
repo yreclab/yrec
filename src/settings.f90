@@ -300,7 +300,9 @@ module settings
   ! YC  If LMHD is TRUE use MHD equation of state tables.  LU numbers
   !     are stored in IOMHDi.
   logical :: lmhd = .false.
-  integer :: iomhd1, iomhd2, iomhd3, iomhd4, iomhd5, iomhd6, iomhd7, iomhd8
+  ! input: mhd equ. of state tables
+  integer, parameter :: iomhd1 = 40, iomhd2 = 41, iomhd3 = 42, iomhd4 = 43, &
+                      & iomhd5 = 44, iomhd6 = 45, iomhd7 = 46, iomhd8 = 47
 
   ! Variables from /CORE/
   ! DBG If LCORE is TRUE then calculate shells interior to start up
@@ -332,6 +334,65 @@ module settings
   real(dp) :: toll = 1.0e-5_dp, tolr = 1.0e-4_dp, tolz = 1.0e-3_dp
   logical :: lcals = .false., lcalsolzx = .false.
   real(dp) :: calsolzx = 0.02292e0_dp, calsolage = 4.57e9_dp
+
+  ! Variables from /ZRAMP/
+  ! parmin.f: DBG 4/94 Added parameters to control ramp Z in core
+  !           If lzramp=t then rescale Z in core from rsclzc value to Zenv value
+  !           where change is linear. Z meets Zenv at rsclzm.
+  ! wrthead.f: MHP 10/02 added proper dimensions for flaol2, fopal2
+  ! sulaol.f: DBG 4/94 Modified to do ZRAMP stuff.
+  real(dp) :: rsclzc(50) = -1.0_dp, rsclzm1(50) = -1.0_dp, rsclzm2(50) = -1.0_dp
+  integer, parameter :: iolaol2 = 63, ioopal2 = 64  ! DBG 8/95 second opoacity tables for zramp and z diffusion
+  integer :: nk
+  logical :: lzramp = .false.
+  character(256) :: flaol2, fopal2
+
+  ! Variables from /CALSTAR/
+  ! DBG 12/94 Added calibrate stellar model
+  ! DBG 12/94 Calibrated stellar model stuff
+  real(dp) :: xls, xlstol, steff, sr
+  real(dp) :: bli, alri, ager, blr, blrp, agei
+  logical :: lstar, lteff = .false., lpassr, lcalst = .false.
+
+  ! Variables from /OPALEOS/
+  ! eqstat.f: YCK >>>  2/95 OPAL eos
+  !           LLP 2001 OPAL eos Mar 2003
+  !           LLP 2006 OPAL eos Oct 2006
+  !           LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
+  ! parmin.f: LLP >>> OPAL 2001 EOS, Potekhin Conductive Opacities,
+  !           OPAL 2006 EOS, Use Numerical Derivitives switches
+  character(256) :: fopale, fopale01, fopale06
+  logical :: lopale = .false., lopale01 = .false., lopale06 = .false., lnumderiv = .false.
+  integer, parameter :: iopale = 49  ! input: opal equation of state
+
+  ! Variables from /NEWOPAC/
+  ! Opacity common blocks - modified 3/09
+  ! 3/09 Alexander 2006 opacity table options and opacity ramp options
+  real(dp) :: zlaol1, zlaol2, zopal1, zopal2, zopal951
+  real(dp) :: zalex1, zkur1, zkur2, tmolmin = 4.0_dp, tmolmax = 4.1_dp
+  logical :: lalex06 = .false., llaol89, lopal92, lopal95, lkur90, lalex95, l2z
+
+  ! Variables from /MISCOPAC/
+  ! condopacp.f: The following three lines provide and interface to PARMIN in order to
+  !              locate the Potekhin files.
+  integer, parameter :: ikur2 = 65, &    ! DBG 8/95 second opoacity tables for zramp and z diffusion
+                      & icondopacp = 75  ! Input files for Potekhin conductive opacities. LLP 7/8/06
+  character(256) :: fkur2, fcondopacp
+  logical :: lcondopacp = .false.
+
+  ! Variables from /ALEXO/
+  character(256) :: opecalex(7)
+  integer, parameter :: ialxo = 39  ! YCK input: Alex low T opacities
+
+  ! Variables from /ALEX06/
+  character(256) :: falex06
+  integer :: ialex06
+
+  ! Variables from /ALEXMIX/
+  real(dp) :: xalex, zalex
+
+  ! Variables from /NOTRAN/
+  logical :: lnoj
 
   ! Variables from /MONTE/
   ! main.f: MHP 8/96 Monte Carlo option for snus added.

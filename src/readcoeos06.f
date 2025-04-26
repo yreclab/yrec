@@ -7,13 +7,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       subroutine readcoeos06
       use params, only : mx, mv, nr => nr06, nt => nt06
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : IOPALE, FOPALE06  ! /OPALEOS/
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
-      LOGICAL*4 LOPALE, lopale01,lopale06,LNumDeriv
-      CHARACTER*256 FOPALE,fopale01,fopale06
       character*1 blank
       common/aaeos06/ q(4),h(4),xxh
       common/aeos06/  xz(mx,mv,nt,nr),
@@ -33,8 +32,6 @@ c     x    alogr(nr,nt)
       dimension moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    amu_M(nr,nt),alogNe(nr,nt),rhogr(mx,nr),frac(mx,6),
      x    alogr(nr,nt)
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     x     lopale06,LNumDeriv
 
       save
       blank=' '

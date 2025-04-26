@@ -13,14 +13,10 @@ C write the headers for all the appropriate output files
       use settings, only : XENV0, ZENV0  ! /LABEL/
       use settings, only : ITRVER  ! /TRACK/
       use settings, only : LISO, IISO, FISO  ! /CHRONE/
+      use settings, only : NK  ! /ZRAMP/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C MHP 10/02 added proper dimensions for flaol2, fopal2
-      CHARACTER*256 FLAOL2, FOPAL2
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
-     *             LZRAMP, FLAOL2, FOPAL2
       SAVE
 
       IF (IRESCA(NK) .EQ. 1) THEN

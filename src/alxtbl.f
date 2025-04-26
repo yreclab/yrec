@@ -21,15 +21,12 @@ C
       use params, only : numx => numxalx, numz => numzalx, numxz => numxzalx,
      +                   numt => numtalx, numd => numdalx, numxt => numxtalx
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : ZALEX1  ! /NEWOPAC/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*256 OPECALEX(NUMX)
       COMMON /ALEXO/OPECALEX,IALXO
-C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
 C     ALEX LOW T OPACITY
       COMMON /GALOT/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ)
       COMMON /ALOT/CAPALEX(NUMXT,NUMT,NUMD),XE,ZE,IX,IT,ID

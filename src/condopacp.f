@@ -3,6 +3,7 @@
 *               from the data file "condall.d"                          *
 *  ---------------------------------------------------  Version 23.05.99
       subroutine CondOpacP(Zion,TLG,RLG,CK,DRK,DTK)
+      use settings, only : IcondOpacP, FcondOpacP  ! /MISCOPAC/
 * Input: Zion - ion charge, TLG - lg(T[K]), RLG - lg(rho[g/cc])
 * Output: CK - Log_{10} thermal conductivity (kappa) [CGS units]
 *         DRK - d log kappa / d log rho
@@ -31,11 +32,6 @@ C     e-mail: palex@astro.ioffe.rssi.ru
       dimension AT(MAXT),AR(MAXR),AZ(MAXZ),AKAP(MAXT,MAXR,MAXZ)
       data KRUN/-1/
 
-C The following three lines provide and interface to PARMIN in order to
-C locate the Potekhin files.
-      COMMON /MISCOPAC/IKUR2,FKUR2,IcondOpacP,FcondOpacp,LcondOpacP
-      LOGICAL*4 LcondOpacP
-      CHARACTER*256 FKUR2,FcondOpacP
       if (KRUN.ne.12345) then ! Reading
          IP = IcondOpacP
          open(IP,file=FcondOpacP,status='OLD')

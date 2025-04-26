@@ -3,15 +3,11 @@ C**********************************************************************
       SUBROUTINE READCO
       use params, only : mx, mv, nr => nreos, nt => nteos
       use settings, only : ISHORT  ! /LUOUT/
+      use settings, only : FOPALE, IOPALE  ! /OPALEOS/
+
       IMPLICIT REAL*8 (A-H,O-Z)
 C..... THE PURPOSE OF THIS SUBROUTINE IS TO READ THE DATA TABLES
       SAVE
-C YCK >>>  2/95 OPAL EOS
-      LOGICAL*4 LOPALE,lopale01,lopale06,LNumDeriv
-      CHARACTER*256 FOPALE,fopale01,fopale06
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     x     lopale06,LNumDeriv
-C <<< YCK
       REAL*8 MOLES
       CHARACTER*1 BLANK
       COMMON/AA/ Q(4),H(4),XXH

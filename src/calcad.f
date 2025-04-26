@@ -56,6 +56,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ATMSTP, ENVSTP  ! /ENVGEN/
       use settings, only : ATMBEG, ATMMIN, ATMMAX  ! /INTATM/
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
+      use settings, only : LOPALE06  ! /OPALEOS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -88,8 +89,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
      *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     *     lopale06,lNumDeriv
 C Added for experimantal mass loss section
       COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
      *               LREIMER,LMDOT

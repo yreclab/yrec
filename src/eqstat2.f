@@ -22,19 +22,12 @@ c
       use settings, only : CGAS, CA3  ! /CONST2/
       use settings, only : TSCUT  ! /CTLIM/
       use settings, only : LDIFZ  ! /GRAVS3/
+      use settings, only : LOPALE, LOPALE01, LOPALE06  ! /OPALEOS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       SAVE
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
-C YCK 2/95 OPAL eos
-C LLP 2001 OPAL eos
-C LLP 2006 OPAL eos
-C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-      LOGICAL*4 LOPALE, lopale01,lopale06,lNumDeriv
-      CHARACTER*256 FOPALE,fopale01,fopale06
-      COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-     x     lopale06,lNumDeriv
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),

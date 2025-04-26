@@ -8,19 +8,14 @@ C DBG 4/94 MOdified to read in second table for ZRAMP core stuff
       use settings, only : ISHORT, ISTOR  ! /LUOUT/
       use settings, only : ZDH  ! /DEBHU/
       use tables, only : OLAOL, OXA, OT, ORHO, IOLAOL, NUMOFXYZ, NUMRHO, NUMT, FLAOL  ! /NWLAOL/
+      use settings, only : IOLAOL2, FLAOL2  ! /ZRAMP/
+      use settings, only : L2Z  ! /NEWOPAC/
+
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       REAL*8 OLAOL2(12,104,52),OXA2(12),OT2(52),ORHO2(104)
-      CHARACTER*256 FLAOL2, FOPAL2
 C DBG 4/94 New common block for second opacity table
       COMMON/NWLAOL2/OLAOL2, OXA2, OT2, ORHO2, NXYZ2,NRHO2,NT2
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
-     *             LZRAMP, FLAOL2, FOPAL2
-C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
       DIMENSION V(12), V2(12), ZDH2(18)
       SAVE
       OPEN(UNIT=IOLAOL,FILE=FLAOL, FORM='FORMATTED',

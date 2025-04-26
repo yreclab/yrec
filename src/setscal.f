@@ -12,16 +12,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CSIG  ! /CONST2/
       use settings, only : ENDAGE, SETDT, LENDAG, LSETDT  ! /SETT/
       use settings, only : XENV0A, ZENV0A, CMIXLA, LSENV0A, SENV0A  ! /NEWXYM/
+      use settings, only : RSCLZC, RSCLZM1, RSCLZM2  ! /ZRAMP/
+      use settings, only : XLS, STEFF, SR, ALRI, LSTAR, LTEFF, LPASSR  ! /CALSTAR/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      CHARACTER*256 FLAOL2, FOPAL2
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
-     *             LZRAMP, FLAOL2, FOPAL2
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
-     1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
-     2      LSTAR, LTEFF, LPASSR,LCALST
       SAVE
 C     LSTAR     T - have got a star at Teff and L
 C     LPASSR    T - on run have just passed Teff

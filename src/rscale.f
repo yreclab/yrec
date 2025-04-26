@@ -12,14 +12,10 @@ C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
       use settings, only : CLN  ! /CONST1/
       use settings, only : XENV0, ZENV0  ! /LABEL/
       use settings, only : XNEWCP, INEWCP, LNEWCP, LREL  ! /NEWCMP/
+      use settings, only : RSCLZC, RSCLZM1, RSCLZM2, LZRAMP  ! /ZRAMP/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      CHARACTER*256 FLAOL2, FOPAL2
-C DBG 5/94 ZRAMP stuff.
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *     IOLAOL2, IOOPAL2, NK2,
-     *     LZRAMP, FLAOL2, FOPAL2
       DIMENSION HCOMP(15,JSON),HS(JSON),HL(JSON),LC(JSON)
       SAVE
 

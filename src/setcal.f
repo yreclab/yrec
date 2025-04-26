@@ -4,14 +4,11 @@ C $$$$$$
       use settings, only : ENDAGE, SETDT, LENDAG, LSETDT  ! /SETT/
       use settings, only : XENV0A, ZENV0A, CMIXLA, LSENV0A, SENV0A  ! /NEWXYM/
       use settings, only : CALSOLAGE  ! /CALS2/
+      use settings, only : RSCLZC, RSCLZM1, RSCLZM2  ! /ZRAMP/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      CHARACTER*256 FLAOL2, FOPAL2
       COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
-     *             LZRAMP, FLAOL2, FOPAL2
       SAVE
 
 C SET UP RUN TO CALIBRATE A SOLAR MODEL.
