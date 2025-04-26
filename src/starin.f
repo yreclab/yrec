@@ -35,6 +35,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use tables, only : LLAOL  ! /NWLAOL/
       use tables, only : LSCV  ! /SCVEOS/
       use settings, only : TAUCZ, TAUCZ0, PPHOT, PPHOT0, FRACSTEP  ! /OVRTRN/
+      use settings, only : SPOTF, SPOTX  ! /SPOTS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -66,8 +67,6 @@ C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
       COMMON /I2O/ COMPMIX
-C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       DATA ATOMWT/23.0D0,26.99D0,24.32D0,55.86D0,28.1D0,12.015D0,
      * 1.008D0,16.0D0,14.01D0,39.96D0,20.19D0,4.004D0/
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),

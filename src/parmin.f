@@ -1,11 +1,7 @@
-C
-C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PARMIN
-      use params, only : NT, NG, NTC, NGC, NTS, NPS
-      use mmodel, only : json
       use settings, only : VNEW  ! /VNEWCB/
       use settings, only : ILAST, IDEBUG, ITRACK, ISHORT,
      1    IMILNE, IMODPT, ISTOR, IOWR  ! /LUOUT/
@@ -108,6 +104,9 @@ C MHP 6/98
       use settings, only : AWIND, LMWIND, LROSSBY, LBSCALE, PMMA, PMMB, PMMC, PMMD, PMMM, PMMJD, PMMMD, PMMSOLP, PMMSOLW, PMMSOLTAU  ! /PMMWIND/
       use settings, only : WMAX, EXMD, EXW, EXTAU, EXR, EXM, EXL, EXPR, CONSTFACTOR, EXCEN, C_2, LJDOT0  ! /CWIND/
       use settings, only : LNEWTCZ, LCALCENV  ! /OVRTRN/
+      use settings, only : LCODM, CODM  ! /MAG/
+      use settings, only : SLI6, SLI7, SBE91, SBE92, SBE93  ! /BURNSCS/
+      use settings, only : SPOTF, SPOTX, LSDEPTH  ! /SPOTS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -127,11 +126,8 @@ C      and extra acoustic depth (calcad.f) output files
       INTEGER MRK
 C JVS END
 
-      COMMON/MAG/LCODM,CODM
-      COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       SAVE
-C
+
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
       NAMELIST /CONTROL/
      *   CMIXLA, CALSOLAGE, CALSOLZX,
@@ -254,10 +250,6 @@ C     3,4=MAGG ET AL. 2021 (MET,PHOT) A&A 661,140
 C MHP 8/17 INITIALIZED WMAX_SUN
       DATA WMAX_SUN/1000.0/
 
-
-C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT
-      DATA LCODM,CODM/.FALSE.,2.5D4/
-C
 C G Somers 06/14 ALLOW NEW LI DESTRUCTION CROSS SECTIONS
 C           NEW VALUES SHOULD BE IN UNITS OF keV b.
 C           DEFAULT LI6 = 5,500 keV b FROM FOWLER ET AL. 1967
@@ -268,11 +260,8 @@ C           DEFAULT BE9(P,D)2HE4 (BE92) = 15,000 keV b FROM FOWLER ET AL. 1967
 C           DEFAULT BE9(P,A)LI6 (BE93) = 15,000 keV b FROM FOWLER ET AL. 1967
       DATA XSLI6, XSLI7, XSBE91, XSBE92, XSBE93
      *     /5.5D3, 5.2D1, 1.1D0, 1.5D4, 1.5D4/
-      DATA LXLI6, LXLI7, LXBE91, LXBE92, LXBE93,
-     *     SLI6, SLI7, SBE91, SBE92, SBE93
-     *     /.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.,
-     *     1.0D0, 1.0D0, 1.0D0, 1.0D0, 1.0D0/
-      DATA SPOTF, SPOTX, LSDEPTH/0.00, 1.00, .FALSE./
+      DATA LXLI6, LXLI7, LXBE91, LXBE92, LXBE93
+     *     /.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE./
 C G Somers END
 
 C THIS SUBROUTINE READS ALL USER DEFINED QUANTITIES FROM THE

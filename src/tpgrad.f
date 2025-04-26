@@ -15,6 +15,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CDELRL, CMIXL, CMIXL2, CMIXL3  ! /CONST3/
       use settings, only : TGCUT  ! /CTLIM/
       use settings, only : IOV1, IOV2, IOVIM, LADOV  ! /DPMIX/
+      use settings, only : SPOTF, SPOTX, LSDEPTH  ! /SPOTS/
 
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
 C COMPUTES RADIATIVE GRADIENT AND COMPARES WITH ADIABATIC GRADIENT
@@ -29,9 +30,6 @@ C          QACT,QACP = NAT-LOG DERIVATIVES OF THE CONVECTIVE GRADIENT
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *     VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
-C G Somers 09/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-C G Somers END
       DATA VTOL/1.0D-10/
       SAVE
 

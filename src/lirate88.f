@@ -7,6 +7,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       use mmodel, only : json
       use settings, only : CLN, CC13, CC23  ! /CONST1/
+      use settings, only : SLI6, SLI7, SBE91, SBE92, SBE93  ! /BURNSCS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -14,9 +15,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
       COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
-C G Somers 6/14, IMPORT LIGHT ELEMENT SCALE FACTOR BLOCK
-      COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
-C G Somers END
       DIMENSION HCOMP(15,JSON),HD(JSON),HT(JSON)
       DATA TLIM/6.0D0/
       SAVE

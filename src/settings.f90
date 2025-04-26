@@ -549,16 +549,18 @@ module settings
 
   ! Variables from /MAG/
   ! MHP 02/12 Permit constant diffusion coefficient
-  logical :: lcodm
-  real(dp) :: codm
+  logical :: lcodm = .false.
+  real(dp) :: codm = 2.5e4_dp
 
   ! Variables from /BURNSCS/
-  ! G Somers 6/14 Allow variable Li/Be destruction cross sections
-  real(dp) :: sli6, sli7, sbe91, sbe92, sbe93
+  ! parmin.f: G Somers 6/14 Allow variable Li/Be destruction cross sections
+  ! lirate88.f: G Somers 6/14, Import light element scale factor block
+  real(dp) :: sli6 = 1.0_dp, sli7 = 1.0_dp, sbe91 = 1.0_dp, sbe92 = 1.0_dp, sbe93 = 1.0_dp
 
   ! Variables from /SPOTS/
   ! calcad.f: G Somers 10/14, Add spot common block
-  real(dp) :: spotf, spotx
-  logical :: lsdepth
+  ! wrtmod.f: G Somers 10/14, Add spot common block, and store common block.
+  real(dp) :: spotf = 0.0_dp, spotx = 1.0_dp
+  logical :: lsdepth = .false.
 
 end module settings

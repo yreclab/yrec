@@ -17,6 +17,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : CLN, C4PIL  ! /CONST1/
       use settings, only : CSIGL, CGL  ! /CONST2/
       use settings, only : KTTAU, KTTAU0, LTTAU  ! /ATMOS/
+      use settings, only : SPOTF, SPOTX  ! /SPOTS/
 
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
 C INPUTS   LRESET = .T.  REDO ALL 3 ENVELOPES AND RETRIANGULATE IF NEED
@@ -29,10 +30,6 @@ C BOTH LNEW AND LRESET ARE RESET TO .FALSE.
       COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
       DATA NUMENV/0/
-
-C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-C G Somers END
 
       SAVE
 C MHP 9/01

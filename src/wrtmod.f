@@ -21,6 +21,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : XENV0, ZENV0  ! /LABEL/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
       use settings, only : XMSOL, LPULSE, IPVER  ! /PULSE/
+      use settings, only : SPOTF, SPOTX  ! /SPOTS/
 
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -45,8 +46,6 @@ C DBG 7/95 To store variables for pulse output
       DIMENSION R0(JSON),HJM(JSON),HI(JSON),HS(JSON)
       DATA IHEADR/4H****/
 
-C G Somers 10/14, Add spot common block, and store common block.
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
       COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)

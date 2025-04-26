@@ -59,6 +59,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : LOPALE06  ! /OPALEOS/
       use mmodel, only : TAUCZN, DELADJ, TAUHE, TNORM, TCZ, WHE, ICLCD, TATMOS, LCLCD  ! /ACDPTH/
+      use settings, only : SPOTF, SPOTX  ! /SPOTS/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -84,7 +85,6 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        COMMON/SOUND/GAM1(JSON),LSOUND
       common/eeos06/esact,eos(10)
       COMMON /LLOT95/ZTAB
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       SAVE
 
 

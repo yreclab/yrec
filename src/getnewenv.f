@@ -16,6 +16,7 @@ C THE DESIRED ENVELOPE MASS
       use settings, only : ENVBEG, ENVMIN, ENVMAX  ! /INTENV/
       use settings, only : WALPCZ, LROT  ! /ROT/
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
+      use settings, only : SPOTF, SPOTX  ! /SPOTS/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -28,9 +29,6 @@ C STORED CONTENTS OF THE ENVELOPE INTEGRATION.
      * LC(JSON),HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),
      * QIW(JSON),ETA2(JSON),HI(JSON),HJM(JSON),R0(JSON),
      * HKEROT(JSON),HG(JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)
-C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-C G Somers END
       SAVE
       IF(LEXCOM)THEN
          JEND = 15
