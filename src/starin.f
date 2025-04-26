@@ -31,21 +31,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : ZDH, XXDH, YYDH, ZZDH, LDH  ! /DEBHU/
       use settings, only : LCORE, MCORE, FCORE  ! /CORE/
       use settings, only : LMHD  ! /MHD/
+      use tables, only : LLAOL  ! /NWLAOL/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL
       INTEGER*4 KATM, KENV, KSAHA
-      REAL*8 OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL
       CHARACTER*256 OPECALEX(7)
       CHARACTER*4 ATEMP
       CHARACTER*6 EOS
       CHARACTER*4 ATM, LOK, HIK, COMPMIX
-      CHARACTER*256 FLAOL, FPUREZ
-C DBGLAOL
-      COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
-     *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ,
-     *  FLAOL, FPUREZ
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
