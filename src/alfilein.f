@@ -31,6 +31,8 @@ C created.
 
        SUBROUTINE ALFILEIN
        use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : ALATM_FeH, ALATM_Alpha, LALTPTau100, IOATMA  ! /ALATM03/
+      use settings, only : FALLARD  ! /ALATM04/
 C
 C Parameters NTA and NGA are respectively the maximum expected numbers
 C of Teff's and GL's we expect to encounter, even in future tables
@@ -41,18 +43,13 @@ C associated max number of GL's is nGL.
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-      CHARACTER*256 FALLARD
       CHARACTER*35 inrec
       CHARACTER*256 inrec2
       DIMENSION TEFFs(NTA)
-      LOGICAL*4 LALTPTau100
 
       COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
      x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
      x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
-     x       IOATMA                                         ! ALSURFP and PARMIN
-      COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
 
      EXTERNAL sort_shell
 

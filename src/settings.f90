@@ -460,4 +460,21 @@ module settings
   logical :: lmonte = .false.
   integer :: imbeg = 1, imend = 1
 
+  ! Variables from /SCV2/
+  character(len=256) :: fscvh, fscvhe, fscvz
+  ! input files for the SCV EoS
+  integer, parameter :: iscvh = 72, iscvhe = 73, iscvz = 74
+
+  ! Variables from /ALATM03/
+  ! envint.f: MHP 6/97 Added Allard model atmospheres
+  ! parmin.f: LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines
+  ! parmin.f: Default FeH and Alpha for new Allard Atmospheres
+  real(dp) :: alatm_feH = 0.0_dp, alatm_alpha = 0.0_dp
+  logical :: laltptau100 = .false.
+  ! MHP 6/97 Added option for Allard model atmospheres
+  integer, parameter :: ioatma = 66
+
+  ! Variables from /ALATM04/
+  character(len=256) :: fallard
+
 end module settings

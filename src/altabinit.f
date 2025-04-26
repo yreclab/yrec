@@ -20,22 +20,18 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 
       SUBROUTINE ALTABINIT
        use settings, only : ISHORT  ! COMMON/LUOUT/
+      use settings, only : LALTPTau100  ! /ALATM03/
 
       PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-      LOGICAL*4 LALTPTau100
-      CHARACTER*256 FALLARD
 
       COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
      x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
      x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
       COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),      ! Shared: ALTABINIT and ALSURFP
      x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
-     x       IOATMA                                         ! ALSURFP and PARMIN
-      COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
       COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
 C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are

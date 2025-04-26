@@ -80,13 +80,12 @@ C       If LPRT  is .TRUE. print Log(P) at the associated Log(Teff) to ISHORT an
 
       SUBROUTINE ALSURFP(TEFFL,GL,LPRT,LAlFail)
       use settings, only : ISHORT, IMODPT, ISTOR  ! /LUOUT/
+      use settings, only : LALTPTau100  ! /ALATM03/
 
       PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-       LOGICAL*4 LALTPTau100
-      CHARACTER*256 FALLARD
 
       COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
       COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
@@ -94,9 +93,6 @@ C       If LPRT  is .TRUE. print Log(P) at the associated Log(Teff) to ISHORT an
      x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
       COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),      ! Shared: ALTABINIT and ALSURFP
      x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
-     x       IOATMA                                         ! ALSURFP and PARMIN
-      COMMON /ALATM04/ DUMMY1,DUMMY2,FALLARD,DUMMY3,DUMMY4
 
       Dimension iGL(4),PL1(4),P100L1(4),
      x    T100L1(4),PL2(4),P100L2(4),T100L2(4)
