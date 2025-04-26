@@ -30,6 +30,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       use settings, only : LMHD  ! /MHD/
       use settings, only : LISO, IISO  ! /CHRONE/
       use mmodel, only : TAUCZN, TAUHE, TNORM, TCZ, WHE, TATMOS, IJLAST, LJLAST, LADON, LACOUT  ! /ACDPTH/
+      use settings, only : TAUCZ, TAUCZ0, PPHOT, PPHOT0  ! /OVRTRN/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -62,8 +63,6 @@ C JVS END
 C JVS 10/11 Common block for He3+He3 luminosity
       COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
 C JVS end
-C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       DIMENSION FXION(3),TLUMX(8),HCOMP(15,JSON),HD(JSON),HL(JSON),
      *HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HT(JSON),LC(JSON),
      *PS(3),TS(3),RS(3),CFENV(9),TRIT(3),TRIL(3),OMEGA(JSON),

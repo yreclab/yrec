@@ -523,21 +523,32 @@ module settings
   logical :: ltrist = .false.
 
   ! Variables from /PMMWIND/
-  character(len=3) :: awind
-  logical :: lmwind, lrossby, lbscale
-  real(dp) :: pmma, pmmb, pmmc, pmmd, pmmm
-  real(dp) :: pmmjd, pmmmd, pmmsolp, pmmsolw, pmmsoltau
+  ! MHP 02/12 New parameterization of angular momentum and mass loss
+  ! from magnetized solar-like winds
+  character(len=3) :: awind = 'K97'
+  ! G Somers 6/16 New parameterization of angular momentum and mass loss from
+  ! solar winds. Follow Matt et al (2012) formulation, but default to Kawaler
+  ! type law.
+  logical :: lmwind = .false., lrossby = .true., lbscale = .false.
+  ! MHP 8/17 Changed default for pmma to 2 from 0
+  real(dp) :: pmma = 2.0_dp, pmmb = 1.0_dp, pmmc = 2.0_dp, pmmd = 0.0_dp, pmmm = 0.5_dp
+  real(dp) :: pmmjd = 1.32e30, pmmmd = 1.27e12, pmmsolp = 4.9304_dp, &
+            & pmmsolw = 2.836e-6, pmmsoltau = 9.4805e5_dp
 
   ! Variables from /CWIND/
-  real(dp) :: wmax, exmd, exw, extau, exr, exm, exl, expr
+  ! MHP 8/17 Added excen, c_2 to common block for Matt et al. 2012 cent. term
+  real(dp) :: wmax = 3.0e-4_dp, exmd, exw, extau, exr, exm, exl, expr
   real(dp) :: constfactor, structfactor, excen, c_2
-  logical :: ljdot0
+  logical :: ljdot0 = .true.
 
   ! Variables from /OVRTRN/
-  logical :: lnewtcz, lcalcenv
+  ! G Somers 3/17, Adding new taucz common block
+  ! parmin.f: Create a new common block for overturn timescale things (pphot,taucz,lnewtcz)
+  logical :: lnewtcz = .true., lcalcenv = .true.  ! default to yes for new taucz calculation
   real(dp) :: taucz, taucz0, pphot, pphot0, fracstep
 
   ! Variables from /MAG/
+  ! MHP 02/12 Permit constant diffusion coefficient
   logical :: lcodm
   real(dp) :: codm
 

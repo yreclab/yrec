@@ -5,6 +5,7 @@ C$$$$$$
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : LROT  ! /ROT/
+      use settings, only : TAUCZ  ! /OVRTRN/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -14,8 +15,6 @@ C Needs access to this common block: grants knowledge of envellope
       COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
      *                 ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
      *                 NUMENV,EDELS(3,JSON),EVELS(JSON)
-C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       DIMENSION HCOMP(15,JSON),HS2(JSON),LCZ(JSON),
      *     XSUM(15), HR(JSON), HP(JSON), HD(JSON), HG(JSON), HS1(JSON),
      *     DEL1(JSON), DEL2(JSON), SVEL(JSON)

@@ -40,6 +40,7 @@ C      use settings, only : LMILNE  ! COMMON/CCOUT2/
       use settings, only : LLAOL89, LOPAL92, LOPAL95, LKUR90, LALEX95  ! /NEWOPAC/
       use tables, only : LSCV  ! /SCVEOS/
       use settings, only : TDISK, PDISK, LDISK  ! /DISK/
+      use settings, only : WMAX, LJDOT0  ! /CWIND/
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -55,10 +56,6 @@ C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
       COMMON /I2O/ COMPMIX
 
-C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
-C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON)

@@ -6,13 +6,12 @@ C$$$$$$
       use settings, only : CLN  ! /CONST1/
       use settings, only : CGL  ! /CONST2/
       use settings, only : LROT  ! /ROT/
+      use settings, only : TAUCZ  ! /OVRTRN/
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       INTEGER*4 IMAX
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       DIMENSION HCOMP(15,JSON),HS2(JSON),LCZ(JSON),
      *     XSUM(15), HR(JSON), HP(JSON), HD(JSON), HG(JSON), HS1(JSON),
      *     DEL1(JSON), DEL2(JSON), SVEL(JSON)
