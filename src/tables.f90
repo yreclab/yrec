@@ -16,7 +16,7 @@ module tables
   ! Variables from /ATMOS2/
   ! JMH 8/18/91
   real(dp) :: atmpl(nt, ng), atmtl(nt), atmgl(ng), atmz
-  integer :: ioatm
+  integer, parameter :: ioatm = 38  ! input: Kurucz atmosphere table
   character(256) :: fatm
 
   ! Variables from /ATMOS2C/

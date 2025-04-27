@@ -65,7 +65,7 @@ C MHP 6/98
       use settings, only : LNULOS1  ! /NULOSS/
       use settings, only : TOLL, TOLR, TOLZ, LCALS, LCALSOLZX, CALSOLZX, CALSOLAGE  ! /CALS2/
       use tables, only : TOLLAOL, LPUREZ, FPUREZ  ! /NWLAOL/
-      use tables, only : IOATM, FATM  ! /ATMOS2/
+      use tables, only : FATM  ! /ATMOS2/
       use settings, only : RSCLZC, RSCLZM1, RSCLZM2, IOLAOL2, IOOPAL2, LZRAMP, FLAOL2, FOPAL2  ! /ZRAMP/
       use settings, only : XLS, XLSTOL, STEFF, SR, LTEFF, LCALST  ! /CALSTAR/
       use settings, only : FOPALE, LOPALE, IOPALE, FOPALE01, LOPALE01, FOPALE06, LOPALE06, LNumDeriv  ! /OPALEOS/
@@ -270,26 +270,11 @@ C VALUES FOR LOGICAL UNITS USED IN READS AND WRITES SET IN DATA
 C STATEMENT; THEY CAN BE CHANGED IN THE NAMELIST IF NEEDED.
 C LOGICAL UNIT 5 = READ FROM SCREEN
 C LOGICAL UNIT 6 = WRITE TO SCREEN: FOR BATCH USE STATUS FILE INSTEAD
-C SPECIFY ALL LOGICAL UNIT NUMBERS HERE:
-C OUTPUT: BINARY OUTPUT OF LAST MODEL
-      ILSTBN = 27
-C OUTPUT: BINARY OUTPUT OF STORED MODELS
-      ISTOBN = 28
-C INPUT: BINARY STARTING MODEL
-      IFSTBN = 29
-C INPUT: KURUCZ ATMOSPHER TABLE
-      IOATM = 38
 
 
 C JVS 02/11 Altered the yrec8 input format so that files can be entered
 C on the command line, with the *.nml1 as the first argument, and *.nml2 as
 C the second. Defaults to yrec8.nml1 and yrec8.nml2 if none are provided.
-c      OPEN(UNIT=ISTAND, FILE='yrec8.nml1', STATUS='OLD')
-c      OPEN(UNIT=IRUN, FILE='yrec8.nml2', STATUS='OLD')
-c      READ(UNIT=ISTAND, NML=CONTROL)
-c      READ(UNIT=IRUN, NML=PHYSICS)
-c      CLOSE(ISTAND)
-c      CLOSE(IRUN)
 
       EMPTY='     '
       CALL GETARG(1, YREC1)
