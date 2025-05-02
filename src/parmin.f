@@ -846,7 +846,7 @@ C G Somers 11/14 write the new header for the .store file, if LSTORE = TRUE.
  1012 FORMAT('# Header Key',/,'# ModType    ModNum    #Shells    ',
      1 'M/Msun    log(Teff)    log(L/Lsun)    log(M/gram)    Age/Gyr',
      1 '    Timestep/yr    log(M_inner/gram)    log(M_outer/gram)',/,
-     1 '# JCORE  JENV  CMIXL  EOS  ATM  LOK  HIK  LPUREZ  COMPMIX',
+     1 '# JCORE  JENV  CMIXL  EOS  ATM  ALOK HIK  LPUREZ  COMPMIX',
      1 '  LEXCOM  LDIFY  LDIFZ  LSEMIC  LOVSTC  LOVSTE  LOVSTM',
      1 '  LROT  LINSTB  LJDOT0  LDISK  TDISK  PDISK  WMAX  LSTORE',
      1 '  LSTATM  LSTENV  LSTMOD  LSTPHYS  LSTROT',/,'# PPI_lum',

@@ -9,7 +9,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE GETYREC7(BL,CFENV,CMIXL,DAGE,DDAGE,FTRI,HCOMP,HD,HL,
      * HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
-     & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,LOK,
+     & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,ALOK,
      & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,COMPMIX,PDISK,TDISK,WMAX)
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
@@ -19,7 +19,9 @@ C Last two lines are MODEL2 add-ons
       IMPLICIT INTEGER*4 (I-K,M)
       IMPLICIT LOGICAL*4(L)
 
-      CHARACTER*4 ATEMP,ATM,HIK,LOK,COMPMIX
+c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
+c MHP 4/25 changed LOK name to make it unique, used elsewhere
+      CHARACTER*4 ATEMP,ATM,HIK,ALOK,COMPMIX
       CHARACTER*6 EOS
 
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
@@ -43,10 +45,15 @@ C but not present in the old YREC input data.
       ENDDO    
 
 C  Set Model2-sspecific strings to "?"
-      ATM = " ? "
-      EOS = " ? "
-      HIK = " ? "
-      LOK = " ? "
+c      ATM = " ? "
+c      EOS = " ? "
+c      HIK = " ? "
+c     LOK = " ? "
+c MHP 4/25 padded character strings to proper length
+      ATM = "  ? "
+      EOS = "    ? "
+      HIK = "  ? "
+      ALOK = "  ? "
       COMPMIX = "AG93"
 
 C Set Model2-specific flags false

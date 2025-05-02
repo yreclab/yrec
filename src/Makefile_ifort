@@ -1,7 +1,7 @@
 
 # The name for the executable can be changed after the NAME =
 
-NAME = yreci_042025
+NAME = yreci_052025
 
 FFILES = \
 alex06tab.f	  alfilein.f	     alprint.f	       alsurfp.f \

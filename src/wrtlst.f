@@ -17,7 +17,9 @@ C     WRITE MODEL OUT IN ASCII FORMAT
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       CHARACTER*6 EOS
-      CHARACTER*4 ATM, LOK, HIK, COMPMIX
+c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
+c MHP 4/25 changed LOK name to make it unique, used elsewhere
+      CHARACTER*4 ATM, ALOK, HIK, COMPMIX
       CHARACTER*256 FLAOL, FPUREZ
       CHARACTER*256 FOPALE,FOPALE01,FcondOpacP,FOPALE06
 
@@ -108,10 +110,10 @@ C Determine equation of state flag, EOS
             IF (LDH) EOS='OP6+DH'
          ENDIF
       ENDIF
-C Determine low temperature opacities flag, LOK
-      LOK='NONE'
-      IF (LALEX95) LOK='ALEX'
-      IF (LKUR90) LOK='KURZ'
+C Determine low temperature opacities flag, ALOK
+      ALOK='NONE'
+      IF (LALEX95) ALOK='ALEX'
+      IF (LKUR90) ALOK='KURZ'
 C Determine high temperature opacities flag, HIK
       HIK='NONE'
       IF (LOPAL95) HIK='OP95'
@@ -121,7 +123,7 @@ C Determine high temperature opacities flag, HIK
       CALL PUTMODEL2(BL,CFENV,CMIXL,DAGE,DDAGE,FTRI,HCOMP,HD,HL,
      * HP,HR,HS,HSTOT,HT,IWRITE,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
-     & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,LOK,
+     & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,ALOK,
      & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,COMPMIX,PDISK,TDISK,WMAX)
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
