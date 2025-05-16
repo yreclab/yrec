@@ -1,0 +1,17 @@
+# Trimmed-down makefile using the legacy approach of a single
+# compile and link command (without intermediate object files)
+# Usage:
+#    make -f Makefile.legacy
+# Defaults to using 'gfortran'
+# To use Intel Fortran ('ifort')
+#    make -f Makefile.legacy FC=ifort
+
+NAME = yrec
+FFILES := $(wildcard *.f)
+FFLAGS =  -ffixed-line-length-132
+
+OBJFILES = $(FFILES:.f=.o)
+
+FC=gfortran
+$(NAME):       $(FFILES)
+        $(FC) $(FFLAGS) -o $(NAME) *.f
