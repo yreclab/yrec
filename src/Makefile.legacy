@@ -8,10 +8,15 @@
 
 NAME = yrec
 FFILES := $(wildcard *.f)
-FFLAGS =  -ffixed-line-length-132
+
+ifeq ("$(FC)", "ifort")
+	FFLAGS = -132 -traceback -warn all -nogen-interfaces
+else
+	FC = gfortran
+	FFLAGS = -ffixed-line-length-132
+endif
 
 OBJFILES = $(FFILES:.f=.o)
 
-FC=gfortran
-$(NAME):       $(FFILES)
+$(NAME): $(FFILES)
         $(FC) $(FFLAGS) -o $(NAME) *.f
