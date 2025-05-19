@@ -19,4 +19,4 @@ endif
 OBJFILES = $(FFILES:.f=.o)
 
 $(NAME): $(FFILES)
-        $(FC) $(FFLAGS) -o $(NAME) *.f
+	$(FC) $(FFLAGS) -o $(NAME) *.f
