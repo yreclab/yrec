@@ -53,7 +53,7 @@ C Get the  LUMINOSITIES---PP(1-2-3)-CNO-HE-NU-GRAV
 C CONVERT TO SOLAR LUMINOSITIES
       READ(IREAD,40) (TLUMX(J),J=1,7)
 c   40 FORMAT('TLUMX',5X,1P7E17.9)
-   40 FORMAT(12X,1P7E17.9)
+   40 FORMAT(10X,1P7E17.9)
 
 C If TLUMX are in ergs, convert to solar units.  Decide by 
 C comparing to 10**20.  IF larger, divide by CLSUN.

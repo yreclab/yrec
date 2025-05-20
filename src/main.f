@@ -77,7 +77,7 @@ C 7/91 ENTROPY TERM COMMON BLOCK ADDED.
       COMMON/ENTROP/HTT0(JSON),HPP0(JSON),HLL0(JSON),HRR0(JSON)
 C 7/91 FLAG TO TOGGLE BETWEEN NEW/OLD RATES ADDED.
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO
+     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C MHP 9/94
       COMMON/ROTPRT/LPRT0
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
@@ -612,6 +612,9 @@ C save old model for PTIME
                END DO
 C JVS 04/14 Save Teff as well
 		   TEFFLO = TEFFL
+C  JVS 05/25 Added model number to list of saved values
+           MO = M 
+
 	    ENDIF
 C store starting distribution of rotational kinetic energy.
             IF(LROT)THEN
