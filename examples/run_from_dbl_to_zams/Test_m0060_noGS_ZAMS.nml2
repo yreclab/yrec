@@ -18,7 +18,7 @@
 ! Options for gravitational settling and microscopic diffusion
  LNEWDIF = .TRUE. ! Enables the usage of new routines for gravitational settling; recommended that this be set T. Required for light element diffusion.
  LDIFY = .FALSE. ! Compute gravitational settling of helium (t/f)
- LDIFZ = .FALSE. ! Compute gravitational settling of helium (t/f)
+ LDIFZ = .FALSE. ! Compute gravitational settling of metal (t/f)
  LDIFLI = .FALSE. ! Compute gravitational settling of light species (t/f)
  FGRY = 1.0D0 ! Factor to muliply diffusion coeffcients for settling of helium (0.75 if rotational mixing not included)
  FGRZ = 1.0D0 ! Factor to multiply diffusion coeffcients for settling of metal (0.75 if rotational mixing not included)
@@ -33,7 +33,7 @@
  ILAMBDA = 4 ! Formula for Coulomb logarithm, used in collision integrals; 4 (recommended) is a constant, 2.2.
 
 ! Numerical convergence option
- LNEWS = .TRUE. ! Extrapolate changes from prior step for next step in initial entripy change estimate; can improve convegence.
+ LNEWS = .TRUE. ! Extrapolate changes from prior step for next step in initial entropy change estimate; can improve convegence.
 ! Niter1 and Niter2 are mandatory; Niter3 and Niter4 can be nonzero for high precision work, but set to zero if you are having convergence issues.
  NITER1 =  2 ! Iterations before SBC is checked              
  NITER2 = 40 ! Iterations after SBC is checked, assumes start of T nuclear burning rates.
@@ -74,7 +74,7 @@
  LSCV = .TRUE. ! Use SCV EoS in domain where it is valid and OPAL is not
  LOPALE06 = .TRUE. ! Use OPAL tabulated EoS. Note - a simplified boltzman/saha solver, fully ionized at high T, is used when this is not enabled, or outside the table
  LNumDeriv = .FALSE. ! Use numerical derivatives of structural variables, rather than analytic ones. Induces dramatic code slow-down if adopted.
- LDH = .TRUE. ! Use Debye-Huckle correction for simplified EoS
+ LDH = .TRUE. ! Use Debye-Huckel correction for simplified EoS
  ETADH0 = -2.0D0 ! Lower DH boundary
  ETADH1 = 1.0D0 ! Upper DH boundary
  TSCUT = 6.0 ! Threshold above which the default EOS assumes full ionization.

@@ -15,7 +15,7 @@
   CALSOLZX = 0.02292d0 
   TOLL = 3.0D-5 ! Tolerance target for L in the calibration routines.
   TOLR = 3.0D-5 ! Tolerance target for R in the calibration routines.
-  CALSOLAGE = 4.568D9 ! Tolerance solar age in the calibration routines.
+  CALSOLAGE = 4.568D9 ! Solar age in the calibration routines.
   
  NUMRUN = 2 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
 
