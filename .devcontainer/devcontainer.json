@@ -11,7 +11,7 @@
 			"local_mirror": true
 		},
 		"ghcr.io/devcontainers-extra/features/bash-command:1": {
-			"command": "cd /workspace/yrec/src; make -j2"
+			"command": "cd /workspaces/yrec/src; make -j2"
 		}
 		//"ghcr.io/wxw-matt/devcontainer-features/command_runner:latest": {
 		//	"build": "cd src; make"
