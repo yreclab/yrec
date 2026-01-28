@@ -18,6 +18,10 @@
         //}
 	},
 
+	"containerEnv": {
+        "PATH": "${containerEnv:PATH}:/workspaces/yrec/src"
+    },
+	
 	"postStartCommand": "cd /workspaces/yrec/src; make -j2"
 	
 
