@@ -10,12 +10,6 @@
 			"clean_cache": true,
 			"local_mirror": true
 		},
-		//"ghcr.io/devcontainers-extra/features/bash-command:1": {
-		//	"command": "cd /workspaces/yrec/src; make -j2"
-		//}
-		//"ghcr.io/wxw-matt/devcontainer-features/command_runner:latest": {
-		//	"build": "cd src; make"
-        //}
 	},
 
 	"remoteEnv": {
@@ -23,17 +17,4 @@
     },
 	
 	"postStartCommand": "cd /workspaces/yrec/src; make -j2"
-	
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
