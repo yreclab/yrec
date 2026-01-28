@@ -5,14 +5,14 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:trixie",
 	"features": {
-		"ghcr.io/wxw-matt/devcontainer-features/apt:0": {
+		"ghcr.io/devcontainers-extra/features/apt-get-packages:1" : {
 			"packages": "gfortran",
 			"clean_cache": true,
 			"local_mirror": true
 		},
-		"ghcr.io/wxw-matt/devcontainer-features/command_runner:latest": {
-			"build": "cd src; make"
-        }
+		//"ghcr.io/wxw-matt/devcontainer-features/command_runner:latest": {
+		//	"build": "cd src; make"
+        //}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
