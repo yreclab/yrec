@@ -1,0 +1,161 @@
+ $CONTROL  
+
+ DESCRIP(1) = "yrec test suite. 0.3 Msun base model, TAMS, no diffusion, no rotation" ! Label for output (optional)  
+ DESCRIP(2) = "Gray Atm OPAL06+SCV EOS GS98" ! Second line label for output (optional)
+
+ ! In addition to X,Y,Z YREC stores light elements (D He3 Li6 Li7 Be9) and CNO isotopes (C12 C13 N14 O16 O18) B10 B11 N15 O17 to be added
+ ! These options adjust their relative abundances. It is recommended to tie these to preset mixtures used in opacity tables.
+ ! This should be done at the start of a model run, and only work if LFIRST=True.
+ ! Option to adjust the CNO mixture to be consistent with the mixture used in the opacity tables
+ ISETMIX=0 ! 0 = do not adjust 1 = use specified mixture (AMIX below) 2 = custom mixture (variables at the end of the namelist)
+ ! AMIX = 'GS98' ! current implemented solar mixtures are GS98,AAG21,M22P and M22M
+ ! Option to adjust the D/He3/Li6/Li7/Be9 abundances and the CNO isotope ratios to be consistent with a specified solar reference
+ ISETISO = 0! 0 = do not adjust 1 = use specified mixture (AISO below) 2 = custom mixture (variables at the end of the namelist)
+ ! AISO = 'L21' ! Lodders 2021 is currently the only supported mixture, for a different one use the custom option
+
+ ! LCALS = .FALSE. ! Toggle to auto-calibrate solar Y and alpha to match the solar R and L at the age of the Sun.
+ ! LCALSOLZX = .TRUE. ! Enforce correct Z/X for mixture. If this is false Z is held constant in the calibration loop.
+ ! CALSOLZX = 0.02292d0 ! Target solar Z/X (0.02292 is GS98) 
+ ! TOLL = 3.0D-5 ! Tolerance target for L in the calibration routines.
+ ! TOLR = 3.0D-5 ! Tolerance target for R in the calibration routines.
+ ! CALSOLAGE = 4.568D9 ! Tolerance solar age in the calibration routines.
+
+! NUMRUN = 1 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
+ ! Typically, a rescaling run is short, and followed by an evolve run (NUMRUN=2); a run with a set input model can be done in one step (NUMRUN=1).
+ ! Larger numbers of runs may be used to either rescale from a starting model to a very different final one or to stop and output details at a series of benchmarks. 
+! This is a sample evolving run
+! KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
+! LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
+! RSCLM(1) = 1.00 ! If positive, rescale to this mass (Msun)
+! RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
+! RSCLX(1) = 0.719600 ! If positive, rescale to this hydrogen.
+! RSCLZ(1) = 0.016492 ! If positive, rescale to this metallicity. 
+! NMODLS(1) = 2000 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
+! XENV0A(1) = 0.719600 ! Envelope abundance label
+! ZENV0A(1) = 0.016492 ! Envelope abundance label
+! CMIXLA(1) = 1.707873 ! Rescale to this mixing length (or use for the run).
+! YREC uses an outer fitting point. 
+! LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.
+! SENV0A(1) = -1.0D-4 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
+! ENDAGE(1) = 4.568D9 ! Run stops if NMODLS(I) is reached or this age is reached
+ ! END_DCEN(1) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D Birthline, start)
+ ! END_DCEN(1) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D Birthline, end)
+ ! END_XCEN(1) = 0.714620 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
+ ! END_XCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
+ ! END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+ ! END_YCEN(1) = 0.9700 ! Run stops if NMODLS(I) is reached or this central helium is reached (ZAHB)
+
+ NUMRUN = 2 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
+! This is a rescaling run followed by an evolve run
+ KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
+ LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
+ RSCLM(1) = -1.00 ! If positive, rescale to this mass (Msun)
+ RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
+ RSCLX(1) = 0.719600 ! If positive, rescale to this hydrogen.
+ RSCLZ(1) = 0.016492 ! If positive, rescale to this metallicity. 
+ NMODLS(1) = 2 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
+ XENV0A(1) = 0.719600 ! Envelope abundance label
+ ZENV0A(1) = 0.016492 ! Envelope abundance label
+ CMIXLA(1) = 1.707873 ! Rescale to this mixing length (or use for the run).
+! YREC uses an outer fitting point. 
+ LSENV0A(1) = .TRUE. ! If true, adjust outer fitting point mass location.
+ SENV0A(1) = -1.0D-4 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
+!
+ KINDRN(2) = 1   
+ LFIRST(2) = .FALSE.  
+ NMODLS(2) = 10000 
+ XENV0A(2) = 0.719600
+ ZENV0A(2) = 0.016492
+ CMIXLA(2) = 1.707873
+ ! ENDAGE(2) = 4.568D9 ! Run stops if NMODLS(I) is reached or this age is reached
+ ! END_DCEN(2) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, start)
+ ! END_DCEN(2) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, end)
+ ! END_XCEN(2) = 0.714620 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
+  END_XCEN(2) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
+ ! END_YCEN(2) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+ ! END_YCEN(2) = 0.9700 ! Run stops if NMODLS(I) is reached or this central helium is reached (ZAHB)
+
+ ! The starting and last models include only abundances and structure variables. These options allow snapshots to be generated with more information. 
+ LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
+ LSTCH = .TRUE. ! If T, writes out interior, envelope, and atmosphere output (as controlled by LSTATM and LSTENV) in a single, consistent format (recommended). The default is different formats for each.
+ LSTATM = .TRUE. ! If T, append an atmosphere to the stored model file.
+ LSTENV = .TRUE. ! If T, append an envelope to the stored model file. If LSTENV and LSTATM = F, no information is output beyond the fitting point.
+ LSTMOD = .TRUE. ! Set the same as LSTORE. May be redundant.
+ LSTPHYS = .TRUE. ! If T, output microphysics (e.g. epsilon, kappa) to store file.
+ LSTROT = .TRUE. ! If T, append rotation data to store file.
+ NPRTMOD = 1000 ! Output detailed model structures every NPRTMOD models. Negative = skip intermediate structures (can still output the final model if LSTPCH=T)
+ NPRTPT = 1 ! Output details for every NPRTPT points (if 1000 points and NPRTPT=10, 100 lines are output).
+ LSTPCH = .TRUE. ! If T, output details of the final model to the .store file.
+
+ LTRACK = .TRUE. ! If T, global properties are output to the .track file. This should almost always be on.
+ ITRVER = 0 ! Toggle for different track file formats. 0 (one line per model) strongly recommended.
+  
+ LRWSH = .FALSE. ! If T, the short file retains only the details from the last model. This minimizes output file size.
+ LCORR = .TRUE. ! If true, output verbose details on model convergence to .short.
+  
+ LPULSE = .FALSE. ! If T, generate pulsation output. LSTATM AND LSTENV are needed to get data for those regions (needed if LPULSE is T)  
+ IPVER = 3 ! Format for pulsation output
+
+! Input files
+! Opacity tables and options
+ LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
+ FALEX06 = "input/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
+ LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
+ ZOPAL951 = 0.016232 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ FLIV95 = "input/opacity/atomic/op05/GS98.OP17" ! Atomic opacity table path
+ LPUREZ = .TRUE. 
+ FPUREZ = "input/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
+ FcondOpacP = "input/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
+
+! Equation of state tables
+ FOPALE06 = "input/eos/opal2006/EOSOPAL06Z0.016492" ! OPAL 2006 EoS table path.
+ FATM = "input/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
+ FALLARD = "input/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
+ FSCVH = "input/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
+ FSCVHE = "input/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
+ FSCVZ = "input/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
+ FFERMI = "input/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
+
+! Starting models
+ ! FFIRST = "input/models/pms/gs98/p100gs98z01757.ahbl" ! Sample starting model - pre-MS seed
+ FFIRST = "startmodels/m0300gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
+ ! FFIRST = "input/models/ZAMS/m0300gs98z018804_ZAMS.first" ! Sample starting model - ZAMS
+ ! FFIRST = "output/testsuite/Test_m0300_feh0_noGS_TAMS.last" ! Sample starting model - TAMS
+
+! Output files 
+ FLAST = "output/testsuite/Test_m0300_feh0_base_TAMS.last" ! The last converged model is stored here.
+ FSTOR = "output/testsuite/Test_m0300_feh0_base_TAMS.store" ! Model snapshots during the run are stored here.
+ FTRACK = "output/testsuite/Test_m0300_feh0_base_TAMS.track" ! Global variables as a function of time are stored here.
+ FSHORT = "output/testsuite/Test_m0300_feh0_base_TAMS.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "output/testsuite/Test_m0300_feh0_base_TAMS.pmod" ! Pulsation output for the interior model.
+ FPENV = "output/testsuite/Test_m0300_feh0_base_TAMS.penv"! Pulsation output for the envelope model.
+ FPATM = "output/testsuite/Test_m0300_feh0_base_TAMS.patm" ! Pulsation output for the atmosphere model.
+  
+! Legacy output files
+ FMODPT = "output/testsuite/Test_m0300_feh0_base_TAMS.full" ! No longer used.
+ FSNU = "output/testsuite/Test_m0300_feh0_base_TAMS.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "output/testsuite/Test_m0300_feh0_base_TAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
+
+! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
+
+! Total CNO (isotope ratios controlled with ISETISO)
+! FRAC_C = 0.172148 ! Mass fraction of metals in the form of carbon; this is the GS98 value
+! FRAC_N = 0.050426 ! Mass fraction of metals in the form of nitrogen; this is the GS98 value
+! FRAC_O = 0.468195 ! Mass fraction of metals in the form of oxygen; this is the GS98 value
+
+! Isotope ratios and light elements
+! R12_13 = 88.27 ! C12/C13 ratio, L21 mix (88.26 L25)
+! R14_15 = 411.9 ! N14/N15 ratio, L21 mix (412.3 L25) - placeholder,N15 not currently used
+! R16_17 = 471.4 ! O16/O17 ratio, L21 mix (2644 L25)- placeholder,O17 not currently used
+! R16_18 = 2693.0 ! O16/O18 ratio, L21 mix (468.2 L25)
+
+! Light element abundances
+! XH2_INI = 2.781e-5 ! Initial D mass fraction, L21 mix (2.780e-5 L25)
+! XHE3_INI = 3.461e-5 ! Initial D mass fraction, L21 mix (3.443e-5 L25)
+! XLI6_INI = 7.187e-10 ! Initial D mass fraction, L21 mix (7.830e-10 L25)
+! XLI7_INI = 1.025e-8 ! Initial D mass fraction, L21 mix (1.112e-8 L25)
+! XBE9_INI = 1.595e-10 ! Initial D mass fraction, L21 mix (1.810e-10 L25)
+! XB10_INI = 1.002e-9 ! Initial D mass fraction, L21 mix (1.099e-9 L25) - placeholder, not currently used
+! XB11_INI = 4.405e-9 ! Initial D mass fraction, L21 mix (4.885e-9 L25) - placeholder, not currently used
+
+ $END  

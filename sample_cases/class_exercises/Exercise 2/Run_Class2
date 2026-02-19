@@ -1,0 +1,18 @@
+cp Sample_Class2_m1p0feh+0p0_ppm2_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m1p0feh+0p0_ppm2_ZAMS.nml2 yrec8.nml2
+./yrec1.01
+cp Sample_Class2_m1p0feh+0p0_s11m2_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m1p0feh+0p0_s11m2_ZAMS.nml2 yrec8.nml2
+./yrec1.01
+cp Sample_Class2_m1p0feh+0p0_stdpp_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m1p0feh+0p0_stdpp_ZAMS.nml2 yrec8.nml2
+./yrec1.01
+cp Sample_Class2_m9p0feh+0p0_stdcno_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m9p0feh+0p0_stdcno_ZAMS.nml2 yrec8.nml2
+./yrec1.01
+cp Sample_Class2_m9p0feh+0p0_cnom3_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m9p0feh+0p0_cnom3_ZAMS.nml2 yrec8.nml2
+./yrec1.01
+cp Sample_Class2_m9p0feh+0p0_s114m3_ZAMS.nml1 yrec8.nml1
+cp Sample_Class2_m9p0feh+0p0_s114m3_ZAMS.nml2 yrec8.nml2
+./yrec1.01

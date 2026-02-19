@@ -1,0 +1,69 @@
+ $CONTROL  
+
+ DESCRIP(1) = 'model5.1 test suite. Solar model, diffusion, rotation, diff rot no'  
+ DESCRIP(2) = 'Gray Atm OPAL06+SCV EOS GS98, I0 cz0 '
+
+ LCALS = FALSE.  
+ TOLL = 3.0D-5  
+ TOLR = 3.0D-5  
+ CALSOLAGE = 4.568D9
+  
+ NUMRUN = 1
+
+ KINDRN(1) = 1  
+ LFIRST(1) = .FALSE.  
+ NMODLS(1) = 12000
+ CMIXLA(1) = 1.822729
+END_YCEN(1) = 0.5 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+ 
+
+ LSTORE = .TRUE.       
+ LSTATM = .FALSE.
+ LSTENV = .FALSE.
+ LSTMOD = .TRUE.
+ LSTPHYS = .TRUE.
+ LSTROT = .TRUE.
+ NPRTMOD = 50              
+ NPRTPT = 1 
+ LSTPCH = .TRUE. 
+
+ LTRACK = .TRUE.  
+ ITRVER = 0  
+  
+ LRWSH = .FALSE.  
+ LCORR = .TRUE.  
+  
+ LPULSE = .FALSE.  
+  
+ LALEX06 = .TRUE.  
+ FALEX06 = "../../input/opacity/alex06/alexmol06gs98.tab"  
+   
+ LOPAL95 = .TRUE.  
+ ZOPAL951 = 0.017968  
+ FLIV95 = "../../input/opacity/opal95/GS98.OP17"  
+  
+ LPUREZ = .TRUE.  
+ FPUREZ = "../../input/opacity/lanl/PURECO.DBGLAOL"  
+  
+ FFIRST = "Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_TAMS.last"
+ FLAST = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.last"
+ FMODPT = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.full"
+ FSTOR = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.store"
+ FTRACK = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.track"
+ FSHORT = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.short"  
+ FPMOD = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.pmod"
+ FPENV = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.penv"
+ FPATM = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.atm"
+ FSNU = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.snu"
+ FSCOMP = "output/Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0.excomp"
+  
+ FOPALE06 = "../../input/eos/opal2006/EOSOPAL06Z0.018776"  
+ FcondOpacP = "../../input/opacity/potekhin/condall06.d"  
+ FATM = "../../input/atmos/kurucz/atmk1990p00.tab"
+ FALLARD = "../../input/atmos/allard/Nextgen2.all"  
+ FSCVH = "../../input/eos/scv/h_tab_i.dat"  
+ FSCVHE = "../../input/eos/scv/he_tab_i.dat"  
+ FSCVZ = "../../input/eos/scv/z_tab_i.dat"    
+ FFERMI = "../../input/eos/yale/FERMI.TAB"  
+  
+ $END  

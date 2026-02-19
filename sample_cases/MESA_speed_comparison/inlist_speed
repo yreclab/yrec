@@ -1,0 +1,142 @@
+&star_job
+
+    ! ! begin with a pre-main sequence model
+    create_pre_main_sequence_model = .true.
+    pre_ms_T_c = 0.99d6 !0.99d6 ! 3d5 default; must be below 1d6 but needs to be as high as possible for convergence
+    pre_ms_relax_num_steps = 50
+    
+    ! save a model at the end of the run
+    save_model_when_terminate = .true.
+    save_model_filename = 'speet_test' 
+    save_pulse_data_when_terminate = .false.
+    history_columns_file = 'history_columns.list'
+    profile_columns_file = 'profile_columns.list'
+    
+    ! abundances https://docs.mesastar.org/en/latest/reference/star_job.html
+    initial_zfracs = 3 ! GS98_zfracs abundances 
+    relax_initial_composition = .false. !.false. ! is default
+
+    ! change_net = .true.
+    ! new_net_name='pp_and_cno_extras.net' 
+    
+    show_net_species_info = .false.
+    show_net_reactions_info = .false.
+
+    pgstar_flag = .false.
+/ !end of star_job namelist
+
+&eos
+   ! equation of state settings https://docs.mesastar.org/en/latest/eos/defaults.html
+   use_Skye = .false.
+   use_FreeEOS = .false.
+   use_OPAL_SCVH = .true.
+/
+
+
+&kap
+    ! gs98 opacities: https://docs.mesastar.org/en/latest/kap/defaults.html
+    kap_file_prefix = 'OP_gs98'
+    kap_lowT_prefix = 'lowT_fa05_gs98'
+    kap_CO_prefix = 'gs98_co'
+
+    use_Zbase_for_Type1 = .true.
+    use_Type2_opacities = .true.
+     Zbase = 0.016492
+/
+
+
+&controls
+    warn_when_large_rel_run_E_err = 99d0 ! turn this off
+
+    star_history_name = 'speed_test' 
+
+    ! starting specifications
+      initial_mass = 1.0
+      initial_z = 0.016492
+      initial_y = 0.2639080
+
+    MLT_option = 'Henyey'
+    mixing_length_alpha = 1.707873
+
+    min_timestep_limit = 0
+
+
+! when to stop 
+    !! for a ZAMS stop:
+    !stop_near_zams = .true.
+    !Lnuc_div_L_zams_limit = 0.90
+    
+    !! for a TAMS stop:
+    !xa_central_lower_limit_species(1) = 'h1'
+    !xa_central_lower_limit(1) = 1d-4
+    
+    !! for a TRGB stop:
+    stop_at_phase_He_Burn = .true.
+
+! output controls
+    history_interval = 1
+    terminal_interval = 10 
+    
+    write_header_frequency = 100
+
+    ! --- these are in fact handled by run_star_extras ---
+    write_profiles_flag = .false. 
+
+    ! calculate brunt-vasaalaa
+    calculate_Brunt_N2 = .false. 
+
+    get_delta_nu_from_scaled_solar = .false.
+    nu_max_sun = 3090d0
+    astero_Teff_sun = 5772d0
+    ! delta_Pg_mode_freq = 10
+
+    ! atmosphere controls
+    atm_option = 'T_tau'
+    ! atm_off_table_option = 'T_tau'
+    atm_T_tau_relation = 'Eddington'
+    atm_T_tau_opacity = 'varying' ! YREC calls the EoS, so do tha here too
+    ! atm_T_tau_errtol = 1d-7    
+    ! atm_T_tau_max_iters = 50    
+    ! atm_T_tau_max_steps = 500   
+
+
+    ! no diffusion
+    do_element_diffusion = .false.
+    
+    use_Ledoux_criterion = .false. ! YREC uses Schwartzschild
+
+    ! Semi-convection only applies if Ledoux used, and we are not using Ledoux
+    alpha_semiconvection = 0.1
+    semiconvection_option = 'Langer_85 mixing; gradT = gradr'
+
+    !! set to .false. to use predictive rather than CPM
+    do_conv_premix = .false.
+
+
+    overshoot_scheme(1) = 'step' ! ``exponential``, ``step``, ``other``
+    overshoot_zone_type(1) = 'burn_H' !  ``burn_H``, ``burn_He``, ``burn_Z``, ``nonburn``, ``any``
+    overshoot_zone_loc(1) = 'core' ! ``core``, ``shell``, ``any``
+    overshoot_bdy_loc(1) = 'top' ! ``bottom``, ``top``, ``any``
+    overshoot_f(1) = 0.0174d0
+    overshoot_f0(1) = 0.0087d0
+
+
+   !# miscellaneous controls
+    warn_when_large_rel_run_E_err = 99d0 !0.02d0
+    use_gold_tolerances = .true.
+    energy_eqn_option = 'dedt'
+    varcontrol_target = 1d-4 ! default is 1d-3; ! 1d-4 preferred
+
+    ! Pre-MS mesh spacing:
+    !mesh_delta_coeff = 1.45! default is 1;
+    
+    ! MS mesh spacing
+    !mesh_delta_coeff = 1.50! default is 1;
+    
+    ! postMS mesh spacing    
+    mesh_delta_coeff = 2.25! default is 1;
+    
+    time_delta_coeff = 1.0 ! default is 1;
+
+
+/ ! end of controls namelist

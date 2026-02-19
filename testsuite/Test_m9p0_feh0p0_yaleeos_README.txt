@@ -1,0 +1,12 @@
+Test_m9p0_feh0p0_yaleeos
+
+This is a non-rotating, solar metallicity, 9 Msun model with the default Yale EoS, overshooting with 0.2 Hp, a gray atmosphere, no gravitational settling, and no diffusion. The model is run first from the deuterium birth line to the TAMS, then from the TAMS to the TAHB. Namelists ending in TAMS govern the first phase of evolution and namelists ending in TAHB govern the second. Two phases of evolution are required because relaxed tolerances and numerical parameters are needed to handle post-MS evolution, where the model is quite touchy and sensitive to numerical choices. However, this model is less sensitive to resolution and tolerances than the OPAL EoS model.
+
+DBL to TAMS:
+This first phase of evolution is handled with two runs (NUMRUN=2). The first is a rescale and evolution run (KINDRN = 3), which rescales the 9 Msun dbl model to solar metallicity and the appropriate mixing length over two steps. The second is an evolution run (KINDRN=1) which evolves the star until the central hydrogen abundance drops below 1E-4 (END_XCEN(2) = 0.0001). In order for the model to reach helium depletion, the inner fitting point must be moved in (LCORE=TRUE) during this first phase of evolution. HTOLER(5,2) must also be increased to 2.5E-6 in order for this model to run past the first few timesteps.
+
+TAMS to TAHB:
+The second phase of evolution is handled with one evolution run (KINDRN=1, NUMRUN=1) which reads in the .last file from the previous phase as the starting model. The metallicity and mixing length do not need to be rescaled. The model is evolved until the central helium abundance drops below 1E-4 (END_YCEN(1) = 0.0001). LCORE must be set to false, lest the fitting point be moved in again. In order to get this model to core helium depletion one tolerance needed to be increased: HTOLER(5,2) = 2.5E-5. 
+
+Alternate stopping point at the ZAHB:
+To stop at the ZAHB instead, set KINDRN=1, NUMRUN=1, and set the stopping condition as a central helium abundance of 0.97 (END_YCEN(1) = 0.97). Using the TAMS model is the new starting model, the same resolution and tolerance parameters from the DBL to TAMS evolution can be kept, with LCORE = FALSE set. The numerical changes adopted for the TAMS to TAHB model are not guaranteed to work for ZAHB to TAHB evolution. In general, to get a high mass model to the TAHB, increasing iterations, increasing HTOLER(5,2), and decreasing FLAG_DX, FLAG_DZ, and TOL_DM_MAX can help, though do not change all parameters at once.

@@ -1,0 +1,261 @@
+ $PHYSICS
+ 
+ ! Constants. Code does cgs computations but does output in solar units.
+ CLSUN = 3.828D33 ! Definition of Lsun used for tracks and output
+ CRSUN = 6.957D10 ! Definition of Rsun used for tracks and output
+
+! Change central fitting point (surface is changed in nml1) 
+ LCORE = .FALSE. ! If true, move the central fitting point in, assuming a Taylor series expansion                                 
+ FCORE = 10.0D0  ! Factor in mass to move the fitting point in by.
+
+! Options for gravitational settling and microscopic diffusion
+ LDIFY = .FALSE. ! Compute gravitational settling of helium (t/f)
+ LDIFZ = .FALSE. ! Compute gravitational settling of metals (t/f)
+ LDIFLI = .FALSE. ! Compute gravitational settling of light species (t/f)
+ FGRY = 1.0D0 ! Factor to muliply diffusion coeffcients for settling of helium (0.75 if rotational mixing not included)
+ FGRZ = 1.0D0 ! Factor to multiply diffusion coeffcients for settling of metal (0.75 if rotational mixing not included)
+! Numerical choices for gravitational settling and thermal diffusion. These are not typically adjusted.
+ DT_GS = 0.1D0 ! Settling solved in multiple timesteps if global timestep < DT_GS*tau(cz base)
+ XMIN = 1.0D-3 ! Diffusion turned off once central H < XMIN
+ YMIN = 1.0D-3 ! Diffusion turned off once surface Y < YMIN
+ GRTOL = 2.0D-7 ! Numerical tolerance for diffusion abundance change solver
+ NITER_GS = 10 ! Maximum number of iterations for diffusion abundance change solver
+ ILAMBDA = 4 ! Formula for Coulomb logarithm, used in collision integrals; 4 (recommended) is a constant, 2.2.
+
+! Numerical convergence option
+ LNEWS = .TRUE. ! Extrapolate changes from prior step for next step in initial entropy change estimate; can improve convegence.
+! Positive Niter1 and Niter2 are mandatory; Niter3 and Niter4 can be nonzero for high precision work, but set to zero if you are having convergence issues.
+ NITER1 =  2 ! Iterations before SBC is checked              
+ NITER2 = 40 ! Iterations after SBC is checked, assumes start of T nuclear burning rates.
+ NITER3 = 0 ! Iterate between model solution and nuclear burning rates. Set to 0 if you encounter convergence difficulties.
+ NITER4 = 0 ! Iterate betweeen model solution, rotation, and rotationally induced mixing.  Set to 0 for models without rotation.
+ ITDIF1=1 ! Iterations between structure equations and rotational mixing (1=none). This is the same as NITER3 unless >1. Recommend 2 for rotational mixing models.
+ FCORR0 = 0.6 ! The code predicts corrections to the structure variables, which can initially be overestimated. This is the iteration 1 scale factor by which they are multipled.          
+ FCORRI = 0.05 ! This is the increment to the factor for each successive interation, for example it reaches the max of 1 in 8 steps if (0.6,0.05). larger factor = faster convergence, less stable
+ HTOLER(1,1) = 6.0D-4 ! Convergence tol for log P. If the maximum correction in a given stage anywhere is below this threshold (for all 4 state variables), the run is converged. 
+ HTOLER(2,1) = 4.5D-4 ! Convergence tol for log T.
+ HTOLER(3,1) = 3.0D-4 ! Convergence tol for log R.  
+ HTOLER(4,1) = 9.0D-4 ! Convergence tol for L/Ltot. Note: all are local  
+ HTOLER(5,1) = 3.0D-5 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,1) is for P+R   
+ HTOLER(5,2) = 2.5E-5 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
+
+! Convective mixing parameters
+ LSEMIC = .FALSE. ! Include semi-convection (t/f). This is relevant for core He-burning models.
+ LOVSTC = .TRUE. ! Include core overshoot (t/f). Note: unless LOVAD=T, this is overmixing only, and does not impact the thermal structure
+ ALPHAC = 0.2 ! Core overshoot in Hp
+ LOVMAX = .TRUE. ! Alternative test (only checked if LOVSTC = T) to avoid pathologies in overshoot of small cores.
+ BETAC = 0.15 ! Alternative test - maximum overshoot in fraction of physical size of core
+ LOVSTE = .FALSE. ! Include envelope overshoot (t/f)
+ ALPHAE = 0.5  ! Envelope overshoot in Hp
+ LOVSTM = .FALSE. ! Include overshoot in intermediate CZ (recommend not on, needs to be checked)
+ ALPHAM = 0.0  ! Intermediate overshoot (above and below) in Hp
+ TGCUT = 6.9 ! Adiabatic convection assumed above this log T.   
+                      
+ ! Equation of state flags
+ LSCV = .TRUE. ! Use SCV EoS in domain where it is valid and OPAL is not
+ LOPALE06 = .TRUE. ! Use OPAL tabulated EoS. Note - a simplified boltzman/saha solver, fully ionized at high T, is used when this is not enabled, or outside the table
+ LNumDeriv = .FALSE. ! Use numerical derivatives of structural variables, rather than analytic ones. Induces dramatic code slow-down if adopted.
+ LDH = .TRUE. ! Use Debye-Huckel correction for the Yale EoS
+ ETADH0 = -2.0D0 ! Lower DH boundary
+ ETADH1 = 1.0D0 ! Upper DH boundary
+ TSCUT = 6.0 ! Threshold above which the default EOS assumes full ionization.
+          
+! Opacity options
+ LCondOpacP = .TRUE. ! Use new conductive opacity tables
+ OPTOL = 1.0D-5 ! The code generates a 2D surface abundance opacity table, useful for outer CZs and envelope integration. It switches to a 3D/4D solution when x, z differ from it by more than this.
+ TMOLMIN = 4.0 ! When available, only molecular opacity below this log T.
+ TMOLMAX = 4.1 ! Only atomic opacities used above this log T. A ramp is used from TMOLMIN to TMOLMAX.
+ 
+! Options for nuclear reactions and nuclear burning
+! Individual Cross Sections (KeV b),defaults are Solar Fusion II, solar fusion III in () after. For first and second derivatives see parmin.f
+!  S0_1_1 = 4.01D-22 !(4.09D-22)
+!  S0_3_3 = 5.21D3 !(5.21D3)
+!  S0_3_4 = 5.61D-1 !(5.61D-1)
+!  S0_1_12 = 1.34D0 !(1.44D0)
+!  S0_1_13 = 7.6D0 !(6.1D0)
+!  S0_1_14 = 1.66D0 !(1.68D0)
+!  S0_1_16 = 1.06D1 !(1.09D1)
+!  S0_PEP = 3.5734D-6 
+!  S0_1_BE7E = 1.7709D-10
+!  S0_1_BE7P = 0.0208D0 !(0.0205D0)
+!  S0_HEP = 8.6D-20
+!  S0_1_15_C12ALP = 7.3D4 !(7.3D4)
+!  S0_1_15_O16 = 3.6D1 !(4.0D1)
+ WEAKSCREENING = 30.0D0 ! Threshold for adopting weak screening for nuclear reaction rates (basically, always with this choice)/
+! Numerics of abundance change solution and thresholds for computing reaction rates. Only TCUT1 is adjusted from default. Do not change without good reason.
+ LSNU = .TRUE. ! Compute solar neutrino fluxes
+ TCUT(1) = 5.5 ! Minimum T for computing epsilon_nuc. Others are thresholds for progressively more advanced burning stages.  (Default 6.5, bad for D burning in preMS)         
+ TCUT(4) = 7.73 ! Minimum T for He burning.        
+ TCUT(5) = 7.5  ! Minimum T for neutrino cooling.        
+ CMIN = 1.0D-20 ! Abundances below cmin are zeroed out in the abundance solver                               
+ ABSTOL = 1.0D-7 ! Absolute error criterion for abundance solver
+ RELTOL = 1.0D-6 ! Relative error criterion for abundance solver
+ KEMMAX = 50 ! Maximum number of steps to solve for abundances
+! Toggles for light element burning cross-sections.
+ LXLI6 = .TRUE. ! Flag to directly specify cross-sections for p+6Li
+ LXLI7 = .TRUE. ! Flag to directly specify cross-sections for p+7Li
+ XSLI6 = 3100.0 ! Cross-section for p+6Li (KeV barns)
+ XSLI7 = 52.0 ! Cross-section for p+7Li (KeV barns)
+ LXBE91 = .TRUE. ! Flag to directly specify cross-sections for p+9Be (emit gamma)
+ LXBE92 = .TRUE. ! Flag to directly specify cross-sections for p+6Li (emit d)
+ LXBE93 = .TRUE. ! Flag to directly specify cross-sections for p+6Li (emit alpha)
+ XSBE91 = 1.2 ! Cross-section for p(9Be,gamma) (KeV barns)
+ XSBE92 = 15000.0! Cross-section for p(9Be,d) (KeV barns)
+ XSBE93 = 21000.0! Cross-section for p(9Be,alpha) (KeV barns)
+
+! Atmospheric surface boundary condition options
+ KTTAU = 0 ! Toggle switch. 0 = Eddington gray 1 = Krishnaswamy 2=legacy (don't use) 3=Kurucz 4=Allard. Note - for 3 and 4, switches to gray if outside table domain.
+! Atmosphere and envelope integrator options. Note - if a tabulated atmosphere is used, only an envelope integration is performed to the outer fitting point.                                             
+ TRIDT = .005 ! The code solves for a SBC between 3 models. This is the spacing between 2 of them in Log Teff. The third is a different L at the average Teff.
+ TRIDL = .040 ! Spacing between the lower pair and upper point in Log L.
+ 
+ ATMERR = 1.0D-9 ! Numerical tolerances for atmosphere and envelope solutions
+ ATMMAX = 0.25 ! Atmosphere integrator uses an adaptive step. This is the maximum step in log tau.       
+ ATMMIN = 0.05 ! Minimum atmosphere integrator step in log tau.         
+ ATMBEG = 0.05 ! Maximum atmosphere integrator step in log tau.
+ ATMD0 = 1.0D-10 ! log10 of starting density at tau=0, atmosphere integrator. You may need to adjust for massive stars.
+ ENVERR = 1.0D-9 ! Numerical tolerance, envelope integrator.       
+ ENVMAX = 0.1 ! Maximum envelope integrator step in log P.
+ ENVMIN = 0.05 ! Minimum envelope integrator step in log P.          
+ ENVBEG = 0.05 ! Starting envelope integrator step in log P.           
+ STOLR0 = 1.0D-6 ! Mass content of envelope has to agree with mass at fitting point to this fractional accuracy.        
+ IMAX = 11 ! Integrators start with a large step, divide to smaller, and extrapolate to zero. Maximum number of loops to infer integration step size (env + atm)              
+ NUSE = 7 ! Number of prior steps used for extrapolation to zero step size (atm+env).               
+  
+! Spatial tolerances for allocating mesh points, replaces HPTTOL
+ TOL_DM_MIN = 0.5D-10 ! Minimum spacing in mass between points (most important for thin outer fitting points)
+ TOL_DM_MAX = 0.02 ! Maximum spacing in log M; important for stellar cores
+ TOL_DL_MAX = 0.0025 ! Maximum spacing in L/Lsurf; important for energy generating regions
+ TOL_DP_ENV_MAX = 0.010 ! Maximum spacing in log P, surface CZ (most important for outer layers)
+ TOL_DP_CZBASE_MAX = 0.0025 ! Maximum spacing in log P near the SCZ base
+ TOL_DP_CORE_MAX = 0.010 ! Maximum spacing in log P, interior to SCZ (important between burning, SCZ base)
+ FLAG_DX = 0.02 ! Discontinuities in X larger than this are preserved / flagged
+ FLAG_DZ = 0.02 ! Discontinuities in Z larger than this are preserved / flagged
+ TOL_CZBASE_FINE_WIDTH = 0.1 ! Width of the finely zoned (in pressure) region around CZ base (0.4 for red giant models)
+ FLAG_DW = 0.1 ! Discontinuities in Omega(rotation) larger than this are preserved / flagged
+
+! Timestep criteria; replaces ATIME,DTWIND,DTDIF
+ LTRIST = .TRUE. ! Restricts timestep to ensure that the model does not move more than the size of the envelope triangle. Important for the Hertzsprung gap.
+ TIME_CORE_MIN = 0.002 ! Minimum X, Y for using "core" vs. "shell" burning criteria
+ TIME_DX_CORE_TOT = 0.002 ! Maximum absolute delta X H core burning (main sequence)
+ TIME_DX_CORE_FRAC = 0.25 ! Maximum fractional delta X, H core burning (main sequence)
+ TIME_DY_CORE_TOT = 0.004 ! Maximum absolute delta Y/Z per timestep (He burning) (red clump/HB)
+ TIME_DY_CORE_FRAC = 0.06 ! Maximum fractional delta Y/Z per timestep (He burning) (red clump/HB)
+ TIME_DX_TOTAL = 0.000150 ! Maximum absolute H burned per timestep, Msun (post-MS)
+ TIME_DX_SHELL = 0.10 ! Maximum fractional delta X, H shell (post-MS)
+ TIME_DY_TOTAL = 0.00015 ! Maximum absolute He burned per timestep, Msun (AGB)
+ TIME_DY_SHELL = 0.02 ! Maximum fractional He burned, He shell (AGB)
+ LSTRUCT_TIME = .TRUE. ! Flag to restrict timestep from structural changes - disabled once Lgrav<0 (minimum radius, close to ZAMS)
+ TIME_DT = 0.005 ! Maximum local change in temperature (pre-MS)
+ TIME_DP = 0.010 ! Maximum local change in pressure (pre-MS)
+ TIME_DR = 0.005 ! Maximum local change in radius (pre-MS)
+ TIME_DL = 0.005 ! Maximum local change in luminosity (pre-MS)
+ TIME_MAX_DT_FRAC = 1.3 ! Maximum fractional change in timestep, model to model
+ TIME_DW_MIX = 0.01 ! Maximum change in omega for each small step in the angular momentum solver (can be more than one per full model step)
+ TIME_DW_GLOBAL = 0.08 ! Maximum change in omega
+
+! Global rotation toggle 
+ LROT = .FALSE. ! Master flag for inclusion of rotation
+ LNEW0 = .FALSE. ! Force a new SBC for each model. Required for models with rotation, as rotation is held fixed in the solution. LROT =T sets this T.
+
+! Rotation and Rotational mixing timesteps and criteria
+ TIME_DW_GLOBAL = 4.0D-2 ! Max local change in omega, model (replaces DTWIND)
+ TIME_DW_MIX = 5.0D-3 ! Max change in omega, rotational mixing (replaces DTDIF)
+ ITDIF2=10 ! Iterations between nuclear burning and rotational mixing (1=none)
+ DJOK=1.0D-4 ! Numerical tolerances for rotational mixing
+
+! Numerical criteria for the structural effects of rotation
+ ACFPFT = 1.0D-36 ! Fractional accuracy for departure from spherical symmetry (cubed)        
+ ITFP1 = 5 ! Iterations between equipotential shape and effective radius solutions (structural effects of rotation)              
+ ITFP2 = 20 ! Iterations for measuring effective radius given shape parameter (structural effects of rotation)             
+
+! Rotation initialization options
+ LWNEW = .FALSE. ! Toggle if converting a non-rotating model to a rotating one               
+ WNEW = 3.95D-6 ! Uniform angular velocity imposed if LWNEW = .TRUE (rad/s). If star-disk coupling is being used, should be set to the same value as the disk period. Check your units!
+ LDISK = .FALSE. ! Toggle if enforcing co-rotation with accretion disk
+ TDISK = 1.00D-3 ! Lifetime of disk locking (Gyr) - 1e5yr = 1e-4 Gyr is the D burning BL. 1e-4 to 1e-2 is the recommended range
+ PDISK = 3.95e-6 ! Rotation period (rad/s) of disk; 8 days (9.0902e-6) is the observed median period in solar-mass disked stars in star forming regions.
+
+! Angular momentum loss options
+ LJDOT0 = .TRUE. ! Include angular momentum loss
+ LMWIND = .TRUE. ! Adopt Matt et al. 2012 magnetized wind model.
+ AWIND = "V13" ! V13 is the standard van Saders & Pinsonneault 2013 model. K97 is the legacy Krishnamurthi et al. 1997 one. CUS is custom. PMMA, PMMB, PMMC,PMMD, PMMM are only used if this is set to CUS.
+ FK = 7.2857 ! Scale factor for angular momentum loss. Typically used as a free parameter to reproduce the solar rotation at the solar age.
+ LROSSBY = .TRUE. ! Scale the loss rate relative to the Rossby number. Should be used with a saturation threshold (WMAX or WMAXSUN below)
+ WMAX = 3.0e-4 ! Maximum angular velocity (rad/s) for scaling the mass loss rate and magnetic fields in the scaled solar wind. This is over-written if WMAX_SUN is below 1000; the latter expresses WMAX relative to the solar angular velocity.
+ WMAX_SUN = 10.0D0 ! WMAX in units of PMMSOLW. A convenient alternative way of specifying WMAX.
+ PMMSOLP = 4.9752! Log P at T=Teff in the solar model, used to compute the equipartition solar B; sets the zero point for field strength in other stars; check against calibrated solar model
+ PMMSOLTAU =9.6132e5! Convective overturn timescale (s); sets the relative Rossby numbers for other stars; check against calibrated solar model
+  
+! Angular momentum transport options
+ LINSTB = .TRUE.! Include rotationally induced mixing (y/n) and hydrodynamic angular momentum transport       
+ LSOLID = .FALSE. ! Enforce uniform rotation at all times. Set T for strongly coupled magnetic models.
+ WALPCZ = 0.0 ! Angular velocity in CZ scales as R^WALPCZ. 0 = solid body -2 = uniform specific angular momentum
+ IMPJMOD = 0 ! Global angular momentum coupling settings. 0 = no effect 1 = solid body everywhere 2 = solid body core, decoupled cz 3 = solid body core, coupled at base of CZ rate
+ LCODM = .TRUE. ! Add magnetic diffusion term
+ CODM = 9.0D4 ! Magnetic diffusion term for angular momentum transport. 0 = Pure hydro. Nonzero=extra diffusive mechanism. 9e4 matches the solar core rotation constraints.
+ FW = 1.0 ! Global factor for scaling the angular momentum transport diffusion coefficients.           
+ FC = 0.391 ! Scale factor for mixing diffusion coefficeints relative to angular momentum. Typicaly calibrated to match Li depletion in a benchmark (cluster stars or the Sun).
+ IGSF = 1 ! Toggle for the stability condition used to evaluate the GSF and ABCD instabilties. 1 is recommended.
+
+! Star spot controls
+ LSDEPTH = .FALSE. ! Control that descreases spot contrast with depth, assuming a constant B. This does not have a dramatic effect on the results.
+ SPOTF = 0.0 ! Spot filling factor. 0.25 is the active star bound in main sequence stars.
+ SPOTX = 1.0 ! Spot temperature contrast; only alter if SPOTF > 0. 0.85 is a typical sunspot value.
+
+! Rarely used options. Only change if you have a specific reason to.
+ LTHOUL = .TRUE. ! Thoul formulism for gravitational settling
+ LTHOULFIT = .FALSE. ! Use published fit vs full solution for settling (not recommended)
+ HTOLER(1,2) = 9.0D5 ! Log correction in P larger than this ends run.   
+ HTOLER(2,2) = 5.0D5 ! Log correction in T larger than this ends run.   
+ HTOLER(3,2) = 5.0D5 ! Log correction in R larger than this ends run.   
+ HTOLER(4,2) = 5.0D6 ! correction in L/Ltot larger than this ends run.    
+ TENV0 = 2.0 ! Minimum T for envelope integration; the code stops below this. Failsafe for bad integration solution (also TENV1).
+ TENV1 = 9.0 ! Maximum T for envelope integration; the code stops below this.
+ ! Atmosphere and envelope sinkline option
+ ATMSTP = 0.05 ! Maximum step in atmosphere integrator for LENVG
+ ENVSTP = 0.05 ! Maximum step in atmosphere integrator for LENVG
+! Option to adjust initial mixture for a single species. Use nml1 variables ISETMIX and ISETISO to reset full mixtures.
+! LNEWCP = .TRUE. ! Manually adjust one input abundance vector to a new uniform value
+! ANEWCP = 'H2 ' ! ID of species to adjust
+! ATMP = 'ABS' ! Indicate if abundance is absolute or relative to H
+! XNEWCP = 1.5D-5 ! New mass fraction
+! PMMJD = 1.32D30 ! Solar wind torque (cgs), used as the zero point for loss rates. Leave alone (adjust wind zero-point with FK).
+! PMMMD = 1.27D12 ! Solar mass loss rate (g /s), used as the zero-point if solar wind mass loss enabled)
+! PMMSOLW = 2.83D-6 ! Solar angular velocity (rad / s), used for inferring torques relative to the solar torque. Leave alone (adjust wind zero-point with FK below).
+ LNOJ = .FALSE. ! Allow rotational mixing but disable angular momentum transport. Specialized limiting case.
+ RCRIT = 1000.0 ! Critical Reynolds number for the onset of the shear instability.          
+ FES = 1.0D0 ! Factor for scaling the angular momentum transport diffusion coefficients for Eddington-Sweet circulation relative to default.              
+ FGSF = 1.0D0 ! Factor for scaling the angular momentum transport diffusion coefficients for the GSF and ABCD instabilties relative to default.              
+ FSS = 1.0D0 ! Factor for scaling the angular momentum transport diffusion coefficients for the secular shear relative to default.              
+ FESC = 1.0D0 ! Factor for scaling the mixing relative to angular momentum transport diffusion coefficients for Eddington-Sweet circulation relative to default.         
+ FSSC = 1.0D0 ! Factor for scaling the mixing relative to angular momentum transport diffusion coefficients for the secular shear relative to default.          
+ FGSFC = 1.0D0 ! Factor for scaling the mixing relative to angular momentum transport diffusion coefficients for the GSF and ABCD instabilties relative to default.        
+
+! Variables that enable legacy features. Only alter for special cases.
+ LEXCOM = .TRUE. ! Extend the original YREC abundances that are tracked to include D, Li6, Li7, Be9. Always set T. If F these are set to zero.
+ LNEWDIF = .TRUE. ! Enables the usage of new routines for gravitational settling; recommended that this be set T. Required for light element diffusion.
+ LNEWNUC = .TRUE. ! Use new format for adjusting cross sections. Code default in this case are Adelberger et al. 2011 rates. Individual cross sections can be manually adjusted, along with derivatives
+ LNULOS1 = .TRUE. ! Toggle to use Itoh et al. 1996 rates - recommended to be set to TRUE
+ LNEWVARS = .TRUE. ! Flag for using new variable names for point, timestep tolerances. Always set true.
+ TOL_DX_MAX = 1.0 ! Maximum spacing in X (obsolete, preserved for back compatibility)
+ TOL_DZ_MAX = 1.0 ! Maximum spacing in Z (obsolete, preserved for back compatibility)
+
+! Experimental toggles, not guaranteed to work (only developers should adjust these)
+ DPENV = 1.0 ! Full mixing from center to fractional depth in mass. Not a standard option.
+ LADOV = .FALSE. ! Experimental option to enforce adiabatic overshoot.
+ LVFC = .FALSE. ! Implements FC as a variable, using the Zahn 1991 approach. Not recommended (disables FC setting.)
+ LDIFAD = .FALSE. ! Treat meridional circulation in a diffusion+ advection approach (Zahn) vs purely diffusive (earlier)
+ LMDOT = .FALSE. ! Allow mass loss (experimental code). Possible options are a constant mass loss rate (or gain); a scaled solar wind; or a Reimers' parameterization for mass loss in evolved giants. Constant Mdot (negative) and Reimers are currently enabled.
+ LSOLWIND = .FALSE. ! Remove mass loss scaled to the solar wind. Not currently implemented.
+! LTSLIR = .FALSE.
+! TSLITOL = 0.01
+
+! Parameters not actually used in the current code.
+ TCUT(2) = 6.5 ! Not used (formerly minimum T for equilibrium pp)        
+ TCUT(3) = 6.82 ! Not used (formerly minimum T for CNO)
+ MCORE = 40 ! Points to assign to new domain; not used now.
+ LENVG = .FALSE. ! Compute the model structure of the outer layers after convergence; used for i/o purposes, or ones where you need information beyond the outer fitting point; not used now (other flags do this)
+ ALFA = 1.5 ! Legacy exponent for angular momentum loss in Kawaler (1988) wind model.        
+
+ $END

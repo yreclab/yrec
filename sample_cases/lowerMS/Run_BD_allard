@@ -1,0 +1,18 @@
+cp SamplelowerMS_m0p03feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p03feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01
+cp SamplelowerMS_m0p04feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p04feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01
+cp SamplelowerMS_m0p05feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p05feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01
+cp SamplelowerMS_m0p06feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p06feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01
+cp SamplelowerMS_m0p07feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p07feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01
+cp SamplelowerMS_m0p08feh+0p0GS98_allard_15Gyr.nml1 yrec8.nml1
+cp SamplelowerMS_m0p08feh+0p0GS98_allard_15Gyr.nml2 yrec8.nml2
+./yrec1.01

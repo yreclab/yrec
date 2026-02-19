@@ -1,0 +1,19 @@
+Radial Differential Rotation Example Cases
+
+Here we run a variety of radial differential rotation cases for a 3.0 Msun star. We assume that the star rotates as a solid body until the TAMS Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_TAMS.last.
+
+We then start from there assuming:
+- Solid body rotation Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI1 . Note that when you turn LSOLID to true (either directly or via IMPJMOD=1, you must also turn LINSTAB to FALSE in order to get models to run)
+- differentially rotating radiative regions and solid body convective regions Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI0  (WALPCZ=0 in this case, IMPJMOD=0)
+- a solid body interior and a differentially rotating surface convection zone, with the rotation of the interior locked to the rotation rate at the base of the convection zone Test_3Msolar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10_RGp2diffrotI3cz2  (WALPCZ=-2 in this case, IMPJMOD=3)
+
+
+And we have set up the models to stop halfway through helium burning END_YCEN(1) = 0.5 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB). Note that it is only possible to set this condition because we are starting from the TAMS, when the central helium is already above this number.
+
+Relevant toggles for this type of work include
+
+! Angular momentum transport toggles
+ LINSTB = .FALSE.! Include rotationally induced mixing (y/n) and hydrodynamic angular momentum transport       
+ LSOLID = .FALSE. ! Enforce uniform rotation at all times. Set T for strongly coupled magnetic models.
+ WALPCZ = 0.0 ! Angular velocity in CZ scales as R^WALPCZ. 0 = solid body -2 = uniform specific angular momentum
+ IMPJMOD = 1 !Rotation profile 0=nothing enforced, 1=LSOLID, 2=SB below Surface convection zone, 3= solid below surface at BCZ rotation
