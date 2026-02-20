@@ -1,0 +1,4 @@
+ NUMBER OF TRACKS   1 FOLLOWING LINES INCLUDE NUMBER OF MODELS PER TRACK, STARTING MASS, AND STARTING ROTATION PERIOD
+    1    1  0.2500  0.0000
+  J    K    Age(Gyr)         L/Lsun          R/Rsun        LogTeff(K)       Mcz(Msun)        Rcz(Rsun)          Xcen         Itot(cgs)       Icz(cgs)      Tau(cz)(sec)   HeCore(Msun)     Patm(cgs)       Mass(Msun)      Prot(days)      Icore(cgs)     Omega(core)     Omega(env)      Jtot(cgs)      Jcore(cgs)      Jenv(cgs)  CentrifugalCorr     CoronalB/Bsol       dM/dt(Msun/yr)
+   1       1      1.03298325E-03  1.35733814E-01  1.11464415E+00  3.52092788E+00  2.50000000E-01  1.43740000E-10  7.11660124E-01  5.92447037E+53  5.92447037E+53  6.30124258E+06  0.00000000E+00  5.31498875E+04  2.50000000E-01  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00  0.00000000E+00

@@ -1,0 +1,15 @@
+#
+#
+#
+ export local="/home/ash.172/RELEASE/examples/rotevol"
+ export tracks="../../Release Paper Sample Case Output/Gyrochrones"
+ export output_dir="/home/ash.172/RELEASE/examples/rotevol/tracks/comparisons/nonsolidbody"
+# INPUT
+ rm fort.*
+ mkdir -p $output_dir
+ ln -s $local/rotevolin_m0p35per5p2.dat fort.11
+ ln -s "$tracks/rotevolin_m0p35per5p2.track" fort.13
+ ln -s $output_dir/rotevolin_m0p35per5p2_num.numerics fort.50
+ ln -s $output_dir/rotevolin_m0p35per5p2_rot.out fort.60
+
+ ./run_experiment

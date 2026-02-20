@@ -1,0 +1,15 @@
+#
+#
+#
+ export local="/home/ash.172/yrec/output/rotevol/gyro_demo/release_paper/rotevol_tutorial"
+ export tracks="evol_tracks"
+ export output_dir="/home/ash.172/yrec/output/rotevol/gyro_demo/release_paper/rotevol_tutorial/tracks/2.0000D0PMMA_1.0000D0PMMB_2.2000D-1PMMM/"
+# INPUT
+ rm fort.*
+ mkdir -p $output_dir
+ ln -s $local/solar_rot_2.0000D0PMMA.dat fort.11
+ ln -s $tracks/cluster_cal_solid.track fort.13
+ ln -s $output_dir/cluster_cal_solid_num.numerics fort.50
+ ln -s $output_dir/cluster_cal_solid_rot.out fort.60
+
+ ./run_rotevol

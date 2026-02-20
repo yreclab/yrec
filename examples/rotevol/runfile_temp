@@ -1,0 +1,15 @@
+#
+#
+#
+ export local="{0}"
+ export tracks="{1}"
+ export output_dir="{2}"
+# INPUT
+ rm fort.*
+ mkdir -p $output_dir
+ ln -s $local/{3}.dat fort.11
+ ln -s "$tracks/{4}.track" fort.13
+ ln -s $output_dir/{5}.numerics fort.50
+ ln -s $output_dir/{6}.out fort.60
+
+ ./{7}

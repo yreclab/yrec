@@ -1,0 +1,170 @@
+C
+C
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+C BSSTEP
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+      SUBROUTINE INT1ZONE(SAGE,SI,FSTRUCT,STAUCZ,YI,YSTR,YTAU,SJ0,SJ1,
+     *                     I,J,T0,DTT,EXCEN,EXW,FCEN,FK2,YCEN)
+C     based on Numerical Recipes SR BSSTEP
+      IMPLICIT REAL*8(A-H,O-Z)
+      IMPLICIT LOGICAL*4(L)
+      PARAMETER(NTRACK=40,NMOD=20000,NMAX=15)
+      PARAMETER (ONE=1.0D0,SHRINK=0.95D0,GROW=1.2D0)
+C USER PARAMETERS, WIND LAW
+      COMMON/PARAM/LSOLID,IWIND,PMMA,PMMB,PMMC,PMMM,SOLJDOT,SOLMDOT,FK,
+     *             PDISK,TDISK,TAUCOUPLE,WCRIT,LROSS
+C SOLAR UNITS IN CGS, USED FOR LOSS LAW
+C SOLAR MASS, RADIUS, LUMINOSITY, SURFACE P, OVERTURN TIMESCALE (CGS),
+C ANGULAR VELOCITY(RAD/S)
+      COMMON/SOLAR/ SOLM,SOLR,SOLL,SOLP,SOLTAU,SOLW
+C PHYSICAL CONSTANTS
+C G (CGS), 2/3, SECONDS IN YEAR, SECONDS IN DAY
+      COMMON/CONST/CG,CC23,CPI,CSECYR,CSECDAY
+      INTEGER*4 NSEQ(11),IMAX,NUSE
+C INPUTS FROM TRACKS - CGS OR SOLAR UNITS AS NOTED
+C SAGE = AGE (YR), SI = CGS MOMENT OF INERTIA TOTAL
+C STAUCZ = CONVECTIVE OVERTURN TIMESCALE (SEC)
+C FSTRUCT = ROTATION-INDEPENDENT TERMS USED IN LOSS LAW
+C SEE SR SETUP FOR DESCRIPTION OF INGREDIENTS
+      REAL*8 SAGE(NTRACK,NMOD), SI(NTRACK,NMOD),STAUCZ(NTRACK,NMOD),
+     *       FSTRUCT(NTRACK,NMOD),EXW,EXCEN,FCEN(NTRACK,NMOD),FK2
+C SPLINE INTERPOLATION VECTORS
+      REAL*8 YI(NMOD),YSTR(NMOD),YTAU(NMOD),SJ0,SJ1,T0,DTT,
+     *       T1,H,HH,H1,A,B,SI1,SRM1,STAU1,WE1,YCEN(NMOD)
+      REAL*8 YEST(NMAX),YOUT(NMAX),YERR(NMAX),YTEST(11),YSCAL(NMAX),
+     *        ERR(NMAX),STAUMIN,STAUMAX
+C ANGULAR MOMENTUM SJ0 = START J, SJ1 = END J
+C T0 = START TIME DTT = TIMESTEP
+      DATA NSEQ /2,4,6,8,12,16,24,32,48,64,96/
+      DATA EPS,IMAX,NUSE/1.0D-3,11,7/
+      SAVE
+      YSCAL(1) = SJ0
+      DO KK = 1, 11
+         YTEST(KK) = 0.0D0
+      END DO
+20    CONTINUE
+C TAU(CZ) CAN OSCILLATE WHEN CLOSE TO A FULLY CONVECTIVE STATE
+C TO AVOID NUMERICAL PATHOLOGIES, RESTRICT THE RANGE TO WITHIN
+C THE ENDPOINT VALUES.
+      STAUMIN = MIN(STAUCZ(I,J-1),STAUCZ(I,J))
+      STAUMAX = MAX(STAUCZ(I,J-1),STAUCZ(I,J))
+      DO II = 1,IMAX
+         H1 = DTT/FLOAT(NSEQ(II))
+         T1 = T0
+         SJ1 = SJ0
+         HH = SAGE(I,J)-SAGE(I,J-1)
+C INTERPOLATE BETWEEN POINTS J AND J-1 FOR STRUCTURE VARIABLES
+         A = (SAGE(I,J)-T0)/HH
+         B = (T0-SAGE(I,J-1))/HH
+         SI0 = A*SI(I,J-1)+B*SI(I,J)+
+     *   ((A**3-A)*YI(J-1)+(B**3-B)*YI(J))*(HH**2)/6.0D0
+         FSTR0 = A*FSTRUCT(I,J-1)+B*FSTRUCT(I,J)+
+     *   ((A**3-A)*YSTR(J-1)+(B**3-B)*YSTR(J))*(HH**2)/6.0D0            
+         FCEN0 = A*FCEN(I,J-1)+B*FCEN(I,J)+
+     *   ((A**3-A)*YCEN(J-1)+(B**3-B)*YCEN(J))*(HH**2)/6.0D0            
+         SW0 = SJ0/SI0
+         IF(LROSS)THEN
+            STAU0 = A*STAUCZ(I,J-1)+B*STAUCZ(I,J)+
+     *   ((A**3-A)*YTAU(J-1)+(B**3-B)*YTAU(J))*(HH**2)/6.0D0            
+            STAU0=MAX(STAU0,STAUMIN)
+            STAU0=MIN(STAU0,STAUMAX)
+            IF(IWIND.EQ.3)THEN
+               W0 = SW0*STAU0/SOLTAU
+               WC0 = WCRIT
+            ELSE IF(IWIND.EQ.2)THEN
+               W0 = SW0
+               WC0 = WCRIT*SOLTAU/STAU0
+            ENDIF
+         ELSE
+            W0 = SW0
+            WC0 = WCRIT
+         ENDIF
+         DO JJ = 1,NSEQ(II)
+            T1 = T1 + H1
+C INTERPOLATE BETWEEN POINTS J AND J-1 FOR STRUCTURE VARIABLES
+            A = (SAGE(I,J)-T1)/HH
+            B = (T1-SAGE(I,J-1))/HH
+            SI1 = A*SI(I,J-1)+B*SI(I,J)+
+     *      ((A**3-A)*YI(J-1)+(B**3-B)*YI(J))*(HH**2)/6.0D0
+            FSTR1 = A*FSTRUCT(I,J-1)+B*FSTRUCT(I,J)+
+     *      ((A**3-A)*YSTR(J-1)+(B**3-B)*YSTR(J))*(HH**2)/6.0D0            
+            FCEN1 = A*FCEN(I,J-1)+B*FCEN(I,J)+
+     *      ((A**3-A)*YCEN(J-1)+(B**3-B)*YCEN(J))*(HH**2)/6.0D0            
+C START OF STEP DJ/DT
+            FCC0 = MIN(0.5D0,SW0**2*FCEN0)
+            FC0 = (FK2/(FK2**2+FCC0)**0.5D0)**EXCEN
+            DJDT0 = -FC0*FSTR0*SW0*MIN(W0,WC0)**(EXW-1.0D0)
+C TRIAL CORRECTED ESTIMATE FOR END OF STEP DJ/DT
+C INCLUDES BOTH LOSS AND CORRECTION FOR CHANGE IN I
+            SW1 = (SJ1 - DJDT0*H1)/SI1
+            IF(SW1.LT.0.0D0)STOP911
+            IF(LROSS)THEN
+               STAU1 = A*STAUCZ(I,J-1)+B*STAUCZ(I,J)+
+     *      ((A**3-A)*YTAU(J-1)+(B**3-B)*YTAU(J))*(HH**2)/6.0D0            
+               STAU1=MAX(STAU1,STAUMIN)
+               STAU1=MIN(STAU1,STAUMAX)
+               IF(IWIND.EQ.3) THEN
+                  W1 = SW1*STAU1/SOLTAU
+                  WC1 = WCRIT
+               ELSE IF(IWIND.EQ.2)THEN
+                  W1 = SW1
+                  WC1 = WCRIT*SOLTAU/STAU1
+               ENDIF
+            ELSE
+               W1 = SW1
+               WC1 = WCRIT
+            ENDIF
+            FCC1 = MIN(0.5D0,SW1**2*FCEN1)
+            FC1 = (FK2/(FK2**2+FCC1)**0.5D0)**EXCEN
+            DJDT1 = -FC1*FSTR1*SW1*MIN(W1,WC1)**(EXW-1.0D0)
+            SJ1 = SJ1 + 0.5D0*H1*(DJDT0+DJDT1)
+C COPY END OF STEP VALUES TO START OF NEXT STEP VALUES
+            SI0 = SI1
+            FSTR0 = FSTR1
+            FCEN0 = FCEN1
+            STAU0 = STAU1
+            W0 = W1
+            SW0 = SJ1/SI1
+C            IF(II.EQ.1)THEN
+C               FCC0 = MIN(0.5D0,FCEN(I,J-1)*SW0**2)
+C               FCC1 = MIN(0.5D0,FCEN(I,J)*SW1**2)
+C               WRITE(*,411)I,J,FK2,FC0,FC1,FCEN(I,J-1),FCEN(I,J),SW0,
+C     *                     SW1,FCC0,FCC1
+C 411           FORMAT(2I5,1P9E12.4)
+C            ENDIF
+            IF(SW0.LT.0.0D0)THEN
+               WRITE(*,2)I,J,SJ0,SJ1,SI0,SI1,DJDT0,DJDT1,SW0,
+     *         SW1,WMAX0,WMAX1,SFAC0,SFAC1
+ 2             FORMAT(2I5,1P12E12.4)
+               STOP
+            ENDIF
+         END DO
+	 XEST = (DTT/FLOAT(NSEQ(II)))**2
+         NV = 1
+         YEST(1)=SJ1
+C         WRITE(*,511)JJ,FSTR0,FSTR1,DJDT0,DJDT1,SJ0,SJ1,WMAX0,WMAX1,
+C     *               SW0,SW1,SI0,SI1
+C 511     FORMAT(I5,1P12E14.4)
+	 CALL RATEXT(II,XEST,YEST,YOUT,YERR,NV,NUSE)
+	 ERRMAX = 0.0D0
+	 ERRMAX = DMAX1(ERRMAX,DABS(YERR(1)/YSCAL(1)))
+	 ERR(1) = DABS(YERR(1)/YSCAL(1))
+	 ERRMAX = ERRMAX/EPS
+         YTEST(II)=YOUT(1)
+	 IF(ERRMAX.LT.ONE) THEN
+            SJ1 = YOUT(1)
+            WRITE(55,911)II,T1,(YTEST(KK),KK=1,11)
+	    RETURN
+	 ENDIF
+      END DO
+C      H = 0.25D0*H/2.0D0**INT((IMAX-NUSE)/2)
+C      H = 0.25D0*H/2**((IMAX-NUSE)/2)
+C      IF(X+H.EQ.X) THEN
+C         WRITE(*,*) 'ERROR IN BSSTEP'
+C	 STOP
+C      END IF
+C      GOTO 20
+      WRITE(*,911)II,(YTEST(KK),KK=1,11)
+ 911  FORMAT('ESTIMATES BY STEPSIZE',I5,1P12E12.4)
+      STOP411
+      END

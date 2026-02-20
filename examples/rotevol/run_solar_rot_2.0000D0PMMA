@@ -1,0 +1,15 @@
+#
+#
+#
+ export local="/home/ash.172/RELEASE/examples/rotevol"
+ export tracks="../../Release Paper Sample Case Output/Gyrochrones"
+ export output_dir="/home/ash.172/RELEASE/examples/rotevol/tracks/solar_model/"
+# INPUT
+ rm fort.*
+ mkdir -p $output_dir
+ ln -s $local/solar_rot_2.0000D0PMMA.dat fort.11
+ ln -s "$tracks/rotevolin_m1p05per8p0.track" fort.13
+ ln -s $output_dir/rotevolin_m1p05per8p0.numerics fort.50
+ ln -s $output_dir/solar_rot_2.0000D0PMMA.out fort.60
+
+ ./run_experiment

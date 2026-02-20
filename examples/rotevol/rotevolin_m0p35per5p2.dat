@@ -1,0 +1,22 @@
+$CONTROL
+
+INUMT=1 ! Number of mass tracks
+LSOLID=T ! T/F flag for rigid rotation
+IWIND=3  ! 1=No loss 2= Modified Kawaler 3=PM
+FK=1.08000D1 ! Parameter (scaling factor) for loss law.  Change to calibrate.
+PMMA=2.0000D0 ! dM/dt ~ omega^PMMA, PMM wind
+PMMB=1.0000D0 ! B R^-PMMC ~ omega^PMMB
+PMMC=0.0000D0 ! Kawaler PMMC = 2 RM PMMC = 0 
+PMMM=2.2000D-1 ! Matt&Pudritz M; dJ/dt~B^4m dM/dt^1-2m.  Matt2012 m=0.22
+SOLJDOT=1.3000E+30 ! Reference solar dJ/dt, used for constant in PMM
+SOLMDOT=1.2700E+12 ! Reference solar dM/dt, used for constant in PMM
+NUMROT=1 ! Number of rotation cases considered
+PDISK0(1)=5.211947111050804 ! Initial rotation period (days)
+TDISK0(1)=1.000D1 ! P = Pdisk enforce for Tdisk (Myr)
+TAUCOUPLE=1 ! Core/envelope coupling timescale (yr); negative=decoupled
+WCRIT=2.83D-5 ! Saturation threshold for loss law (rad/s); 10 omega_sun here
+LROSS=TRUE ! T/F rossby scaling of omega_crit (iwind=2) or constant(iwind=3)
+LCALSOL=.FALSE. ! If T, set numtrack=1 and calibrate Fk to get solw at solage
+SOLAGE=4.568D9 ! Solar age in Gyr, used for solar calibration
+SOLW=2.83D-6 ! Solar angular velocity.  25.4d=2.863d-6 rad/s
+$END
