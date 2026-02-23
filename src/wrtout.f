@@ -523,7 +523,8 @@ C JVS 02/12 Added PPHOT and SMASS to the output
      5      SSS1,SSS2,SSS3,RRR1,RRR2,RRR3,PPHOT,SMASS
 C MHP 9/25 added more columns to cz depth to avoid overflow
 C     1499       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4,16E16.8,12E10.3,41E16.8)
- 1499       FORMAT(1X,2I8,1P7E16.8,1P5E12.4,16E16.8,12E10.3,41E16.8)
+C MCR 12/25 Preserve precision and 'E' for values w/ 3-digit exponents
+ 1499       FORMAT(1X,2I8,1P7E17.8E3,1P5E12.4,16E17.8E3,12E10.3,41E17.8E3)
          ELSE IF(ITRVER .EQ.1 .OR. ITRVER .EQ.2) THEN
             WRITE(ITRACK,1500)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
      *                     ENVR,ENVT,ENVD,ENVP,ENVO
