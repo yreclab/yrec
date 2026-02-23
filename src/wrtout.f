@@ -522,6 +522,7 @@ C JVS 02/12 Added PPHOT and SMASS to the output
      4      SJTOT,SKEROT,HITOT,HICZ,OMEGA(M),OMEGA(1),ROTP,ROTV,TAUCZ,
      5      SSS1,SSS2,SSS3,RRR1,RRR2,RRR3,PPHOT,SMASS
 C MHP 9/25 added more columns to cz depth to avoid overflow
+C     1499       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4,16E16.8,12E10.3,41E16.8)
 C MCR 12/25 Preserve precision and 'E' for values w/ 3-digit exponents
  1499       FORMAT(1X,2I8,1P7E17.8E3,1P5E12.4,16E17.8E3,12E10.3,41E17.8E3)
          ELSE IF(ITRVER .EQ.1 .OR. ITRVER .EQ.2) THEN
@@ -703,12 +704,6 @@ C      *            LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
 
 C JVS END
        ENDIF
-C JVS 08/25 Added the option to output a stitched version of the interior and envelope 
-C solutions.
-      IF(LSTCH.AND.MOD(MODEL,NPRTMOD).EQ.0) THEN
-          CALL STITCH(HCOMP,HR,HP,HD,HS,HT,HL,HS1,OMEGA,ETA2,HI,R0,HJM,
-     *          FP,FT,TEFFL,HSTOT,BL,M,LC,MODEL)
-      ENDIF
 
       RETURN
       END
