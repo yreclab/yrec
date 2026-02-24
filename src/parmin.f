@@ -44,8 +44,8 @@ C JVS 02/11 PARAMETERS for command line yrec input file specification
 C      and extra acoustic depth (calcad.f) output files
 C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
       CHARACTER*256 FCLCD, YREC1, YREC2, FJLAST
-      CHARACTER*256 EMPTY
       CHARACTER*256 CMD  ! Shell command composition for system() call
+      INTEGER  I, LAST_SLASH_IDX
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
       COMMON/VNEWCB/VNEW(12)
@@ -774,14 +774,14 @@ c      READ(UNIT=IRUN, NML=PHYSICS)
 c      CLOSE(ISTAND)
 c      CLOSE(IRUN)
 
-      EMPTY='     '
       CALL GETARG(1, YREC1)
-      IF (YREC1(1:2) .EQ. EMPTY(1:2)) YREC1 = 'yrec8.nml1'
-      write(*,*) '.nml1 input file:',YREC1
+      IF (YREC1(1:2) .EQ. ' ') YREC1 = 'yrec8.nml1'
+      print *, ' '
+      write(*,*) 'CONTROL namelist :  ',YREC1(1:LEN_TRIM(YREC1))
 
       CALL GETARG(2, YREC2)
-      IF (YREC2(1:2) .EQ. EMPTY(1:2)) YREC2 = 'yrec8.nml2'
-      write(*,*) '.nml2 input file:',YREC2
+      IF (YREC2(1:2) .EQ. ' ') YREC2 = 'yrec8.nml2'
+      write(*,*) 'PHYSICS namelist :  ',YREC2(1:LEN_TRIM(YREC2))
 
       OPEN(UNIT=ISTAND, FILE=YREC1, STATUS='OLD')
       OPEN(UNIT=IRUN, FILE=YREC2, STATUS='OLD')
@@ -828,9 +828,18 @@ C corresponding environment variable, if one is defined.
 
 C Create output directory as specified in the FTRACK value of CONTROL
 C namelist if it doesn't already exist.
-      CMD = 'mkdir -p `dirname '
-      CMD(LEN_TRIM(CMD)+2: LEN_TRIM(FTRACK)+LEN_TRIM(CMD)) = FTRACK(1:LEN_TRIM(FTRACK))
-      CMD(LEN_TRIM(CMD)+1: LEN_TRIM(CMD)+2)  = '`'  ! close dirname call with backtick
+      CMD = 'mkdir -p '
+      ! find index of last '/' char. Use that to snip out the directory name.
+      DO I = LEN_TRIM(FTRACK), 1, -1
+          IF (FTRACK(I:I) .EQ. '/') THEN
+              LAST_SLASH_IDX = I
+              GOTO 1250
+          ENDIF
+      END DO
+1250  CONTINUE
+      CMD(LEN_TRIM(CMD)+2:LEN_TRIM(FTRACK(1:LAST_SLASH_IDX))+LEN_TRIM(CMD)) = FTRACK(1:LAST_SLASH_IDX)
+      print *,"OUTPUT placed in :  ",FTRACK(1:LAST_SLASH_IDX)
+      print *, ''
       CALL system(CMD)
 
 
