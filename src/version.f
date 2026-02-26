@@ -9,7 +9,7 @@ C----------------------------------------
 
       SUBROUTINE SETVERSION()
       CHARACTER*10 YRECVER
-      ! Short git commit hash + indicator working tree was not clean
+      ! Short git commit hash + indicator if working tree was not clean
       CHARACTER*20 GITHASH
       COMMON/VERSION/ YRECVER, GITHASH
       YRECVER = YREC_VERSION
