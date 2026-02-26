@@ -40,20 +40,20 @@ PREFIX ?= /usr/local/bin
 OBJS := $(patsubst %.f,%.o,$(wildcard *.f))
 
 # Flags for GNU Fortran (gfortran)
-GNU_BASE_FFLAGS = -ffixed-line-length-132 -Wall
+GNU_BASE_FFLAGS = -ffixed-line-length-132 -Wall -cpp -DGIT_HASH="'$(REPO_HASH)'"
 GNU_DEV_FFLAGS = -fcheck=all -ffpe-trap=invalid,zero,overflow
 GNU_DBG_FFLAGS = -g -fsanitize=undefined -fsanitize=address -fstack-protector-strong -O0
 GNU_PROF_FFLAGS = -O3 -g -pg
 GNU_REL_FFLAGS = -O3
 
 # Flags for Intel Fortran (ifort)
-IFORT_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces
+IFORT_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp -DGIT_HASH="'$(REPO_HASH)'"
 IFORT_DEV_FFLAGS = -check all -fpe:0
 IFORT_DBG_FFLAGS = -g
 IFORT_REL_FFLAGS = -O3
 
 # Flags for newer Intel Fortran compiler (ifx)
-IFX_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces
+IFX_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp -DGIT_HASH="'$(REPO_HASH)'"
 IFX_DEV_FFLAGS = -check all -fpe:0
 IFX_DBG_FFLAGS = -g
 IFX_REL_FFLAGS = -O3
@@ -83,9 +83,24 @@ else
 	REL_FFLAGS = $(GNU_REL_FFLAGS)
 endif
 
+# Test for presence of git command for version hash collection.
+GIT_AVAIL := $(shell command -v git)
+ifdef GIT_AVAIL
+REPO_DIRTY := $(shell command git diff --name-only --quiet .; echo $$?)
+SHORT_HASH := $(shell command git rev-parse --short HEAD)
+ifeq ($(REPO_DIRTY),1)
+  REPO_HASH=$(SHORT_HASH)-dirty
+else
+  REPO_HASH=$(SHORT_HASH)
+endif
+else
+  REPO_HASH=unknown
+endif
+
+
 # Targets
-all: FFLAGS += $(REL_FFLAGS)
-all: $(NAME)
+default: FFLAGS += $(REL_FFLAGS)
+default: $(NAME)
 
 devel: FFLAGS += $(DEV_FFLAGS)
 devel: $(NAME)

@@ -21,6 +21,9 @@ C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
       PARAMETER (JSON=5000)
 
       REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
+      CHARACTER*10 YRECVER
+      CHARACTER*20 GITHASH
+      CHARACTER*256 VERFMT
       CHARACTER*256 FLAOL, FPUREZ
       CHARACTER*256 FLAOL2, FOPAL2, FKUR2
       CHARACTER*256 DESCRIP(2)
@@ -297,6 +300,7 @@ C G Somers 6/14 ALLOW VARIABLE LI/BE DESTRUCTION CROSS SECTIONS
       COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
 C G Somers END
+      COMMON/VERSION/YRECVER, GITHASH
       SAVE
 C
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
@@ -763,6 +767,8 @@ C Default FeH and Alpha for new Allard Atmospheres
 C 3/09 Input file for 2006 Alexander opacities
       IALEX06 = 90
 
+      print *,''
+      print *,'Yale Rotating Evolution Code - YREC, v',YRECVER(1:LEN_TRIM(YRECVER)),' (',GITHASH(1:LEN_TRIM(GITHASH)),')'
 
 C JVS 02/11 Altered the yrec8 input format so that files can be entered
 C on the command line, with the *.nml1 as the first argument, and *.nml2 as
@@ -773,6 +779,11 @@ c      READ(UNIT=ISTAND, NML=CONTROL)
 c      READ(UNIT=IRUN, NML=PHYSICS)
 c      CLOSE(ISTAND)
 c      CLOSE(IRUN)
+
+C Dynamically create format string so version info is nicely spaced
+      WRITE(VERFMT, 315) LEN_TRIM(YRECVER), LEN_TRIM(GITHASH)
+  315 FORMAT('(''# YREC v'', A', I2.2, ', '' ('', A', I2.2,
+     *       ', '')'')')
 
       CALL GETARG(1, YREC1)
       IF (YREC1(1:2) .EQ. ' ') YREC1 = 'yrec8.nml1'
@@ -939,6 +950,7 @@ C JvS 08/25 Added stitched interior and envelope option
          IF(LSTCH)THEN
             LPHHD = .TRUE.
          ELSE
+            WRITE(ISTOR,VERFMT) YRECVER, GITHASH
             WRITE(ISTOR,1012)
          ENDIF   
       ENDIF
@@ -1387,14 +1399,24 @@ C DBG PULSE
       IF (LPUREZ) THEN
           WRITE(ISHORT,*) ' USING PURE C AND N OPACITY TABLES'
       END IF
+
       WRITE(IMODPT,310) DESCRIP(1),  DESCRIP(2)
+
+      WRITE(ISHORT,314)
+      WRITE(ISHORT,VERFMT) YRECVER, GITHASH
       WRITE(ISHORT,310) DESCRIP(1),  DESCRIP(2)
-  310 FORMAT(/,' ',125('='),/,' ',' DESCRIPTION OF RUN: ', A80,/,
-     *         ' ', 9X, '  ',8X,': ', A80,/,' ',130('='),/,' ')
+  310    FORMAT('# DESCRIPTION OF RUN:',A80,/, '#',9X,'  ',8X,': ',
+     *          A80,/,'#', 100('='))
+
       IF(LTRACK) THEN
+
+         WRITE(ITRACK,314)
+  314    FORMAT('#',/,'#',100('='))
+         WRITE(ITRACK,VERFMT) YRECVER, GITHASH
          WRITE(ITRACK,320) DESCRIP(1), DESCRIP(2)
-  320    FORMAT('#',/,'#',100('='),/,'#',' DESCRIPTION OF RUN: ', A80,/,
-     *          '#',9X,'  ',8X,': ', A80,/,'#',100('='))
+  320    FORMAT('# DESCRIPTION OF RUN:',A80,/, '#',9X,'  ',8X,': ',
+     *          A80,/,'#', 100('='))
+
       ENDIF
       WRITE(ISHORT,323)
  323  FORMAT(' USING OSCILATORY SPLINE INTERPOLATION IN HPOINT')

@@ -202,6 +202,7 @@ C       DATA SUNAGE,SUNL/4.57D09,3.844D33/  ! KC 2025-05-31
 C*******
 C START
 C*******
+      CALL SETVERSION()
 
       IOWR = 9
 C LPUNCH is TRUE once first model is calculated
