@@ -236,6 +236,6 @@
  TCUT(3) = 6.82 ! Not used (formerly minimum T for CNO)
  MCORE = 40 ! Points to assign to new domain; not used now.
  LENVG = .FALSE. ! Compute the model structure of the outer layers after convergence; used for i/o purposes, or ones where you need information beyond the outer fitting point; not used now (other flags do this)
- ALFA = 1.5 ! Legacy exponent for angular momentum loss in Kawaler (1988) wind model.
- 
+ ALFA = 1.5 ! Legacy exponent for angular momentum loss in Kawaler (1988) wind model.        
+
  $END

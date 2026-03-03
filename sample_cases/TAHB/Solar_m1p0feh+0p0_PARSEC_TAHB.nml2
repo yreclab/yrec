@@ -16,10 +16,10 @@
  ! XNEWCP = 1.5D-5 ! New mass fraction
 
  ! Options for gravitational settling and microscopic diffusion
- LNEWDIF = .TRUE. ! Enables the usage of new routines for gravitational settling; recommended that this be set T. Required for light element diffusion.
- LDIFY = .TRUE. ! Compute gravitational settling of helium (t/f)
- LDIFZ = .TRUE. ! Compute gravitational settling of helium (t/f)
- LDIFLI = .TRUE. ! Compute gravitational settling of light species (t/f)
+ LNEWDIF = .FALSE. ! Enables the usage of new routines for gravitational settling; recommended that this be set T. Required for light element diffusion.
+ LDIFY = .FALSE. ! Compute gravitational settling of helium (t/f)
+ LDIFZ = .FALSE. ! Compute gravitational settling of helium (t/f)
+ LDIFLI = .FALSE. ! Compute gravitational settling of light species (t/f)
  FGRY = 1.0D0 ! Factor to muliply diffusion coeffcients for settling of helium (0.75 if rotational mixing not included)
  FGRZ = 1.0D0 ! Factor to multiply diffusion coeffcients for settling of metal (0.75 if rotational mixing not included)
  ! Numerical choices for gravitational settling and thermal diffusion. You should not need to adjust these.
@@ -55,11 +55,11 @@
  ! Convective mixing parameters
  LSEMIC = .FALSE. ! Include semi-convection (t/f). Ensure that this is on for core He-burning models.
  DPENV = 1.0 ! Full mixing from center to fractional depth in mass. Not a standard option.
- LOVSTC = .FALSE. ! Include core overshoot (t/f). Note: unless LOVAD=T, this is overmixing only, and does not impact the thermal structure
- ALPHAC = 0.2 ! Core overshoot in Hp
+ LOVSTC = .TRUE. ! Include core overshoot (t/f). Note: unless LOVAD=T, this is overmixing only, and does not impact the thermal structure
+ ALPHAC = 0.25 ! Core overshoot in Hp
  LOVMAX = .FALSE. ! Alternative test (only checked if LOVSTC = T) to avoid pathologies in overshoot of small cores.
  BETAC = 0.15 ! Alternative test - maximum overshoot in fraction of physical size of core
- LOVSTE = .FALSE. ! Include envelope overshoot (t/f)
+ LOVSTE = .TRUE. ! Include envelope overshoot (t/f)
  ALPHAE = 0.5  ! Envelope overshoot in Hp
  LOVSTM = .FALSE. ! Include overshoot in intermediate CZ (recommend not on, needs to be checked)
  ALPHAM = 0.0  ! Intermediate overshoot (above and below) in Hp

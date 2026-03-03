@@ -1,0 +1,87 @@
+ $CONTROL  
+
+ DESCRIP(1) = "model5.1 test suite. Core helium burning, no diffusion, no rotation. Diffusion-calibrated. Overshooting."
+ DESCRIP(2) = "Gray Atm OPAL06+SCV EOS GS98" ! Second line label for output (optional)
+ 
+ ISETMIX=0 ! 0 = do not adjust 1 = use specified mixture (AMIX below) 2 = custom mixture (see parmin.f for variables)
+ AMIX = 'GS98'
+ ISETISO = 0! 0 = do not adjust 1 = use specified mixture (AISO below) 2 = custom mixture (see parmin.f for variables)
+
+ LCALS = .FALSE. ! Toggle to auto-calibrate solar Y and alpha to match the solar R and L at the age of the Sun. Does not enforce correct Z/X for mixture.
+ LCALSOLZX = .TRUE.
+ CALSOLZX = 0.02292d0 
+ TOLL = 3.0D-6 ! Tolerance target for L in the calibration routines.
+ TOLR = 3.0D-6 ! Tolerance target for R in the calibration routines.
+ CALSOLAGE = 4.568D9 ! Tolerance solar age in the calibration routines.
+  
+ NUMRUN = 3
+
+ KINDRN(1) = 2 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, no zero timestep)
+ LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
+ CMIXLA(1) = 1.707873
+ RSCLX(1) = 0.708508
+ RSCLZ(1) = 0.018777
+ NMODLS(1) = 10
+
+ KINDRN(2) = 2 ! rescale
+ LFIRST(2) = .FALSE.
+ CMIXLA(2) = 1.707873
+ RSCLX(2) = 0.708508
+ RSCLZ(2) = 0.018777
+ RSCLM(2) = -1 ! If positive, rescale to this mass (Msun)
+ RSCLCM(2) = 0.464901 ! If positive, rescale to this core mass (CHeB only)
+ NMODLS(2) = 10
+
+ KINDRN(3) = 1
+ LFIRST(3) = .FALSE.
+ NMODLS(3) = 1000000
+ XENV0A(3) = 0.708508 ! Envelope abundance label
+ ZENV0A(3) = 0.018777
+ CMIXLA(3) = 1.707873
+END_YCEN(3) = 0.001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+
+ LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
+ LSTATM = .FALSE. ! If T, ppend an atmosphere to the stored model file.
+ LSTENV = .FALSE. ! If T, append an envelope to the stored model file. If LSTENV and LSTATM = F, no information is output beyond the fitting point.
+ LSTMOD = .TRUE. ! Set the same as LSTORE. May be redundant.
+ LSTPHYS = .TRUE. ! If T, output microphysics (e.g. epsilon, kappa) to store file.
+ LSTROT = .FALSE. ! If T, append rotation data to store file.
+ NPRTMOD = 50 ! Output detailed model structures every NPRTMOD models.
+ NPRTPT = 1 ! Output details for every NPRTPT points (if 1000 points and NPRTPT=10, 100 lines are output).
+ LSTPCH = .TRUE. ! If T, output details of the final model to the .store file.
+ LTRACK = .TRUE. ! If T, global properties are always output to the .track file. This should almost always be on.
+ ITRVER = 0 ! Toggle for different track file formats. 0 (one line per model) strongly recommended.
+ LRWSH = .FALSE. ! If T, the short file retains only the details from the last model. This minimizes output file size.
+ LCORR = .TRUE. ! If true, output verbose details on model convergence to .short.
+ LPULSE = .FALSE. ! If T, generate pulsation output. LSTATM AND LSTENV are needed to get data for those regions (highly recommended if LPULSE is T)  
+  
+ LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
+ FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
+ LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
+ ZOPAL951 = 0.018777 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ FLIV95 = "{YREC_INPUT}/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
+ LPUREZ = .TRUE. 
+ FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
+
+ FFIRST = "{YREC_START}/zahb/120mSOLpreZAHB.last"
+ FLAST = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.last" ! The last converged model is stored here.
+ FMODPT = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.full" ! No longer used.
+ FSTOR = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.store" ! Model snapshots during the run are stored here.
+ FTRACK = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.track" ! Global variables as a function of time are stored here.
+ FSHORT = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.pmod" ! Pulsation output for the interior model.
+ FPENV = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.penv"! Pulsation output for the envelope model.
+ FPATM = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.atm" ! Pulsation output for the atmosphere model.
+ FSNU = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "{YREC_OUTPUT}/sample_cases/TAHB/ZAHB_m1p2feh+0p0_diffcal_TAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
+
+ FOPALE06 = "{YREC_INPUT}/eos/opal2006/EOSOPAL06Z0.018776" ! OPAL 2006 EoS table path.
+ FcondOpacP = "{YREC_INPUT}/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
+ FATM = "{YREC_INPUT}/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
+ FALLARD = "{YREC_INPUT}/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
+ FSCVH = "{YREC_INPUT}/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
+ FSCVHE = "{YREC_INPUT}/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
+ FSCVZ = "{YREC_INPUT}/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
+ FFERMI = "{YREC_INPUT}/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
+   
+ $END  
