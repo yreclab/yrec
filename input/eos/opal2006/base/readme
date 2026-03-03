@@ -10,6 +10,13 @@ This is due to switching of calculational methods (see below).
 The Z=0 tables extend to lower temperatue at high density than the Z=0.02 
 and Z=0.04 tables.  This data is at or near the limits of the theory
 and its use is only recommended for exploratory calculations.
+
+02/2026
+Updated the ZFS_interp_EOS5.f routines to 1) accept command line input of Z, 
+2) write to a file with the name EOSAPOAL06{Z}, 3) not zip that file anymore
+The Makefile has been updated to use this new routine (ZFS_interp_EOS5_2025)
+and allow for some of the same compiler options as the main YREC code. 
+
 >>END<<
 _______________________________________________________________________
 This directory contains equation of state data files for pure H, pure 

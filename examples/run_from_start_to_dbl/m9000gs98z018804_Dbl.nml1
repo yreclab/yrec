@@ -74,7 +74,7 @@
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
 ! FFIRST = "{YREC_INPUT}/models/pms/gs98/p900gs98z0188.nmo" ! Starting model path.
- FFIRST = "{YREC_INPUT}/models/start/m9000gs98z018804_prems.first" ! The last converged model is stored here.
+ FFIRST = "{YREC_START}/start/m9000gs98z018804_prems.first" ! The last converged model is stored here.
  FLAST = "{YREC_OUTPUT}/m9000gs98z018804_Dbl.first" ! The last converged model is stored here.
  FMODPT = "{YREC_OUTPUT}/m9000gs98z018804_Dbl.full" ! No longer used.
  FSTOR = "{YREC_OUTPUT}/m9000gs98z018804_Dbl.store" ! Model snapshots during the run are stored here.

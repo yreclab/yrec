@@ -126,9 +126,9 @@
  TOL_DM_MIN = 0.5D-10 ! Minimum spacing in mass between points (most important for thin outer fitting points)
  TOL_DM_MAX = 0.02 ! Maximum spacing in log M; important for stellar cores
  TOL_DL_MAX = 0.0025 ! Maximum spacing in L/Lsurf; important for energy generating regions
- TOL_DP_ENV_MAX = 0.01 ! Maximum spacing in log P, surface CZ (most important for outer layers)
- TOL_DP_CZBASE_MAX = 0.0025 ! Maximum spacing in log P near the SCZ base
- TOL_DP_CORE_MAX = 0.010 ! Maximum spacing in log P, interior to SCZ (important between burning, SCZ base)
+ TOL_DP_ENV_MAX = 0.005 ! Maximum spacing in log P, surface CZ (most important for outer layers)
+ TOL_DP_CZBASE_MAX = 0.00125 ! Maximum spacing in log P near the SCZ base
+ TOL_DP_CORE_MAX = 0.005 ! Maximum spacing in log P, interior to SCZ (important between burning, SCZ base)
  FLAG_DX = 0.02 ! Discontinuities in X larger than this are preserved / flagged
  FLAG_DZ = 0.02 ! Discontinuities in Z larger than this are preserved / flagged
  TOL_CZBASE_FINE_WIDTH = 0.1 ! Width of the finely zoned (in pressure) region around CZ base (0.4 for red giant models)
@@ -146,10 +146,10 @@
  TIME_DY_TOTAL = 0.00015 ! Maximum absolute He burned per timestep, Msun (AGB)
  TIME_DY_SHELL = 0.02 ! Maximum fractional He burned, He shell (AGB)
  LSTRUCT_TIME = .TRUE. ! Flag to restrict timestep from structural changes - disabled once Lgrav<0 (minimum radius, close to ZAMS)
- TIME_DT = 0.010 ! Maximum local change in temperature (pre-MS)
- TIME_DP = 0.020 ! Maximum local change in pressure (pre-MS)
- TIME_DR = 0.010 ! Maximum local change in radius (pre-MS)
- TIME_DL = 0.010 ! Maximum local change in luminosity (pre-MS)
+ TIME_DT = 0.005 ! Maximum local change in temperature (pre-MS)
+ TIME_DP = 0.010 ! Maximum local change in pressure (pre-MS)
+ TIME_DR = 0.005 ! Maximum local change in radius (pre-MS)
+ TIME_DL = 0.005 ! Maximum local change in luminosity (pre-MS)
  TIME_MAX_DT_FRAC = 1.3 ! Maximum fractional change in timestep, model to model
  TIME_DW_MIX = 0.01 ! Maximum change in omega for each small step in the angular momentum solver (can be more than one per full model step)
  TIME_DW_GLOBAL = 0.08 ! Maximum change in omega

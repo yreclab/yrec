@@ -38,38 +38,8 @@
  ! END_DCEN(1) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D Birthline, end)
  ! END_XCEN(1) = 0.714620 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
  ! END_XCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
- ! END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+  END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
  ! END_YCEN(1) = 0.9700 ! Run stops if NMODLS(I) is reached or this central helium is reached (ZAHB)
-
-! NUMRUN = 2 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
-! This is a rescaling run followed by an evolve run
- ! KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
- !LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
- !RSCLM(1) = 1.00 ! If positive, rescale to this mass (Msun)
- !RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
- !RSCLX(1) = 0.719629 ! If positive, rescale to this hydrogen.
- !RSCLZ(1) = 0.016492 ! If positive, rescale to this metallicity. 
- !NMODLS(1) = 2 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
- !XENV0A(1) = 0.719629 ! Envelope abundance label
- !ZENV0A(1) = 0.016492 ! Envelope abundance label
- !CMIXLA(1) = 1.712513 ! Rescale to this mixing length (or use for the run).
-! YREC uses an outer fitting point. 
- !LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.
- !SENV0A(1) = -1.0D-4 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
-!
- !KINDRN(2) = 1   
- !LFIRST(2) = .FALSE.  
- !NMODLS(2) = 10000 
- !XENV0A(2) = 0.719629
- !ZENV0A(2) = 0.016492
- !CMIXLA(2) = 1.712513
- ! ENDAGE(2) = 4.568D9 ! Run stops if NMODLS(I) is reached or this age is reached
- ! END_DCEN(2) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, start)
- ! END_DCEN(2) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, end)
- ! END_XCEN(2) = 0.714620 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
- ! END_XCEN(2) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
-  END_YCEN(2) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
- ! END_YCEN(2) = 0.9700 ! Run stops if NMODLS(I) is reached or this central helium is reached (ZAHB)
 
  ! The starting and last models include only abundances and structure variables. These options allow snapshots to be generated with more information. 
  LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
@@ -95,42 +65,39 @@
 ! Input files
 ! Opacity tables and options
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
- FALEX06 = "../../input/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
+ FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
  ZOPAL951 = 0.016492 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
- FLIV95 = "../../input/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
+ FLIV95 = "{YREC_INPUT}/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
- FPUREZ = "../../input/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
- FcondOpacP = "../../input/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
+ FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
+ FcondOpacP = "{YREC_INPUT}/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
 
 ! Equation of state tables
- FOPALE06 = "../../input/eos/opal2006/EOSOPAL06Z0.018776" ! OPAL 2006 EoS table path.
- FATM = "../../input/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
- FALLARD = "../../input/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
- FSCVH = "../../input/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
- FSCVHE = "../../input/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
- FSCVZ = "../../input/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
- FFERMI = "../../input/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
+ FOPALE06 = "{YREC_INPUT}/eos/opal2006/EOSOPAL06Z0.018776" ! OPAL 2006 EoS table path.
+ FATM = "{YREC_INPUT}/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
+ FALLARD = "{YREC_INPUT}/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
+ FSCVH = "{YREC_INPUT}/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
+ FSCVHE = "{YREC_INPUT}/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
+ FSCVZ = "{YREC_INPUT}/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
+ FFERMI = "{YREC_INPUT}/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
 
 ! Starting models
- ! FFIRST = "../../input/models/pms/gs98/p100gs98z01757.ahbl" ! Sample starting model - pre-MS seed
- ! FFIRST = "../../input/models/dbl/m1000gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
- ! FFIRST = "../../input/models/ZAMS/m1000gs98z018804_ZAMS.first" ! Sample starting model - ZAMS
-  FFIRST = "output/Test_m3p0feh+0p0GS98_std25_TAMS.last" ! Sample starting model - TAMS
+ FFIRST = "{YREC_START}/tams/Test_m3p0feh+0p0GS98_std25_TAMS.last" ! Sample starting model - TAMS
 
 ! Output files 
- FLAST = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.last" ! The last converged model is stored here.
- FSTOR = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.store" ! Model snapshots during the run are stored here.
- FTRACK = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.track" ! Global variables as a function of time are stored here.
- FSHORT = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.short" ! Details about the numerics of the model run are stored here.
- FPMOD = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.pmod" ! Pulsation output for the interior model.
- FPENV = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.penv" ! Pulsation output for the envelope model.
- FPATM = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.atm" ! Pulsation output for the atmosphere model.
+ FLAST = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.last" ! The last converged model is stored here.
+ FSTOR = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.store" ! Model snapshots during the run are stored here.
+ FTRACK = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.track" ! Global variables as a function of time are stored here.
+ FSHORT = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.pmod" ! Pulsation output for the interior model.
+ FPENV = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.penv" ! Pulsation output for the envelope model.
+ FPATM = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.atm" ! Pulsation output for the atmosphere model.
   
 ! Legacy output files
- FMODPT = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.full" ! No longer used.
- FSNU = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP = "output/Test_m3p0feh+0p0GS98_std25_ZAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FMODPT = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.full" ! No longer used.
+ FSNU = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "{YREC_OUTPUT}/Test_m3p0feh+0p0GS98_std25_ZAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
 
 ! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
 

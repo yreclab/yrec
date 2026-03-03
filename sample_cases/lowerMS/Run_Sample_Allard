@@ -1,0 +1,19 @@
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p03feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p03feh+0p0GS98_allard_15Gyr.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p04feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p04feh+0p0GS98_allard_15Gyr.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p05feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p05feh+0p0GS98_allard_15Gyr.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p06feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p06feh+0p0GS98_allard_15Gyr.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p07feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p07feh+0p0GS98_allard_15Gyr.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p08feh+0p0GS98_allard_15Gyr.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p08feh+0p0GS98_allard_15Gyr.nml2 
+
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p09feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p09feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p1feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p1feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p2feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p2feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p3feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p3feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p4feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p4feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p5feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p5feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p6feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p6feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p7feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p7feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p8feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p8feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m0p9feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m0p9feh+0p0GS98_allard_ZAMS.nml2 
+time ./yrec_202602 /home/pinsonneault.1/model/SamplelowerMS_m1p0feh+0p0GS98_allard_ZAMS.nml1 /home/pinsonneault.1/model/SamplelowerMS_m1p0feh+0p0GS98_allard_ZAMS.nml2 
+

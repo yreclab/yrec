@@ -74,39 +74,39 @@
 ! Input files
 ! Opacity tables and options
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
- FALEX06 =  "../../input/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
+ FALEX06 =  "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
  ZOPAL951 = 0.016492 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
- FLIV95 =  "../../input/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
+ FLIV95 =  "{YREC_INPUT}/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
- FPUREZ =  "../../input/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
- FcondOpacP =  "../../input/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
+ FPUREZ =  "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
+ FcondOpacP =  "{YREC_INPUT}/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
 
 ! Equation of state tables
- FOPALE06 =  "../../input/eos/opal2006/EOSOPAL06Z0.017000000" ! OPAL 2006 EoS table path.
- FATM =  "../../input/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
- FALLARD =  "../../input/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
- FSCVH =  "../../input/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
- FSCVHE =  "../../input/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
- FSCVZ =  "../../input/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
- FFERMI =  "../../input/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
+ FOPALE06 =  "{YREC_INPUT}/eos/opal2006/EOSOPAL06Z0.017000000" ! OPAL 2006 EoS table path.
+ FATM =  "{YREC_INPUT}/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
+ FALLARD =  "{YREC_INPUT}/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).
+ FSCVH =  "{YREC_INPUT}/eos/scv/h_tab_i.dat" ! SCZ EoS table for X
+ FSCVHE =  "{YREC_INPUT}/eos/scv/he_tab_i.dat" ! SCZ EoS table for Y
+ FSCVZ =  "{YREC_INPUT}/eos/scv/z_tab_i.dat" ! SCZ EoS table for Z (generated from YREC EoS, needed for consistency)
+ FFERMI =  "{YREC_INPUT}/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
 
 ! Starting models
-  FFIRST =  "../../input/models/dbl_grid/m3500gs98z016492_Dbl.first" ! Sample starting model - Deuterium birthline
+  FFIRST =  "{YREC_START}/dbl_grid/m3500gs98z016492_Dbl.first" ! Sample starting model - Deuterium birthline
 
 ! Output files 
- FLAST =  "starting_tams/Grid_m3p8feh+0p0GS98_std25_TAMS.last" ! The last converged model is stored here.
- FSTOR =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.store" ! Model snapshots during the run are stored here.
- FTRACK =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.track" ! Global variables as a function of time are stored here.
- FSHORT =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.short" ! Details about the numerics of the model run are stored here.
- FPMOD =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.pmod" ! Pulsation output for the interior model.
- FPENV =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.penv" ! Pulsation output for the envelope model.
- FPATM =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.atm" ! Pulsation output for the atmosphere model.
+ FLAST =  "{YREC_START}/tams/Grid_m3p8feh+0p0GS98_std25_TAMS.last" ! The last converged model is stored here.
+ FSTOR =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.store" ! Model snapshots during the run are stored here.
+ FTRACK =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.track" ! Global variables as a function of time are stored here.
+ FSHORT =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.short" ! Details about the numerics of the model run are stored here.
+ FPMOD =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.pmod" ! Pulsation output for the interior model.
+ FPENV =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.penv" ! Pulsation output for the envelope model.
+ FPATM =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.atm" ! Pulsation output for the atmosphere model.
   
 ! Legacy output files
- FMODPT =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.full" ! No longer used.
- FSNU =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP =  "output/Grid_m3p8feh+0p0GS98_std25_TAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FMODPT =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.full" ! No longer used.
+ FSNU =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP =  "{YREC_OUTPUT}/Grid_m3p8feh+0p0GS98_std25_TAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
 
 ! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
 
