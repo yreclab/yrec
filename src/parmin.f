@@ -1547,7 +1547,7 @@ C parameter NUM_ENVVARS, above.
       DEFAULTS(1) = "../../input"
 
       PHOLDERS(2) = "{YREC_START}"
-      DEFAULTS(2) = "../../input/models"
+      DEFAULTS(2) = "../../startmodels"
 
       PHOLDERS(3) = "{YREC_OUTPUT}"
       DEFAULTS(3) = "output"
