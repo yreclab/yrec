@@ -1,4 +1,4 @@
-Sample_m9p0_feh0p0_none
+Sample_m9p0feh0p0GS98_none
 
 This is a non-rotating, solar metallicity, 9 Msun model with the default OPAL EoS, no semiconvection, no overshooting, a gray atmosphere, no gravitational settling, and no diffusion. The model is run from the deuterium birth line to the TAHB with the same tolerances and resolution parameters all the way through. 
 
@@ -9,4 +9,5 @@ Alternate stopping point at the TAMS:
 The evolution can be stopped with the central hydrogen abundance set to 1E-4 (END_XCEN(2) = 0.0001).
 
 Alternate stopping point at the ZAHB:
+
 To stop at the ZAHB instead, set KINDRN=1, NUMRUN=1, and set the stopping condition as a central helium abundance of 0.97 (END_YCEN(1) = 0.97). The same resolution and tolerance parameters from the DBL to TAMS evolution can be kept, with LCORE = FALSE set. Either the dbl model or the .last model from the TAMS run can be used as the starting model. If the latter, set LCORE to false.

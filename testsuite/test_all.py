@@ -9,6 +9,7 @@
 import os, sys
 import shutil
 from glob import glob
+import pathlib
 import re
 import numbers
 import pytest
@@ -197,14 +198,22 @@ def test_yrec(tdir, nml1, nml2):
     # Run the executable with the inputs for a given test case.
     os.chdir(tdir)
     for direc in ['output', 'standard']:
-        if not os.path.exists(direc):
-            os.mkdir(direc)
+        os.makedirs(direc, exist_ok=True)
     proc = sp.run([yrec_exe, nml1, nml2],
             stdout=sp.PIPE,
             stderr=sp.PIPE)
     os.chdir(startdir)
-    print(proc.stdout.decode())
-    print(proc.stderr.decode())
+    out = proc.stdout.decode()
+    err = proc.stderr.decode()
+
+    print(out)
+    print(err)
+    # Extract output directory from terminal output
+    outdir = None
+    for line in out.split('\n'):
+        if "OUTPUT placed in" in line:
+            outdir = str(pathlib.Path(line.split(':')[1].strip()))
+    print(f'{outdir=}')
 
     # Fail on abnormal termination
     assert proc.returncode == 0, "Program terminated abnormally"
@@ -214,7 +223,11 @@ def test_yrec(tdir, nml1, nml2):
     # If no reference standard, copy outputs to
     # reference standard location and return.
     tbase = nml1.replace(".nml1", "")
-    outputs = glob(f"{tdir}/output/{tbase}.*")
+    all_outputs = glob(f"{tdir}/{outdir}/{tbase}.*")
+    print(f"{tdir}/{outdir}/{tbase}")
+    print(f"{all_outputs=}")
+    outputs = [f for f in all_outputs if re.search(r'(\.short|\.store|\.track)', f)]
+    print(f"{outputs=}")
 
     # Fail on missing outputs
     assert len(outputs) > 0, "Missing output(s)"

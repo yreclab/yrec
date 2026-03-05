@@ -35,10 +35,10 @@
 ! Numerical convergence option
  LNEWS = .TRUE. ! Extrapolate changes from prior step for next step in initial entripy change estimate; can improve convegence.
 ! Positive Niter1 and Niter2 are mandatory; Niter3 and Niter4 can be nonzero for high precision work, but set to zero if you are having convergence issues.
- NITER1 =  2 !2 ! Iterations before SBC is checked              
- NITER2 = 40 !40 ! Iterations after SBC is checked, assumes start of T nuclear burning rates.
- NITER3 = 40 !40 Iterate between model solution and rotational mixing. Set to 1 for models without rotation.
- NITER4 = 40 ! Iterate betweeen model solution and nuclear burning rates.
+ NITER1 =  2 ! Iterations before SBC is checked              
+ NITER2 = 40 ! Iterations after SBC is checked, assumes start of T nuclear burning rates.
+ NITER3 = 40 ! Iterate betweeen model solution and nuclear burning rates.
+ NITER4 = 40 ! Iterate between model solution and rotational mixing.
  FCORR0 = 0.6 ! The code predicts corrections to the structure variables, which can initially be overestimated. This is the iteration 1 scale factor by which they are multipled.          
  FCORRI = 0.05 ! This is the increment to the factor for each successive interation, for example it reaches the max of 1 in 8 steps if (0.6,0.05). larger factor = faster convergence, less stable
  HTOLER(1,1) = 6.0D-9 ! Convergence tol for log P. If the maximum correction in a given stage anywhere is below this threshold (for all 4 state variables), the run is converged. 
@@ -50,7 +50,7 @@
  HTOLER(2,2) = 5.0D5 ! Log correction in T larger than this ends run.   
  HTOLER(3,2) = 5.0D5 ! Log correction in R larger than this ends run.   
  HTOLER(4,2) = 5.0D6 ! correction in L/Ltot larger than this ends run.    
- HTOLER(5,2) = 2.5E-7 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
+ HTOLER(5,2) = 2.5E-6 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
 
 ! Convective mixing parameters
  LSEMIC = .FALSE. ! Include semi-convection (t/f). Ensure that this is on for core He-burning models.

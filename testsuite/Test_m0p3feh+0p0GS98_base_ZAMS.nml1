@@ -95,18 +95,18 @@
  FFIRST = "{YREC_START}/dbl/m0300gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
 
 ! Output files 
- FLAST = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.last" ! The last converged model is stored here.
- FSTOR = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.store" ! Model snapshots during the run are stored here.
- FTRACK = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.track" ! Global variables as a function of time are stored here.
- FSHORT = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.short" ! Details about the numerics of the model run are stored here.
- FPMOD = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.pmod" ! Pulsation output for the interior model.
- FPENV = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.penv"! Pulsation output for the envelope model.
- FPATM = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.patm" ! Pulsation output for the atmosphere model.
+ FLAST = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.last" ! The last converged model is stored here.
+ FSTOR = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.store" ! Model snapshots during the run are stored here.
+ FTRACK = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.track" ! Global variables as a function of time are stored here.
+ FSHORT = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.pmod" ! Pulsation output for the interior model.
+ FPENV = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.penv"! Pulsation output for the envelope model.
+ FPATM = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.patm" ! Pulsation output for the atmosphere model.
   
 ! Legacy output files
- FMODPT = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.full" ! No longer used.
- FSNU = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP = "{YREC_OUTPUT}/testsuite/Test_m0300_feh0_base_ZAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FMODPT = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.full" ! No longer used.
+ FSNU = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "{YREC_OUTPUT}/testsuite/Test_m0p3feh+0p0GS98_base_ZAMS.excomp" ! No longer used (light elements vs. time, now included in track file)
 
 ! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
 

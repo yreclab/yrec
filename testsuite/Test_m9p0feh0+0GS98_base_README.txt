@@ -1,4 +1,4 @@
-Test_m9p0_feh0p0_base
+Test_m9p0feh0p0GS98_base
 
 This is a non-rotating, solar metallicity, 9 Msun model with the default OPAL EoS, overshooting with 0.2 Hp, a gray atmosphere, no gravitational settling, and no diffusion. The model is run first from the deuterium birth line to the TAMS, then from the TAMS to the TAHB. Namelists ending in TAMS govern the first phase of evolution and namelists ending in TAHB govern the second. Two phases of evolution are required because relaxed tolerances and numerical parameters are needed to handle post-MS evolution, where the model is quite touchy and sensitive to numerical choices.
 
@@ -10,4 +10,5 @@ The second phase of evolution is handled with one evolution run (KINDRN=1, NUMRU
 
 Alternate stopping point at the ZAHB:
 To stop at the ZAHB instead, set KINDRN=1, NUMRUN=1, and set the stopping condition as a central helium abundance of 0.97. Using the TAMS model is the new starting model, the same resolution and tolerance parameters from the DBL to TAMS evolution can be kept, with LCORE = FALSE set. The numerical changes adopted for the TAMS to TAHB model are not guaranteed to work for ZAHB to TAHB evolution. In general, to get a high mass model to the TAHB, increasing iterations, increasing HTOLER(5,2), and decreasing FLAG_DX, FLAG_DZ, and TOL_DM_MAX can help, though do not change all parameters at once.
+
 

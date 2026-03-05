@@ -6,7 +6,7 @@
 
  LEXCOM = .TRUE. ! Model includes D, Li6, Li7, Be9. Always set T. This should be removed from the list.
 ! Change central fitting point (surface is changed in nml1) 
- LCORE = .FALSE. ! If true, move the central fitting point in, assuming a Taylor series expansion                                 
+ LCORE = .TRUE. ! If true, move the central fitting point in, assuming a Taylor series expansion                                 
  FCORE = 10.0D0  ! Factor in mass to move the fitting point in by.
 
 ! Option to adjust initial mixture for a single species. Use nml1 variables ISETMIX and ISETISO to reset full mixtures.
@@ -37,10 +37,10 @@
 ! Positive Niter1 and Niter2 are mandatory; Niter3 and Niter4 can be nonzero for high precision work, but set to zero if you are having convergence issues.
  NITER1 =  2 ! Iterations before SBC is checked              
  NITER2 = 40 ! Iterations after SBC is checked, assumes start of T nuclear burning rates.
- NITER3 = 40 ! Iterate between model solution and rotational mixing. Set to 1 for models without rotation.
- NITER4 = 40 ! Iterate betweeen model solution and nuclear burning rates.
+ NITER3 = 40 ! Iterate betweeen model solution and nuclear burning rates.
+ NITER4 = 40 ! Iterate between model solution and rotational mixing.
  FCORR0 = 0.6 ! The code predicts corrections to the structure variables, which can initially be overestimated. This is the iteration 1 scale factor by which they are multipled.          
- FCORRI = 0.0 !5 ! This is the increment to the factor for each successive interation, for example it reaches the max of 1 in 8 steps if (0.6,0.05). larger factor = faster convergence, less stable
+ FCORRI = 0.05 ! This is the increment to the factor for each successive interation, for example it reaches the max of 1 in 8 steps if (0.6,0.05). larger factor = faster convergence, less stable
  HTOLER(1,1) = 6.0D-9 ! Convergence tol for log P. If the maximum correction in a given stage anywhere is below this threshold (for all 4 state variables), the run is converged. 
  HTOLER(2,1) = 4.5D-9 ! Convergence tol for log T.
  HTOLER(3,1) = 3.0D-9 ! Convergence tol for log R.  
@@ -50,13 +50,13 @@
  HTOLER(2,2) = 5.0D5 ! Log correction in T larger than this ends run.   
  HTOLER(3,2) = 5.0D5 ! Log correction in R larger than this ends run.   
  HTOLER(4,2) = 5.0D6 ! correction in L/Ltot larger than this ends run.    
- HTOLER(5,2) = 2.5E-5 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
+ HTOLER(5,2) = 2.5E-6 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
 
 ! Convective mixing parameters
  LSEMIC = .FALSE. ! Include semi-convection (t/f). Ensure that this is on for core He-burning models.
  DPENV = 1.0 ! Full mixing from center to fractional depth in mass. Not a standard option.
  LOVSTC = .TRUE. ! Include core overshoot (t/f). Note: unless LOVAD=T, this is overmixing only, and does not impact the thermal structure
- ALPHAC = 0.2 ! Core overshoot in Hp
+ ALPHAC = 0.4 ! Core overshoot in Hp
  LOVMAX = .FALSE. ! Alternative test (only checked if LOVSTC = T) to avoid pathologies in overshoot of small cores.
  BETAC = 0.15 ! Alternative test - maximum overshoot in fraction of physical size of core
  LOVSTE = .FALSE. ! Include envelope overshoot (t/f)
@@ -71,8 +71,8 @@
  ENVSTP = 0.05 ! Maximum step in atmosphere integrator for LENVG
                       
  ! Equation of state flags
- LSCV = .FALSE. ! Use SCV EoS in domain where it is valid and OPAL is not
- LOPALE06 = .FALSE. ! Use OPAL tabulated EoS. Note - a simplified boltzman/saha solver, fully ionized at high T, is used when this is not enabled, or outside the table
+ LSCV = .TRUE. ! Use SCV EoS in domain where it is valid and OPAL is not
+ LOPALE06 = .TRUE. ! Use OPAL tabulated EoS. Note - a simplified boltzman/saha solver, fully ionized at high T, is used when this is not enabled, or outside the table
  LNumDeriv = .FALSE. ! Use numerical derivatives of structural variables, rather than analytic ones. Induces dramatic code slow-down if adopted.
  LDH = .TRUE. ! Use Debye-Huckle correction for simplified EoS
  ETADH0 = -2.0D0 ! Lower DH boundary
@@ -150,13 +150,13 @@
  
 ! Spatial tolerances for allocating mesh points, replaces HPTTOL
  TOL_DM_MIN = 0.5D-10 ! Minimum spacing in mass between points (most important for thin outer fitting points)
- TOL_DM_MAX = 0.04!4 ! Maximum spacing in log M; important for stellar cores
- TOL_DL_MAX = 0.005!5 ! Maximum spacing in L/Lsurf; important for energy generating regions
- TOL_DP_ENV_MAX = 0.02!2 ! Maximum spacing in log P, surface CZ (most important for outer layers)
- TOL_DP_CZBASE_MAX = 0.005!5 ! Maximum spacing in log P near the SCZ base
- TOL_DP_CORE_MAX = 0.02!2 ! Maximum spacing in log P, interior to SCZ (important between burning, SCZ base)
- FLAG_DX = 0.02 ! Discontinuities in X larger than this are preserved / flagged
- FLAG_DZ = 0.02 ! Discontinuities in Z larger than this are preserved / flagged
+ TOL_DM_MAX = 0.04 !4 Maximum spacing in log M; important for stellar cores
+ TOL_DL_MAX = 0.005 ! Maximum spacing in L/Lsurf; important for energy generating regions
+ TOL_DP_ENV_MAX = 0.02 ! Maximum spacing in log P, surface CZ (most important for outer layers)
+ TOL_DP_CZBASE_MAX = 0.005 ! Maximum spacing in log P near the SCZ base
+ TOL_DP_CORE_MAX = 0.02 ! Maximum spacing in log P, interior to SCZ (important between burning, SCZ base)
+ FLAG_DX = 0.02 !2 Discontinuities in X larger than this are preserved / flagged
+ FLAG_DZ = 0.02 !2 Discontinuities in Z larger than this are preserved / flagged
  TOL_DX_MAX = 1.0 ! Maximum spacing in X (obsolete, preserved for back compatibility)
  TOL_DZ_MAX = 1.0 ! Maximum spacing in Z (obsolete, preserved for back compatibility)
  TOL_CZBASE_FINE_WIDTH = 0.4 ! Width of the finely zoned (in pressure) region around CZ base
@@ -167,10 +167,10 @@
  TIME_CORE_MIN = 0.002 ! Minimum X, Y for using "core" vs. "shell" burning criteria
  TIME_DX_CORE_TOT = 0.002 ! Maximum absolute delta X H core burning (main sequence)
  TIME_DX_CORE_FRAC = 0.05 ! Maximum fractional delta X, H core burning (main sequence)
- TIME_DY_CORE_TOT = 0.004!4 ! Maximum absolute delta Y/Z per timestep (He burning) (red clump/HB)
- TIME_DY_CORE_FRAC = 0.06!6 ! Maximum fractional delta Y/Z per timestep (He burning) (red clump/HB)
- TIME_DX_TOTAL = 0.00015!15 ! Maximum absolute H burned per timestep, Msun (post-MS)
- TIME_DX_SHELL = 0.10!10 ! Maximum fractional delta X, H shell (post-MS)
+ TIME_DY_CORE_TOT = 0.004 !4 Maximum absolute delta Y/Z per timestep (He burning) (red clump/HB)
+ TIME_DY_CORE_FRAC = 0.06 !6 Maximum fractional delta Y/Z per timestep (He burning) (red clump/HB)
+ TIME_DX_TOTAL = 0.00015 ! Maximum absolute H burned per timestep, Msun (post-MS)
+ TIME_DX_SHELL = 0.10 ! Maximum fractional delta X, H shell (post-MS)
  TIME_DY_TOTAL = 0.00015 ! Maximum absolute He burned per timestep, Msun (AGB)
  TIME_DY_SHELL = 0.02 ! Maximum fractional He burned, He shell (AGB)
  LSTRUCT_TIME = .TRUE. ! Flag to restrict timestep from structural changes - disabled once Lnuc>>>Lgrav
