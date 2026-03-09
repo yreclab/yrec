@@ -9,7 +9,7 @@
 project = 'YREC'
 copyright = '2025, YREC Developers'
 author = 'YREC Developers'
-release = '5.1b'
+release = '202602'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
