@@ -4,7 +4,7 @@
 
 ---
 
-[![Documentation](https://img.shields.io/badge/YREC-Documentation-6495ED)](https://yrec.readthedocs.io/en/latest/) [![Zenodo](https://img.shields.io/badge/Zenodo-Community-93CCEA)](https://zenodo.org/communities/yrec/records?q=&l=list&p=1&s=10&sort=newest)  [![yreclab](https://img.shields.io/badge/Launch_in_browser-yreclab-ff7f0e)](https://yreclab.github.io/) 
+[![Documentation](https://img.shields.io/badge/YREC-Documentation-6495ED)](https://yrec.readthedocs.io/en/latest/) [![Zenodo](https://img.shields.io/badge/Zenodo-Community-93CCEA)](https://zenodo.org/communities/yrecmodels)  [![yreclab](https://img.shields.io/badge/Launch_in_browser-yreclab-ff7f0e)](https://yreclab.github.io/) 
 
 **YREC** is a modern & efficient public stellar evolution code delivering fast, precise models across a wide spectrum of initial conditions and physical prescriptions. Stellar evolution calculations from YREC have been used to study the physics of solar analogs, evolved giants, low-mass stars, rapidly rotators, and magnetically-active stars. With modern microphysics and prescriptions for rotation, surface magnetism, composition, and mixing, YREC provides a versatile foundation for tackling many different astrophysical problems. In the era of *precision* stellar astrophysics, YREC offers an open, performant, and lightweight alternative to existing codes.
 
