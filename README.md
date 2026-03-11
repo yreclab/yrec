@@ -24,7 +24,7 @@ To get started using YREC, consult the **[documentation](https://yrec.readthedoc
 
 Feedback and contributions are welcome, please open an issue or create a pull request.
 
-Namelists, models, or tools relevant to YREC are invited to be posted to the [YREC Zenodo community](https://zenodo.org/communities/yrec/records?q=&l=list&p=1&s=10&sort=newest).
+Namelists, models, or tools relevant to YREC are invited to be posted to the [YREC Zenodo community](https://zenodo.org/communities/yrecmodels).
 
 ### Citing
 
