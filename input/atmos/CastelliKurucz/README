@@ -1,0 +1,21 @@
+If you are using the new atmk2004 Kurucz/Castelli 
+
+http://kurucz.harvard.edu/papers/uppsala/
+
+ODFNEW = as NOVER but with newly computed ODFs with better opacities
+         and better abundances.
+CASTELLI 2004 New grids of ATLAS9 model atmospheres (Castelli and Kurucz)
+              arXiv:astro-ph/0405087 
+
+         **THESE ARE THE PREFERRED MODELS**
+ 
+         ***  4 Nov 2008 ALL A*ODFNEW.DAT FILES REPLACED ***
+         ***   45000, 4.5 INSERTED INSTEAD OF DUPLICATE 45000, 5  ***
+
+You NEED TO CHANGE KTTAU to 5 (NOT 3)
+
+(there are more Teff values in the updated tables, and the length
+of the Teff vector is hardcoded)
+
+JNT 2014/6/9
+
