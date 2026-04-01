@@ -13,8 +13,10 @@
 	},
 
 	"remoteEnv": {
-        "PATH": "${containerEnv:PATH}:/workspaces/yrec/src"
+        "PATH": "${containerEnv:PATH}:/workspaces/yrec/src",
+        "YREC_INPUT": "/workspaces/yrec/input",
+        "YREC_START": "/workspaces/yrec/startmodels"
     },
-	
+
 	"postStartCommand": "cd /workspaces/yrec/src; make -j2"
 }
