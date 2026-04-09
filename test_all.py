@@ -227,6 +227,9 @@ def test_yrec(tdir, nml1, nml2):
             outdir = str(pathlib.Path(line.split(':')[1].strip()))
     print(f'{outdir=}')
 
+    # Ensure outdir is an absolute path
+    outdir = os.path.abspath(os.path.join(tdir, outdir))
+
     # Fail on abnormal termination
     assert proc.returncode == 0, "Program terminated abnormally"
 
@@ -235,8 +238,8 @@ def test_yrec(tdir, nml1, nml2):
     # If no reference standard, copy outputs to
     # reference standard location and return.
     tbase = nml1.replace(".nml1", "")
-    all_outputs = glob(f"{tdir}/{outdir}/{tbase}.*")
-    print(f"{tdir}/{outdir}/{tbase}")
+    all_outputs = glob(f"{outdir}/{tbase}.*")
+    print(f"output file base = {outdir}/{tbase}")
     print(f"{all_outputs=}")
     outputs = [f for f in all_outputs if re.search(r'(\.short|\.store|\.track)', f)]
     print(f"{outputs=}")
