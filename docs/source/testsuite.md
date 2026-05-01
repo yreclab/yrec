@@ -1,7 +1,7 @@
 Test Suite
 ==========
 
-YREC includes an explicit set of namelists which cover behaviors known to work in the code. They act as example namelists for how to work with the code, and log specific configurations where the code will produce an expected result. As a result, they are also used to test backwards compatibility of the code between versions and during development.
+YREC includes an explicit set of namelists which cover behaviors known to work in the code. They act as example namelists for how to work with the code, and log specific configurations where the code will produce an expected result. They are also used to test backwards compatibility of the code between versions and during development.
 
 The test suite is currently divided into two categories: one is the **published test suite**, which represents a stable set of models published with one or more YREC instrument papers. The second is a set of contributed **test suite extras**, which demonstrate relevant code functionality and may be independently documented or published.
 
@@ -9,13 +9,14 @@ The test suite is currently divided into two categories: one is the **published 
 
 A test runner is provided to execute YREC on collections of model definitions,
 store the results as reference standards, and compare subsequent runs against
-those standards in order to identify changes.  While YREC is a pure Fortran
-application, pytest was chosen to be the test execution framework due to its
-feature set and ease of installation and use.
+those standards in order to identify changes in behavior.  While YREC is a pure
+Fortran application, pytest was chosen to be the test execution framework due
+to its feature set and ease of installation and use.
 
 ### Environment
 
-The test runner is implemented using pytest, which in turn requires python. A python virtualenv may be useful to host the necessary packages.
+The test runner is implemented using pytest, which in turn requires python. A
+python virtualenv may be useful to host the necessary packages.
 
 ```
 python -m venv ./yrec
@@ -23,7 +24,8 @@ source ./yrec/bin/activate
 pip install pytest pytest-xdist
 ```
 
-If a suitable python is not available, one may be installed using mamba or conda and then used as a base for installing pytest.
+If a suitable python is not available, one may be installed using mamba or
+conda and then used as a base for installing pytest.
 
 ```
 mamba create -n yrec python=3.10
@@ -31,17 +33,19 @@ mamba activate yrec
 pip install pytest pytest-xdist
 ```
 
-The test runner has been successfully used with python 3.10, pytest 8.4.2, and pytest-xdist 3.8.0 and should work with newer versions of these.
+The test runner has been successfully used with python 3.10, pytest 8.4.2, and
+pytest-xdist 3.8.0 and should also work with newer versions of these.
 
 ### Running Tests
 
-1. Build YREC using the Makefile in `src` (see the Quick Start, Building YREC section)
-1. Activate environment containing pytest per Environment steps above
-2. Edit configuration file `pytest.ini` (in repository root directory) to specify and/or change various parameters, such as:
+1. Build YREC using the Makefile in `src` (see <project:./quickstart.md#building-yrec>)
+2. Activate environment containing pytest per Environment steps above
+3. Edit configuration file `pytest.ini` (in repository root directory) to specify and/or change various parameters, such as:
 
     a. Location of yrec executable
 
-    b. List of sets or individual cases to run
+    b. List of sets or individual cases to run. The file contains documentation
+    on how to precisely specify which tests to run.
 
     c. Numerical tolerance for comparisons with reference standard outputs
 
@@ -54,24 +58,24 @@ The test runner has been successfully used with python 3.10, pytest 8.4.2, and p
 ### Test Runner Behavior
 
 The test runner will produce a summary of pass/fail results and indicate any
-differences from reference outputs indentified. Green periods (.) indicate
-passing tests, failures are marked with a red 'F'. Output from failing tests is
-provided after all tests have been run. Other pytest command line arguments are
-accepted as well, including '-v' for a more verbose output during execution.
+differences from reference outputs indentified. With the default output
+verbosity, green periods (.) indicate passing tests, failures are marked with a
+red 'F'. Output from failing tests is provided after all tests have been run.
+Other pytest command line arguments are accepted as well, including '-v' for a
+more verbose output during execution which shows the name of each test case.
 
 The first time a test case is run, the YREC outputs produced are promoted to
 reference standards and are copied into the `standard` directory alongside the
-input namelists. If the test runner detects that a reference standard output
-for a given test case already exists in the `standard` directory, it will use
-the outputs stored there as a basis of comparison against the outputs produced
-by YREC and will fail a test that has outputs which differ from the reference
-standard.
+input namelists in a given directory. If the test runner detects that a
+reference standard output for a test case already exists in the `standard`
+directory, it will compare the new YREC outputs against the standard and will
+fail a test that has outputs which differ from the reference standard.
 
 ```{admonition} Note
-All testsuite and other example namelists are configured to honor the various
-YREC path override environment variables possible. (See Control Options for a
-description of the environment variable functionality.)
+All test suite and extras namelists are configured to honor the various YREC
+path overrides provided through environment variables.
 ```
+(Re: the note above, see <project:./namelist_control.md#file-location-specifiers> )
 
 
 ## Published Test Suite (`testsuite/`)
