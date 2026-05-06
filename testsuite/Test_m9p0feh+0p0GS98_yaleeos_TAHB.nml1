@@ -79,22 +79,22 @@
 
 ! Starting models
  !FFIRST = "{YREC_START}/dbl/m9000gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
- FFIRST = "{YREC_START}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAMS.last" ! Sample starting model - TAMS
+ FFIRST = "{YREC_START}/Test_m9p0feh+0p0GS98_yaleeos_TAMS.last" ! Sample starting model - TAMS
 
 
 ! Output files 
- FLAST = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.last" ! The last converged model is stored here.
- FSTOR = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.store" ! Model snapshots during the run are stored here.
- FTRACK = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.track" ! Global variables as a function of time are stored here.
- FSHORT = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.short" ! Details about the numerics of the model run are stored here.
- FPMOD = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.pmod" ! Pulsation output for the interior model.
- FPENV = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.penv"! Pulsation output for the envelope model.
- FPATM = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.patm" ! Pulsation output for the atmosphere model.
+ FLAST = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.last" ! The last converged model is stored here.
+ FSTOR = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.store" ! Model snapshots during the run are stored here.
+ FTRACK = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.track" ! Global variables as a function of time are stored here.
+ FSHORT = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.pmod" ! Pulsation output for the interior model.
+ FPENV = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.penv"! Pulsation output for the envelope model.
+ FPATM = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.patm" ! Pulsation output for the atmosphere model.
   
 ! Legacy output files
- FMODPT = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.full" ! No longer used.
- FSNU = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP = "{YREC_OUTPUT}/testsuite/Test_m9p0feh+0p0GS98_yaleeos_TAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FMODPT = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.full" ! No longer used.
+ FSNU = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "{YREC_OUTPUT}/Test_m9p0feh+0p0GS98_yaleeos_TAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
 
 ! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
 
