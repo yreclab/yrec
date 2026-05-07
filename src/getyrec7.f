@@ -26,7 +26,7 @@ c MHP 4/25 changed LOK name to make it unique, used elsewhere
 
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
-      DIMENSION CFENV(9),HCOMP(15,JSON),HD(JSON),HL(JSON),HR(JSON),
+      DIMENSION CFENV(9),HCOMP(17,JSON),HD(JSON),HL(JSON),HR(JSON),
      *HP(JSON),HS(JSON),HT(JSON),LC(JSON),OMEGA(JSON),OMEGAL(JSON),
      *PS(3),RS(3),TS(3),TLUMX(8),TRIL(3),TRIT(3)
 
@@ -39,7 +39,7 @@ C This is agreed upon protection in case they are inadvertently used in the prog
 C but not present in the old YREC input data.
       DO I  = 1, JSON
          OMEGA(I) = 0D0
-       DO J = 1, 15
+       DO J = 1, 17
           HCOMP(J,I) = 0D0
        ENDDO
       ENDDO
@@ -171,10 +171,10 @@ C READ IN H2,LI6,LI7,BE9 (EXTENDED COMPOSITION)
       IF(LEXCOM) THEN
        IF(JENV.EQ.1)THEN
 C FULLY CONVECTIVE MODEL
-          READ(IREAD,300)(HCOMP(I,1),I=12,15)
- 300        FORMAT(4(1PE9.3,1X))
+          READ(IREAD,300)(HCOMP(I,1),I=12,17)
+ 300        FORMAT(6(1PE9.3,1X))
           DO 310 J = 1,M
-             DO 305 I = 12,15
+             DO 305 I = 12,17
               HCOMP(I,J) = HCOMP(I,1)
  305           CONTINUE
  310        CONTINUE
@@ -182,15 +182,15 @@ C FULLY CONVECTIVE MODEL
 C GENERAL CASE
 C THESE ABUNDANCES ARE READ IN WITH 2 SHELLS PER LINE
           DO 315 K = JCORE,JENV-1,2
-             READ(IREAD,200)((HCOMP(I,J),I = 12,15),J = K,K+1)
+             READ(IREAD,200)((HCOMP(I,J),I = 12,17),J = K,K+1)
  315        CONTINUE
 C IF AN ODD NUMBER OF ABUNDANCES STORED, READ IN LAST VALUE
           KT = JENV-1 - JCORE
-          IF(MOD(KT,2).NE.0)READ(IREAD,300)(HCOMP(I,K),I = 12,15)
+          IF(MOD(KT,2).NE.0)READ(IREAD,300)(HCOMP(I,K),I = 12,17)
           IF(JCORE.GT.1) THEN
 C CONVECTIVE CORE- ASSIGN FIRST VALUE TO SHELLS 1-JCORE
              DO 330 J = 1,JCORE-1
-              DO 320 I = 12,15
+              DO 320 I = 12,17
                  HCOMP(I,J) = HCOMP(I,JCORE)
  320              CONTINUE
  330           CONTINUE
@@ -198,7 +198,7 @@ C CONVECTIVE CORE- ASSIGN FIRST VALUE TO SHELLS 1-JCORE
           IF(JENV.LT.M) THEN
 C CONVECTIVE SURFACE- ASSIGN LAST VALUE TO SHELLS JENV - M
              DO 350 J = JENV+1,M
-              DO 340 I = 12,15
+              DO 340 I = 12,17
                  HCOMP(I,J) = HCOMP(I,JENV)
  340              CONTINUE
  350           CONTINUE

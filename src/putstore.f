@@ -35,7 +35,7 @@ C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
       COMMON/FLAG/LEXCOM
       COMMON/HEFLSH/LKUTHE
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
+      DIMENSION HCOMP(17,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      * HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      * CFENV(9),TLUMX(8),OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),R0(JSON),
      * HJM(JSON),HI(JSON),ID(JSON),HS1(JSON)
@@ -252,7 +252,7 @@ C write out the requested information.
             I = ID(II)
 C write out the basic info
             WRITE(ISTOR,62,ADVANCE='no') I,HS(I),HR(I),HL(I),HP(I),
-     *         HT(I),HD(I),OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
+     *         HT(I),HD(I),OMEGA(I),LC(I),(HCOMP(J,I),J=1,17)
 C write out additional physics if desired
             IF(LSTPHYS)THEN
              SG = DEXP(CLN*(CGL - 2.0D0*HR(I)))*HS1(I)

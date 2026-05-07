@@ -29,7 +29,7 @@ c MHP 4/25 changed LOK name to make it unique, used elsewhere
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
 
-      DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
+      DIMENSION HCOMP(17,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      &     HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      &     CFENV(9),TLUMX(8),OMEGA(JSON)
 
@@ -86,10 +86,10 @@ C Skip over column headings for per-shell data
 C Read per-shell data (HENYEY POINGS)
       DO I = 1,M
          READ(IREAD,60) K,HS(I),HR(I),HL(I),HP(I),HT(I),HD(I),
-     *      OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
+     *      OMEGA(I),LC(I),(HCOMP(J,I),J=1,17)
        ENDDO
  60   FORMAT(I6,0P2F18.14,1PE24.16,0P3F18.14,1PE24.16,1x,L1,
-     &     3(0PF12.9),12(0PE16.8))
+     &     3(0PF12.9),14(0PE16.8))
 
       RETURN
       END

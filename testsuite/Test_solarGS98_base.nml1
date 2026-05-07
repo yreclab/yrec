@@ -95,18 +95,18 @@
  FFIRST = "{YREC_START}/dbl/m1000gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
 
 ! Output files 
- FLAST = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.last" ! The last converged model is stored here.
- FSTOR = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.store" ! Model snapshots during the run are stored here.
- FTRACK = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.track" ! Global variables as a function of time are stored here.
- FSHORT = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.short" ! Details about the numerics of the model run are stored here.
- FPMOD = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.pmod" ! Pulsation output for the interior model.
- FPENV = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.penv"! Pulsation output for the envelope model.
- FPATM = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.patm" ! Pulsation output for the atmosphere model.
+ FLAST = "{YREC_OUTPUT}/Test_solarGS98_base.last" ! The last converged model is stored here.
+ FSTOR = "{YREC_OUTPUT}/Test_solarGS98_base.store" ! Model snapshots during the run are stored here.
+ FTRACK = "{YREC_OUTPUT}/Test_solarGS98_base.track" ! Global variables as a function of time are stored here.
+ FSHORT = "{YREC_OUTPUT}/Test_solarGS98_base.short" ! Details about the numerics of the model run are stored here.
+ FPMOD = "{YREC_OUTPUT}/Test_solarGS98_base.pmod" ! Pulsation output for the interior model.
+ FPENV = "{YREC_OUTPUT}/Test_solarGS98_base.penv"! Pulsation output for the envelope model.
+ FPATM = "{YREC_OUTPUT}/Test_solarGS98_base.patm" ! Pulsation output for the atmosphere model.
   
 ! Legacy output files
- FMODPT = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.full" ! No longer used.
- FSNU = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.snu" ! No longer used (formally, output if LSNU = T).
- FSCOMP = "{YREC_OUTPUT}/testsuite/Test_solarGS98_base.excomp" ! No longer used (light elements vs. time, now included in track file)
+ FMODPT = "{YREC_OUTPUT}/Test_solarGS98_base.full" ! No longer used.
+ FSNU = "{YREC_OUTPUT}/Test_solarGS98_base.snu" ! No longer used (formally, output if LSNU = T).
+ FSCOMP = "{YREC_OUTPUT}/Test_solarGS98_base.excomp" ! No longer used (light elements vs. time, now included in track file)
 
 ! Custom mixture controls - CNO enabled if ISETMIX = 2, Light elements if ISETISO=2
 

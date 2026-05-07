@@ -26,7 +26,7 @@ c MHP 4/25 changed LOK name to make it unique, used elsewhere
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
 
-      DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
+      DIMENSION HCOMP(17,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      &     HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      &     CFENV(9),TLUMX(8),OMEGA(JSON)
 
@@ -97,7 +97,7 @@ C write column headings for all per shell information
      *  'DENSITY     ','OMEGA         ',' C','  H1     ','   He4    ',
      *  '   METALS  ','He3      ','C12      ','C13      ','N14      ',
      *  'N15      ','O16      ','O17      ','O18      ','H2       ',
-     *  'Li6      ','Li7      ','Be9      '
+     *  'Li6      ','Li7      ','Be9      ','B10      ','B11      '
  55   FORMAT(A6,2A18,A24,3A18,A24,A2,3A12,12A16)
       WRITE(IWRITE,*)
 
@@ -106,7 +106,7 @@ C LLP 4/16/03  Output OMEGA rather Log10(OMEGA), a change from YREC7 files
 C write per shell information, one line per shell
       DO I = 1,M
          WRITE(IWRITE,60) I,HS(I),HR(I),HL(I),HP(I),HT(I),HD(I),
-     *      OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
+     *      OMEGA(I),LC(I),(HCOMP(J,I),J=1,17)
        ENDDO
  60   FORMAT(I6,0P2F18.14,1PE24.16,0P3F18.14,1PE24.16,1x,L1,
      &     3(0PF12.9),12(0PE16.8))

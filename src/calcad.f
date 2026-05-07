@@ -66,7 +66,7 @@ C       INTEGER I, K, N, U, ICZ, NN, IENDJ, FLG, V, IATCNT, KTSAV
       INTEGER I, K, P, U, ICZ, NN, IENDJ, FLG, V  ! IATCNT, KTSAV
       INTEGER IDUMJ, KATMJ,KENVJ,KSAHAJ,IXXJ
       DIMENSION RCZL(1), RCZ(1),HR(JSON), HD(JSON), HP(JSON), BJ(1),FPLJ(1),FTLJ(1),
-     * FT(JSON),FP(JSON), HCOMP(15,JSON), HT(JSON)  ! HL(JSON)
+     * FT(JSON),FP(JSON), HCOMP(17,JSON), HT(JSON)  ! HL(JSON)
       LOGICAL LPULPTJ,LPRTJ,LSBC0J  ! LTEST
 
 C KC 2025-05-30 reordered common block elements
@@ -109,7 +109,7 @@ C      *     lopale06,lNumDeriv
 C MHP 8/25 Remove file names from common blocks
       COMMON/OPALEOS/LOPALE,IOPALE,lopale01,lopale06,lNumDeriv
 C Added for experimantal mass loss section
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
+      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(17),CREIM,
      *               LREIMER,LMDOT
 C G Somers 10/14, Add spot common block
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH

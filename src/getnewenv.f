@@ -42,7 +42,7 @@ C JvS 08/25 Updated with new elements
      *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
      *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
       DIMENSION HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),
-     * LC(JSON),HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),
+     * LC(JSON),HCOMP(17,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),
      * QIW(JSON),ETA2(JSON),HI(JSON),HJM(JSON),R0(JSON),
 C      * HKEROT(JSON),HG(JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)  ! KC 2025-05-31
      * HKEROT(JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)
@@ -51,7 +51,7 @@ C G Somers 10/14, Add spot common block
 C G Somers END
       SAVE
       IF(LEXCOM)THEN
-         JEND = 15
+         JEND = 17
       ELSE
          JEND = 11
       ENDIF

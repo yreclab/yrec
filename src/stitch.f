@@ -27,7 +27,7 @@
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
       DIMENSION HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),
-     * LC(JSON),HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),
+     * LC(JSON),HCOMP(17,JSON),OMEGA(JSON),HS1(JSON),
      * ETA2(JSON),HI(JSON),HJM(JSON),R0(JSON),FP(JSON),
      * FT(JSON)
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
@@ -71,7 +71,7 @@ C ****************************  WRITE OUT INTERIOR INFORMATION   ***************
             SG = DEXP(CLN*(CGL - 2.0D0*HR(I)))*HS1(I)
 C write out the basic info
             WRITE(ISTOR,62,ADVANCE='no') MODEL,I,HS(I),HR(I),HL(I),HP(I),
-     *         HT(I),HD(I),OMEGA(I),LC(I),.TRUE.,.FALSE.,.FALSE.,(HCOMP(J,I),J=1,15)
+     *         HT(I),HD(I),OMEGA(I),LC(I),.TRUE.,.FALSE.,.FALSE.,(HCOMP(J,I),J=1,17)
 C write out additional physics if desired
             WRITE(ISTOR,63,ADVANCE='no') SO(I),SG,SDEL(1,I),SDEL(2,I),
      *           SDEL(3,I),SVEL(I),GAM1(I),SFXION(1,I),SFXION(2,I),SFXION(3,I),
@@ -143,7 +143,7 @@ C DEFINE SOME ARRAYS WE NEED
 C write out the basic info. Omega and abundances take value of last interior point.
             WRITE(ISTOR,62,ADVANCE='no') MODEL,I,ENVS(I-M)+HSTOT,ENVR(I-M),ENVL(I-M),
      *      ENVP(I-M),ENVT(I-M),ENVD(I-M),OMEGA(M),LCENV(I-M),.FALSE.,.TRUE.,.FALSE.,
-     *      (HCOMP(J,M),J=1,15)
+     *      (HCOMP(J,M),J=1,17)
 C write out additional physics
                WRITE(ISTOR,63,ADVANCE='no') ENVO(I-M),SG,EDELS(1,I-M),EDELS(2,I-M),
      *           EDELS(3,I-M),EVELS(I-M),EGAM1(I-M),EFXIONS(1,I-M),EFXIONS(2,I-M),
@@ -164,7 +164,7 @@ C write out the basic info. Omega and abundances take value of last interior poi
             RAD = DLOG10(DEXP(CLN*ENVR(NUMENV)) + ATMOR(I))
             WRITE(ISTOR,62,ADVANCE='no') MODEL,NUMATM-I+M+NUMENV,HSTOT,RAD,B,
      *      ATMOP(I),ATMOT(I),ATMOD(I),OMEGA(M),
-     *      .FALSE.,.FALSE.,.FALSE.,.TRUE.,(HCOMP(J,M),J=1,15)
+     *      .FALSE.,.FALSE.,.FALSE.,.TRUE.,(HCOMP(J,M),J=1,17)
 C write out additional physics
             WRITE(ISTOR,63,ADVANCE='no') ATMOO(I),SG,ADELS(1,I),
      *           ADELS(2,I),ADELS(3,I),0.0,AGAM1(I),
