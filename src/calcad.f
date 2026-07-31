@@ -47,7 +47,8 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT,
 C      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
-     *                  TEFFL, HCOMP, DAGE, JENV)
+     *                  TEFFL, HCOMP, DAGE, JENV, OMEGA)
+C     *                  TEFFL, HCOMP, DAGE, JENV, OMEGA, TAUCZ)
       PARAMETER (JSON=5000)
       PARAMETER (NTS=63, NPS=76)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -112,7 +113,11 @@ C Added for experimantal mass loss section
       COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
      *               LREIMER,LMDOT
 C G Somers 10/14, Add spot common block
+      COMMON/SPOTEVOL/EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX,RO_SAT
+      LOGICAL EVOLSPOTS
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
+C      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C G Somers END
       SAVE
 
@@ -166,11 +171,19 @@ c      IF (KTTAU .EQ. 0) LAOLY = .TRUE.
 c      IF (KTTAU .EQ. 3) LAOLY = .FALSE.      ! for grey atm intergration: stores values in common block
 C      G Somers 10/14, FOR SPOTTED RUNS, FIND THE PRESSURE AT
 C      THE AMBIENT TEMPERATURE ATEFFL
-      IF(JENV.EQ.M.AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
+      IF(EVOLSPOTS)THEN
+              
+        CALL GETSPOT(HCOMP,HR,HP,HD,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,
+     *                  LC,RBCZ, OMEGA)
+C     *                  LC,RBCZ, OMEGA, TAUCZ)
+        ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
+
+        ELSEIF(JENV.EQ.M.AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
             ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
-      ELSE
+
+        ELSE
             ATEFFL = TEFFL
-      ENDIF
+        ENDIF
       CALL ENVINT(BJ,FPLJ,FTLJ,GLJ,HSTOT,IXXJ,LPRTJ,LSBC0J,
      *         PLIMJ,RLJ,ATEFFL,XJ,ZJ,DUM1,IDUMJ,KATMJ,KENVJ,KSAHAJ,
      *         DUM2,DUM3,DUM4,LPULPTJ)

@@ -53,6 +53,8 @@ C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
       COMMON/VNEWCB/VNEW(12)
+
+
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
      1    IOPMOD, IOPENV, IOPATM, IDYN,
@@ -251,7 +253,7 @@ C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 2025/09/04 ADD IMPJMOD TO SOLID
-C FROM JNT 05/15 add IMPJMOD (impose J model) which controls angular momentum 
+C FROM JNT 05/15 add IMPJMOD (impose J model) which controls angular momentum
 C     coupling (0=no effect, 1=solid body rotation, 2= solid body core decoupled from surface cz
 C     decoupled from surface cz, 3=solid body core coupled to surface cz)
       COMMON/SBROT/LSOLID,IMPJMOD
@@ -282,7 +284,7 @@ C FROM MAGNETIZED SOLAR-LIKE WINDS
       CHARACTER*3 AWIND
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
-C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU	
+C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU
       COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
      *         LMWIND,LROSSBY,LBSCALE,AWIND
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
@@ -300,8 +302,13 @@ C G Somers 6/14 ALLOW VARIABLE LI/BE DESTRUCTION CROSS SECTIONS
      *LXLI6,LXLI7,LXBE91,LXBE92,LXBE93
       COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
+      COMMON/SPOTEVOL/EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX, RO_SAT
+      LOGICAL EVOLSPOTS
 C G Somers END
       COMMON/VERSION/YRECVER, GITHASH
+
+      INTEGER TESTVALUE
+      COMMON/TESTING/TESTVALUE
       SAVE
 C
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
@@ -388,6 +395,7 @@ C G Somers 6/14
      *   LXLI6,LXLI7,LXBE91,LXBE92,LXBE93,
      *   SLI6,SLI7,SBE91,SBE92,SBE93,LNEWNUC,
      *   SPOTF, SPOTX, LSDEPTH,
+     *   EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX,RO_SAT,
 C G Somers END
 C MHP 09/14 ADDED CROSS SECTIONS
      *   S0_1_1,S0_3_3,S0_3_4,S0_1_12,S0_1_13,S0_1_14,S0_1_16,
@@ -947,13 +955,13 @@ C 3/09 Disable older Alexander opacities if a newer one is specified
       REWIND(ISTOR)
 C G Somers 11/14 write the new header for the .store file, if LSTORE = TRUE.
       IF(LSTORE)THEN
-C JvS 08/25 Added stitched interior and envelope option      
+C JvS 08/25 Added stitched interior and envelope option
          IF(LSTCH)THEN
             LPHHD = .TRUE.
          ELSE
             WRITE(ISTOR,VERFMT) YRECVER, GITHASH
             WRITE(ISTOR,1012)
-         ENDIF   
+         ENDIF
       ENDIF
  1012 FORMAT('# Header Key',/,'# ModType    ModNum    #Shells    ',
      1 'M/Msun    log(Teff)    log(L/Lsun)    log(M/gram)    Age/Gyr',
@@ -1527,7 +1535,6 @@ C      1         '   RESCALE & EVOLVE THE PREVIOUS RUN''S LAST MODEL.')
  1000 CONTINUE
       RETURN
       END
-
 
 C Replace any defined "{YREC_XXX}" placeholder string in the passed
 C variable with the value of the corresponding environment variable.

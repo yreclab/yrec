@@ -110,7 +110,7 @@ C     2'# ')
      2'          H2_sur         Li6_sur         Li7_sur         Be9_sur           X_sur',
      2'           Y_sur           Z_sur         Z_X_sur            Jtot      KE_rot_tot',
      2'           I_tot            I_cz       Omega_sur       Omega_cen      Prot_sur_d',
-     2'        Vrot_kms         TauCZ_s    MHshell_base     MHshell_mid     MHshell_top',
+     2'        Vrot_kms         TauCZ_s    Fspot    MHshell_base     MHshell_mid     MHshell_top',
      2'    RHshell_base     RHShell_mid     RHshell_top       logP_phot       Mass_msun',/,
      2'# ')
 C G Somers END.
