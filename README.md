@@ -40,4 +40,4 @@ If you use YREC in your research, please cite one or more of the relevant papers
 
 [van Saders & Pinsonneault 2013](https://ui.adsabs.harvard.edu/abs/2013ApJ...776...67V/abstract): This paper updates the description of rotation and magnetized winds in the code.
 
-Pinsonneault et al. 2026: The YREC public release paper
+[Pinsonneault et al. 2026](https://ui.adsabs.harvard.edu/abs/2026ApJ..1006..220P/abstract): The YREC public release paper
