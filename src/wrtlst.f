@@ -85,6 +85,9 @@ C Determine atmosphere flag, ATM
 C JNT 06/14
       ELSEIF (KTTAU .EQ. 5) THEN
          ATM='K/C '
+C LMB 05/26 MARCS ATM
+      ELSEIF (KTTAU .EQ. 6) THEN
+         ATM='MAR '
       ENDIF
 C Determine equation of state flag, EOS
       EOS='SAHA  '
