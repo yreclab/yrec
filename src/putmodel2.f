@@ -1,6 +1,6 @@
 C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-C PUTMMODEL2 - Write out a stallar model in MODEL2 format
+C PUTMMODEL2 - Write out a stellar model in MODEL2 format
 C
 C llp  4/16/03
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
