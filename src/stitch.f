@@ -180,8 +180,8 @@ C  zero placeholders for rotation output
 
 C **************************    Output format codes   ******************************
 
- 62   FORMAT(I6,1X,I6,0P2F18.14,1PE24.16,0P3F18.14,1PE24.16,1X,L1,1X,L1,1X,L1,1X,L1,
-     &     3(0PF12.9),12(0PE16.8),2X)
+ 62   FORMAT(I6,1X,I6,0P2F18.14,1PE24.16,0PF18.14,1X,F18.14,1X,F18.14,1PE24.16,
+     &     1X,L1,1X,L1,1X,L1,1X,L1,3(0PF12.9),12(0PE16.8),2X)
 
  63   FORMAT(1PE10.4,1PE11.3,E12.4,E12.4,E12.4,1PE12.4,0PF9.5,F9.5,F9.5,F9.5,
 CC     &     F9.5,F9.5,F9.5,F9.5,F9.5,F9.5,F9.5,E13.5,E13.5,E13.5)
