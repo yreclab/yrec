@@ -851,7 +851,7 @@ C namelist if it doesn't already exist.
       CMD = 'mkdir -p "' // FTRACK(1:LAST_SLASH_IDX) // '"'
       print *,"OUTPUT placed in :  ",FTRACK(1:LAST_SLASH_IDX)
       print *, ''
-      CALL system(CMD))
+      CALL system(CMD)
 
 
 C JVS 02/11 Acoustic depth/ Asteroseismic glitch output. Puts output
