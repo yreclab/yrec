@@ -840,7 +840,6 @@ C corresponding environment variable, if one is defined.
 
 C Create output directory as specified in the FTRACK value of CONTROL
 C namelist if it doesn't already exist.
-      CMD = 'mkdir -p '
       ! find index of last '/' char. Use that to snip out the directory name.
       DO I = LEN_TRIM(FTRACK), 1, -1
           IF (FTRACK(I:I) .EQ. '/') THEN
@@ -849,10 +848,10 @@ C namelist if it doesn't already exist.
           ENDIF
       END DO
 1250  CONTINUE
-      CMD(LEN_TRIM(CMD)+2:LEN_TRIM(FTRACK(1:LAST_SLASH_IDX))+LEN_TRIM(CMD)) = FTRACK(1:LAST_SLASH_IDX)
+      CMD = 'mkdir -p "' // FTRACK(1:LAST_SLASH_IDX) // '"'
       print *,"OUTPUT placed in :  ",FTRACK(1:LAST_SLASH_IDX)
       print *, ''
-      CALL system(CMD)
+      CALL system(CMD))
 
 
 C JVS 02/11 Acoustic depth/ Asteroseismic glitch output. Puts output
