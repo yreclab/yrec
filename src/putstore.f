@@ -25,7 +25,8 @@ C     WRITE MODEL OUT IN ASCII FORMAT
       CHARACTER*6 EOS
 c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
 c MHP 4/25 changed LOK name to make it unique, used elsewhere
-      CHARACTER*4 ATM, ALOK, HIK, COMPMIX
+C LMB 9/26 changed COMPMIX to be the currently-used AMIX
+      CHARACTER*4 ATM, ALOK, HIK, AMIX
 C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL, FPUREZ
 C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
@@ -42,7 +43,8 @@ C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C ^ no longer relevant: LMB 9/26 changed COMPMIX to be the currently-used AMIX
+C     COMMON /I2O/ COMPMIX
 
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
@@ -158,7 +160,7 @@ C points. Output is either in the old format or new format, not both.
           ! write model physics header. Should only happen upon first model output.
           ! write physics flags:
             WRITE(ISTOR,29) JCORE,JENV,CMIXL,EOS,ATM,ALOK,HIK,LPUREZ,
-     &     COMPMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
+     &     AMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
      &     LROT,LINSTB,LJDOT0,LDISK,TDISK,PDISK,WMAX,LSTORE,LSTATM,LSTENV,
      &     LSTMOD,LSTPHYS,LSTROT
    29      FORMAT('#',2I8,F16.10,1X,A6,1X,3(A4,1X),L1,1X,A4,1X,11(L1,1X),
@@ -168,7 +170,7 @@ C points. Output is either in the old format or new format, not both.
           ENDIF
         CALL STITCH(HCOMP,HR,HP,HD,HS,HT,HL,HS1,OMEGA,ETA2,
      * HI,R0,HJM,FP,FT,TEFFL,HSTOT,BL,M,LC,MODEL)
- 1013     FORMAT('# JCORE  JENV  CMIXL  EOS  ATM  ALOK HIK  LPUREZ  COMPMIX',
+ 1013     FORMAT('# JCORE  JENV  CMIXL  EOS  ATM  ALOK HIK  LPUREZ  AMIX',
      1 '  LEXCOM  LDIFY  LDIFZ  LSEMIC  LOVSTC  LOVSTE  LOVSTM',
      1 '  LROT  LINSTB  LJDOT0  LDISK  TDISK  PDISK  WMAX  LSTORE',
      1 '  LSTATM  LSTENV  LSTMOD  LSTPHYS  LSTROT')
@@ -201,7 +203,7 @@ C write header records
 
 C write physics flags:
       WRITE(ISTOR,30) JCORE,JENV,CMIXL,EOS,ATM,ALOK,HIK,LPUREZ,
-     &     COMPMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
+     &     AMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
      &     LROT,LINSTB,LJDOT0,LDISK,TDISK,PDISK,WMAX,LSTORE,LSTATM,LSTENV,
      &   LSTMOD,LSTPHYS,LSTROT
    30 FORMAT(2I8,F16.10,1X,A6,1X,3(A4,1X),L1,1X,A4,1X,11(L1,1X),

@@ -19,7 +19,8 @@ C     WRITE MODEL OUT IN ASCII FORMAT
       CHARACTER*6 EOS
 c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
 c MHP 4/25 changed LOK name to make it unique, used elsewhere
-      CHARACTER*4 ATM, ALOK, HIK, COMPMIX
+C LMB 9/26 changed COMPMIX to be the currently-used AMIX
+      CHARACTER*4 ATM, ALOK, HIK, AMIX
 C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL, FPUREZ
 C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
@@ -35,7 +36,8 @@ C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C ^ no longer relevant: LMB 9/26 changed COMPMIX to be the currently-used AMIX
+C      COMMON /I2O/ COMPMIX
 
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
@@ -131,7 +133,7 @@ C Determine high temperature opacities flag, HIK
      * HP,HR,HS,HSTOT,HT,IWRITE,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
      & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,ALOK,
-     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,COMPMIX,PDISK,TDISK,WMAX)
+     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,AMIX,PDISK,TDISK,WMAX)
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
