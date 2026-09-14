@@ -66,6 +66,19 @@ C MHP 06/13 Remember that flag is switched
             LTTAU = .TRUE.
          ENDIF
       ENDIF
+C LMB 05/26 add MARCS atmosphere limit
+      IF(KTTAU. EQ. 6) THEN
+         IF(TEFFL.GE.3.9D0) THEN
+            WRITE(*,*)
+            WRITE(*,8) TEFFL
+ 8          FORMAT('LOG TEFF OF ',F7.3,' ABOVE MARCS TABLE MAX 3.90 - SWITCH'
+     *             ,'TO GRAY ATMOSPHERE BOUNDARY CONDITION')
+         KTTAU = 0
+         LNEW = .TRUE.
+C MHP 06/13 Remember that flag is swiched
+         LTTAU = .TRUE.
+         ENDIF 
+      ENDIF
       IF(LTTAU)THEN
          IF(KTTAU0.EQ.3.AND.TEFFL.LT.3.95D0)THEN
             KTTAU = KTTAU0
@@ -79,6 +92,13 @@ C MHP 06/13 Remember that flag is switched
             WRITE(*,11) TEFFL,AL_TEFFLmax
  11         FORMAT('LOG TEFF OF ',F7.3,' below Allard Table max ',F7.3
      *     ,'  - SWITCH BACK TO ALLARD ATMOSPHERE BOUNDARY CONDITION')
+C LMB 05/26 - add MARCS atmosphere limit
+         ELSE IF(KTTAU0.EQ.6.AND.TEFFL.LT.3.9D0)THEN
+            KTTAU = KTTAU0
+            LTTAU = .FALSE.
+            WRITE(*,12) TEFFL
+ 12         FORMAT('LOG TEFF OF ',F7.3,' BELOW 3.90 - SWITCH'
+     *      ,' BACK TO MARCS ATMOSPHERE BOUNDARY CONDITION')
          ENDIF
       ENDIF
       LFLP = .FALSE.

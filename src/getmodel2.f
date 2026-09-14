@@ -11,10 +11,11 @@ C      * HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,  ! KC 2025-
      * HP,HR,HS,HSTOT,HT,IREAD,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
      & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,ALOK,
-     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,COMPMIX,PDISK,TDISK,WMAX)
+     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,AMIX,PDISK,TDISK,WMAX)
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 C MHP 4/25 chanted LOK to ALOK to avoid variable name conflicts
+C LMB 9/26 changed COMPMIX to be the currently-used AMIX
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
@@ -24,7 +25,8 @@ C MHP 4/25 chanted LOK to ALOK to avoid variable name conflicts
       CHARACTER*5 ATEMP
 c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
 c MHP 4/25 changed LOK name to make it unique, used elsewhere
-      CHARACTER*4 ATM, ALOK, HIK, COMPMIX
+C LMB 9/26 changed COMPMIX to be the currently-used AMIX
+      CHARACTER*4 ATM, ALOK, HIK, AMIX
 
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
 
@@ -45,7 +47,7 @@ C get the header record
 C Get the flags describing the input physics and the information that
 C is stored in the model (rotating or not?, extendec compotition, etc.)
       READ(IREAD,30) JCORE,JENV,CMIXL,EOS,ATM,ALOK,HIK,LPUREZ,
-     &     COMPMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
+     &     AMIX,LEXCOM,LDIFY,LDIFZ,LSEMIC,LOVSTC,LOVSTE,LOVSTM,
      &     LROT,LINSTB,LJDOT0,LDISK,TDISK,PDISK,WMAX
    30 FORMAT(2I8,F16.10,1X,A6,1X,3(A4,1X),L1,1X,A4,1X,11(L1,1X),
      &     3(1PE18.10))

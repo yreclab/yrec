@@ -20,7 +20,8 @@ C DBGLAOL
 C      CHARACTER*256 OPECALEX(7)
       CHARACTER*4 ATEMP
       CHARACTER*6 EOS
-      CHARACTER*4 ATM, LOK, HIK, COMPMIX
+C LMB 9/26 changed COMPMIX to be the currently-used AMIX
+      CHARACTER*4 ATM, LOK, HIK, AMIX
 C MHP 8/25 Removed unused character strings
 C      CHARACTER*256 FLAOL, FPUREZ
 C      CHARACTER*256 FLAST, FFIRST, FRUN, FSTAND, FFERMI,
@@ -108,7 +109,8 @@ C JvS 08/25 Updated with new elements
 C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C ^ no longer relevant: LMB 9/26 changed COMPMIX to be the currently-used AMIX
+C      COMMON /I2O/ COMPMIX
 C G Somers 10/14, Add spot common block
       COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
@@ -189,7 +191,7 @@ C model.  We decide what kind of model format it has and process accordingly.
      *    HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE0,JENV0,LC,LEXCOM0,
      *    LROT0,M,MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
      &    ATM,EOS,HIK,LDIFY0,LDIFZ0,LDISK0,LINSTB0,LJDOT00,LOK,
-     &    LOVSTC0,LOVSTE0,LOVSTM0,LPUREZ0,LSEMIC0,COMPMIX,PDISK0,
+     &    LOVSTC0,LOVSTE0,LOVSTM0,LPUREZ0,LSEMIC0,AMIX,PDISK0,
      &    TDISK0,WMAX0)
 C First three lines above are YREC7 inputs
 C Last three lines are MODEL2 add-ons
@@ -202,7 +204,7 @@ C      *    HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE0,JENV0,LC,LEXCOM0,  ! KC 2025-0
      *    HP,HR,HS,HSTOT,HT,IREAD,JCORE0,JENV0,LC,LEXCOM0,
      *    LROT0,M,MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
      &    ATM,EOS,HIK,LDIFY0,LDIFZ0,LDISK0,LINSTB0,LJDOT00,LOK,
-     &    LOVSTC0,LOVSTE0,LOVSTM0,LPUREZ0,LSEMIC0,COMPMIX,PDISK0,
+     &    LOVSTC0,LOVSTE0,LOVSTM0,LPUREZ0,LSEMIC0,AMIX,PDISK0,
      &    TDISK0,WMAX0)
 C First three lines above are YREC7 inputs
 C Last three lines are MODEL2 add-ons

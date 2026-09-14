@@ -10,7 +10,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      * HP,HR,HS,HSTOT,HT,IREAD,ISHORT,JCORE,JENV,LC,LEXCOM,LROT,M,
      * MODEL,OMEGA,PS,RS,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,
      & ATM,EOS,HIK,LDIFY,LDIFZ,LDISK,LINSTB,LJDOT0,ALOK,
-     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,COMPMIX,PDISK,TDISK,WMAX)
+     & LOVSTC,LOVSTE,LOVSTM,LPUREZ,LSEMIC,AMIX,PDISK,TDISK,WMAX)
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
@@ -21,7 +21,8 @@ C Last two lines are MODEL2 add-ons
 
 c     CHARACTER*4 ATM, LOK, HIK, COMPMIX
 c MHP 4/25 changed LOK name to make it unique, used elsewhere
-      CHARACTER*4 ATEMP,ATM,HIK,ALOK,COMPMIX
+c LMB 9/26 changed COMPMIX to be the currently-used AMIX
+      CHARACTER*4 ATEMP,ATM,HIK,ALOK,AMIX
       CHARACTER*6 EOS
 
       COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
@@ -54,7 +55,7 @@ c MHP 4/25 padded character strings to proper length
       EOS = "    ? "
       HIK = "  ? "
       ALOK = "  ? "
-      COMPMIX = "AG93"
+      AMIX = "AG93"
 
 C Set Model2-specific flags false
       LDIFY = .FALSE.
