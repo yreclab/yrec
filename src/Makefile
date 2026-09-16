@@ -97,6 +97,14 @@ else
   REPO_HASH=unknown
 endif
 
+# Platform detection for static linking
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+	STATIC_FLAGS = -static -static-libgfortran -static-libgcc
+endif
+ifeq ($(UNAME), Darwin)
+	STATIC_FLAGS = -mmacosx-version-min=11.0 -static-libgfortran -static-libquadmath
+endif
 
 # Targets
 default: FFLAGS += $(REL_FFLAGS)
@@ -115,6 +123,10 @@ release: $(NAME)
 prof: FFLAGS += $(DEV_FFLAGS) $(PROF_FFLAGS)
 prof: LDFLAGS += $(PROF_LDFLAGS)
 prof: $(NAME)
+
+static: FFLAGS += $(REL_FFLAGS)
+static: LDFLAGS += $(STATIC_FLAGS)
+static: $(NAME)
 
 $(NAME): $(OBJS)
 	$(FC) $(LDFLAGS) -o $(NAME) $(OBJS)
