@@ -16,6 +16,7 @@ YREC uses modern input microphysics (equation of state, energy transport, energy
 quickstart.md
 userguide.md
 testsuite
+python_package.md
 ```
 
 ```{toctree}
