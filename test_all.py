@@ -24,6 +24,7 @@ float_frac_tol = float(config['tolerances']['float_frac_tol'])
 int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
 show_output = config.getboolean('options','show_output_upon_failure')
+ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
 
 if not os.path.exists(yrec_exe):
     raise FileNotFoundError(f"YREC executable {yrec_exe} not found!")
@@ -100,6 +101,8 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
         try:
             refline = next(ref)
             outline = next(out)
+            if not ignore_version_diffs and re.search(r"# YREC v.* \(.*\)", outline):
+                continue
             ref_vals = vals_from_line(refline)
             out_vals = vals_from_line(outline)
         except StopIteration as ex:
