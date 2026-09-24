@@ -92,7 +92,7 @@ C     2'    B11_cen         O18_cen         He3_surf        C12_surf        C13_
 C     2'      B10_surf        O16_surf        B11_surf        O18_surf        H2_surf         Li6_surf',
 C     2'        Li7_surf        Be9_surf         X_surf          Y_surf          Z_surf         Z/X_su',
 C     2'rf          Jtot         KE_rot_tot       total I           CZ I         Omega_surf      Omega',
-C     2'_cen       Prot (days)     Vrot (km/s)     TauCZ (s)       Mfrac_base      Mfrac_midp      Mfr',
+C     2'_cen       Prot (days)     Vrot (km/s)     TauCZ (s)    FSpot       Mfrac_base      Mfrac_midp      Mfr',
 C     2'ac_top       Rfrac_base      Rfrac_midp      Rfrac_top         P_phot           Mass     ',/,
 C     2'# ')
  1504       FORMAT(
@@ -110,7 +110,7 @@ C     2'# ')
      2'          H2_sur         Li6_sur         Li7_sur         Be9_sur           X_sur',
      2'           Y_sur           Z_sur         Z_X_sur            Jtot      KE_rot_tot',
      2'           I_tot            I_cz       Omega_sur       Omega_cen      Prot_sur_d',
-     2'        Vrot_kms         TauCZ_s    Fspot    MHshell_base     MHshell_mid     MHshell_top',
+     2'        Vrot_kms         TauCZ_s        Fspot    MHshell_base     MHshell_mid     MHshell_top',
      2'    RHshell_base     RHShell_mid     RHshell_top       logP_phot       Mass_msun',/,
      2'# ')
 C G Somers END.

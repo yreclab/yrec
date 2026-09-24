@@ -5,8 +5,7 @@ C TPGRAD
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE TPGRAD(TL,T,PL,P,D,RL,SL,B,O,QDT,QDP,QOT,QOD,QCP,
      *DEL,DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
-     *VEL,LDERIV,LCONV,FPL,FTL,TEFFL,OMEGA)
-C     *VEL,LDERIV,LCONV,FPL,FTL,TEFFL,OMEGA,TAUCZ)
+     *VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
 
       PARAMETER(JSON=5000)
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
@@ -31,11 +30,11 @@ C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *     VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C G Somers 09/14, Add spot common block
-      COMMON/SPOTEVOL/EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX,RO_SAT
-      LOGICAL EVOLSPOTS
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-C      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C A Ash 9/8 Added SpotEvol to spot common block 
+      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH,LEVOLSPOTS,SPOTEX,FSPOTSCALE,RO_SCALE,FSPOT_SOL,KSPOT,FSPOT,ATEFFL
+      COMMON/SURFW/OMEGASURF
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+
 C G Somers END
       DATA VTOL/1.0D-10/
       SAVE
@@ -90,22 +89,16 @@ C
 C This flux alters DELR, so recalculate DELDEL with the correction. Only
 C do this if the spot filling factor is non-zero, and the envelope is
 C convective.
-      IF(EVOLSPOTS)THEN
-              
-        CALL GETSPOT(HCOMP,HR,HP,HD,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,
-     *                  LC,RBCZ, OMEGA)
-C     *                  LC,RBCZ, OMEGA, TAUCZ)
-        ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
-        DEEPX=DEEPX
-        ELSEIF(JENV.EQ.M.AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
-            ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
-            DEEPX=DEEPX
-        ELSE
-            ATEFFL = TEFFL
+C      CALL GETSPOT(M,TEFFL)
+      IF(SPOTF .NE. 0.00)THEN
+         IF(LSDEPTH)THEN
+            ATEFFL = TEFFL - 0.25*LOG10(FSPOT * SPOTX**4.0 + 1.0 - FSPOT)
+            DEEPX = 1.0 - (1.0 - SPOTX)*(10.**ATEFFL)/(10.**TL)
+         ELSE
+         DEEPX = SPOTX
         ENDIF
-
-         DELDEL = DELR/(SPOTF * DEEPX**4.0 + 1.0 - SPOTF) - DELA
-      
+         DELDEL = DELR/(FSPOT * DEEPX**4.0 + 1.0 - FSPOT) - DELA
+      ENDIF
 C G Somers END
       G = DEXP(CLN*(CGL + SL - RL - RL))
       PRESHT = P/(D*G)

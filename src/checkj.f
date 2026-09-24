@@ -250,9 +250,9 @@ C         ENDIF
             ENDIF
   150    CONTINUE
          IF(.NOT.LOKAD)THEN
-            WRITE(*,160)DELJ,IJMAX,(DELJI(J),IMAXI(J),J=1,IT)
-  160       FORMAT(' MAX D(J/M)/(J/M)',1PE12.3,' AT PT.',I5,
-     *      ' BY ITERATION'/5(1X,E11.3,I4))
+C            WRITE(*,160)DELJ,IJMAX,(DELJI(J),IMAXI(J),J=1,IT)
+C  160       FORMAT(' MAX D(J/M)/(J/M)',1PE12.3,' AT PT.',I5,
+C     *      ' BY ITERATION'/5(1X,E11.3,I4))
          ENDIF
 C
 C G Somers 11/14, I AM TURNING OFF THE OUTPUT TO THE .FULL FILE.

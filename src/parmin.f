@@ -53,8 +53,6 @@ C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
       INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
 C JVS END
       COMMON/VNEWCB/VNEW(12)
-
-
       COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
      1    IOPMOD, IOPENV, IOPATM, IDYN,
@@ -253,7 +251,7 @@ C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 2025/09/04 ADD IMPJMOD TO SOLID
-C FROM JNT 05/15 add IMPJMOD (impose J model) which controls angular momentum
+C FROM JNT 05/15 add IMPJMOD (impose J model) which controls angular momentum 
 C     coupling (0=no effect, 1=solid body rotation, 2= solid body core decoupled from surface cz
 C     decoupled from surface cz, 3=solid body core coupled to surface cz)
       COMMON/SBROT/LSOLID,IMPJMOD
@@ -284,7 +282,7 @@ C FROM MAGNETIZED SOLAR-LIKE WINDS
       CHARACTER*3 AWIND
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
-C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU
+C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU	
       COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
      *         LMWIND,LROSSBY,LBSCALE,AWIND
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
@@ -301,14 +299,10 @@ C G Somers 6/14 ALLOW VARIABLE LI/BE DESTRUCTION CROSS SECTIONS
       COMMON/XSECT/XSLI6,XSLI7,XSBE91,XSBE92,XSBE93,
      *LXLI6,LXLI7,LXBE91,LXBE92,LXBE93
       COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-      COMMON/SPOTEVOL/EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX, RO_SAT
-      LOGICAL EVOLSPOTS
+C A Ash 9/26 Added SpotEvol to spots common block
+      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH,LEVOLSPOTS,SPOTEX,FSPOTSCALE,RO_SCALE,FSPOT_SOL,KSPOT,FSPOT,ATEFFL
 C G Somers END
       COMMON/VERSION/YRECVER, GITHASH
-
-      INTEGER TESTVALUE
-      COMMON/TESTING/TESTVALUE
       SAVE
 C
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
@@ -391,11 +385,11 @@ C
 C MHP 8/17 ADDED WMAX_SUN
      *   PMMSOLP,PMMSOLW,PMMSOLTAU,LCODM,CODM,WMAX_SUN,
 C G Somers 6/14
+C A Ash 9/8 Added Spotevol 
      *   XSLI6,XSLI7,XSBE91,XSBE92,XSBE93,
      *   LXLI6,LXLI7,LXBE91,LXBE92,LXBE93,
      *   SLI6,SLI7,SBE91,SBE92,SBE93,LNEWNUC,
-     *   SPOTF, SPOTX, LSDEPTH,
-     *   EVOLSPOTS,SPOTEX,SPOTF_SUN,SPOTMAX,RO_SAT,
+     *   SPOTF, SPOTX, LSDEPTH,LEVOLSPOTS,SPOTEX,FSPOTSCALE,RO_SCALE,FSPOT_SOL,KSPOT,
 C G Somers END
 C MHP 09/14 ADDED CROSS SECTIONS
      *   S0_1_1,S0_3_3,S0_3_4,S0_1_12,S0_1_13,S0_1_14,S0_1_16,
@@ -636,7 +630,10 @@ C           DEFAULT BE9(P,A)LI6 (BE93) = 15,000 keV b FROM FOWLER ET AL. 1967
      *     SLI6, SLI7, SBE91, SBE92, SBE93
      *     /.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.,
      *     1.0D0, 1.0D0, 1.0D0, 1.0D0, 1.0D0/
-      DATA SPOTF, SPOTX, LSDEPTH/0.00, 1.00, .FALSE./
+C A Ash 9/26 Spotevol defaults
+      DATA SPOTF,SPOTX,LSDEPTH,LEVOLSPOTS,SPOTEX,
+     *     FSPOTSCALE,RO_SCALE,FSPOT_SOL,KSPOT
+     *     /0.00,1.00,.FALSE.,.FALSE.,1.0D0,0.0D0,1.0D0,1.0D-4,0/
 C G Somers END
 C MHP 8/14 DEFAULT CROSS-SECTIONS ARE TAKEN FROM THE SOLAR FUSION II PAPER
 C REFERENCE ADELBERGER ET AL. 2011. UNITS ARE KeV b
@@ -790,9 +787,11 @@ c      CLOSE(ISTAND)
 c      CLOSE(IRUN)
 
 C Dynamically create format string so version info is nicely spaced
-      WRITE(VERFMT, 315) LEN_TRIM(YRECVER), LEN_TRIM(GITHASH)
-  315 FORMAT('(''# YREC v'', A', I2.2, ', '' ('', A', I2.2,
-     *       ', '')'')')
+C      WRITE(VERFMT, 315) LEN_TRIM(YRECVER), LEN_TRIM(GITHASH)
+C  315 FORMAT('(''# YREC v'', A', I2.2, ', '' ('', A', I2.2,
+C     *       ', '')'')')
+      WRITE(VERFMT, 315) LEN_TRIM(YRECVER)
+  315 FORMAT('(''# YREC v'', A', I2.2,')')
 
       CALL GETARG(1, YREC1)
       IF (YREC1(1:2) .EQ. ' ') YREC1 = 'yrec8.nml1'
@@ -848,7 +847,6 @@ C corresponding environment variable, if one is defined.
 
 C Create output directory as specified in the FTRACK value of CONTROL
 C namelist if it doesn't already exist.
-      CMD = 'mkdir -p '
       ! find index of last '/' char. Use that to snip out the directory name.
       DO I = LEN_TRIM(FTRACK), 1, -1
           IF (FTRACK(I:I) .EQ. '/') THEN
@@ -857,7 +855,7 @@ C namelist if it doesn't already exist.
           ENDIF
       END DO
 1250  CONTINUE
-      CMD(LEN_TRIM(CMD)+2:LEN_TRIM(FTRACK(1:LAST_SLASH_IDX))+LEN_TRIM(CMD)) = FTRACK(1:LAST_SLASH_IDX)
+      CMD = 'mkdir -p "' // FTRACK(1:LAST_SLASH_IDX) // '"'
       print *,"OUTPUT placed in :  ",FTRACK(1:LAST_SLASH_IDX)
       print *, ''
       CALL system(CMD)
@@ -955,13 +953,13 @@ C 3/09 Disable older Alexander opacities if a newer one is specified
       REWIND(ISTOR)
 C G Somers 11/14 write the new header for the .store file, if LSTORE = TRUE.
       IF(LSTORE)THEN
-C JvS 08/25 Added stitched interior and envelope option
+C JvS 08/25 Added stitched interior and envelope option      
          IF(LSTCH)THEN
             LPHHD = .TRUE.
          ELSE
             WRITE(ISTOR,VERFMT) YRECVER, GITHASH
             WRITE(ISTOR,1012)
-         ENDIF
+         ENDIF   
       ENDIF
  1012 FORMAT('# Header Key',/,'# ModType    ModNum    #Shells    ',
      1 'M/Msun    log(Teff)    log(L/Lsun)    log(M/gram)    Age/Gyr',
@@ -1535,6 +1533,7 @@ C      1         '   RESCALE & EVOLVE THE PREVIOUS RUN''S LAST MODEL.')
  1000 CONTINUE
       RETURN
       END
+
 
 C Replace any defined "{YREC_XXX}" placeholder string in the passed
 C variable with the value of the corresponding environment variable.

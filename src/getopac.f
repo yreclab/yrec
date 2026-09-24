@@ -68,8 +68,10 @@ C     GET INTERIOR OPACITY IF NEEDED
 C     HELIUM BURNING REGION (HB EVOLUTION) USE PURE Z TABLE
 C mhp 7/12 Altered logic of the opacities in the He burnng
 C regime.  Switched to exclusive usage of OPAL below 50 million K
-C and switched the ramp to above Z = 0.1.
-      IF((Z .GT. 0.1D0) .AND. (TL.GT.7.7D0)) THEN
+C     and switched the ramp to above Z = 0.1.
+c$$$  JCZ 211125 changing temperature limit to 7.0 to accommodate
+C     semiconvection+overshoot HB models, which can reach lower core temperatures
+      IF((Z .GT. 0.1D0) .AND. (TL.GT.7.0D0)) THEN 
 C      IF((Z .GT. 0.15D0) .OR.
 C     *     ((ABS(Z-ZENV) .GT. OPTOL).AND..NOT.L2Z)) THEN
          IF(.NOT.LPUREZ) THEN
@@ -101,8 +103,9 @@ C           ZIT=ZOPAL951
        QOT = QOTZ + (Z-1.0D0)*SLOPE
 C      ELSE
       ELSE IF((Z.GT.0.12D0) .OR. ((ABS(Z-ZENV) .GT. OPTOL)
-     *   .AND..NOT.L2Z .AND. .NOT.LOPAL95))THEN
-         WRITE(ISHORT,*)' Z>0.12 T < 5 X 10^7 K',
+     *      .AND..NOT.L2Z .AND. .NOT.LOPAL95))THEN
+C     JCZ 211125 changed to 10^7 K in message to reflect above change in logic.
+         WRITE(ISHORT,*)' Z>0.12 T < 10^7 K',
      *   ' OUTSIDE OPAL OPACITY TABLE RANGE OR Z',
      *   ' OUTSIDE SINGLE TABLE USED.Z,ZENV,LOG T=',Z,ZENV,TL
          STOP

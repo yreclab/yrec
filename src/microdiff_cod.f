@@ -111,7 +111,16 @@ C
          HRU_I = ER(I)
          HTU_I = T*CON_TEMP
 c         FAC=FGRLI(KK)*HRU_I**2*HTU_I**2.5D0/LN_LAMBDA
+c        JvS 01/26 Added support for FGRY and FGRZ modifications 
+c        to diffusion coefficients. 
+c         FAC=HRU_I**2*HTU_I**2.5D0/LN_LAMBDA
          FAC=HRU_I**2*HTU_I**2.5D0/LN_LAMBDA
+         IF(J.EQ.1)THEN
+            FAC=FGRY*HRU_I**2*HTU_I**2.5D0/LN_LAMBDA
+         ENDIF
+         IF(J.EQ.3)THEN
+            FAC=FGRZ*HRU_I**2*HTU_I**2.5D0/LN_LAMBDA 
+         ENDIF   
 c        collect the first diffusion terms for hydroden.
 c        collect the third diffusion terms for everything else.
          AP = -TAP(J)
