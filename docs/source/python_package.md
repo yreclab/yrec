@@ -13,73 +13,72 @@ environment.
 
 # Usage
 
-To use YREC in a python environment, simply import the package `yrec`. This
-makes several classes and functions available which are detailed below.
+To use YREC in a python environment, import the package `yrec`.
 
 ## Support data
 
-NOTE: The first time yrec is imported after installation, it will perform a
-single-time download of supporting data.  The default location for this data is
-in `${HOME}/.config/yrec`, but can be overridden by setting the `YREC_DOWNLOAD`
-environment variable to another directory prior to importing yrec. This data may
-take a few minutes to download depending on the speed of the internet connection.
+The first time yrec is imported after installation, it will perform a
+single-time download of supporting data into the default location
+`${HOME}/.config/yrec` which may take a few minutes to download depending on
+the speed of the internet connection.
 
-This support data includes the INPUT and STARTMODELS directories from the
-release of YREC used to build the core application bundled with the python
-package. If you require newer or different INPUT or STARTMODELS data, you can
-point the environment variable to where you have that stored prior to importing
-yrec. Note: If you require an override location for the support data, that
-location will have to be specified via environment variable prior to _each_ use
-of yrec. This can be done from the shell, before running the script or python
-interpreter, via `export YREC_DOWNLOAD=<location>`, or from within a python
-script by using `os.environ['YREC_DOWNLOAD'] = <location>`.
+The support data include the INPUT and STARTMODELS directories from the
+release of YREC used to build the core application bundled within the python
+package.
 
-Leaving `YREC_DOWNLOAD` unset will cause the support data to be stored and
-accessed from the default location. This will be appropriate for nearly all use
-cases.
-
-## API
-
+```{admonition} Note
+:class: hint
+The support data download location can be overridden by setting the
+`YREC_DATA` environment variable to the new location prior to each time
+yrec is imported.  This can be done before running python code, via `export
+YREC_DATA=<location>` (bash-like shells) , or from within a python script
+by using `os.environ['YREC_DATA']=<location>`.
+```
 
 ### yrec module
 
-#### module members
+Variables:
+   * __ __version__ __ - Version of package
+   * __ __commit__ __- Git commit hash of source tree used to build wrapped YREC executable
 
-```
-yrec.run_parallel( [models] )
-```
+#### `yrec.run_parallel(models, workers=0, verbose=False)`
+
 Run multiple models simultaneously. Argument is a list containing one or more model objects.
 
+Parameters:
+   * models - List of `Model`(s) to run
+   * workers - Number of requested worker processes (default 0 means number of available CPUs)
+   * verbose - Print extra information about process dispatch and status (default False)
 
-### Model Class Members
+### yrec.model module
 
-#### Method members
+#### `class yrec.model.Model(nml1=None, nml2=None)`
 
-```
-.run()
-```
+A YREC model
+
+Parameters:
+   * nml1 – PHYSICS or CONTROL namelist filename
+   * nml2 – CONTROL or PHYSICS namelist filename
+
+   PHYSICS and CONTROL arguments may be in any order.
+
+Variables:
+   * name - Name given to model
+   * control - CONTROL vars (dict)
+   * physics - PHYSICS vars (dict)
+   * control_filename - CONTROL namelist output filename
+   * physics_filename - PHYSICS namelist output filename
+
+##### `copy(yrec_model)`
+
+Make a new model by copying an existing model.
+
+
+##### `.run()`
+
 Run the model using the YREC core and deposit outputs in the output directory
 specified.  Terminal output from the progress of the run is deposited in the
 `<model_name>.out` file.
-
-
-#### Data members
-
-```
-.name
-```
-Name for this model. Automatically derived from namelist input files, if the model
-was created using those. Can be overridden by assigning a new string to this member.
-
-```
-.control
-```
-A dictionary representing the current state of the set of the model's CONTROL variables.
-
-```
-.physics
-```
-A dictionary representing the current state of the set of the model's PHYSICS variables.
 
 
 ## Shell Entrypoint
@@ -107,13 +106,12 @@ yrec.__version__
 Creating a model object from the can be done in a couple ways.
 
 Create a model using the values specified by the namelist files NML1 and NML2.
-They are provided as arguments to the model() method in any order.
+They are provided as arguments to the Model() constructor in any order.
 ```
 import yrec
 mymodel = yrec.Model(NML1_or_2, NML2_or_1)
 i.e.
 mymodel = yrec.Model('control_namelist.nml1', 'physics_namelist.nml2')
-mymodel.run()
 ```
 
 Create a model by copying an existing model which is passed as the only
@@ -123,17 +121,27 @@ derived from a given model.
 mymodel2 = yrec.model.copy_existing( my_mode )
 ```
 
+### Running models
 
-Run multiple models simultaneously, using three CPUs.
+Run a single model
+```
+mymodel = yrec.Model('control_A.nml1', 'physics_A.nml2')
+mymodel.run()
+```
+
+Run multiple models simultaneously, using three concurrent workers.
 ```
 mA = yrec.Model('control_A.nml1', 'physics_A.nml2')
 mB = yrec.Model('physics_B.nml2', 'control_B.nml1')
 mC = yrec.Model('control_C.nml1', 'physics_C.nml2')
 models = [mA, mB, mC]
-yrec.run_parallel(models)
+yrec.run_parallel(models, workers=3)
 {'mA_name': True, 'mB_name': True, 'mC_name': True}
 ```
 
+The output files produced by the YREC executable are deposited into the
+locations specified in the associated CONTROL namelist variables.  The terminal
+output from the run is captured and placed alongside the other output files.
 
 ## Versioning convention
 
