@@ -12,7 +12,7 @@ C 06
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PUTSTORE(HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI)
+     *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL)
 
 C  PUTSTORE PUTS THE MOST RECENT VERBOSE OUTPUT FILE INTO THE .STORE FILE,
 C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS.
@@ -30,8 +30,20 @@ C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL, FPUREZ
 C      CHARACTER*256 FOPALE,FOPALE01,FOPALE06  ! FcondOpacP
 
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 9/24/26 MHP via Claude
+C code changed to pass CMIXL as an explicit argument instead of via
+C common block, to reduce implicit global state ahead of the F90
+C module conversion
       COMMON/FLAG/LEXCOM
       COMMON/HEFLSH/LKUTHE
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
@@ -61,27 +73,42 @@ c     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV
       COMMON/GRAVST/GRTOL,ILAMBDA,NITER_GS,LDIFY
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
-C MHP 8/25 Removed character file names from common block
-      COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
-     *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ
-C KC 2025-05-30 reordered common block elements
-C       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,FOPALE01,LOPALE01,
-C      x  FOPALE06,LOPALE06,LNumDeriv
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove dead opacity-table Z-value inputs
+C 9/24/26 MHP via Claude
+C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
+C COMMON /NEWOPAC/
+      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
+     *  L2Z,LLAOL,LPUREZ,LcondOpacP
 C MHP 8/25 Remove file names from common blocks
-      COMMON/OPALEOS/LOPALE,IOPALE,lopale01,lopale06,lNumDeriv
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
+      COMMON/OPALEOS/lopale06,lNumDeriv
+C 9/25/26 MHP via Claude
+C code changed to fix IDTT -> IDT, matching most other files that
+C declare COMMON/SCVEOS/ (pre-existing name-only inconsistency; this
+C slot was never read or written by name in this file)
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
+     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
 
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
       COMMON/SOUND/GAM1(JSON),LSOUND
@@ -109,24 +136,14 @@ C Determine equation of state flag, EOS
       IF (LDH) EOS='SAH+DH'
       IF (LSCV) THEN
          EOS='SCV   '
-         IF (LOPALE) EOS='SCV+OP'
-         IF (LOPALE01) EOS='SCV+O1'
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
          IF (LDH) THEN
          IF (LOPALE06) EOS='SCV+O6'
             EOS='SCV+DH'
-            IF (LOPALE) EOS='SCVDHO'
-            IF (LOPALE01) EOS='SCDHO1'
             IF (LOPALE06) EOS='SCDHO6'
          ENDIF
       ELSE
-         IF (LOPALE) THEN
-            EOS='OPAL  '
-            IF (LDH) EOS='OPA+DH'
-         ENDIF
-         IF (LOPALE01) THEN
-            EOS='OPAL01'
-            IF (LDH) EOS='OP1+DH'
-         ENDIF
          IF (LOPALE06) THEN
             EOS='OPAL06'
             IF (LDH) EOS='OP6+DH'
@@ -134,13 +151,15 @@ C Determine equation of state flag, EOS
       ENDIF
 C Determine low temperature opacities flag, LOK
       ALOK='NONE'
-      IF (LALEX95) ALOK='ALEX'
-      IF (LKUR90) ALOK='KURZ'
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
 C Determine high temperature opacities flag, HIK
       HIK='NONE'
       IF (LOPAL95) HIK='OP95'
-      IF (LOPAL92) HIK='OP92'
-      IF (LLAOL89) HIK='LL89'
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
 
       IF(ATM .EQ. ' ? ') THEN
          WRITE(ISHORT,7)
@@ -165,7 +184,7 @@ C points. Output is either in the old format or new format, not both.
            LPHHD = .FALSE. ! Turn off the physics header fo the rest of the run.
           ENDIF
         CALL STITCH(HCOMP,HR,HP,HD,HS,HT,HL,HS1,OMEGA,ETA2,
-     * HI,R0,HJM,FP,FT,TEFFL,HSTOT,BL,M,LC,MODEL)
+     * HI,R0,HJM,FP,FT,TEFFL,HSTOT,BL,M,LC,MODEL,CMIXL)
  1013     FORMAT('# JCORE  JENV  CMIXL  EOS  ATM  ALOK HIK  LPUREZ  COMPMIX',
      1 '  LEXCOM  LDIFY  LDIFZ  LSEMIC  LOVSTC  LOVSTE  LOVSTM',
      1 '  LROT  LINSTB  LJDOT0  LDISK  TDISK  PDISK  WMAX  LSTORE',
@@ -297,7 +316,7 @@ C        CALL WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,HL,
 C      *   HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
 C      *   DAGE)  ! KC 2025-05-31
          CALL WRTMOD(M,JENV,HCOMP,HS1,HD,HL,
-     *               HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE)
+     *               HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL)
       ENDIF
 
       WRITE(ISTOR,65)

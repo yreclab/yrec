@@ -18,7 +18,16 @@ c     T6 and rho
      . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
       common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
       common/eeos06/esact,eos(mv)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 c
       save
       iu=0

@@ -33,8 +33,24 @@ C     e-mail: palex@astro.ioffe.rssi.ru
 C The following three lines provide and interface to PARMIN in order to
 C locate the Potekhin files.
 C MHP 8/25 Removed character file names from common block
-      COMMON /MISCOPAC/IKUR2,IcondOpacP,LcondOpacP
-      LOGICAL*4 LcondOpacP
+C 9/24/26 MHP via Claude
+C code changed to merge COMMON /MISCOPAC/ into COMMON /NEWOPAC/
+C (this file has no IMPLICIT LOGICAL*4(L), so the merged-in L-prefixed
+C members need an explicit LOGICAL*4 declaration, matching how they
+C are implicitly typed everywhere else this block is declared)
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
+     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+      LOGICAL*4 LALEX06,LOPAL95,L2Z,LLAOL,LPUREZ,LcondOpacP
 
 C removed unused variables
 C     CHARACTER*256 FKUR2,FcondOpacP

@@ -5,6 +5,13 @@ C QENV
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QENV(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
+C 9/24/26 MHP via Claude
+C QENV's argument list must stay fixed: it is invoked polymorphically as
+C the DERIV callback by MMID/BSSTEP (see EXTERNAL QENV in envint.f),
+C which always calls it with this exact original argument list. CMIXL
+C cannot be added here as a normal argument; it is relayed instead via
+C COMMON/QENVMIX/, set by ENVINT immediately before every code path that
+C may reach QENV (direct calls and the BSSTEP/MMID callback alike).
 
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
@@ -20,35 +27,33 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *            SENV
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
      *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
+      COMMON/QENVMIX/CMIXLQ
       SAVE
 
       PL = X0
       SL = Y(1) + STOTAL
       TL = Y(2)
       RL = Y(3)
-      IF(LMHD)THEN
-         CALL MEQOS(TL,T,PL,P,DL,D,X,Z,BETA,BETA1,BETA14,FXION,RMU,
-C      *   AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,
-C      *   LDERIV,LATMO,KSAHA)  ! KC 2025-05-31
-     *   AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP)
-      ELSE
-         CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETA1,BETA14,FXION,RMU,
+C 9/22/26 MHP via Claude
+C code changed to remove the MHD equation of state
+      CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETA1,BETA14,FXION,RMU,
      *   AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,
      *   LDERIV,LATMO,KSAHA)
-      ENDIF
       CALL GETOPAC(DL, TL, X, Z, O, OL, QOD, QOT, FXION)
       IOVIM = -1
       CALL TPGRAD(TL,T,PL,P,D,RL,SL,B,O,QDT,QDP,QOT,QOD,QCP,DEL,
      *     DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,VEL,
-     *     LDERIV,LCONV,FPL,FTL,TEFFL)
+     *     LDERIV,LCONV,FPL,FTL,TEFFL,CMIXLQ)
       DYDX(1) = -DEXP(CLN*(C4PIL+4.0D0*RL+PL-CGL-SL-SL))/FPL
       DYDX(2) = DEL
       DYDX(3) = -DEXP(CLN*(PL+RL-CGL-SL-DL))*FPL

@@ -6,23 +6,38 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GETOPAC(DL,TL,X,Z,O,OL,QOD,QOT,FXION)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
       REAL*8 FXION(3)
 C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL, FPUREZ, FKUR2, FcondOpacP
 C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove dead opacity-table Z-value inputs
+C 9/24/26 MHP via Claude
+C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
+C COMMON /NEWOPAC/
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
+     *  L2Z,LLAOL,LPUREZ,LcondOpacP
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-C MHP 8/25 Removed character file names from common block
-      COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
-     *     IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ
       COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-C MHP 8/25 Removed character file names from common block
-      COMMON /MISCOPAC/IKUR2,IcondOpacP,LcondOpacP
       SAVE
 C
 C     THIS SUBROUTINE CALCULATES THE OPACITY FOR A GIVEN X AND Z.
@@ -37,26 +52,17 @@ C
       IF(TL.LE.TMOLMAX)THEN
          IF (LALEX06) THEN
             CALL GETALEX06(DL,TL,X,Z, SO, SOL,SQOD,SQOT)
-C             RR = DL - 3.0D0*(TL-6.0D0)
-C             WRITE(*,911)X,Z,RR,TL,SOL
-C 911         FORMAT(2f5.2,3f7.3)
           LGOTATM = .TRUE.
-         ELSE IF (LALEX95) THEN
-            CALL YALO3D(DL, TL, X, Z, SO, SOL, SQOD, SQOT)
-          LGOTATM = .TRUE.
-         ELSE IF (LKUR90) THEN
-            CALL KURUCZ(DL, TL, SO, SOL, SQOD, SQOT, *100)
-          IF (L2Z) THEN
-             CALL KURUCZ2(DL, TL, SO1, SOL1, SQOD1, SQOT1, *100)
-             SLOPE = (SOL-SOL1)/(ZKUR1-ZKUR2)
-               SOL = SOL1 + (Z-ZKUR2)*SLOPE
-             SO = 10.0D0**SOL
-             SLOPE = (SQOD-SQOD1)/(ZKUR1-ZKUR2)
-             SQOD = SQOD1 + (Z-ZKUR2)*SLOPE
-             SLOPE = (SQOT-SQOT1)/(ZKUR1-ZKUR2)
-             SQOT = SQOT1 + (Z-ZKUR2)*SLOPE
-           END IF
-           LGOTATM = .TRUE.
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C added trap for no molecular (low-T) opacity table chosen
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+         ELSE
+            WRITE(ISHORT,*)'NO MOLECULAR OPACITY TABLE CHOSEN',
+     *      ' RUN STOPPED. X Z TL=',X,Z,TL
+            STOP
          END IF
       ENDIF
   100 CONTINUE
@@ -71,12 +77,8 @@ C regime.  Switched to exclusive usage of OPAL below 50 million K
 C     and switched the ramp to above Z = 0.1.
 c$$$  JCZ 211125 changing temperature limit to 7.0 to accommodate
 C     semiconvection+overshoot HB models, which can reach lower core temperatures
-      IF((Z .GT. 0.1D0) .AND. (TL.GT.7.0D0)) THEN 
-C      IF((Z .GT. 0.15D0) .OR.
-C     *     ((ABS(Z-ZENV) .GT. OPTOL).AND..NOT.L2Z)) THEN
+      IF((Z .GT. 0.1D0) .AND. (TL.GT.7.0D0)) THEN
          IF(.NOT.LPUREZ) THEN
-C            WRITE(ISHORT, *)' ERROR: Z.NE.ZENV. NEED PURE Z',
-C     *        ' TABLE TO CONTINUE. Z,ZENV=',Z, ZENV
             WRITE(ISHORT, *)' ERROR: Z>0.10 T > 5 X 10^7 K',
      *        ' NEED PURE Z TABLE TO CONTINUE. Z,LOG T=',Z, TL
               STOP
@@ -86,13 +88,15 @@ C     *        ' TABLE TO CONTINUE. Z,ZENV=',Z, ZENV
 C MHP 7/12 INTERPOLATE TO MAXIMUM Z IN TABLE
              ZIT = 0.1D0
              CALL GETOPAL95(DL,TL,X,ZIT,O,OL,QOD,QOT)
-C           ZIT=ZOPAL951
-         ELSE IF (LOPAL92) THEN
-           CALL YLLO3D(DL,TL,X,O,OL,QOD,QOT)
-           ZIT=ZOPAL1
-         ELSE IF (LLAOL89) THEN
-           CALL GTLAOL(DL,TL,X,O,OL,QOD,QOT)
-           ZIT=ZLAOL1
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables; added trap
+C for no opacity table chosen
+         ELSE
+            WRITE(ISHORT,*)'NO OPACITY TABLE CHOSEN',
+     *      ' RUN STOPPED. X Z TL=',X,Z,TL
+            STOP
          END IF
        SLOPE = (OL-OLZ)/(ZIT-1.0D0)
        OL = OLZ + (Z-1.0D0)*SLOPE
@@ -117,30 +121,10 @@ C
 C      IF (LOPAL95) THEN
       ELSE IF (LOPAL95) THEN
          CALL GETOPAL95(DL,TL,X,Z,O,OL,QOD,QOT)
-      ELSE IF (LOPAL92) THEN
-         CALL YLLO3D(DL,TL,X,O,OL,QOD,QOT)
-         IF (L2Z) THEN
-            CALL YLLO3D2(DL,TL,X,O1,OL1,QOD1,QOT1)
-          SLOPE = (OL-OL1)/(ZOPAL1-ZOPAL2)
-          OL = OL1 + (Z-ZOPAL2)*SLOPE
-          O = 10.0D0**OL
-          SLOPE = (QOD-QOD1)/(ZOPAL1-ZOPAL2)
-          QOD = QOD1 + (Z-ZOPAL2)*SLOPE
-          SLOPE = (QOT-QOT1)/(ZOPAL1-ZOPAL2)
-          QOT = QOT1 + (Z-ZOPAL2)*SLOPE
-       END IF
-      ELSE IF (LLAOL89) THEN
-         CALL GTLAOL(DL,TL,X,O,OL,QOD,QOT)
-         IF (L2Z) THEN
-          CALL GTLAOL2(DL,TL,X,O1,OL1,QOD1,QOT1)
-          SLOPE = (OL-OL1)/(ZLAOL1-ZLAOL2)
-          OL = OL1 + (Z-ZLAOL2)*SLOPE
-          O = 10.0D0**OL
-          SLOPE = (QOD-QOD1)/(ZLAOL1-ZLAOL2)
-          QOD = QOD1 + (Z-ZLAOL2)*SLOPE
-          SLOPE = (QOT-QOT1)/(ZLAOL1-ZLAOL2)
-          QOT = QOT1 + (Z-ZLAOL2)*SLOPE
-       END IF
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
 C MHP 7/12 INSERT FINAL TRAP - NO OPACITY COMPUTED
 C SHOULD NOT BE ABLE TO GET HERE.
       ELSE

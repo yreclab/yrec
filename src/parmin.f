@@ -3,10 +3,19 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C PARMIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      SUBROUTINE PARMIN(FALEX06,FALLARD,FATM,FFERMI,FKUR,FKUR2,FLAOL,
-     * FLAOL2,FLIV95,FLLDAT,FMHD1,FMHD2,FMHD3,FMHD4,FMHD5,FMHD6,FMHD7,
-     * FMHD8,FOPAL2,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,FSCVHE,FSCVZ,
-     * OPECALEX)
+C 9/22/26 MHP via Claude
+C code changed to remove the MHD equation of state
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+      SUBROUTINE PARMIN(FALEX06,FALLARD,FATM,FFERMI,
+     * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
+     * FSCVHE,FSCVZ)
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -20,12 +29,10 @@ C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
       PARAMETER (NTS=63, NPS=76)
       PARAMETER (JSON=5000)
 
-      REAL*8 OLAOL,OXA,OT,ORHO,TOLLAOL
       CHARACTER*10 YRECVER
       CHARACTER*20 GITHASH
       CHARACTER*256 VERFMT
-      CHARACTER*256 FLAOL, FPUREZ
-      CHARACTER*256 FLAOL2, FOPAL2, FKUR2
+      CHARACTER*256 FPUREZ
       CHARACTER*256 DESCRIP(2)
       CHARACTER*3 ANEWCP,ATMP,AID(12)
 C MHP 10/24 MIXTURE TYPE FOR NEW HEAVY ELEMENT MIXTURE MACHINERY
@@ -33,16 +40,21 @@ C MHP 10/24 MIXTURE TYPE FOR NEW HEAVY ELEMENT MIXTURE MACHINERY
       REAL*8 ZXMIXT(4),FRAC_CT(4),FRAC_NT(4),FRAC_OT(4)
       DIMENSION KINDRN(50),RSCLM(50),RSCLX(50),RSCLZ(50),
      1          RSCLCM(50)
-      CHARACTER*256 FISO
+C 9/25/26 MHP via Claude
+C code changed to remove the LISO isochrone-output option
       CHARACTER*256 FATM
       CHARACTER*256 FSTCH
       CHARACTER*256 FALLARD,FSCVH,FSCVHE,FSCVZ
       CHARACTER*256 FLAST, FFIRST, FFERMI,
      1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
-     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
-     3    FLLDAT, FSNU, FSCOMP, FKUR,
-     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      CHARACTER*256 FMONTE1,FMONTE2
+     2    FSTOR, FPMOD, FPENV, FPATM,
+     3    FSNU, FSCOMP
+C 9/25/26 MHP via Claude
+C code changed to add FSOUND, the Csound.dat sound-speed-profile
+C output filename, to the file-name-managed unit system
+      CHARACTER*256 FSOUND
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
 C JVS 02/11 PARAMETERS for command line yrec input file specification
 C      and extra acoustic depth (calcad.f) output files
 C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
@@ -50,21 +62,39 @@ C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
       !CHARACTER*256 FJLAST
       CHARACTER*256 CMD  ! Shell command composition for system() call
       INTEGER  I, LAST_SLASH_IDX
-      INTEGER ICLCD, MRK, IACAT, IJLAST, IJVS, IJENT, IJDEL
+C 9/25/26 MHP via Claude
+C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
+C reservations
+      INTEGER ICLCD, MRK, IJLAST
 C JVS END
       COMMON/VNEWCB/VNEW(12)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ,ISOUND
+C 9/25/26 MHP via Claude
+C code changed to add ISOUND (Csound.dat unit) to COMMON/IOUNITS/
+C 9/24/26 MHP via Claude
+C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
+C 9/24/26 MHP via Claude
+C code changed to remove dead IDYN from COMMON/LUNUM/
+C 9/25/26 MHP via Claude
+C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
+C assigned a unit number, but never opened or read anywhere)
 C MHP 8/25 Removed file names from common block
 C      COMMON/LUFNM/ FLAST, FFIRST, FRUN, FSTAND, FFERMI,
 C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-C MHP 6/98
-      COMMON/IOMONTE/FMONTE1,FMONTE2,IMONTE1,IMONTE2
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
       COMMON/DESC/DESCRIP
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
@@ -74,8 +104,15 @@ C MHP 6/98
      1     NUMRUN
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/24/26 MHP via Claude
+C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
+C passed as an explicit argument where actually used
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/CT2/DTWIND
       COMMON/CT3/LPTIME
@@ -125,7 +162,6 @@ C MHP 7/91 ADDED COMMON BLOCK FOR NUMERICAL PARAMETERS IN KEMCOM.
 C YCK >>> OPAL95
       CHARACTER*256 FLIV95
 C MHP 8/25 Removed character file names from common block
-      COMMON /LOPAL95/ILIV95
 C <<< YCK
 C MHP 6/90 ADDITIONAL COMMON BLOCK FOR SETTLING.
       COMMON/GRAVS2/DT_GS,XMIN,YMIN,LTHOULFIT
@@ -141,16 +177,11 @@ C LPOUT AND POMAX ADDED TO CONTROL COMMON BLOCK, REST IN PHYSICS
       COMMON /PO/POA,POB,POC,POMAX,LPOUT
       COMMON/TRACK/ITRVER
       COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1           IOMHD7, IOMHD8
       COMMON/CORE/LCORE,MCORE,FCORE
 C DBGLAOL
 C MHP 8/25 Removed character file names from common block
-      COMMON/NWLAOL/OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL,
-     *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ
-C MHP 8/25 Removed character file names from common block
 C DBG 11/11/91 ADDED TO NAMELIST
-      COMMON/CHRONE/LRWSH, LISO, IISO
+      COMMON/CHRONE/LRWSH
 C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
 C a set of runs.
       COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
@@ -159,8 +190,7 @@ C MHP 8/25 Removed file names from common block
 C JMH 8/18/91
 C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
 C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-     *              ATMGL(NG),ATMZ,IOATM
+      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
 C JMH
 C JNT 6/14 SAME AS ATMOS2 BUT FOR KURUCZ/CASTELLI2004 ATMOSPHERES
       COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
@@ -177,8 +207,10 @@ C DBG 7/92 ADDED DEBYE HUCKEL PARAMETERS TO NAMELIST, ETADH0, ETADH1
 
 C MHP 8/25 Removed character file names from common block
 C DBG 4/94 ADDED PARAMETERS TO CONTROL RAMP Z IN CORE
+C 9/24/26 MHP via Claude
+C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
+     *             IOLAOL2, NK,
      *             LZRAMP
 C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
 C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
@@ -187,27 +219,33 @@ C DBG 12/94 ADDED CALIBRATE STELLAR MODEL
      1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
      2      LSTAR, LTEFF, LPASSR,LCALST
 C OPAL eos
-      CHARACTER*256 FOPALE,FOPALE01,FcondOpacP,FOPALE06
-C KC 2025-05-30 reordered common block elements
-C       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,FOPALE01,LOPALE01,
-C      x  FOPALE06,LOPALE06,LNumDeriv
+      CHARACTER*256 FcondOpacP,FOPALE06
 C MHP 8/25 Remove file names from common blocks
-      COMMON/OPALEOS/LOPALE,IOPALE,lopale01,lopale06,lNumDeriv
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
+      COMMON/OPALEOS/lopale06,lNumDeriv
 C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
-C MHP 8/25 Removed character file names from common block
-      COMMON /MISCOPAC/IKUR2,IcondOpacP,LcondOpacP
-C     9/95 Alex low T opacity tables
-      CHARACTER*256 OPECALEX(7)
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove dead opacity-table Z-value inputs
+C 9/24/26 MHP via Claude
+C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
+C COMMON /NEWOPAC/
+      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
+     *  L2Z,LLAOL,LPUREZ,LcondOpacP
       CHARACTER*256 FALEX06
-C MHP 8/25 Removed all character strings from common blocks
-      COMMON /ALEXO/IALXO
 C 2006 version added 3/09
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALEX06/IALEX06
-      COMMON /ALEXMIX/XALEX,ZALEX
+C 9/24/26 MHP via Claude
+C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
+C never read or written anywhere)
       COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
       COMMON/NOTRAN/LNOJ
 C 8/96 MHP NEW COMMON BLOCK FOR NUCLEAR REACTION RATES.
@@ -230,18 +268,16 @@ C       COMMON/NEWPARAM/FLAG_DX,FLAG_DW,FLAG_DZ,LSTRUCT_TIME,
      * TOL_DM_MIN,TOL_DP_CORE_MAX,TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,
 C      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LNEWVARS
      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LSTRUCT_TIME,LNEWVARS
-C MHP 6/96 MONTE CARLO OPTION FOR SNUS ADDED.
-      COMMON/MONTE/LMONTE,IMBEG,IMEND
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
      *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
 C MHP 8/25 Removed file names from common block
-      COMMON/SCV2/ISCVH,ISCVHE,ISCVZ
 C      COMMON/SCV2/FSCVH,FSCVHE,FSCVZ,ISCVH,ISCVHE,ISCVZ
 C LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines
-      COMMON /ALATM03/ ALATM_FeH,ALATM_Alpha,LALTPTau100,  ! Shared: ALFILEIN,
-     x       IOATMA                                         ! ALSURFP and PARMIN
+      COMMON/ALATM03/ALATM_FeH,ALATM_Alpha,LALTPTau100
 C MHP 8/25 Removed character file names from common block
       COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
@@ -269,11 +305,13 @@ C        THE SETTLING COEFFICIENT DIRECTLY (in setup_grsett.f)
 C JVS 02/11 Acoustic depth calc common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE,
-     *ACATMR(JSON), ACATMD(JSON), ACATMP(JSON), ACATMT(JSON),TATMOS,
+C 9/25/26 MHP via Claude
+C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
+C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
+      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
+     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
+     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
-     *AGEOUT(5), LCLCD, ICLCD, IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-     *IJENT, IJDEL, LACOUT
 C JVS END
 C JVS 04/14 Common block for additional timestep governors
       COMMON/GOVS/LTRIST
@@ -309,13 +347,11 @@ C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
      *   CMIXLA, CALSOLAGE, CALSOLZX,
      *   DESCRIP,
      *   ENDAGE,
-     *   FLAOL, FPUREZ,FLAOL2, FOPAL2,
+     *   FPUREZ,
      *   FLAST, FFIRST, FFERMI, FDEBUG, FTRACK, FSHORT, FSTCH,
      *   FMILNE, FMODPT, FSTOR, FPMOD, FPATM, FPENV,
-     *   FDYN, FLLDAT, FSNU, FSCOMP, FKUR, FMHD1,
-     *   FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8, FISO, FATM,
-     *   FKUR2, FALLARD, FSCVH, FSCVHE, FSCVZ, FOPALE, FLIV95,
-     *   FMONTE1,FMONTE2,
+     *   FSNU, FSCOMP, FATM, FSOUND,
+     *   FALLARD, FSCVH, FSCVHE, FSCVZ, FLIV95,
      *   IPVER, ITRVER,
      *   KINDRN,
      *   LDEBUG, LCORR, LMILNE, LTRACK, LSTORE, LFIRST,
@@ -325,20 +361,24 @@ C G Somers 11/14
 C G Somers END
      *   LPULSE, LZRAMP, LTEFF, LCALST, LPUREZ,
 C MHP 9/24 add LCALSOLZX to namelist
-     *   LISO, LRWSH, LSENV0A, LPOUT,LCALS,LCALSOLZX,
-     *   LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,
+C 9/25/26 MHP via Claude
+C code changed to remove the LISO isochrone-output option
+     *   LRWSH, LSENV0A, LPOUT,LCALS,LCALSOLZX,
+     *   LOPAL95,
      *   NPOINT,
      *   NPENV, NPRTMOD, NPRTPT, NUMRUN, NMODLS,
-     *   OPECALEX,
      *   POA, POB, POC, POMAX,
      *   RSCLM, RSCLX, RSCLZ, RSCLCM, RSCLZC, RSCLZM1, RSCLZM2,
      *   SETDT, SENV0A,STEFF,SR,
      *   TOLR, TOLL,TOLZ,
      *   XENV0A, XLS, XLSTOL,
      *   ZENV0A,
-     *   ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     *   ZOPAL952, ZALEX1, ZALEX2, ZKUR1, ZKUR2,
-     *     FOPALE01,FcondOpacP,FOPALE06,FALEX06,LALEX06,
+C 9/24/26 MHP via Claude
+C code changed to remove dead opacity-table Z-value inputs
+     *   ZOPAL951,
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
+     *     FcondOpacP,FOPALE06,FALEX06,LALEX06,
 C MHP 10/24 ADDED END_DCEN,END_XCEN,END_YCEN VECTORS TO NML1, USED IN MAIN
 C MHP 10/24 ADDED HEAVY ELEMENT MIXTURE CONTROLS TO NML1,USED IN STARIN
      * END_DCEN,END_XCEN,END_YCEN,ISETMIX,ISETISO,
@@ -361,7 +401,7 @@ C
      *   LNEWCP, LKUTHE, LOVSTC, LOVSTE, LOVSTM, LOVMAX,
      *   LEXCOM, LROT, LNEW0, LINSTB, LWNEW, LJDOT0, LPTIME,LADOV,LTRIST,
      *   LENVG, LNULOS1, LTHOUL, LTHOULFIT,
-     *   LOPALE, LMHD, LCORE, LSEMIC, LNEWS,
+     *   LCORE, LSEMIC, LNEWS,
      *   MCORE,
      *   NITER1, NITER2, NITER3, NITER4, NUSE, NITER_GS,
      *   OPTOL,
@@ -373,10 +413,10 @@ C
      *   WALPCZ, WNEW, WEAKSCREENING,
      *   XNEWCP, XMIN,
      *   YMIN, TMOLMIN,TMOLMAX,
-     *   LMONTE,IMBEG,IMEND,SSTANDARD,LSCV,
+     *   SSTANDARD,LSCV,
      *   LDISK,TDISK,PDISK,WMAX,LSOLID,IMPJMOD, !JNT 09/2025 FOR 05/15
      *   DMDT0,FCZDMDT,FTOTDMDT,COMPACC,CREIM,LREIMER,LMDOT,
-     *   LOPALE01,LcondOpacP,LOPALE06,LNumDeriv,
+     *   LcondOpacP,LOPALE06,LNumDeriv,
      *   ALATM_FeH,ALATM_Alpha,LALTPTau100,! For new Allard Atmospheres
      *   CSTMIXING, CSTDIFFMIX,      !CFD oct2009 To mimic mixing(reduce settling)
      *   LSOLWIND,LMWIND,LROSSBY,LPMM,LBSCALE,
@@ -405,8 +445,8 @@ C G Somers 3/17 USE NEW OVERTURN TIMESCALE CALC?
      *   LNEWTCZ, LCALCENV
 C
 C DBG DATA CARDS FOR THE RUN PARAMETERS
-C MHP DATA FOR MONTE CARLO OPTION, ETC
-      DATA LMONTE,IMBEG,IMEND/.FALSE.,1,1/
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
 c Changed slightly 3He-3He on 9/25/97 to take account of the S'.
 c  Previously (6/16/97) used S at Gamow Peak. Agrees with Workshop paper.
 c
@@ -419,8 +459,6 @@ C MHP 9/94 COMBINED DIFFUSION/ADVECTION OPTION
 C MHP 9/93
       DATA LNOJ/.FALSE./
       DATA TDISK,PDISK,LDISK/0.0D0,7.2722D-6,.FALSE./
-      DATA XALEX/0.7E0/
-      DATA ZALEX/0.02E0/
       DATA LSENV0A, SENV0A /50*.FALSE.,50*1.26D-4/
       DATA XENV0, ZENV0/0.7,0.02/
       DATA LDEBUG, LCORR, NPOINT, LMILNE, LTRACK, LSTORE,
@@ -510,12 +548,9 @@ C DBG PULSE DATA CARD FOR PULSATION
       DATA ITRVER/1/
       DATA KTTAU/0/
       DATA CLSUN,CRSUN/3.8515D33,6.9598D10/
-C YC  If LMHD is TRUE use MHD equation of state tables.  LU numbers
-C     are stored in IOMHDi.
 C DBG If LCORE is TRUE then calculate shells interior to start up
 C     model's inner most shell.
       DATA LCORE,MCORE,FCORE/.FALSE.,0,1.0/
-      DATA LMHD/.FALSE./
 C MHP 5/90 NEW DATA STATEMENTS FOR NEW PARAMETERS
       DATA GRTOL,ILAMBDA,NITER_GS,LDIFY/1.0D-8,1,10,
      *     .FALSE./
@@ -531,7 +566,11 @@ C MHP 5/90 NEW DATA STATEMENTS FOR NEW PARAMETERS
 C DBGLAOL
       DATA TOLLAOL,LLAOL,LPUREZ/10.0,.FALSE.,.FALSE./
 C DBG 11/11/91
-      DATA LRWSH,LISO/.FALSE.,.FALSE./
+      DATA LRWSH/.FALSE./
+C 9/25/26 MHP via Claude
+C code changed to add a default for FSOUND matching the previous
+C hardcoded Csound.dat behavior; overridable via the CONTROL namelist
+      DATA FSOUND/'Csound.dat'/
 C 3/92 DBG
       DATA LNULOS1/.FALSE./
 C DBG PULSE OUT 7/92
@@ -545,11 +584,12 @@ C DBG 4/94 ZRAMP STUFF
      *       50*-1.0D0, .FALSE./
 C DBG 12/94 CALIBRATED STELLAR MODEL STUFF
       DATA LCALST, LTEFF/.FALSE., .FALSE./
-C YCK >>>  2/95 OPAL eos
-C LLP >>> OPAL 2001 EOS, Potekhin Conductive Opacities,
-C         OPAL 2006 EOS, Use Numerical Derivitives switches
-      DATA LOPALE, LOPALE01,LcondOpacP,LOPALE06,LNumDeriv
-     x     /.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE./
+C LLP >>> OPAL 2006 EOS, Potekhin Conductive Opacities,
+C         Use Numerical Derivitives switches
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
+      DATA LcondOpacP,LOPALE06,LNumDeriv
+     x     /.FALSE.,.FALSE.,.FALSE./
 C MHP 8/25 Removed hard coded defaults
 C     Alex low T opacity
 C      DATA OPECALEX/'OPACALEXANDER.X00',
@@ -704,56 +744,47 @@ C OUTPUT: FOR PULSATION CODE, ENVELOPE
       IOPENV = 25
 C OUTPUT: FOR PULSATION CODE, ATMOSPHERE
       IOPATM = 26
-C OUTPUT: BINARY OUTPUT OF LAST MODEL
-      ILSTBN = 27
-C OUTPUT: BINARY OUTPUT OF STORED MODELS
-      ISTOBN = 28
-C INPUT: BINARY STARTING MODEL
-      IFSTBN = 29
-C OUTPUT: INFO RELAVENT TO DYNAMO
-      IDYN = 30
-C YCK INPUT: OPAL92 OPACITY TABLES
-      ILLDAT = 32
+C 9/25/26 MHP via Claude
+C code changed to remove dead ILSTBN, ISTOBN, IFSTBN unit reservations
+C (assigned here but never opened, read, or written anywhere; not even
+C shared via a common block)
+C OUTPUT: SOUND SPEED PROFILE (WRITTEN BY WRTMOD WHEN LSOUND IS TRUE)
+      ISOUND = 500
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
 C YCK INPUT: OPAL95 OPACITY TABLE
       ILIV95 = 48
 C OUTPUT: SNU FLUXES
       ISNU = 33
-C OUTPUT: EXTENDED COMPOSITION INFO
-      ISCOMP = 34
-C YCK INPUT: KURUCZ LOW T OPACITIES
-      IKUR = 36
-C OUPUT: ISOCHRONE INFORMATION
-      IISO = 37
+C 9/25/26 MHP via Claude
+C code changed to remove dead COMMON/LUNUM/ISCOMP unit reservation
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/25/26 MHP via Claude
+C code changed to remove the LISO isochrone-output option
 C INPUT: KURUCZ ATMOSPHER TABLE
       IOATM = 38
-C YCK INPUT: Alex LOW T OPACITIES
-      IALXO = 39
-C INPUT: MHD EQU. OF STATE TABLES
-      IOMHD1 = 40
-      IOMHD2 = 41
-      IOMHD3 = 42
-      IOMHD4 = 43
-      IOMHD5 = 44
-      IOMHD6 = 45
-      IOMHD7 = 46
-      IOMHD8 = 47
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
 C INPUT: OPAL EQUATION OF STATE
       IOPALE = 49
-C INPUT LAOL OPACITIES IN DENSE GRID FORMAT
-      IOLAOL = 61
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
 C INPUT: LAOL OPACITIES FOR PURE CN IN DENSE GRID FORMAT
       IOPUREZ = 62
 C DBG 4/94
 C     INPUT:
 C DBG 8/95 SECOND OPOACITY TABLES FOR ZRAMP AND Z DIFFUSION
-      IOLAOL2 = 63
-      IOOPAL2 = 64
-      IKUR2 = 65
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
 C MHP 6/97 ADDED OPTION FOR ALLARD MODEL ATMOSPHERES
       IOATMA = 66
-C MHP 6/98 MONTE CARLO FOR SNUs
-      IMONTE1 = 70
-      IMONTE2 = 71
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
 C INPUT FILES FOR THE SCV EOS
       ISCVH=72
       ISCVHE=73
@@ -809,8 +840,16 @@ C been changed during the run, and what the original setting was
       KTTAU0 = KTTAU
       LTTAU = .FALSE.
 C DBG WRITE OUT ENTIRE NAMELIST TO ISHORT
-      WRITE(ISHORT,NML=PHYSICS)
-      WRITE(ISHORT,NML=CONTROL)
+C 9/25/26 MHP via Claude
+C *** LIVE ISSUE, NOT YET RESOLVED *** These writes execute before
+C ISHORT is OPENed (see OPEN(ISHORT,FILE=FSHORT,...) below), so unit
+C 20 was never actually pointed at FSHORT here -- Fortran silently
+C auto-created a stray fort.20 file instead, and the namelist echo has
+C never actually reached the .short file. Commented out for now rather
+C than fixed outright; MHP plans to move these after consulting other
+C developers on where the echo should go.
+C      WRITE(ISHORT,NML=PHYSICS)
+C      WRITE(ISHORT,NML=CONTROL)
 
 C Post-process all CONTROL namelist vars that hold path values.
 C Expand any placeholders found in the string with the value taken from a
@@ -835,6 +874,7 @@ C corresponding environment variable, if one is defined.
       CALL EXPAND_VALUE(FSCVZ)
       CALL EXPAND_VALUE(FSHORT)
       CALL EXPAND_VALUE(FSNU)
+      CALL EXPAND_VALUE(FSOUND)
       CALL EXPAND_VALUE(FSTOR)
       CALL EXPAND_VALUE(FTRACK)
 
@@ -867,32 +907,12 @@ C same conventions
      *       delad,gamma1,P, T, X'
 
 
-C      IACAT = 92
-C      FACAT=FSHORT(1:MRK-1)//'acatm'
-C      OPEN(UNIT=IACAT, FILE=FACAT, STATUS='UNKNOWN')
-C      WRITE(IACAT,*) 'Acoustic depth calculation output file: atmosphere integration'
-C      WRITE(IACAT,*) 'age (Gyr),radius(cm),1/sound speed(s/cm),delad,gamma1,
-C     * P, T, X'
-
+C 9/25/26 MHP via Claude
+C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
+C reservations (all were declared but never opened anywhere)
 C            IJLAST = 93
 C            FJLAST=FSHORT(1:MRK-1)//'jlast'
 C            OPEN(UNIT=IJLAST, FILE=FJLAST, STATUS='UNKNOWN')
-
-C      IJVS = 94
-C      FJVS=FSHORT(1:MRK-1)//'jvs'
-C      OPEN(UNIT=IJVS, FILE=FJVS, STATUS='UNKNOWN')
-C      WRITE(IJVS,*) 'The dels'
-
-C      IJENT = 95
-C      FJENT=FSHORT(1:MRK-1)//'ent'
-C      OPEN(UNIT=IJENT, FILE=FJENT, STATUS='UNKNOWN')
-C      WRITE(IJENT,*) 'Profiles: Age(Gyr), log(R), log(L), Log(LHe3),
-C     * Conv flag, log(T), log(P), log(D)'
-
-C      IJDEL = 96
-C      FJDEL=FSHORT(1:MRK-1)//'del'
-C      OPEN(UNIT=IJDEL, FILE=FJDEL, STATUS='UNKNOWN')
-C      WRITE(IJDEL,*) 'Profiles: Age(Gyr), depth, del, del, del'
       ENDIF
 
 
@@ -921,26 +941,15 @@ C           DEFAULT BE9(P,A)LI6 (BE93) = 15,000 keV b FROM FOWLER ET AL. 1967
       ENDIF
 C G Somers END
 C MHP 8/25 open relevant table as well as ensuring that only one is selected
-C  Disable Older OPAL EOS's if a newer one is specified
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
       IF (LOPALE06) THEN
-          LOPALE01 = .FALSE.
-          LOPALE = .FALSE.
          OPEN(IOPALE, FILE=FOPALE06,STATUS='OLD')
       ENDIF
-      IF (LOPALE01) THEN
-         OPEN(IOPALE, FILE=FOPALE01,STATUS='OLD')
-         LOPALE = .FALSE.
-      ELSE IF(LOPALE) THEN
-         OPEN(IOPALE, FILE=FOPALE,STATUS='OLD')
-      ENDIF
-C 3/09 Disable older Alexander opacities if a newer one is specified
-      IF(LALEX06)THEN
-         LALEX95 = .FALSE.
-         LKUR90 = .FALSE.
-      ENDIF
-      IF(LALEX95)THEN
-         LKUR90 = .FALSE.
-      ENDIF
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
 
       OPEN(ISTOR,FILE=FSTOR,FORM='FORMATTED',STATUS='UNKNOWN')
       REWIND(ISTOR)
@@ -980,6 +989,19 @@ C G Somers END
 
       OPEN(ISHORT,FILE=FSHORT,FORM='FORMATTED',STATUS='UNKNOWN')
       REWIND(ISHORT)
+C 9/25/26 MHP via Claude
+C code changed to open the sound-speed-profile output (previously
+C hardcoded to unit 500/'Csound.dat' in wrtmod.f) here instead, using
+C the managed ISOUND unit and FSOUND filename. Opened unconditionally
+C since LSOUND is only known at runtime, well after PARMIN returns.
+C Rewound explicitly so every run starts with a clean file even if
+C LSOUND never becomes true this run (STATUS='UNKNOWN' alone does not
+C truncate/reposition an existing file on OPEN, so without this a
+C stale file from an earlier LSOUND-triggering run would otherwise be
+C left in place, opened but unwritten, and could be mistaken for
+C fresh output).
+      OPEN(ISOUND,FILE=FSOUND,FORM='FORMATTED',STATUS='UNKNOWN')
+      REWIND(ISOUND)
       IF (LTRACK) THEN
           OPEN(UNIT=ITRACK,FILE=FTRACK, FORM='FORMATTED',
      *        STATUS='UNKNOWN')
@@ -1013,20 +1035,14 @@ C     OPEN ALL PULSE FILES
       OPEN(IOPENV, FILE=FPENV,STATUS='UNKNOWN',FORM='FORMATTED')
       OPEN(IOPATM, FILE=FPATM,STATUS='UNKNOWN',FORM='FORMATTED')
       END IF
-C MHP 6/98
-C MHP 8/25 Moved call from main to here for opening idyn
-      IF(LMONTE)THEN
-         OPEN(UNIT=IDYN,FILE=FDYN,FORM='FORMATTED',STATUS='OLD')
-         OPEN(IMONTE1, FILE=FMONTE1,STATUS='UNKNOWN',FORM='FORMATTED')
-         OPEN(IMONTE2, FILE=FMONTE2,STATUS='UNKNOWN',FORM='FORMATTED')
-      ENDIF
+C 9/24/26 MHP via Claude
+C code changed to remove the Monte Carlo option
 C     MHP 8/25 Moved opening of conductive opacity and EoS tables here, to avoid complicated passages of declared variables.
       IF(LcondOpacP)then
          open(IcondOpacP,file=FcondOpacP,status='OLD')
       ENDIF
-      IF(LISO) THEN
-         OPEN(IISO, FILE=FISO,STATUS='UNKNOWN', FORM='FORMATTED')
-      ENDIF
+C 9/25/26 MHP via Claude
+C code changed to remove the LISO isochrone-output option
       IF(LSEMIC)THEN
          IF(LOVSTC.OR.LOVSTE.OR.LOVSTM)THEN
             WRITE(ISHORT,2)LSEMIC,LOVSTE,LOVSTC,LOVSTM
