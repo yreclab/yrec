@@ -270,8 +270,18 @@ C write out the requested information.
          DO II = 1,IDM
             I = ID(II)
 C write out the basic info
-            WRITE(ISTOR,62,ADVANCE='no') I,HS(I),HR(I),HL(I),HP(I),
-     *         HT(I),HD(I),OMEGA(I),LC(I),(HCOMP(J,I),J=1,15)
+C 9/28/26 MHP via Claude
+C code changed to add MODEL and the interior/envelope/atmosphere
+C region-flag triple to this WRITE, matching FORMAT 62 (which already
+C expects them, mirroring stitch.f's WRITE(ISTOR,62,...) calls) and
+C fixing a crash ("Expected INTEGER for item 2 ... got REAL") present
+C on main itself: FORMAT 62 was widened there but this WRITE was never
+C updated to match. This file only ever writes interior points, so
+C the flag triple is always .TRUE.,.FALSE.,.FALSE., as in stitch.f's
+C own interior-point call.
+            WRITE(ISTOR,62,ADVANCE='no') MODEL,I,HS(I),HR(I),HL(I),
+     *         HP(I),HT(I),HD(I),OMEGA(I),LC(I),.TRUE.,.FALSE.,.FALSE.,
+     *         (HCOMP(J,I),J=1,15)
 C write out additional physics if desired
             IF(LSTPHYS)THEN
              SG = DEXP(CLN*(CGL - 2.0D0*HR(I)))*HS1(I)

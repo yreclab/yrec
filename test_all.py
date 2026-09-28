@@ -101,7 +101,7 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
         try:
             refline = next(ref)
             outline = next(out)
-            if not ignore_version_diffs and re.search(r"# YREC v.* \(.*\)", outline):
+            if ignore_version_diffs and re.search(r"# YREC v.* \(.*\)", outline):
                 continue
             ref_vals = vals_from_line(refline)
             out_vals = vals_from_line(outline)
