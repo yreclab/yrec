@@ -10,6 +10,8 @@ C MHP 8/25 Passed file names directly instead of through common, as character st
 C JNT 06/14 ADD NTC FOR KURUCZ/CASTELLI 2004 ATM
       PARAMETER (NT=57,NG=11)
       PARAMETER (NTC=76,NGC=11)
+C LMB 06/26 ADD NTM FOR MARCS ATM
+      PARAMETER (NTM=33,NGM=13)
       PARAMETER (NTS=63, NPS=76)
 C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE
       PARAMETER(NTA=54,NGA=5)
@@ -62,8 +64,11 @@ C     *              ATMGL(NG),ATMZ,IOATM,FATM
 C JNT 06/14
       COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
      *              ATMGLC(NGC)
+C LMB 05/26
+      COMMON/ATMOS2M/ATMPLM(NTM,NGM),ATMTLM(NTM),
+     *              ATMGLM(NGM)
 C MHP 8/92 COMMON BLOCK ADDED FOR LOWER EDGE OF TABLE IN LOG G.
-      COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
+      COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC),IMIN3(NTM),IMINMAX3(NTM)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
@@ -306,6 +311,61 @@ C          should break when trying to find surface P.
            IF(.NOT.LCATCH) IMIN2(J) = NG
         END DO
 C END JNT 6/14
+
+C LMB 5/26 ADD OPTION FOR NEW MARCS ATMOSHPERES
+      ELSE IF (KTTAU .EQ. 6) THEN
+C OPEN SURFACE PRESSURE TABLE
+        OPEN(IOATM,FILE=FATM, STATUS='OLD')
+C GET ABUNDANCE:
+        READ(IOATM,200) ATMZ
+C GET VALUES OF LOG Teff:
+        READ(IOATM,209) (ATMTLM(I),I=1,NTM)
+  209   FORMAT(1P4E16.8,7(/1P4E16.8),/1PE16.8,/)
+C GET VALUES OF LOG G:
+        READ(IOATM,211) (ATMGLM(I),I=1,NGM)
+  211   FORMAT(1P4E16.8,2(/1P4E16.8),/1PE16.8,/) 
+C GET GRID OF LOG PRESSURE VALUES:
+        DO 210 J=1,NTM
+          READ(IOATM,212) (ATMPLM(J,I),I=1,NGM)
+  212     FORMAT(1P4E16.8,2(/1P4E16.8),/1PE16.8)
+  210   CONTINUE
+
+        REWIND IOATM
+        CLOSE(IOATM)
+C       G Somers 5/15; added a catch that allows the code to work
+C                      if the highest gravity P value for a specific
+C                      temperature is -999. LCATCH is set to true
+C                      once the first valid P is read, and it can
+C                      set the minimum P thereafter.
+        DO J = 1,NTM
+           LCATCH = .FALSE.
+           DO K = NGM,1,-1
+              IF(ATMPLM(J,K).LE.0.0D0)THEN
+C                IMIN3 records the lowest logg with a pressure
+                 IF(LCATCH)THEN
+                    IMIN3(J) = K + 1
+                    GOTO 7
+                 ENDIF
+              ELSE
+C                if we have reached a non-negative pressure value,
+C                turn off the catch so IMIN3 can be set. also record
+C                the highest gravity with a pressure for later interpolation
+                 IF(.NOT.LCATCH) IMINMAX3(J) = K
+                 LCATCH = .TRUE.
+              ENDIF
+           END DO
+           IMIN3(J) = 1
+    7      CONTINUE
+C          if all of the P values at a given T are -999, set IMIN3
+C          to the number of gravity terms. in response, the code
+C          should break when trying to find surface P.
+           IF(.NOT.LCATCH) IMIN3(J) = NGM
+        END DO
+        ! TODO: FIX THE RAGGED EDGES! Causes problems at low Teff
+      !   DO J = 1,NTM
+      !       print*, J, ATMTLM(J), IMIN3(J), ATMGLM(IMIN3(J)),ATMGLM(IMINMAX3(J))
+      !   END DO
+C END LMB 5/26
       ENDIF
 
 C MHP 5/97 ADDED OPTION FOR NEW SCV EQUATION OF STATE TABLES.

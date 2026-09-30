@@ -103,6 +103,8 @@ C Determine atmosphere flag, ATM
          ATM='KUR '
       ELSEIF (KTTAU .EQ. 4) THEN
          ATM='ALL '
+      ELSEIF (KTTAU .EQ. 6) THEN
+         ATM='MAR '
       ENDIF
 C Determine equation of state flag, EOS
       EOS='SAHA  '
