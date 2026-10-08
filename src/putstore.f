@@ -271,16 +271,23 @@ C write out the requested information.
             I = ID(II)
 C write out the basic info
 C 9/28/26 MHP via Claude
-C code changed to add MODEL and the interior/envelope/atmosphere
-C region-flag triple to this WRITE, matching FORMAT 62 (which already
-C expects them, mirroring stitch.f's WRITE(ISTOR,62,...) calls) and
-C fixing a crash ("Expected INTEGER for item 2 ... got REAL") present
-C on main itself: FORMAT 62 was widened there but this WRITE was never
-C updated to match. This file only ever writes interior points, so
-C the flag triple is always .TRUE.,.FALSE.,.FALSE., as in stitch.f's
-C own interior-point call.
+C code changed to add MODEL to this WRITE, matching FORMAT 62 (which
+C already expected it) and fixing a crash ("Expected INTEGER for item
+C 2 ... got REAL") present on main itself: FORMAT 62 was widened there
+C but this WRITE was never updated to match.
+C 10/8/26 MHP via Claude
+C code changed to remove the interior/envelope/atmosphere region-flag
+C triple added above: after consultation with other developers, this
+C doesn't fit the .store header (FORMAT 55 documents no such columns)
+C and isn't desired here. This file only ever writes interior points,
+C so the flags were always the same hard-coded, uninformative
+C .TRUE.,.FALSE.,.FALSE. -- unlike stitch.f, which genuinely needs the
+C triple since it writes interior, envelope, and atmosphere rows with
+C the same format. MODEL is kept; FORMAT 62 below now supplies only
+C LC(I)'s own logical, as it did before the region-flag triple was
+C ever added.
             WRITE(ISTOR,62,ADVANCE='no') MODEL,I,HS(I),HR(I),HL(I),
-     *         HP(I),HT(I),HD(I),OMEGA(I),LC(I),.TRUE.,.FALSE.,.FALSE.,
+     *         HP(I),HT(I),HD(I),OMEGA(I),LC(I),
      *         (HCOMP(J,I),J=1,15)
 C write out additional physics if desired
             IF(LSTPHYS)THEN
@@ -309,7 +316,7 @@ C write out additional rotation info if desired
             ENDIF
          ENDDO
  62   FORMAT(I6,1X,I6,0P2F18.14,1PE24.16,0PF18.14,1X,F18.14,1X,F18.14,1PE24.16,
-     &     1X,L1,1X,L1,1X,L1,1X,L1,3(0PF12.9),12(0PE16.8),2X)
+     &     1X,L1,3(0PF12.9),12(0PE16.8),2X)
 
  63   FORMAT(1PE10.4,1PE11.3,E12.4,E12.4,E12.4,1PE12.4,0PF9.5,1X,F9.5,1X,F9.5,
      &     1X,F9.5,1X,F9.5,1X,F9.5,E12.4,E12.4,E12.4,E12.4,E12.4,E13.5,E13.5,E13.5)

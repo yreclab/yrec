@@ -419,7 +419,13 @@ C
      *   LcondOpacP,LOPALE06,LNumDeriv,
      *   ALATM_FeH,ALATM_Alpha,LALTPTau100,! For new Allard Atmospheres
      *   CSTMIXING, CSTDIFFMIX,      !CFD oct2009 To mimic mixing(reduce settling)
-     *   LSOLWIND,LMWIND,LROSSBY,LPMM,LBSCALE,
+C 10/8/26 MHP via Claude
+C code changed to remove LPMM: confirmed unused (not in any COMMON
+C block, no conditional anywhere in the code references it, and its
+C own DATA default was already commented out), so it had zero effect
+C on any run. The PMMA/PMMB/PMMC/PMMD/PMMM/PMMJD/PMMMD/PMMWMAX
+C parameters below remain live, used under the LMWIND option.
+     *   LSOLWIND,LMWIND,LROSSBY,LBSCALE,
      *   AWIND,PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMWMAX,
 C MHP 8/17 ADDED WMAX_SUN
      *   PMMSOLP,PMMSOLW,PMMSOLTAU,LCODM,CODM,WMAX_SUN,
@@ -443,6 +449,21 @@ C MHP 09/14 ADDED CROSS SECTIONS
      *   TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LNEWVARS,
 C G Somers 3/17 USE NEW OVERTURN TIMESCALE CALC?
      *   LNEWTCZ, LCALCENV
+C
+C 10/8/26 MHP via Claude
+C code added: an output-only NAMELIST (never READ, only WRITTEN) for
+C variables that are derived/overridden after PHYSICS and CONTROL are
+C read in, so their effective (post-derivation) values can be echoed
+C to .short alongside the raw namelists, without a hand-written
+C FORMAT per variable. Excludes purely incidental I/O bookkeeping
+C (e.g. CMD, FCLCD, ICLCD, MRK, LAST_SLASH_IDX).
+      NAMELIST /DERIVED/
+     *   CLN, CC13, CC23,
+     *   CONSTFACTOR, EXCEN, EXL, EXM, EXMD, EXPR, EXR, EXTAU, EXW, WMAX,
+     *   LDIFY, LDIFZ, LTHOUL, LTHOULFIT, LNEW0, LNEWDIF, ILAMBDA,
+     *   SLI6, SLI7, SBE91, SBE92, SBE93, FRAC_C, FRAC_N, FRAC_O,
+     *   ZXMIX, SUM_FRAC, LISOTOPE, LMIXTURE, INEWCP,
+     *   LREL, CMIXL, KTTAU0, LTTAU
 C
 C DBG DATA CARDS FOR THE RUN PARAMETERS
 C 9/24/26 MHP via Claude
@@ -490,6 +511,15 @@ C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
       DATA HPTTOL/1.0D-8,8.0D-2,5.0D-2,5.0D-2,1.0D0,1.0D0,0.0D0,5.0D-2,
      *            2.0D-2,5.0D-2,5.0D-2,1.0D-1/
       DATA LNEWCP,ANEWCP,XNEWCP/.FALSE.,'   ',1.3D1/
+C 10/8/26 MHP via Claude
+C code changed to add a blank default for ATMP: it had no DATA
+C statement anywhere, so its storage was zero-initialized to NUL
+C bytes rather than blanks. Harmless as long as nothing echoed it
+C (IF(ATMP.EQ.'ABS') at line ~1173 just evaluates false either way,
+C matching the LREL=.TRUE. default), but the new NML=PHYSICS echo
+C writes it out verbatim, and raw NUL bytes turned .short into a
+C binary-looking file. Blank matches the "not 'ABS'" default.
+      DATA ATMP/'   '/
 C MHP 10/24 ADDED NEW MIXTURE CONTROL ISETISO CONTROLS CNO ISOTOPE RATIOS AND
 C LIGHT ELEMENT ABUNDANCES D,HE3,LI6,LI7,BE9,B10,B11 (1=USED)
 C ISETMIX CONTROLS C+N+O MASS FRACTIONS (1=USED)
@@ -571,6 +601,25 @@ C 9/25/26 MHP via Claude
 C code changed to add a default for FSOUND matching the previous
 C hardcoded Csound.dat behavior; overridable via the CONTROL namelist
       DATA FSOUND/'Csound.dat'/
+C 10/8/26 MHP via Claude
+C code changed to add blank defaults for the remaining CONTROL/PHYSICS
+C CHARACTER namelist variables that had none. Each is always set by
+C every current test's namelist anyway, but with no DATA default their
+C storage zero-initializes to NUL bytes rather than blanks; harmless
+C as long as nothing echoed them, but the new NML=CONTROL/PHYSICS echo
+C (see above) writes every member verbatim, and raw NULs turn .short
+C into a binary-looking file for any run that leaves one of these
+C unset (as FDEBUG and FSTCH, both legacy/unused outputs, always are).
+C A single blank is padded to each variable's full declared length by
+C the compiler, same as ANEWCP's existing default above. FALEX06,
+C FALLARD, FATM, FFERMI, FLIV95, FPATM, FPENV, FPMOD, FPUREZ, FSCVH,
+C FSCVHE, FSCVZ are PARMIN's own dummy arguments (not local variables,
+C can't take a DATA default here) but are always explicitly set by
+C every current test's namelist, so are not at risk in practice.
+      DATA DESCRIP/2*' '/
+      DATA FDEBUG,FFIRST,FLAST/3*' '/
+      DATA FMILNE,FMODPT,FOPALE06,FSCOMP/4*' '/
+      DATA FSHORT,FSNU,FSTCH,FSTOR,FTRACK,FcondOpacP/6*' '/
 C 3/92 DBG
       DATA LNULOS1/.FALSE./
 C DBG PULSE OUT 7/92
@@ -839,17 +888,13 @@ C MHP 06/13 Added memory of whether the choice of atmospheres has
 C been changed during the run, and what the original setting was
       KTTAU0 = KTTAU
       LTTAU = .FALSE.
-C DBG WRITE OUT ENTIRE NAMELIST TO ISHORT
 C 9/25/26 MHP via Claude
-C *** LIVE ISSUE, NOT YET RESOLVED *** These writes execute before
-C ISHORT is OPENed (see OPEN(ISHORT,FILE=FSHORT,...) below), so unit
-C 20 was never actually pointed at FSHORT here -- Fortran silently
-C auto-created a stray fort.20 file instead, and the namelist echo has
-C never actually reached the .short file. Commented out for now rather
-C than fixed outright; MHP plans to move these after consulting other
-C developers on where the echo should go.
-C      WRITE(ISHORT,NML=PHYSICS)
-C      WRITE(ISHORT,NML=CONTROL)
+C 10/8/26 MHP via Claude
+C code changed to resolve the fort.20 live issue noted above (now
+C removed): the namelist echo belongs after ISHORT is OPENed, not
+C here. Moved to just past OPEN(ISHORT,...), alongside the rest of
+C the run-parameter echo -- see the NML=PHYSICS/CONTROL/DERIVED
+C writes there.
 
 C Post-process all CONTROL namelist vars that hold path values.
 C Expand any placeholders found in the string with the value taken from a
@@ -1297,95 +1342,25 @@ C G SOMERS 04/15; ENSURE CORRECT PARAMETERS FOR LIGHT ELEMENT DIFFUSION.
       ENDIF
 
 C     WRITE OUT RUN PARAMETERS.
-
-      WRITE(ISHORT,50)XENV0,ZENV0
-   50 FORMAT(30X,'RUN DATA VALUES'/3X,
-     *       'LINE  1     XENV0     ZENV0       ZSI'/2X,
-     *       'STANDARD       N/A       N/A  0.00E+00'/3X,
-     *       'CURRENT',1P2E10.0,2X,E8.2)
+C 10/8/26 MHP via Claude
+C code changed to replace the hand-written STANDARD/CURRENT echo
+C tables (which only covered a subset of namelist variables, had
+C truncated arrays for ATIME/HPTTOL, and had a broken arg list on the
+C old TRIDT/TRIDL line -- WRITE(ISHORT,45) TRIDT,TRIDL/TRIDT/TRIDL was
+C parsed as two items, not four, despite FORMAT 45's four-column
+C header) with a complete, always-in-sync echo of the actual PHYSICS
+C and CONTROL namelists, plus a DERIVED namelist (declared above) for
+C the handful of values that are only meaningful after post-namelist-
+C read derivation/overrides (e.g. CMIXL, LREL, the LDIFLI-forced
+C cascade). The NPOINT/NPENV/NPRTMOD/NPRTPT sentinel-default logic
+C below is functional, not echo, and is preserved unchanged.
       IF(NPOINT.LE.0) NPOINT = 9999
-      WRITE(ISHORT,70) LDEBUG,LCORR,NPOINT,LMILNE,LTRACK,LSTORE,LSTPCH
-   70 FORMAT(3X,'LINE  2    LDEBUG     LCORR    NPOINT    LMILNE    LTRA
-     *CK    LSTORE    LSTPCH'/2X,'STANDARD',2(9X,'T'),6X,
-     *'9999',9X,'F',2(9X,'T'),9X,'T'/3X,'CURRENT',2(9X,L1),6X,
-     *I4,3(9X,L1),9X,L1)
       IF(NPENV.LE.0) NPENV = 9999
-      WRITE(ISHORT,90) LSCRIB,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT
-   90 FORMAT(3X,'LINE  3    LSCRIB    LSTATM    LSTENV    LSTMOD',5X,
-     *'LSTPHYS    LSTROT'/2X,'STANDARD',9X,'T',2(9X,'F'),
-     *9X,'T',2(9X,'F'),9X,'2'/3X,'CURRENT',5(9X,L1),9X,L1)
-      WRITE(ISHORT,110)LENVG,ATMSTP,ENVSTP
-  110 FORMAT(3X,'LINE 4     LENVG    ATMSTP    ENVSTP'/2X,'STANDARD',7X,
-     *       'N/A',6X,'0.50',6X,'0.50'/3X,'CURRENT',9X,L1,2(4X,F6.3))
       IF(NPRTMOD.LE.0) NPRTMOD = 9999
       IF(NPRTPT.LE.0) NPRTPT = 9999
-      WRITE(ISHORT,130) NPRTMOD,NPRTPT
-  130 FORMAT(3X,'LINE  4  NPRTMOD    NPRTPT'/2X,'STANDARD',
-     *1(7X,'N/A'),9X,'5'/3X,'CURRENT',2(6X,I4))
-
-C     SPIT OUT NAMELIST VARIABLES TO ISHORT
-
-      WRITE(ISHORT,25) (TCUT(J),J=1,5),TSCUT,TENV0,TENV1,TGCUT
-   25 FORMAT(3X,'LINE  2    TCUT-  E  TCUT- PP  TCUT-CNO  TCUT-
-     *3A  TCUT- NU TCUT-SAHA     TENV0     TENV1     TGCUT'/2X, 'STANDAR
-     *D',9X,'6.50',6X,'6.50',6X,'6.82',6X,'7.70',6X,'7.50',6X,
-     *'6.00',6X,'3.00',6X,'9.00',6X,'6.90'/3X,'CURRENT',
-     *9(5X,F5.2))
-      WRITE(ISHORT,35) ATMERR,ATMMAX,ATMD0,ENVERR,ENVMAX,ENVMIN
-C MHP 10/02 obsolete variables removed
-C      WRITE(ISHORT,35) NIATM,ATMERR,ATMMAX,ATMD0,NIENV,ENVERR,ENVMAX,
-C     *ENVMIN
-   35 FORMAT(3X,'LINE  3     NIATM    ATMERR    ATMMAX     ATMD0',5X,
-     *'NIENV    ENVERR    ENVMAX    ENVMIN'/2X,'STANDARD',9X,'8',2X,
-     *'3.00E-04  5.00E-01  1.00E-10',8X,'10  3.00E-04  5.00E-01  2.50E-0
-     *1'/3X,'CURRENT',10X,3(1PE10.2),10X,3(1PE10.2))
-C     *1'/3X,'CURRENT',7X,I3,3(1PE10.2),7X,I3,3(1PE10.2))
-      WRITE(ISHORT,45) TRIDT,TRIDL/TRIDT/TRIDL
-   45 FORMAT(3X,'LINE  4     TRIDT     TRIDL    LSENV0',5X,
-     *'SENV0'/2X,'STANDARD',6X,'0.01',6X,'0.08',9X,'F',2X,
-     *'1.00E-07'/3X,'CURRENT',2F10.4)
-      WRITE(ISHORT,55)(HTOLER(5,J),J=1,2),((HTOLER(I,J),I=1,4),J=1,2)
-   55 FORMAT(3X,'LINE  5 TOL.RHS-P TOL.RHS-T MIN.COR-P MIN.COR-T MIN.COR
-     *-R MIN.COR-L MAX.COR-P MAX.COR-T MAX.COR-R MAX.COR-L'/2X,'STANDARD
-     *  3.00E-05  2.50E-06  6.00E-05  4.50E-05  3.00E-05  9.00E-05  9.00
-     *E-01  5.00E-01  5.00E-01  2.00E+00'/3X,'CURRENT',10(2X,1PE8.2))
-      WRITE(ISHORT,65)(HPTTOL(J),J=1,8)
-   65 FORMAT(3X,'LINE  6  D(S)-MIN  D(S)-MAX   FLAG-DX   FLAG-DZ    MAX
-     *DP MAX DL/LT    MAX DX    MAX DZ'/2X,'STANDARD  1.00E-08  8.00E-02
-     *  5.00E-02  1.00E+00  5.00E-02  2.00E-02  1.00E+00  1.00E+00'/3X,
-     *'CURRENT',8(2X,1PE8.2))
-      WRITE(ISHORT,75)LNEWCP,ANEWCP,LREL,XNEWCP
-   75 FORMAT(3X,'LINE  7    LNEWCP    ANEWCP      LREL    XNEWCP'/2X,
-     *'STANDARD',9X,'F',7X,'N/A',9X,'T',7X,'N/A'/3X,'CURRENT',9X,L1,7X,
-     *A3,9X,L1,1PE10.2)
-      WRITE(ISHORT,85)ACFPFT,ITFP1,ITFP2
-   85 FORMAT(3X,'LINE  8    ACFPFT     ITFP1     ITFP2'/2X,'STANDARD',
-     *1X,'1.000E-20',9X,'2',8X,'20'/3X,'CURRENT',1PE10.3,6X,I4,6X,I4)
-      WRITE(ISHORT,105) NITER1,NITER2,FCORR0,FCORRI
-  105 FORMAT(32X,'RUN DATA VALUES'/3X,
-     *'LINE  1    NITER1    NITER2    FCORR0    FCORRI'/2X,
-     *'STANDARD',9X,'2',8X,'20',6X,'0.80',6X,'0.10'/3X,
-     *'CURRENT',2(6X,I4),2(5X,F5.2))
-      WRITE(ISHORT,145)(ATIME(I),I=1,3),ATIME(7)
-  145 FORMAT(3X,'LINE  5 XCORE MIN  DEL.XCORE FRAC.XCORE DEL.XSHELL'/2X,
-     *'STANDARD     0.001     0.020     0.500     0.100'/3X,'CURRENT',
-     *4(4X,F6.3))
-      WRITE(ISHORT,155)(ATIME(I),I=4,6)
-  155 FORMAT(3X,'LINE  7 DEL.YCORE  FRAC.YCORE DEL.YSHELL'/2X,'STANDARD
-     *    0.020     0.300    0.0015'/3X,'CURRENT',2(5X,F5.3),4X,F6.4)
-      WRITE(ISHORT,165) LKUTHE
-  165 FORMAT(3X,'LINE  8    LKUTHE'/,2X,
-     *'STANDARD',9X,'F'/3X,'CURRENT',9X,L1)
-      WRITE(ISHORT,175) CMIXL,DPENV,LOVSTC,ALPHAC,LOVSTE,ALPHAE
-  175 FORMAT(3X,'LINE  9   CMIXL     DPENV    LOVSTC    ALPHAC    LOVSTE
-     *    ALPHAE'/2X,'STANDARD',7X,'N/A',6X,'1.00',2(9X,'F',6X,'0.00')/
-     *3X,'CURRENT',2(5X,F5.2),2(9X,L1,5X,F5.2))
-      WRITE(ISHORT,185) LNEW0,LEXCOM
-  185 FORMAT(3X,'LINE 10   LNEW0    LEXCOM'/2X,
-     *'STANDARD',2(9X,'F')/3X,'CURRENT',2(9X,L1))
-      WRITE(ISHORT,195) LROT,WALPCZ,LINSTB
-  195 FORMAT(3X,'LINE 11      LROT    WALPCZ    LINSTB'/2X,'STANDARD',
-     *7X,'N/A',6X,'0.00',7X,'N/A'/3X,'CURRENT',9X,L1,5X,F5.2,9X,L1)
+      WRITE(ISHORT,NML=PHYSICS)
+      WRITE(ISHORT,NML=CONTROL)
+      WRITE(ISHORT,NML=DERIVED)
       IF(KTTAU .EQ. 0) THEN
            WRITE(ISHORT, 197)
       ELSE IF (KTTAU .EQ. 1) THEN
