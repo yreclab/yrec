@@ -209,8 +209,13 @@ C MHP 8/25 Removed character file names from common block
 C DBG 4/94 ADDED PARAMETERS TO CONTROL RAMP Z IN CORE
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
+C 10/9/26 MHP via Claude
+C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
+C redundant copy of the run-index loop variable main.f already passes
+C explicitly to the subroutines that need it (STARIN/RSCALE), and was
+C never read by name in this file.
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
+     *             IOLAOL2,
      *             LZRAMP
 C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
 C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
@@ -271,9 +276,16 @@ C      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LNEWVARS
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV (was IDTT here only,
+C since this file also declares COMMON/OPTAB/'s own, unrelated IDT at
+C line 142, a name collision with no cross-usage between the two
+C indices). Renamed throughout every file that declares
+C COMMON/SCVEOS/, so this slot now has one consistent name everywhere
+C instead of needing a special case here and in starin.f.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
+     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 C MHP 8/25 Removed file names from common block
 C      COMMON/SCV2/FSCVH,FSCVHE,FSCVZ,ISCVH,ISCVHE,ISCVZ
 C LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines

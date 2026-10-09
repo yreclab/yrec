@@ -6,8 +6,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C calculates the distance the star has travelled in the HR diagram
 C if far enough, output pulsation model
 C MHP 8/25 passed file names directly and removed common block with file names
-      SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,FPATM,FPENV,
-     * FPMOD)
+C 10/9/26 MHP via Claude
+C code changed to pass NK as an explicit argument instead of via
+C COMMON/ZRAMP/, which this file otherwise never used (NK was its only
+C member ever referenced here). See the CALL PDIST site in main.f,
+C which already has NK as its own local run-index variable.
+      SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
+     * FPENV,FPMOD)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
@@ -19,11 +24,6 @@ C MHP 10/02 added proper dimensions to last 2 variables
       COMMON /PO/POA,POB,POC,POMAX,LPOUT
       COMMON/PULSE/XMSOL,LPULSE,IPVER
 C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude

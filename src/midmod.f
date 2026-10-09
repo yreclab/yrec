@@ -41,7 +41,14 @@ C MHP 05/02 ADDED FOR DEUTERIUM BURNING
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C MHP 06/02
-      COMMON/PREVMID/DDELP(JSON),DDELN(JSON),HRP(JSON),LCP(JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/PREVMID/ to plain local arrays:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves their values across calls, same
+C as COMMON did. LCP keeps its LOGICAL*4 type via the IMPLICIT
+C LOGICAL*4(L) rule already in effect in this file.
+      DIMENSION DDELP(JSON),DDELN(JSON),HRP(JSON),LCP(JSON)
       DIMENSION HCOMP(15,JSON),HD(JSON),HG(JSON),HJM(JSON),HL(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HS2(JSON),HT(JSON),
 C      *     LC(JSON),LCZ(JSON),ETA2M(JSON),HDM(JSON),HGM(JSON),  ! KC 2025-05-31

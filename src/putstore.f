@@ -93,12 +93,20 @@ C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state
       COMMON/OPALEOS/lopale06,lNumDeriv
 C 9/25/26 MHP via Claude
-C code changed to fix IDTT -> IDT, matching most other files that
-C declare COMMON/SCVEOS/ (pre-existing name-only inconsistency; this
-C slot was never read or written by name in this file)
+C code changed to use IDT here, matching most other files that
+C declare COMMON/SCVEOS/ (pre-existing name-only inconsistency with
+C parmin.f/starin.f, which used IDTT since they also declare
+C COMMON/OPTAB/'s own, unrelated IDT; this slot was never read or
+C written by name in this file)
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV throughout every
+C file that declares COMMON/SCVEOS/, including parmin.f/starin.f
+C (previously IDTT there), fully resolving the OPTAB/SCVEOS IDT name
+C collision. Confirmed no file ever cross-uses OPTAB's index for
+C SCVEOS's or vice versa; this is a pure rename.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD

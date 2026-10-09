@@ -50,8 +50,15 @@ C      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025
      *                  TEFFL, HCOMP, DAGE, JENV, CMIXL)
       PARAMETER (JSON=5000)
       PARAMETER (NTS=63, NPS=76)
+C 10/9/26 MHP via Claude
+C code changed to add mx,mv,nr,nt (matching every other file that
+C declares an OPAL 2006 EOS common block), needed below for
+C COMMON/EOS06MISC/'s array dimensions; this file previously only
+C needed COMMON/EEOS06/, which it hardcoded as eos(10) instead.
+      PARAMETER (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+      Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
       REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
@@ -106,7 +113,13 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *SENV
        COMMON/SOUND/GAM1(JSON),LSOUND
-      common/eeos06/esact,eos(10)
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale).
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
       COMMON /LLOT95/ZTAB
       COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
@@ -114,9 +127,14 @@ C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
      * END_DCEN(50),END_XCEN(50),END_YCEN(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
       COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV: parmin.f and
+C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
+C slot was called IDTT there as a workaround. Renamed to IDTSCV
+C everywhere COMMON/SCVEOS/ is declared for one consistent name.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 C MHP 8/25 Remove file names from common blocks
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state

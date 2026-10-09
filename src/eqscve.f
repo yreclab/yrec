@@ -13,9 +13,14 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV: parmin.f and
+C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
+C slot was called IDTT there as a workaround. Renamed to IDTSCV
+C everywhere COMMON/SCVEOS/ is declared for one consistent name.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C REPLACE 4-PT LAGRANGE INTERPOLATE WITH 4-PT NATURAL SPLINE
@@ -45,9 +50,9 @@ C  CHECK IF THE POINT IS WITHIN THE TABLE
          RETURN
       ENDIF
 C  FIND NEAREST POINTS IN TEMPERATURE.
-      IF(TL.LT.TLOGX(IDT+1))THEN
+      IF(TL.LT.TLOGX(IDTSCV+1))THEN
 C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
-         DO I = IDT,1,-1
+         DO I = IDTSCV,1,-1
             IF(TL.GT.TLOGX(I))THEN
                II = I - 1
                GOTO 10
@@ -57,7 +62,7 @@ C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
   10     CONTINUE
       ELSE
 C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS
-         DO I = IDT+2,NTS
+         DO I = IDTSCV+2,NTS
             IF(TL.LT.TLOGX(I))THEN
                II = I - 2
                GOTO 20
@@ -66,20 +71,20 @@ C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS
          II = NTS - 3
   20     CONTINUE
       ENDIF
-      IDT = MAX(1,II)
-      IDT = MIN(NTS-3,IDT)
+      IDTSCV = MAX(1,II)
+      IDTSCV = MIN(NTS-3,IDTSCV)
       LSMT = .FALSE.
-      IF(IDT.EQ.II)THEN
-         DTABOVE = TL - TLOGX(IDT+1)
-         DTBELOW = TLOGX(IDT+2) - TL
+      IF(IDTSCV.EQ.II)THEN
+         DTABOVE = TL - TLOGX(IDTSCV+1)
+         DTBELOW = TLOGX(IDTSCV+2) - TL
          IF(DTABOVE.LT.TOLST)THEN
-            IF(IDT.GT.1)THEN
+            IF(IDTSCV.GT.1)THEN
                LSMT = .TRUE.
                ISMT = -1
                FST = (DTABOVE+TOLST)/(2.0D0*TOLST)
             ENDIF
          ELSE IF(DTBELOW.LT.TOLST)THEN
-            IF(IDT.LT.NTS-3)THEN
+            IF(IDTSCV.LT.NTS-3)THEN
                LSMT = .TRUE.
                ISMT = 1
                FST = 0.5D0*DTBELOW/TOLST
@@ -87,11 +92,11 @@ C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS
          ENDIF
       ENDIF
 C  FIND NEAREST POINTS IN PRESSURE.
-      JJJ = MIN(NPTSX(IDT)-3,IDP)
-      IF(PP.LT.TABLENV(IDT,JJJ+1,1))THEN
+      JJJ = MIN(NPTSX(IDTSCV)-3,IDP)
+      IF(PP.LT.TABLENV(IDTSCV,JJJ+1,1))THEN
 C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
          DO J = JJJ,1,-1
-            IF(PP.GT.TABLENV(IDT,J,1))THEN
+            IF(PP.GT.TABLENV(IDTSCV,J,1))THEN
                JJ = J - 1
                GOTO 30
             ENDIF
@@ -99,12 +104,12 @@ C SEARCH DOWN TO FIND NEAREST 4 TABLE ELEMENTS
          JJ = 1
   30     CONTINUE
          IDP = MAX(1,JJ)
-         IDP = MIN(NPTSX(IDT)-3,IDP)
+         IDP = MIN(NPTSX(IDTSCV)-3,IDP)
       ELSE
 C SEARCH UP FOR NEAREST 4 TABLE ELEMENTS.  NOTE SEARCH IS DONE AT LOWEST
 C TEMPERATURE POINT (WITH THE MINIMUM RANGE IN P).
-         DO J = JJJ+2,NPTSX(IDT)
-            IF(PP.LT.TABLENV(IDT,J,1))THEN
+         DO J = JJJ+2,NPTSX(IDTSCV)
+            IF(PP.LT.TABLENV(IDTSCV,J,1))THEN
                JJ = J - 2
                GOTO 40
             ENDIF
@@ -113,13 +118,13 @@ C POINT IS OUTSIDE TABLE; RETURN.
          LCALC = .FALSE.   ! Error exit - no valid table entry
          RETURN
   40     CONTINUE
-         IDP = MIN(NPTSX(IDT)-3,JJ)
+         IDP = MIN(NPTSX(IDTSCV)-3,JJ)
       ENDIF
       LCALC = .TRUE.
       LSMP = .FALSE.
       IF(IDP.EQ.JJ)THEN
-         DPABOVE = PP - TABLENV(IDT,IDP+1,1)
-         DPBELOW = TABLENV(IDT,IDP+2,1) - PP
+         DPABOVE = PP - TABLENV(IDTSCV,IDP+1,1)
+         DPBELOW = TABLENV(IDTSCV,IDP+2,1) - PP
          IF(DPABOVE.LT.TOLSP)THEN
             IF(IDP.GT.1)THEN
                LSMP = .TRUE.
@@ -127,7 +132,7 @@ C POINT IS OUTSIDE TABLE; RETURN.
                FSP = (DPABOVE+TOLSP)/(2.0D0*TOLSP)
             ENDIF
          ELSE IF(DPBELOW.LT.TOLSP)THEN
-            IF(IDP.LT.NPTSX(IDT)-3)THEN
+            IF(IDP.LT.NPTSX(IDTSCV)-3)THEN
                LSMP = .TRUE.
                ISMP = 1
                FSP = 0.5D0*DPBELOW/TOLSP
@@ -135,11 +140,11 @@ C POINT IS OUTSIDE TABLE; RETURN.
          ENDIF
       ENDIF
 C      DO K = 1,4
-C         QR(K) = TLOGX(K+IDT-1)
+C         QR(K) = TLOGX(K+IDTSCV-1)
 C      END DO
 C      CALL INTERP(QR,FT,FTD,TL)
 C      DO K = 1,4
-C         QR(K) = TABLENV(IDT,IDP+K-1,1)
+C         QR(K) = TABLENV(IDTSCV,IDP+K-1,1)
 C      END DO
 C      CALL INTERP(QR,FP,FPD,PP)
       Y = 1.0D0 - X - Z
@@ -148,9 +153,9 @@ C INCLUDE RADIATION PRESSURE IN THE EQUATION OF STATE.
       PGAS = BETA*P
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
-         II = IDT+I-1
+         II = IDTSCV+I-1
          DO K = 1,4
-            QR(K) = TABLENV(IDT,IDP+K-1,1)
+            QR(K) = TABLENV(IDTSCV,IDP+K-1,1)
          END DO
          DO J = 1,5
             DO K = 1,4
@@ -166,7 +171,7 @@ C     *      + FP(4)*TABLENV(II,IDP+3,J+1)
       END DO
 C INTERPOLATE IN TEMPERATURE
       DO K = 1,4
-         QR(K) = TLOGX(K+IDT-1)
+         QR(K) = TLOGX(K+IDTSCV-1)
       END DO
       DO J = 1,5
          DO K = 1,4
@@ -180,9 +185,9 @@ C PERFORM INTERPOLATION AT ADJACENT TEMPERATURE TABLE POINTS
       IF(LSMT)THEN
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
-         II = IDT+I-1+ISMT
+         II = IDTSCV+I-1+ISMT
          DO K = 1,4
-            QR(K) = TABLENV(IDT,IDP+K-1,1)
+            QR(K) = TABLENV(IDTSCV,IDP+K-1,1)
          END DO
          DO J = 1,5
             DO K = 1,4
@@ -198,7 +203,7 @@ C     *      + FP(4)*TABLENV(II,IDP+3,J+1)
       END DO
 C INTERPOLATE IN TEMPERATURE
       DO K = 1,4
-         QR(K) = TLOGX(K+IDT+ISMT-1)
+         QR(K) = TLOGX(K+IDTSCV+ISMT-1)
       END DO
       DO J = 1,5
          DO K = 1,4
@@ -222,9 +227,9 @@ C PERFORM INTERPOLATION AT ADJACENT PRESSURE TABLE POINTS
       IF(LSMP)THEN
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
-         II = IDT+I-1
+         II = IDTSCV+I-1
          DO K = 1,4
-            QR(K) = TABLENV(IDT,IDP+K-1+ISMP,1)
+            QR(K) = TABLENV(IDTSCV,IDP+K-1+ISMP,1)
          END DO
          DO J = 1,5
             DO K = 1,4
@@ -240,7 +245,7 @@ C     *      + FP(4)*TABLENV(II,IDP+3,J+1)
       END DO
 C INTERPOLATE IN TEMPERATURE
       DO K = 1,4
-         QR(K) = TLOGX(K+IDT-1)
+         QR(K) = TLOGX(K+IDTSCV-1)
       END DO
       DO J = 1,5
          DO K = 1,4
@@ -264,9 +269,9 @@ C PERFORM INTERPOLATION AT ADJACENT T+P TABLE POINTS
       IF(LSMP .AND. LSMT)THEN
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
-         II = IDT+I-1 + ISMT
+         II = IDTSCV+I-1 + ISMT
          DO K = 1,4
-            QR(K) = TABLENV(IDT,IDP+K-1+ISMP,1)
+            QR(K) = TABLENV(IDTSCV,IDP+K-1+ISMP,1)
          END DO
          DO J = 1,5
             DO K = 1,4
@@ -282,7 +287,7 @@ C     *      + FP(4)*TABLENV(II,IDP+3,J+1)
       END DO
 C INTERPOLATE IN TEMPERATURE
       DO K = 1,4
-         QR(K) = TLOGX(K+IDT-1 + ISMT)
+         QR(K) = TLOGX(K+IDTSCV-1 + ISMT)
       END DO
       DO J = 1,5
          DO K = 1,4
@@ -389,16 +394,16 @@ C   Helium tables.
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
 
       DO K = 1,4
-         QR(K) = TLOGX(K+IDT-1)
+         QR(K) = TLOGX(K+IDTSCV-1)
       END DO
       CALL INTERP(QR,FT,FTD,TL)
       DO K = 1,4
-         QR(K) = TABLENV(IDT,IDP+K-1,1)
+         QR(K) = TABLENV(IDTSCV,IDP+K-1,1)
       END DO
       CALL INTERP(QR,FP,FPD,PP)
 
       DO I = 1,4
-         II = IDT+I-1
+         II = IDTSCV+I-1
          TEMP(I,1)=FP(1)*TABLEX(II,IDP,2) +
      *   FP(2)*TABLEX(II,IDP+1,2) + FP(3)*TABLEX(II,IDP+2,2)
      *   + FP(4)*TABLEX(II,IDP+3,2)
@@ -419,7 +424,7 @@ C   These are in column 3 respectively of the SCV hydrogen and
 C   Helium tables.
 C INTERPOLATE IN PRESSURE AT 4 DIFFERENT TEMPERATURE POINTS.
       DO I = 1,4
-         II = IDT+I-1
+         II = IDTSCV+I-1
          TEMP(I,1)=FP(1)*TABLEX(II,IDP,3) +
      *   FP(2)*TABLEX(II,IDP+1,3) + FP(3)*TABLEX(II,IDP+2,3)
      *   + FP(4)*TABLEX(II,IDP+3,3)

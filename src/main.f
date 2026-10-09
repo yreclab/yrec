@@ -125,10 +125,13 @@ C a set of runs.
       COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
      * SENV0A(50)
 C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *     IOLAOL2, NK, LZRAMP
+C 10/9/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/ entirely from this file: NK was
+C its only member ever referenced here (as this file's own run-index
+C loop variable, DO 200 NK = 1, NUMRUN below), and is now passed
+C explicitly to PDIST and WRTHEAD instead of relying on them reading
+C it back out of the common block. RSCLZC/RSCLZM1/RSCLZM2/IOLAOL2/
+C LZRAMP (ZRAMP's other members) were never used in this file.
 C DBG 4/26/94 Tired of not have access to current age of model so...
       COMMON/THEAGE/DAGE
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
@@ -174,13 +177,28 @@ C as above for the model Z.
       COMMON /LLOT95/CAPPA(NUMX,NUMTT,NUMD),ZTAB
 C as above for desired surface value of X.
       COMMON /LLOT95E/CAPPAE(NUMTT,NUMD),XTAB
-C indices for interpolation in Z,X,T, and R
-      COMMON/OP95INDX/JZ,JX(4,4),JT,JD(4)
-C interpolation factors for Z,X,T, and R, as well as derivative
-C factors for T and RHO.
-      COMMON/OP95FACT/BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4)
+C indices for interpolation in Z,X,T, and R; interpolation factors
+C for Z,X,T, and R (and derivative factors for T and RHO).
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/OP95INDX/ and COMMON/OP95FACT/ into
+C COMMON/OP95INTERP/ (see getopal95.f for the full rationale). This
+C file declares only the JZ..BDD prefix, not the full block (which
+C also has COMMON/OP95EXT/'s RL,RLL,RLH,LEXTL,LEXTH,LEXH appended) --
+C this file already has its own, unrelated RLL (log-luminosity
+C calibration variable, used with CHKCAL/ISNU below) that would
+C collide with OP95EXT's RLL if the full block were declared here.
+C Declaring a prefix is legal Fortran and matches exactly what this
+C file already had (no new members gained).
+      COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
+     *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4)
 C MHP 05/02 ADDED FOR ITERATION BETWEEN ROTATION AND STRUCTURE CALCULATION
-      COMMON/ORIGSTART/HJM0(JSON),HCOMPP0(15,JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/ORIGSTART/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION HJM0(JSON),HCOMPP0(15,JSON)
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C***MHP 1/04 inserted for test
@@ -427,7 +445,7 @@ C MHP 08/02 STORE STARTING CZ PROPERTIES
          JCZ = JENV
          TAUCZ = 0.0D0
 C write out headers of the appropriate output files
-      CALL WRTHEAD(SMASS,CMIXL)
+      CALL WRTHEAD(SMASS,CMIXL,NK)
 C DBG PULSE OUT 7/92
 C initialize variables for calculating when to dump pulse output
          POL1 = BL
@@ -544,7 +562,7 @@ C        print*,'MAIN LSOUND = ',LSOUND
 CFD end
             IF (LPOUT) THEN
 C MHP 8/25 changed to add file names as declared variables 
-             CALL PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,FPATM,
+             CALL PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
      *       FPENV,FPMOD)
           ENDIF
 

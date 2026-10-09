@@ -20,9 +20,8 @@ C MHP 3/92 COMMON BLOCKS ADDED FOR SHEAR VELOCITY AND MU INHIBITION.
       COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
      *     EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
      *     QDTMI(JSON),RM(JSON),TM(JSON)
-C      JvS 09/25 RENAMED ARRAYS IN INTVR2 TO PLAY NICELY WITH MDPHY     
+C      JvS 09/25 RENAMED ARRAYS IN INTVR2 TO PLAY NICELY WITH MDPHY
 C      COMMON/INTVR2/AMUM(JSON),THDIFM(JSON),VISCM(JSON),WM(JSON)
-      COMMON/INTVR2/AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
@@ -47,7 +46,16 @@ C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
      *     FACT5(JSON),FACT7(JSON),FACT8(JSON)
       COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
       COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-      COMMON/PREVMU/VMUP(JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/PREVMU/ and COMMON/INTVR2/ to plain
+C local arrays: both are declared only in this file (confirmed via a
+C codebase-wide scan), so there's nothing to share via COMMON. The
+C existing blanket SAVE statement below already preserves their
+C values across calls, same as COMMON did (VMUP specifically needs
+C this: it holds the prior iteration's VMU for a damping blend when
+C IT.GT.1).
+      DIMENSION VMUP(JSON)
+      DIMENSION AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
 C 3/93 QUADRUPOLE DRIVING TERM ADDED.
       COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
       COMMON/QUADRU/QUAD(JSON),GG(JSON)

@@ -42,8 +42,15 @@ C MHP 8/25 Removed character file names from common block
 C DBG 5/94 ZRAMP stuff.
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
+C 10/9/26 MHP via Claude
+C code changed to remove NK (was NK2 here only, since this file's own
+C dummy argument NK already carries the identical value, passed down
+C from main.f's own run-index loop variable through STARIN) from
+C COMMON/ZRAMP/. It was never read by name here, only declared for
+C positional alignment with the other members, so this file's own NK
+C argument is untouched.
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *     IOLAOL2, NK2,
+     *     IOLAOL2,
      *     LZRAMP
       DIMENSION HCOMP(15,JSON),HS(JSON),HL(JSON),LC(JSON)
       SAVE

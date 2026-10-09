@@ -89,10 +89,16 @@ c    common eeeos06 definitions
 c      xx is an auxilliary array containing the same values of x as array xa.
 c***************************************************************************
 
-      common/aaeos06/ q(4),h(4),xxh
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
+     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
+C 10/9/26 MHP via Claude
+C code changed to rename AEOS06's M member to MIDX throughout: M is
+C such a universally-used name elsewhere in this codebase (e.g. shell
+C count in calcad.f) that keeping it here was just asking for a
+C future collision. Used in this file as the composition/mixture-axis
+C loop index below (MF/MG/MH/MI are local, unshared bracket indices,
+C unaffected).
 
 c***************************************************************************
 c
@@ -156,7 +162,6 @@ c***************************************************************************
 
 C KC 2025-05-30 reordered common block elements
 C       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
-      common/beos06/ zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c***************************************************************************
 c
@@ -185,8 +190,16 @@ c      It can be used for checking purposes.
 c
 c***************************************************************************
 
-      common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      common/eeos06/esact,eos(mv)
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/: all four are small
+C (<2KB combined) and no member name collides with any dummy argument
+C in any file that declares this block (checked codebase-wide), unlike
+C COMMON/AEOS06/ and COMMON/EEEOS06/ (both left untouched -- AEOS06 is
+C ~14MB and collides with calcad.f's own M argument; EEEOS06 is ~1.3MB).
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c***************************************************************************
 c    common eeos06 definitions:
@@ -353,21 +366,21 @@ c     table boundaries.  choose largest allowed size.
       sum2=0.0D0
       sum23=0.0D0
       sum33=0.0D0
-      do m=mf,mf2
+      do midx=mf,mf2
         do ir=l1,l1+1
           do it=k1,k1+1
-            sum1=sum1+xz(m,1,it,ir)
+            sum1=sum1+xz(midx,1,it,ir)
           enddo
         enddo
         do ir=l1,l1+2
           do it=k1,k1+2
-            sum2=sum2+xz(m,1,it,ir)
+            sum2=sum2+xz(midx,1,it,ir)
           enddo
         enddo
         if (ipu .eq. 3) then
           do ir=l1,l1+2
             do it=k1,k1+ipu
-              sum23=sum23+xz(m,1,it,ir)
+              sum23=sum23+xz(midx,1,it,ir)
             enddo
           enddo
         else
@@ -376,7 +389,7 @@ c     table boundaries.  choose largest allowed size.
         if (iqu .eq. 3) then
           do ir=l1,l1+3
             do it=k1,k1+ipu
-              sum33=sum33+xz(m,1,it,ir)
+              sum33=sum33+xz(midx,1,it,ir)
             enddo
           enddo
         else
@@ -411,13 +424,13 @@ c     table boundaries.  choose largest allowed size.
 
    15 continue
       do 124 iv=1,iorder
-      do 123 m=mf,mf2
+      do 123 midx=mf,mf2
 
       is=0
 c__________
       do ir=l1,l1+iq
         do it=k1,k1+ip
-        epl(m,it,ir)=xz(m,iv,it,ir)
+        epl(midx,it,ir)=xz(midx,iv,it,ir)
         is=1
         enddo
       enddo

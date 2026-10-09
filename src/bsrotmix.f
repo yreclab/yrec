@@ -7,7 +7,13 @@ C EXTRAPOLATES TO ZERO TIMESTEP,
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HCOMP(15,JSON),NSEQ(11),X(11),D(15,JSON),JJ(15)
-      COMMON/BSBURN/HCOMPI(11,15,JSON),HCOMPA(15,JSON),HCOMPE(15,JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/BSBURN/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION HCOMPI(11,15,JSON),HCOMPA(15,JSON),HCOMPE(15,JSON)
       LOGICAL*4 LDO(15), LCNO(JSON),LHE3(JSON)
       SAVE
 C      SAVE X,D,JJ,LDO,NMAX,LCNO,LCNCHECK

@@ -64,9 +64,14 @@ C code changed to remove the OPAL 1995/2001 equations of state
 C MHP 3/94 ADDED METAL DIFFUSION
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV: parmin.f and
+C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
+C slot was called IDTT there as a workaround. Renamed to IDTSCV
+C everywhere COMMON/SCVEOS/ is declared for one consistent name.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 C       DATA NZP1/12/
 C       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
 C       DATA SCALET,SCALES/0.500D0, 2.000D0/

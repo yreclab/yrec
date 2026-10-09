@@ -30,8 +30,14 @@ C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
+C 10/9/26 MHP via Claude
+C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
+C redundant copy of the run-index loop variable main.f already passes
+C explicitly to the subroutines that need it (STARIN/RSCALE), and was
+C never read by name in this file (the "NK-1" in the comment below is
+C just documentation, not live code).
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
+     *             IOLAOL2,
      *             LZRAMP
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,

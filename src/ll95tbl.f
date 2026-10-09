@@ -33,8 +33,22 @@ C X<0.9 FOR Z=0.1).
 C FOR EACH COMPOSITION A FULL GRID IN (T,RHO/T6**3) IS RETAINED.
       COMMON /LLOT95A/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ),
      *                CAPPA2(NUMXZ,NUMT,NUMD),NUMXM(NUMZ),NZ(NUMZ)
-C INDICES FOR INTERPOLATION IN Z,X,T, AND R
-      COMMON/OP95INDX/JZ,JX(4,4),JT,JD(4)
+C INDICES FOR INTERPOLATION IN Z,X,T, AND R; INTERPOLATION FACTORS FOR
+C Z,X,T, AND R (AND DERIVATIVE FACTORS FOR T AND RHO); AND DATA FOR
+C LINEAR EXTRAPOLATION WHEN OUTSIDE THE TABLE IN RHO.
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/OP95INDX/ into COMMON/OP95INTERP/ (see
+C getopal95.f for the full rationale). This file declares the FULL
+C block, not just the JZ..JD prefix it originally needed: it has its
+C own DATA statement initializing JZ,JX,JT,JD below, and mixing a
+C DATA-initialized short declaration of a COMMON block with a larger
+C declaration of the same name elsewhere is a genuine linker/ABI
+C hazard (confirmed: this caused NaN corruption when first tried as a
+C prefix -- see the linker's "size of symbol changed" warning).
+C Declaring the full block here avoids any size mismatch.
+      COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
+     *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4),
+     *     RL,RLL,RLH(4),LEXTL,LEXTH,LEXH(4)
 C 9/23/26 MHP via Claude
 C code changed to remove the OPAL92 opacity tables
 C 9/23/26 MHP via Claude

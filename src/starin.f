@@ -113,9 +113,16 @@ C never read or written anywhere)
 C DBG 1/96 VNEW REPLACES V
       COMMON/VNEWCB/VNEW(12)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV (was IDTT here only,
+C since this file also declares COMMON/OPTAB/'s own, unrelated IDT at
+C line 78, a name collision with no cross-usage between the two
+C indices). Renamed throughout every file that declares
+C COMMON/SCVEOS/, so this slot now has one consistent name everywhere
+C instead of needing a special case here and in parmin.f.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
+     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 C MHP 10/98 ADDED HPTTOL FOR CHANGING CORE FITTING POINT
       COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
      1     NITER1,NITER2,NITER3

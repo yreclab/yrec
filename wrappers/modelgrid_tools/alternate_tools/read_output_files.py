@@ -96,20 +96,24 @@ def read_store_file(fname):
             Ages (in Gyr) corresponding to each model in the models list.
 	
 	'''
-	model_nums = [] # this isn't currently used for anything. 
+	model_nums = [] # this isn't currently used for anything.
 	model_ages = [] # Gyr
 	models = [] # list of dataframes
-	# 10/8/26 MHP via Claude: added 'MODEL' as the leading column. A main-
-	# branch change widened putstore.f's FORMAT 62 to prepend the model
-	# number to each shell row; without accounting for it here, every
-	# column below would silently be read one position off from SHELL
-	# onward.
-	names =['MODEL','SHELL','MASS','RADIUS','LUMINOSITY','PRESSURE','TEMPERATURE','DENSITY','OMEGA',
-	 'C','H1','He4','METALS','He3','C12','C13','N14','N15','O16','O17','O18','H2','Li6',
-	 'Li7','Be9','OPAC','GRAV','DELR','DEL','DELA','V_CONV','GAM1','HII','HEII','HEIII',
-	 'BETA','ETA','PPI','PPII','PPIII','CNO','3HE','E_NUC','E_NEU','E_GRAV','A','RP/RE',
-	 'FP','FT','J/M','MOMENT','DEL_KE','V_ES','V_GSF','V_SS','VTOT'] # dataframe column names
-	
+	# 10/9/26 MHP via Claude: column names are now read from each model's
+	# own header line in the file, instead of a hardcoded list here. YREC
+	# writes .store in one of two formats depending on the run's LSTCH
+	# namelist setting: the legacy format (header starts 'SHELL ...') or
+	# the newer STITCH format (header starts 'MODEL SHELL ...', with
+	# extra CONVECTIVE/INTERIOR_PT/ENV_PT/ATM_PT/TRIPLE_ALPHA/CP/
+	# DLNRHODLNT columns). A hardcoded list only ever matched the legacy
+	# format and silently misread the other; reading the header directly
+	# handles both, and any future column YREC adds, without needing this
+	# file updated to match. One known quirk: the legacy format's own
+	# header was never updated when putstore.f started prepending a
+	# MODEL value to every data row, so its header is one column short --
+	# detected below and compensated for.
+	boolean_cols = {'C', 'CONVECTIVE', 'INTERIOR_PT', 'ENV_PT', 'ATM_PT'}
+
 	file = open(fname, "r")
 	i = -1
 	flag = False # True while on a line that goes into the current dataframe
@@ -120,24 +124,35 @@ def read_store_file(fname):
 			model_ages.append(float(line[87:102])) # get the age (Gyr)
 			flag = False
 			continue
-		if line[:5] == 'SHELL':
-			i +=1
+		tokens = line.split()
+		if tokens[:2] == ['MODEL', 'SHELL']:
+			# STITCH format: header already labels every column, MODEL included
+			names = tokens
+			i += 1
 			flag = True
 			models.append(pd.DataFrame(columns=names))
 			continue
-		if i > -1 and line.strip() != '' and flag:
+		if tokens[:1] == ['SHELL']:
+			# legacy format: header is missing the MODEL label that
+			# putstore.f's FORMAT 62 nonetheless prepends to every row
+			names = ['MODEL'] + tokens
+			i += 1
+			flag = True
+			models.append(pd.DataFrame(columns=names))
+			continue
+		if i > -1 and line != '' and flag:
 			# print(line.split())
-			models[i].loc[len(models[i])] = line.split()
-		
+			models[i].loc[len(models[i])] = tokens
+
 	file.close()
 
 	# processing to turn things into floats
 	for model in models:
 		for k in model.columns:
-			if k == 'C':
+			if k in boolean_cols:
 				model[k] = [shell == "T" for shell in model[k]]
 			else:
-				try: 
+				try:
 					model[k] = model[k].astype(float)
 				except: # cannot read numbers less than 1e-99
 					model[k] = 0 # but that's basically 0 anyway

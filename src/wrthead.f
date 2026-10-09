@@ -4,7 +4,12 @@ C WRTHEAD
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C write the headers for all the appropriate output files
 
-      SUBROUTINE WRTHEAD (SMASS,CMIXL)
+C 10/9/26 MHP via Claude
+C code changed to pass NK as an explicit argument instead of via
+C COMMON/ZRAMP/, which this file otherwise never used (NK was its only
+C member ever referenced here). See the CALL WRTHEAD site in main.f,
+C which already has NK as its own local run-index variable.
+      SUBROUTINE WRTHEAD (SMASS,CMIXL,NK)
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -14,11 +19,6 @@ C      CHARACTER*256 FISO,FLAOL2, FOPAL2
       COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
      1       NUMRUN
 C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
       COMMON/TRACK/ITRVER
       COMMON/LABEL/XENV0,ZENV0
 C 9/25/26 MHP via Claude

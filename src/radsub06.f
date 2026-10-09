@@ -10,10 +10,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       IMPLICIT REAL*8 (A-H,O-Z)
 C       real*8 moles,k,molenak,Na  ! KC 2025-05-31
       real*8 moles,molenak
-      common/eeos06/esact,eos(mv)
 C KC 2025-05-30 reordered common block elements
 C       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
-      common/beos06/ zz(mx),iri(10),index(10),nta(nr),nra(nt)
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale).
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c       data Na/6.0221367D+23/, k/1.380658D-16/, unitf/0.9648530D0/,
 c      x unitfold/0.965296D0/, c/2.9979245D10/, sigma/5.67051D-5/

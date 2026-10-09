@@ -26,7 +26,13 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
       COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
       COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-      COMMON/ADVEC/FADV(JSON),FADV0(JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/ADVEC/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION FADV(JSON),FADV0(JSON)
       COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
 C MHP 9/93
       COMMON/NOTRAN/LNOJ

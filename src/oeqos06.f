@@ -34,6 +34,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       IMPLICIT LOGICAL*4(L)
 
       parameter (mx=5,mv=10,nr=169,nt=197)
+      Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
       PARAMETER ( IVARX = 25 )
       PARAMETER (CNVS = 0.434294481D0 )
       PARAMETER (ZERO = 0.0D0)
@@ -60,7 +61,13 @@ C COMMON/IOUNITS/
      *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
      *  IOPALE,ISCVH,ISCVHE,ISCVZ
 
-      common/eeos06/esact,eos(mv)
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale).
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 C      DATA NZP1/12/
 C      DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/

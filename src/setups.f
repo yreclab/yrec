@@ -88,9 +88,14 @@ C JNT 06/14
 C MHP 8/92 COMMON BLOCK ADDED FOR LOWER EDGE OF TABLE IN LOG G.
       COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV: parmin.f and
+C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
+C slot was called IDTT there as a workaround. Renamed to IDTSCV
+C everywhere COMMON/SCVEOS/ is declared for one consistent name.
       COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
      *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 C MHP 8/25 Removed file names from common block
 
       SAVE
