@@ -111,6 +111,13 @@ C SCVEOS's or vice versa; this is a pure rename.
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
       COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LMILNE below (gating CALL WRTMIL) but never
+C declared COMMON/CCOUT2/, so it was an uninitialized local, always
+C .FALSE. -- the Milne output call here was dead code. No namelist
+C file currently sets LMILNE, so this has no effect on any existing
+C run; it only restores the intended behavior if someone enables it.
+      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

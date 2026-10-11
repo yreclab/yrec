@@ -56,6 +56,14 @@ C COMMON/IOUNITS/
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
       COMMON/DISK/SAGE,TDISK,PDISK,LDISK
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LCODM and CODM below (the constant
+C diffusion coefficient option) but never declared COMMON/MAG/, so
+C both were uninitialized locals -- LCODM was always .FALSE. and the
+C branch never executed, even though ~101 test/example namelists set
+C LCODM = .TRUE. explicitly. Declaring the block (same layout as
+C codiff.f) makes the namelist values actually arrive here.
+      COMMON/MAG/CODM,LCODM
       COMMON/EGRID/CHI(JSON),ECHI(JSON),EQS1(JSON),DCHI,NTOT
 C Time change of theta
       COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),

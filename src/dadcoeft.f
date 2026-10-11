@@ -39,6 +39,17 @@ C TERMS
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
      *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LROSSBY and PMMSOLTAU below (the Rossby
+C scaling of the saturation threshold) but never declared
+C COMMON/PMMWIND/, so both were uninitialized locals -- LROSSBY was
+C always .FALSE. and the branch never executed, even though its
+C namelist default is .TRUE. and ~105 test/example namelists set it
+C .TRUE. explicitly. Declaring the block (same layout as mwind.f)
+C makes the namelist values actually arrive here.
+      CHARACTER*3 AWIND
+      COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,
+     *         PMMSOLW,PMMSOLTAU,LMWIND,LROSSBY,LBSCALE,AWIND
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
