@@ -23,7 +23,7 @@ END_YCEN(1) = 0.5 ! Run stops if NMODLS(I) is reached or this central helium is 
  LSTMOD = .TRUE.
  LSTPHYS = .TRUE.
  LSTROT = .TRUE.
- NPRTMOD = 50
+ NPRTMOD = 1000
  NPRTPT = 1
  LSTPCH = .TRUE.
 

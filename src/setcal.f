@@ -16,8 +16,10 @@ C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
      * SENV0A(50)
       COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
 C MHP 8/25 Removed character file names from common block
+C 9/24/26 MHP via Claude
+C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
+     *             IOLAOL2, NK,
      *             LZRAMP
       SAVE
 

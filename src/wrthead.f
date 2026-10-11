@@ -4,7 +4,7 @@ C WRTHEAD
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C write the headers for all the appropriate output files
 
-      SUBROUTINE WRTHEAD (SMASS)
+      SUBROUTINE WRTHEAD (SMASS,CMIXL)
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -14,19 +14,44 @@ C      CHARACTER*256 FISO,FLAOL2, FOPAL2
       COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
      1       NUMRUN
 C MHP 8/25 Removed character file names from common block
+C 9/24/26 MHP via Claude
+C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
+     *             IOLAOL2, NK,
      *             LZRAMP
       COMMON/TRACK/ITRVER
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/24/26 MHP via Claude
+C code changed to pass CMIXL as an explicit argument instead of via
+C common block, to reduce implicit global state ahead of the F90
+C module conversion
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 9/24/26 MHP via Claude
+C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
+C 9/24/26 MHP via Claude
+C code changed to remove dead IDYN from COMMON/LUNUM/
+C 9/25/26 MHP via Claude
+C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
+C assigned a unit number, but never opened or read anywhere)
 C MHP 8/25 Removed character file names from common block
-      COMMON/CHRONE/LRWSH, LISO, IISO
+C 9/25/26 MHP via Claude
+C code changed to remove the LISO isochrone-output option
+      COMMON/CHRONE/LRWSH
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
 
@@ -43,14 +68,6 @@ C MHP 8/25 Removed character file names from common block
      *       ' Z=',F8.6,' CMIXL=', F8.6, ' NO.MODS=', I5)
   49  FORMAT(/, ' RUN=',I2,' RESCALE&EVOLVE ', ' X=',F8.6,
      *       ' Z=',F8.6,' CMIXL=', F8.6, ' NO.MODS=', I5)
-
-      IF (LISO) THEN
-C header stuff for isochrone output
-         GMMASS = SMASS*CMSUN
-         WRITE(IISO, 1495) GMMASS,
-     *        XENV0,ZENV0,CMIXL,CMBOL
- 1495    FORMAT(7X, 1P5E16.8)
-      END IF
 
       IF (LTRACK .AND. LFIRST(NK)) THEN
 C ITRVER identifies version of track out file.  If you change

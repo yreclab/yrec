@@ -11,9 +11,10 @@ c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
       parameter (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
-      LOGICAL*4 LOPALE, lopale01,lopale06,LNumDeriv
+      LOGICAL*4 lopale06,LNumDeriv
 C MHP 8/25 Remove unused variables
-C      CHARACTER*256 FOPALE,fopale01,fopale06
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
       character*1 blank
       common/aaeos06/ q(4),h(4),xxh
       common/aeos06/  xz(mx,mv,nt,nr),
@@ -34,12 +35,21 @@ C       common/eeeeos06/moles(mx),xin(mx),tmass(mx),icycuse(mx,nr),
      x    amu_M(nr,nt),alogNe(nr,nt),rhogr(mx,nr),frac(mx,6),
 C      x    alogr(nr,nt)
      x    alogr(nr,nt),icycuse(mx,nr)
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C KC 2025-05-30 reordered common block elements
 C       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
 C      x     lopale06,LNumDeriv
 C MHP 8/25 Remove file names from common blocks
-      COMMON/OPALEOS/LOPALE,IOPALE,lopale01,lopale06,lNumDeriv
+      COMMON/OPALEOS/lopale06,lNumDeriv
 
       save
       blank=' '

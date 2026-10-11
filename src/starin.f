@@ -8,7 +8,8 @@ C       SUBROUTINE STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,FP,  ! KC
      * FT,FTRI,HCOMP,HD,HI,HJM,HKEROT,HL,HP,HR,HS,HS1,HS2,HSTOT,HT,IKUT,
 C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 2025-05-31
      * ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,
-     * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V)
+     * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V,
+     * CMIXL)
 
       PARAMETER (JSON=5000)
       PARAMETER (NTS=63, NPS=76)
@@ -16,7 +17,6 @@ C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL
       INTEGER*4 KATM, KENV, KSAHA
-      REAL*8 OLAOL(12,104,52),OXA(12),OT(52),ORHO(104),TOLLAOL
 C      CHARACTER*256 OPECALEX(7)
       CHARACTER*4 ATEMP
       CHARACTER*6 EOS
@@ -28,29 +28,46 @@ C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
+C 9/24/26 MHP via Claude
+C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
+C 9/24/26 MHP via Claude
+C code changed to remove dead IDYN from COMMON/LUNUM/
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 9/25/26 MHP via Claude
+C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
+C assigned a unit number, but never opened or read anywhere)
 C     COMMON/LUFNM/ FLAST, FFIRST, FRUN, FSTAND, FFERMI,
 C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
 C DBGLAOL
 C MHP 8/25 Removed all character strings from common blocks
-      COMMON/NWLAOL/OLAOL, OXA, OT, ORHO, TOLLAOL,
-     *  IOLAOL, NUMOFXYZ, NUMRHO, NUMT, LLAOL, LPUREZ, IOPUREZ
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
       COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
      1     NUMRUN
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/COMP2/YENV,Y3ENV
-      COMMON/CONST/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,CMBOL
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
-      COMMON/CONST3/CDELRL,CMIXL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 9/24/26 MHP via Claude
+C code changed to pass CMIXL as an explicit argument instead of via
+C common block, to reduce implicit global state ahead of the F90
+C module conversion
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/FLAG/LEXCOM
       COMMON/HEFLSH/LKUTHE
@@ -60,8 +77,6 @@ C MHP 8/25 Removed all character strings from common blocks
      *     ETA2X(JSON)
       COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
       COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/MHD/LMHD,IOMHD1,IOMHD2,IOMHD3,IOMHD4,IOMHD5,IOMHD6,
-     1     IOMHD7, IOMHD8
       COMMON/CORE/LCORE,MCORE,FCORE
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
@@ -77,12 +92,24 @@ C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
 C     MHP 10/24 ENSURE THAT ONLY HOMOGENEOUS MODELS HAVE THE MIXTURE ALTERED
       REAL*8 TESTMIX(15)
 C OPACITY COMMON BLOCKS - modified 3/09
-      COMMON /NEWOPAC/ZLAOL1,ZLAOL2,ZOPAL1,ZOPAL2, ZOPAL951,
-     +       ZALEX1, ZKUR1, ZKUR2,TMOLMIN,TMOLMAX,LALEX06,
-     +       LLAOL89,LOPAL92,LOPAL95,LKUR90,LALEX95,L2Z
-C MHP 8/25 Removed all character strings from common blocks
-      COMMON /ALEXO/IALXO
-      COMMON /ALEXMIX/XALEX,ZALEX
+C 9/23/26 MHP via Claude
+C code changed to remove the OPAL92 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the Kurucz 1990 opacity tables
+C 9/23/26 MHP via Claude
+C code changed to remove the LAOL89 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove the Alexander 1995 opacity tables
+C 9/24/26 MHP via Claude
+C code changed to remove dead opacity-table Z-value inputs
+C 9/24/26 MHP via Claude
+C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
+C COMMON /NEWOPAC/
+      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
+     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+C 9/24/26 MHP via Claude
+C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
+C never read or written anywhere)
 C DBG 1/96 VNEW REPLACES V
       COMMON/VNEWCB/VNEW(12)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
@@ -550,28 +577,31 @@ C CONVECTIVE OR RADIATIVE.
              DO 588 KK = 1,4
               IDD(KK) = 5
  588           CONTINUE
-               IF (LMHD) THEN
-                  CALL MEQOS(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,
-     *                 FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,
-C      *                 QDTP,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)  ! KC 2025-05-31
-     *                 QDTP,QAT,QAP,QCPT,QCPP)
-                  IF (LDH) THEN
-                     XXDH = HCOMP(1,M)
-                     YYDH = HCOMP(2,M)+HCOMP(4,M)
-                     ZZDH = HCOMP(3,M)
-                     ZDH(1) = HCOMP(5,M)+HCOMP(6,M)
-                     ZDH(2) = HCOMP(7,M)+HCOMP(8,M)
-                     ZDH(3) = HCOMP(9,M)+HCOMP(10,M)+HCOMP(11,M)
-                  END IF
-                  CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,
+C 9/22/26 MHP via Claude
+C code changed to remove the MHD equation of state
+C 9/23/26 MHP via Claude
+C this EQSTAT call was previously only reached when LMHD was TRUE
+C (there was no ELSE branch calling it otherwise, unlike every other
+C LMHD site in the code), so with the default LMHD=.FALSE. it never
+C executed. Identified as an unintended bug and fixed by calling it
+C unconditionally, matching every other EQSTAT call site.
+               IF (LDH) THEN
+                  XXDH = HCOMP(1,M)
+                  YYDH = HCOMP(2,M)+HCOMP(4,M)
+                  ZZDH = HCOMP(3,M)
+                  ZDH(1) = HCOMP(5,M)+HCOMP(6,M)
+                  ZDH(2) = HCOMP(7,M)+HCOMP(8,M)
+                  ZDH(3) = HCOMP(9,M)+HCOMP(10,M)+HCOMP(11,M)
+               END IF
+               CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,
      *                 FXION,RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,
      *                 QDTP,QAT,QAP,QCPT,QCPP,LDERIV,LATMO,KSAHA)
-               END IF
                CALL GETOPAC(DL, TL, X, Z, O, OL, QOD, QOT, FXION)
                IOVIM = -1
                CALL TPGRAD(TL,T,PL,P,D,RL,SL,B,O,QDT,QDP,QOT,QOD,
      *              QCP,DEL,DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,
-     *              QACR,QCPT,QCPP,VEL,LDERIV,LCONV,FPL,FTL,TEFFL)
+     *              QACR,QCPT,QCPP,VEL,LDERIV,LCONV,FPL,FTL,TEFFL,
+     *              CMIXL)
                HD(M) = DL
                LC(M) = LCONV
           ENDIF
@@ -620,7 +650,7 @@ C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
           ENDIF
           CALL ENVINT(B,FPL,FTL,GL,HSTOT,IXX,LPRT,LSBC0,PLIM,RL,
      *           ATEFFL,X,Z,DUM1,IDUM,KATM,KENV,KSAHA,DUM2,
-     *           DUM3,DUM4,LPULPT)
+     *           DUM3,DUM4,LPULPT,CMIXL)
 C G Somers END
             ENVMAX = EMAX0
             ENVMIN = EMIN0
@@ -914,13 +944,13 @@ C 730  CONTINUE
 C      endif
 
 C       CALL PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,LCZ,M,TEFFL)  ! KC 2025-05-31
-      CALL PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,M,TEFFL)
+      CALL PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,M,TEFFL,CMIXL)
       CALL OVROT(HCOMP,HD,HP,HR,HS,HT,LC,M,LCZ,MRZONE,MXZONE,NRZONE,
      *           NZONE)
 C INITIALIZE TAUCZ, PPHOT, AND FRACSTEP
 C       CALL GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,  ! KC 2025-05-31
       CALL GETTAU(HCOMP,HR,HP,HD,HS1,HT,FP,FT,TEFFL,
-     *            HSTOT,BL,M,LC,ENVR)
+     *            HSTOT,BL,M,LC,ENVR,CMIXL)
       TAUCZ0 = TAUCZ
       PPHOT0 = PPHOT
       FRACSTEP = 0.5

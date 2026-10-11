@@ -21,28 +21,41 @@ c
       IMPLICIT LOGICAL*4(L)
 C KC 2025-05-30 addressed warning messages from Makefile.legacy
 C       SAVE
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CONST1/ CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI
-      COMMON/CONST2/CGAS,CA3,CA3L,CSIG,CSIGL,CGL,CMKH,CMKHN
+C 9/25/26 MHP via Claude
+C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
+C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
+      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
+     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDY,
+C 9/25/26 MHP via Claude
+C code changed to fix XXDY -> XXDH, matching every other file that
+C declares COMMON/DEBHU/ (pre-existing name-only inconsistency; this
+C slot was never read or written by name in this file)
+      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
      1     YYDH,ZZDH,DHNUE(18),LDH
 C YCK 2/95 OPAL eos
 C LLP 2001 OPAL eos
 C LLP 2006 OPAL eos
 C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-      LOGICAL*4 LOPALE, lopale01,lopale06,lNumDeriv
 C MHP 8/25 Remove unused variables
-C      CHARACTER*256 FOPALE,fopale01,fopale06
-C KC 2025-05-30 reordered common block elements
-C       COMMON/OPALEOS/FOPALE,LOPALE,IOPALE,fopale01,lopale01,fopale06,
-C      x     lopale06,lNumDeriv
-C MHP 8/25 Remove file names from common blocks
-      COMMON/OPALEOS/LOPALE,IOPALE,lopale01,lopale06,lNumDeriv
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
+      COMMON/OPALEOS/lopale06,lNumDeriv
 C MHP 3/94 ADDED METAL DIFFUSION
       COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
@@ -280,96 +293,8 @@ C      WT1 =-SCALES*30.0D0*WTS2*(1.0D0-WTS)**2 ! Derivative of WT0
       ENDIF
  200  CONTINUE
 
-C 1995 OPAL eqos
-      IF(LOPALE)THEN
-      IF(T.GE.5.0D3 .AND. TL.LE.8.0D0 .AND. DL.LE.5.0D0)THEN
-
-         CALL OEQOS(TL,T,PL,P,D10o,Doo,X,Z,BETAo,BETAIo,
-     1   BETA14o,RMUo,AMUo,EMUo,QDTo,QDPo,QCPo,DELAo,*998)
-
-C          CALL EQBOUND(T,D10o,DL0,FAC,LTAB,LRAMP)  ! KC 2025-05-31
-         CALL EQBOUND(T,D10o,FAC,LTAB,LRAMP)
-
-         IF(.NOT.LTAB)GOTO 998  ! Point is not in OPAL 1995 EOS table, so exit.
-
-         IF(.NOT.LRAMP)THEN
-C  No ramping needed between OPAL 1995 EOS and Yale/SCV. Result is
-C  fully in the OPAL 1995 table
-            DL=D10o
-            D=10.0D0**DL
-            BETA=BETAo
-            BETAI=1.0D0/BETA
-            BETA14=1.0D0-BETA
-            RMU=RMUo
-            AMU=AMUo
-            EMU=EMUo
-            QDT=QDTo
-            QDP=QDPo
-            QCP=QCPo
-            DELA=DELAo
-         ELSE
-C  Ramping required. Result is on border between OPAL 1995 EOS and Yale/SCV.
-            DL=DL+FAC*(D10o-DL)
-            D=10.0D0**DL
-            BETA=BETA+FAC*(BETAo-BETA)
-            BETAI=1.0D0/BETA
-            BETA14=1.0D0-BETA
-            RMU=RMU+FAC*(RMUo-RMU)
-            AMU=AMU+FAC*(AMUo-AMU)
-            EMU=EMU+FAC*(EMUo-EMU)
-            QDT=QDT+FAC*(QDTo-QDT)
-            QDP=QDP+FAC*(QDPo-QDP)
-            QCP=QCP+FAC*(QCPo-QCP)
-            DELA=DELA+FAC*(DELAo-DELA)
-         ENDIF
-      ENDIF
-      ENDIF
-
-C 2001 OPAL eqos  LLP 6/17/03
-      IF(LOPALE01)THEN
-      IF(T.GE.2.0D3 .AND. T.LE.100D6 .AND. DL.LE.7.0D0)THEN
-         CALL OEQOS01(TL,T,PL,P,D10o,Doo,X,Z,BETAo,BETAIo,
-     1   BETA14o,RMUo,AMUo,EMUo,QDTo,QDPo,QCPo,DELAo,*998)
-
-C          CALL EQBOUND01(T,D10o,DL0,FAC,LTAB,LRAMP)  ! KC 2025-05-31
-         CALL EQBOUND01(T,D10o,FAC,LTAB,LRAMP)
-C eqbound01 determines whether or not the point is in the OPAL 2001 EOS table
-
-         IF(.NOT.LTAB)GOTO 998  ! Point is not in OPAL 2001 tabel, so exit.
-C USE OPAL RESULTS IF NOT IN (RHO,T) REGIME WHERE RAMP
-C NEEDED
-         IF(.NOT.LRAMP)THEN
-C  No ramping needed between OPAL 2001 EOS and Yale/SCV. Result is
-C  fully in the OPAL 2001 table
-            DL=D10o
-            D=10.0D0**DL
-            BETA=BETAo
-            BETAI=1.0D0/BETA
-            BETA14=1.0D0-BETA
-            RMU=RMUo
-            AMU=AMUo
-            EMU=EMUo
-            QDT=QDTo
-            QDP=QDPo
-            QCP=QCPo
-            DELA=DELAo
-         ELSE
-C  Ramping required. Result is on border between OPAL 2001 EOS and Yale/SCV.
-            DL=DL+FAC*(D10o-DL)
-            D=10.0D0**DL
-            BETA=BETA+FAC*(BETAo-BETA)
-            BETAI=1.0D0/BETA
-            BETA14=1.0D0-BETA
-            RMU=RMU+FAC*(RMUo-RMU)
-            AMU=AMU+FAC*(AMUo-AMU)
-            EMU=EMU+FAC*(EMUo-EMU)
-            QDT=QDT+FAC*(QDTo-QDT)
-            QDP=QDP+FAC*(QDPo-QDP)
-            QCP=QCP+FAC*(QCPo-QCP)
-            DELA=DELA+FAC*(DELAo-DELA)
-         ENDIF
-      ENDIF
-      ENDIF
+C 9/24/26 MHP via Claude
+C code changed to remove the OPAL 1995/2001 equations of state
 
 C 2006 OPAL eqos  LLP 10/13/2996
       IF(LOPALE06)THEN

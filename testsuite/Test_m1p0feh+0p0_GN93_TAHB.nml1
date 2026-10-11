@@ -36,7 +36,7 @@
  LSTMOD = .TRUE. ! Set the same as LSTORE. May be redundant.
  LSTPHYS = .TRUE. ! If T, output microphysics (e.g. epsilon, kappa) to store file.
  LSTROT = .FALSE. ! If T, append rotation data to store file.
- NPRTMOD = 50 ! Output detailed model structures every NPRTMOD models.
+ NPRTMOD = 1000 ! Output detailed model structures every NPRTMOD models.
  NPRTPT = 1 ! Output details for every NPRTPT points (if 1000 points and NPRTPT=10, 100 lines are output).
  LSTPCH = .TRUE. ! If T, output details of the final model to the .store file.
 

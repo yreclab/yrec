@@ -46,7 +46,7 @@
  LSTMOD = .TRUE.
  LSTPHYS = .TRUE.
  LSTROT = .TRUE.
- NPRTMOD = 50              
+ NPRTMOD = 1000              
  NPRTPT = 1 
  LSTPCH = .TRUE. 
 

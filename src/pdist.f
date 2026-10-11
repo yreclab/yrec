@@ -19,19 +19,34 @@ C MHP 10/02 added proper dimensions to last 2 variables
       COMMON /PO/POA,POB,POC,POMAX,LPOUT
       COMMON/PULSE/XMSOL,LPULSE,IPVER
 C MHP 8/25 Removed character file names from common block
+C 9/24/26 MHP via Claude
+C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
       COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, IOOPAL2, NK,
+     *             IOLAOL2, NK,
      *             LZRAMP
-      COMMON/LUNUM/IFIRST, IRUN, ISTAND, IFERMI,
-     1    IOPMOD, IOPENV, IOPATM, IDYN,
-     2    ILLDAT, ISNU, ISCOMP, IKUR
+C 9/24/26 MHP via Claude
+C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
+C 9/24/26 MHP via Claude
+C code changed to remove dead IDYN from COMMON/LUNUM/
+C 9/25/26 MHP via Claude
+C code changed to consolidate all I/O logical unit numbers, previously
+C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
+C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
+C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
+C COMMON/IOUNITS/
+      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
+     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
+     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 9/25/26 MHP via Claude
+C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
+C assigned a unit number, but never opened or read anywhere)
 C MHP 8/25 Removed common block with file names
 C      COMMON/LUFNM/ FLAST, FFIRST, FRUN, FSTAND, FFERMI,
 C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/LUOUT/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,IOWR
       SAVE
 
       TM1 = BL-POL1
