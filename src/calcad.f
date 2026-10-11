@@ -120,7 +120,16 @@ C rationale).
       common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
      .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
      .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
-      COMMON /LLOT95/ZTAB
+C 10/11/26 MHP via Claude
+C code changed to remove an incorrect COMMON /LLOT95/ declaration from
+C this file. Every other file declares it as
+C   COMMON /LLOT95/CAPPA(NUMX,NUMT,NUMD),ZTAB
+C so declaring only ZTAB here aliased it to CAPPA(1,1,1) -- an opacity
+C value, not the table's Z. Harmless to date only because this file's
+C two references to ZTAB are both in commented-out CALL ESAC06 lines
+C (see below); nothing reads it. NOTE: if those calls are ever
+C restored they need the real metallicity, which must come from the
+C full block declaration or (better) be passed in as an argument.
       COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),

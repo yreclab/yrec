@@ -27,7 +27,15 @@ C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
       COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
      *               LREIMER,LMDOT
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGT,DLOGP
+C 10/11/26 MHP via Claude
+C code changed to fix the member ORDER of COMMON/MASSCHG2/: this file
+C had DLOGT,DLOGP while mdot.f (which writes them) and coefft.f (which
+C reads them) both declare DLOGP,DLOGT -- i.e. the two were
+C transposed here, so DLOGT in this file aliased mdot.f's DLOGP and
+C vice versa. Harmless so far only because this file uses neither
+C (nor SMASS0); it uses only SACC and SCEN, which are at the same
+C positions in both orderings, so this correction is behavior-neutral.
+      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)

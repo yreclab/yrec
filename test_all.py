@@ -112,10 +112,14 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
         for i, val in enumerate(ref_vals):
             if isinstance(val, numbers.Number):
                 # An IndexError indicates the number of tokens on the line
-                # differs between files.
+                # differs between files.  A TypeError indicates the token at
+                # this position is numeric in one file and text in the other,
+                # which happens whenever the two files are line-shifted
+                # relative to each other (e.g. a namelist echo gained or lost
+                # a variable).  Both are differences, not harness errors.
                 try:
                     diff = abs(out_vals[i] - val)
-                except IndexError as ex:
+                except (IndexError, TypeError) as ex:
                     difference = True
                     break
 

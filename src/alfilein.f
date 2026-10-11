@@ -63,7 +63,21 @@ C COMMON/IOUNITS/
 C MHP 8/25 Removed character file names from common block
       COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
 
-     EXTERNAL sort_shell
+C 10/11/26 MHP via Claude
+C code changed to re-indent EXTERNAL to column 7.  It had only 5 leading
+C blanks, putting the "E" in column 6, which in fixed form marks a
+C CONTINUATION line.  The compiler therefore read the previous statement
+C as
+C      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4EXTERNALSORT_SHELL
+C a legal 24-character name, so it compiled silently: the EXTERNAL
+C declaration was discarded and the 4th block member was renamed.
+C Behavior-neutral today -- sort_shell is only reached via CALL (and is
+C defined in this file), and DUMMY4EXTERNALSORT_SHELL was one implicit
+C REAL*8 at the same position as DUMMY4 in the other five files that
+C declare ALATM04 -- but it would break the moment a 5th member were
+C added, sort_shell were passed as an actual argument, or this file were
+C converted to free form.
+      EXTERNAL sort_shell
 
       SAVE
 
