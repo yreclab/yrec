@@ -27,7 +27,11 @@ C COMMON/IOUNITS/
      *  IOPALE,ISCVH,ISCVHE,ISCVZ
       DIMENSION LTRI(3),TRIT(3),TRIL(3),CFENV(9),PS(3),TS(3),RS(3),
      *     ESTORE(4),LC(JSON)
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
 C 9/25/26 MHP via Claude

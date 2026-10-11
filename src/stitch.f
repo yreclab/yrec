@@ -6,7 +6,11 @@
       PARAMETER (JSON=5000)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 ENVS1(JSON)
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

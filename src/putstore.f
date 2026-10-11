@@ -109,7 +109,11 @@ C SCVEOS's or vice versa; this is a pure rename.
      *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTSCV,IDP
 
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
 C 10/11/26 MHP via Claude
 C BUG FIX: this file reads LMILNE below (gating CALL WRTMIL) but never

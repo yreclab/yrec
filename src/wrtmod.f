@@ -32,7 +32,11 @@ C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)
       COMMON/LABEL/XENV0,ZENV0
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,

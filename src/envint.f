@@ -128,7 +128,11 @@ C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 
 C G Somers 11/14, ADD I/O COMMON BLOCK
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
 C G Somers END
 
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK

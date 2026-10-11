@@ -96,7 +96,11 @@ C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
       COMMON/DESC/DESCRIP
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSTCH,LPHHD
       COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
       COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
@@ -367,7 +371,7 @@ C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
      *   IPVER, ITRVER,
      *   KINDRN,
      *   LDEBUG, LCORR, LMILNE, LTRACK, LSTORE, LFIRST,
-     *   LSTPCH, LSCRIB, LSTCH,
+     *   LSTPCH, LSTCH,
 C G Somers 11/14
      *   LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,
 C G Somers END
@@ -435,10 +439,14 @@ C 10/8/26 MHP via Claude
 C code changed to remove LPMM: confirmed unused (not in any COMMON
 C block, no conditional anywhere in the code references it, and its
 C own DATA default was already commented out), so it had zero effect
-C on any run. The PMMA/PMMB/PMMC/PMMD/PMMM/PMMJD/PMMMD/PMMWMAX
+C on any run. The PMMA/PMMB/PMMC/PMMD/PMMM/PMMJD/PMMMD
 C parameters below remain live, used under the LMWIND option.
+C 10/11/26 MHP via Claude
+C code changed to remove PMMWMAX: like LPMM, it was in no COMMON
+C block, had no DATA default, and was referenced nowhere in the code,
+C so setting it had no effect. No namelist file sets it.
      *   LSOLWIND,LMWIND,LROSSBY,LBSCALE,
-     *   AWIND,PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMWMAX,
+     *   AWIND,PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,
 C MHP 8/17 ADDED WMAX_SUN
      *   PMMSOLP,PMMSOLW,PMMSOLTAU,LCODM,CODM,WMAX_SUN,
 C G Somers 6/14
@@ -497,7 +505,6 @@ C MHP 9/93
       DATA LDEBUG, LCORR, NPOINT, LMILNE, LTRACK, LSTORE,
      1 LSTPCH
      2  /.FALSE., .TRUE., 1, .FALSE., .TRUE., .FALSE.,.FALSE./
-      DATA LSCRIB/.TRUE./
       DATA LSTCH/.FALSE./
       DATA LENVG, ATMSTP, ENVSTP/.FALSE.,0.5,0.5/
       DATA NPRTMOD, NPRTPT/1,1/
