@@ -77,7 +77,13 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/NEWOPAC/L2Z,LLAOL
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
       SAVE
 C
 C     THIS SUBROUTINE CALCULATES THE OPACITY FOR A GIVEN X AND Z.

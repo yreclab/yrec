@@ -107,7 +107,13 @@ C Time change of theta
       COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
      *               DDELM(JSON),FESTIME(JSON),THP(JSON),
      *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),

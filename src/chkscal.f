@@ -58,7 +58,17 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/CKIND/RESCAL(4,50),IRESCA(50)
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/LENDAG(50),LSETDT(50)
-      COMMON/CALSTAR/BLI,ALRI,AGER,BLR,BLRP,AGEI,LSTAR,LPASSR
+C 10/12/26 MHP via Claude
+C code changed to demote BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/ to locals of this routine.  All five are written and
+C read only here -- BLI/AGEI at the interpolation setup, BLR/AGER/BLRP in
+C the radius-matching iteration below -- while main.f, parmin.f and
+C setscal.f merely carried them positionally.  The blanket SAVE below
+C keeps their values across calls exactly as COMMON storage did, which
+C BLRP relies on, being set on one call and read on the next.  Only
+C ALRI, LSTAR and LPASSR are genuinely shared; setscal.f initializes
+C those three.
+      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

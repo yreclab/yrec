@@ -57,7 +57,13 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
@@ -79,10 +85,6 @@ C  MEAN MOLECULAR WEIGHT FOR ALL RADIATIVE SHELLS.
       LDERIV = .FALSE.
       LOCOND = .FALSE.
       LATMO = .FALSE.
-      IDT = 15
-      DO 25 I = 1,4
-         IDD(I) = 5
- 25   CONTINUE
       DO 30 IM = 1,M
          SL = HS(IM)
          TL = HT(IM)

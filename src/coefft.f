@@ -79,7 +79,13 @@ C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
       COMMON/CTLIM/TENV
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
@@ -151,10 +157,6 @@ c      ENDIF
       DO 10 J = 1,8
        TLUMX(J) = 0.0D0
    10 CONTINUE
-      IDT = 15
-      DO 15 J = 1,4
-       IDD(J) = 5
-   15 CONTINUE
       DO 30 IM = 1,M
 C SET UP LOCAL VARIABLES FOR CALLS TO BASIC PHYSICS ROUTINES
        THL = 0.0D0

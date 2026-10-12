@@ -113,7 +113,13 @@ C module conversion
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
      *     ETA2X(JSON)
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
       COMMON/DPMIX/IOV1,IOV2,IOVIM
@@ -635,10 +641,6 @@ C CONVECTIVE OR RADIATIVE.
              SL = HS(M)
              FPL = 1.0D0
              FTL = 1.0D0
-             IDT = 15
-             DO 588 KK = 1,4
-              IDD(KK) = 5
- 588           CONTINUE
 C 9/22/26 MHP via Claude
 C code changed to remove the MHD equation of state
 C 9/23/26 MHP via Claude

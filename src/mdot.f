@@ -66,7 +66,14 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
-      COMMON/MASSCHG3/DMSUN,DMWSUN,DMWMAX
+C 10/12/26 MHP via Claude
+C code changed to drop COMMON/MASSCHG3/ entirely.  mdot.f was its only
+C declaring file once LSOLWIND moved to the consolidated block, so
+C DMSUN, DMWSUN and DMWMAX are now locals.  They are given an explicit
+C zero below rather than relying on static storage happening to be
+C zeroed, which makes the guarded branch provably inert until these
+C three are given a real source.
+      DATA DMSUN,DMWSUN,DMWMAX/3*0.0D0/
       DIMENSION HCOMP(15,JSON),HS(JSON),HS1(JSON),HS2(JSON),
      *          HT(JSON),HJM(JSON),OMEGA(JSON),HR(JSON),
      *          HP(JSON),HD(JSON)

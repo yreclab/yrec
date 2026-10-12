@@ -186,7 +186,11 @@ C MHP 1/93 add common blocks for automatic calibration of solar models.
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
 C DBG 12/94 added calibrate stellar model
-      COMMON/CALSTAR/BLI,ALRI,AGER,BLR,BLRP,AGEI,LSTAR,LPASSR
+C 10/12/26 MHP via Claude
+C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
+C now locals there.  This file never referenced them.
+      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
 C MHP 7/96 common block added for sound speed
       COMMON/SOUND/GAM1(JSON),LSOUND
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU

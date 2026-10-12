@@ -103,7 +103,13 @@ C module conversion
       COMMON/CTLIM/TENV
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/INTPAR/STOLR0,IMAX,NUSE
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C DBG PULSE
       COMMON/PULSE/XMSOL
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
@@ -244,10 +250,6 @@ C We have Allard atmosphere boundary conditions
     2 CONTINUE
 C Start gray atmosphere bounary conditions
 C GUESS THE TEMPERATURE FOR AN OPTICAL DEPTH NEAR ZERO.
-      IDT = 15
-      DO 5 JJ = 1,4
-       IDD(JJ) = 5
-    5 CONTINUE
       ERRSUM(1) = 0.0D0
       IF(KTTAU .EQ. 0) THEN
             TL = TEFFL - 0.031235D0 + 0.25D0*DLOG10(CC23)

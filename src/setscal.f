@@ -79,7 +79,11 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/CALSTAR/BLI,ALRI,AGER,BLR,BLRP,AGEI,LSTAR,LPASSR
+C 10/12/26 MHP via Claude
+C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
+C now locals there.  This file never referenced them.
+      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
       SAVE
 C     LSTAR     T - have got a star at Teff and L
 C     LPASSR    T - on run have just passed Teff

@@ -169,7 +169,13 @@ C THESE CONTROLS ONLY ALTER THE MIXTURE IN THE STARTING MODEL AND ONLY
 C IF THE MODEL IS CHEMICALLY UNEVOLVED. POSTPROCESSING TOOLS SHOULD BE USED FOR THE
 C CORE HE BURNING PHASE.
 c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
-      COMMON/OPTAB/ZSI,IDT,IDD(4)
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/LENDAG(50),LSETDT(50)
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
@@ -230,7 +236,11 @@ C never read by name in this file.
 C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
 C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
 C DBG 12/94 ADDED CALIBRATE STELLAR MODEL
-      COMMON/CALSTAR/BLI,ALRI,AGER,BLR,BLRP,AGEI,LSTAR,LPASSR
+C 10/12/26 MHP via Claude
+C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
+C now locals there.  This file never referenced them.
+      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
 C OPAL eos
       CHARACTER*256 FcondOpacP,FOPALE06
 C MHP 8/25 Remove file names from common blocks
@@ -528,7 +538,7 @@ C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
      1     /50*0.0,50*0.0,50*0.0/
       DATA AID/'HE3','C12','C13','N14','N15','O16','O17','O18','H2 ',
      *'LI6','LI7','BE9'/
-      DATA OPTOL,ZSI/1.0D-8,0.0D0/
+      DATA OPTOL/1.0D-8/
       DATA TCUT,TSCUT,TENV0,TENV1,TGCUT/
      *     6.5D0,6.5D0,6.82D0,7.7D0,7.5D0,6.0D0,3.0D0,9.0D0,6.9D0/
       DATA ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX/3.0D-4,1.0D-10,1.0D-1,
