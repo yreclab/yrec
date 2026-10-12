@@ -26,6 +26,23 @@ ref_dir = config['paths']['reference_dir']
 show_output = config.getboolean('options','show_output_upon_failure')
 ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
 
+# Lines matching any of these regular expressions are dropped from BOTH the
+# reference and the output before comparison, each file filtered
+# independently.  See iter_compared_lines() for why that matters.
+version_banner_re = re.compile(r"# YREC v.* \(.*\)")
+ignore_line_res = []
+if config.has_section('ignore'):
+    for pattern in config['ignore'].get('patterns', '').split('\n'):
+        pattern = pattern.strip()
+        if not pattern:
+            continue
+        try:
+            ignore_line_res.append(re.compile(pattern))
+        except re.error as ex:
+            raise ValueError(
+                f"pytest.ini [ignore] patterns: {pattern!r} is not a valid "
+                f"regular expression ({ex})")
+
 if not os.path.exists(yrec_exe):
     raise FileNotFoundError(f"YREC executable {yrec_exe} not found!")
 
@@ -85,28 +102,53 @@ def vals_from_line(line):
     return vals
 
 
+def iter_compared_lines(path):
+    '''Yield (physical line number, line) for every line of `path` that is not
+    excluded by an ignore rule.
+
+    Each file is filtered independently and on its own content, so a line
+    that appears in only one of the two files -- a version banner, or a
+    namelist variable that one side echoes and the other does not -- is
+    removed from that side alone and cannot shift the rest of the comparison.
+    Deciding from one file and skipping both, as this once did, turns a single
+    unmatched line into a difference on every line that follows it.'''
+    with open(path, 'r') as fh:
+        for lineno, line in enumerate(fh, start=1):
+            if ignore_version_diffs and version_banner_re.search(line):
+                continue
+            if any(rx.search(line) for rx in ignore_line_res):
+                continue
+            yield lineno, line
+
+
 def filevals_differ(ref_file, out_file, float_tol, int_tol):
     '''Iterate over lines in two files to compare, split lines into tokens and
     compare each token with an integer or floating-point tolerance for numeric
-    values or literally, otherwise.'''
-    ref = open(ref_file, 'r')
-    out = open(out_file, 'r')
-    lineno = 1
+    values or literally, otherwise.  Reported line numbers are physical lines
+    of the reference file, counting any lines an ignore rule dropped.'''
+    ref = iter_compared_lines(ref_file)
+    out = iter_compared_lines(out_file)
     diff_found = False
 
     # Iterate over lines of files
     while True:
         difference = False
         locs = []
-        try:
-            refline = next(ref)
-            outline = next(out)
-            if ignore_version_diffs and re.search(r"# YREC v.* \(.*\)", outline):
-                continue
-            ref_vals = vals_from_line(refline)
-            out_vals = vals_from_line(outline)
-        except StopIteration as ex:
+        ref_next = next(ref, None)
+        out_next = next(out, None)
+        if ref_next is None and out_next is None:
             break
+        if ref_next is None or out_next is None:
+            # One file still has comparable lines once the other is exhausted.
+            # Returning silently here would let a truncated output pass.
+            longer = "reference" if out_next is None else "output"
+            print(f"{longer} has more comparable lines than the other file")
+            diff_found = True
+            break
+        lineno, refline = ref_next
+        _, outline = out_next
+        ref_vals = vals_from_line(refline)
+        out_vals = vals_from_line(outline)
 
         # Compare all values on line
         for i, val in enumerate(ref_vals):
@@ -153,10 +195,7 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
             print(f"line: {lineno}")
             print(refline, end='')
             print(color_indicator(outline, locs))
-        lineno += 1
 
-    ref.close()
-    out.close()
     return diff_found
 
 
