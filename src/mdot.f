@@ -67,7 +67,28 @@ C       COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
       SAVE
       SENVOLD = HS(M) - HSTOT
 C MHP 8/10- CHECK FOR SCALED SOLAR WIND MASS LOSS
-      IF(LSOLWIND .AND. LROT) THEN
+C 10/12/26 MHP via Claude
+C BUG FIX: added the DMWSUN guard below.  DMSUN, DMWSUN and DMWMAX are
+C set NOWHERE in the code -- no assignment, no DATA statement, and no
+C namelist entry in any of the 315 input files -- and COMMON/MASSCHG3/ is
+C declared only here, so all three are permanently zero.  The branch
+C therefore evaluated (OMEGA(M)/0)**2, and DMDT = 0*Infinity = NaN.
+C
+C It has never fired, for two separate reasons: parmin.f's
+C COMMON/MASSCHG3/ declaration is commented out (two variants, both
+C inactive), so the PHYSICS namelist's LSOLWIND is a local there and its
+C value never reaches this routine, where LSOLWIND is itself never
+C written and so always .FALSE.; and every one of the 315 namelists sets
+C LMDOT = .FALSE., which makes MASSLOSS return before calling MDOT.
+C
+C That matters because the namelist consolidation will put LSOLWIND in
+C the shared block and so repair the propagation.  Nine namelists set
+C LSOLWIND = .TRUE. and all nine also set LROT = .TRUE., so without this
+C guard they would start entering the branch and taking a NaN mass-loss
+C rate.  The option stays inert until DMSUN/DMWSUN/DMWMAX are given a
+C source, which is a separate decision for the experimental mass-loss
+C code.
+      IF(LSOLWIND .AND. LROT .AND. DMWSUN.GT.0.0D0) THEN
          F1 = (OMEGA(M)/DMWSUN)**2
          F2 = (DMWMAX/DMWSUN)**2
          DMDT = DMSUN*MIN(F1,F2)
