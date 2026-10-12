@@ -208,16 +208,41 @@ The two `.last` files were restored with `git checkout` so they match the
 start model that produced the current TAHB references. Any full run will
 dirty them again.
 
-To fix, first establish whether the pair is simply stale or genuinely
-irreproducible: run `Test_m9p0feh+0p0GS98_base_TAMS` twice and compare the
-`.last` it writes against the committed fixture and against itself.
+### Diagnosis (2026-10-12): the fixture is stale, not irreproducible
 
-- if it writes the same file twice but differs from the committed one, the
-  fixture is stale: commit the regenerated `.last` and regenerate the TAHB
-  reference from it, after which the chain round-trips like the other 133
-- if consecutive runs differ from each other, the TAMS model itself is not
-  reproducible, and the TAHB case cannot be stabilized by refreshing the
-  fixture
+`Test_m9p0feh+0p0GS98_base_TAMS` was run twice and the `.last` it writes
+compared against the committed fixture and against itself:
+
+- the case **passes** its own `.short`/`.store`/`.track` comparison
+- the two runs write **byte-identical** `.last` files, so the model is
+  fully reproducible
+- both differ from the committed fixture on essentially every line, but
+  only in the last one or two digits, e.g. `4.02995301695` against
+  `4.02995301685`, `1.3819062456E+03` against `1.3819062459E+03`, with
+  identical model indices (830, 707) and agreement to ~10 significant
+  figures
+
+So the committed fixture carries round-off-level drift from an older build.
+There is no chaos in the TAMS model. The TAHB divergence is a stale start
+model amplified by a 9 Msun He-ignition evolution, which is sensitive
+enough to turn a ~1e-10 relative perturbation in its initial model into a
+visible difference.
+
+### Fix
+
+Refresh the fixture and its dependent reference together, as one change:
+
+1. run the `base` and `yaleeos` TAMS cases and commit the two regenerated
+   `startmodels/*_TAMS.last` files
+2. regenerate the two TAHB references from those start models
+3. confirm a second full run leaves `startmodels/` clean, which is the
+   condition the other 133 chained fixtures already satisfy
+
+Doing only step 1 or only step 2 makes the mismatch worse, so they must go
+in the same commit. Not yet applied: it rewrites a committed physics
+fixture and a reference, which is a judgement call for MHP rather than
+routine cleanup. The two `.last` files are currently at their committed
+state so the TAHB references in `standard/` remain self-consistent.
 
 ---
 
