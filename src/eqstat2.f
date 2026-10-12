@@ -134,9 +134,9 @@ C ASSUME EXCESS Z(METALS) IS IN THE FORM OF CARBON(12)
        AMU = AMUENV + DFX1 + DFX4 + DFX12
        AMUI = 1.0D0/AMU
        IF(LSAHA) THEN
-          FMU = AMUENV*AMUI
+          FMUENV = AMUENV*AMUI
           DO 20 I = 1,NZP1
-             FX(I) = FMU*FXENV(I)
+             FX(I) = FMUENV*FXENV(I)
  20         CONTINUE
           FX(6) = FX(6) + DFX12*AMUI
           FX(7) = FX(7) + DFX1*AMUI

@@ -95,7 +95,11 @@ C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
-      COMMON/DESC/DESCRIP
+C 10/12/26 MHP via Claude
+C code changed to drop COMMON/DESC/, which was declared in parmin.f alone.
+C DESCRIP is now simply a local, kept by the blanket SAVE, and remains a
+C CONTROL namelist variable.  Character data does not belong in a COMMON
+C block.
 C 10/11/26 MHP via Claude
 C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or
@@ -337,8 +341,16 @@ C FROM MAGNETIZED SOLAR-LIKE WINDS
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
 C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU	
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C AWIND is referenced in executable code only here, where it selects the
+C wind law ('K97'/'V13') below; the other four files declaring this block
+C never used it.  AWIND stays a PHYSICS namelist variable and is now a
+C local, kept across calls by the blanket SAVE.  Being last, its removal
+C moves no other member.
       COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
-     *         LMWIND,LROSSBY,LBSCALE,AWIND
+     *         LMWIND,LROSSBY,LBSCALE
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
      *             STRUCTFACTOR,EXCEN,C_2,LJDOT0

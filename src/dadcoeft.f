@@ -47,9 +47,14 @@ C always .FALSE. and the branch never executed, even though its
 C namelist default is .TRUE. and ~105 test/example namelists set it
 C .TRUE. explicitly. Declaring the block (same layout as mwind.f)
 C makes the namelist values actually arrive here.
-      CHARACTER*3 AWIND
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C this file never referenced AWIND.  It is now a local of parmin.f, the
+C only routine that reads it.  Being last, its removal moves no other
+C member, and the block shrinks identically in all five files.
       COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,
-     *         PMMSOLW,PMMSOLTAU,LMWIND,LROSSBY,LBSCALE,AWIND
+     *         PMMSOLW,PMMSOLTAU,LMWIND,LROSSBY,LBSCALE
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP

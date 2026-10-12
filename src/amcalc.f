@@ -21,12 +21,17 @@ C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
      *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      CHARACTER*3 AWIND
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
 C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C this file never referenced AWIND.  It is now a local of parmin.f, the
+C only routine that reads it.  Being last, its removal moves no other
+C member, and the block shrinks identically in all five files.
       COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
-     *         LMWIND,LROSSBY,LBSCALE,AWIND
+     *         LMWIND,LROSSBY,LBSCALE
       COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       SAVE
 
