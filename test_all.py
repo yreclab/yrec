@@ -83,6 +83,50 @@ def collect_tests(testreqs):
     return tcases
 
 
+def case_fingerprint(tdir, nml1, nml2):
+    '''Return the normalized contents of a case's two input files, used to
+    recognize a case that is duplicated between test directories. Trailing
+    whitespace is stripped from each line, since it cannot affect namelist
+    input.'''
+    parts = []
+    for name in (nml1, nml2):
+        path = os.path.join(tdir, name)
+        try:
+            with open(path, 'r', errors='replace') as fh:
+                parts.append('\n'.join(line.rstrip() for line in fh))
+        except OSError:
+            # Missing or unreadable input: fingerprint on the path so this
+            # case can never be silently merged with a different one.
+            parts.append(f'<unreadable {path}>')
+    return tuple(parts)
+
+
+def drop_duplicate_cases(tcases):
+    '''Drop any case whose two input files match those of a case already
+    collected, so the same model is not evolved twice in one run.
+
+    The first occurrence in pytest.ini `tests` order is the one kept, which
+    puts the regression suite ahead of the example directories. Matching is
+    on file contents, not names, so editing either copy makes them differ
+    and both are collected again -- this needs no maintenance as cases are
+    added. Note that the skipped case's reference files are not compared
+    while it remains a duplicate.'''
+    seen = {}
+    kept = []
+    duplicates = []
+    for tdir, nml1, nml2 in tcases:
+        fingerprint = case_fingerprint(tdir, nml1, nml2)
+        if fingerprint in seen:
+            duplicates.append((f"{tdir}/{nml1}", seen[fingerprint]))
+        else:
+            seen[fingerprint] = f"{tdir}/{nml1}"
+            kept.append([tdir, nml1, nml2])
+    for skipped, original in duplicates:
+        print(f"duplicate case skipped: {skipped} has the same inputs as "
+              f"{original}")
+    return kept
+
+
 def vals_from_line(line):
     '''Split text line and return list of separate integer, float,
     and text segment components.'''
@@ -238,7 +282,7 @@ def color_indicator(line, indices):
     return out
 
 
-test_cases = collect_tests(tests)
+test_cases = drop_duplicate_cases(collect_tests(tests))
 
 
 
