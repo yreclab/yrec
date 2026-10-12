@@ -276,3 +276,77 @@ Suggested fix: commit the start model under `startmodels/` and point
 `FFIRST` at `{YREC_START}`, matching the convention the other 690 start
 models follow. That removes the ordering dependency entirely rather than
 relying on directory order in `pytest.ini`.
+
+---
+
+## 6. `IMPLICIT` statements are inconsistent between scoping units
+
+**Status:** open. Audited 2026-10-12 and currently harmless, but it is a
+trap worth closing before the F90 module conversion.
+
+The house convention is three statements:
+
+```fortran
+      IMPLICIT REAL*8(A-H,O-Z)
+      IMPLICIT LOGICAL*4(L)
+      IMPLICIT INTEGER*4(I,J,K,M,N)
+```
+
+Only 8 files carry all three. Across the sources:
+
+| what | count |
+|---|---|
+| `REAL*8` + `LOGICAL*4` (no `INTEGER*4`) | 149 files |
+| `REAL*8` only | 34 files |
+| all three | 7 files (+1 with them repeated per subprogram) |
+| no `IMPLICIT` at all | 13 files |
+| `IMPLICIT NONE` | 3 files |
+
+`starin.f` is one of the 151 files lacking `IMPLICIT INTEGER*4(I,J,K,M,N)`,
+which is what prompted this entry. Other specific oddities:
+
+- `getyrec7.f` uses `IMPLICIT INTEGER*4(I-K,M)`, which omits `N`
+- `condopacp.f` spells it `DOUBLE PRECISION(A-H),DOUBLE PRECISION(O-Z)`
+- `alfilein.f` has five `IMPLICIT` statements because its subprograms
+  declare them separately, and they are not all the same set
+
+### Why it is currently harmless
+
+- Omitting `IMPLICIT INTEGER*4(I,J,K,M,N)` changes nothing: `I`-`N`
+  already default to `INTEGER(4)`, which is the same type and size.
+- Omitting `IMPLICIT LOGICAL*4(L)` makes `L` names `INTEGER(4)`. That is
+  the same 4-byte size, so a COMMON block's layout is unaffected, and any
+  genuine logical use fails to compile rather than misbehaving quietly.
+- Omitting `IMPLICIT REAL*8(A-H,O-Z)` is the dangerous one, because reals
+  become 4-byte and a shared COMMON block would be laid out at half
+  width. A per-scoping-unit audit of all 218 units found exactly one that
+  both lacks it and declares a COMMON block, `version.f/SETVERSION`, and
+  both members of `COMMON/VERSION/` there are explicitly
+  `CHARACTER*10`/`CHARACTER*20`, so nothing is implicitly typed.
+
+A full type/size resolution of every COMMON member in every declaring
+file -- using that file's `IMPLICIT` rules plus its explicit declarations
+-- found **zero** members whose type or size disagrees between files.
+
+The other 15 units lacking `REAL*8` are small numerical helpers
+(`spline.f`, `kspline.f`, `search.f`, `xrng4.f` and similar) plus three
+embedded helpers, `slopes.f/SAFEDIVIDE`, `liburn.f/SAFEDIVEXP` and
+`parmin.f/EXPAND_VALUE`. The three embedded ones declare every variable
+explicitly (`REAL*8 NUMERATOR, DENOMINATOR, RESULT`), so they are safe.
+
+### Why to fix anyway
+
+The safety above is incidental, not structural. Adding one real local to
+any of those 16 units, or adding a COMMON block to one, silently yields
+4-byte reals with no warning: the compiler is doing exactly what the
+(absent) declaration asks. The F90 conversion will also have to state
+these types explicitly, so normalizing first removes a class of
+conversion bug.
+
+Suggested approach: bring every unit to the three-statement convention,
+then move toward `IMPLICIT NONE` with explicit declarations as the module
+conversion lands. The audit scripts used here are
+`/home/pinsonneault.1/model/claude_work/implicit_audit.py` (cross-file
+member type resolution) and `implicit_per_unit.py` (per-scoping-unit
+`REAL*8` coverage); they are worth moving into the repo as a check if
+this is pursued.

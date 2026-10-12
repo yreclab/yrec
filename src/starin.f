@@ -157,6 +157,34 @@ c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
       COMMON/NEWMX/ISETMIX,ISETISO,LMIXTURE,LISOTOPE,FRAC_C,FRAC_N,
      * FRAC_O,R12_13,R14_15,R16_17,R16_18,ZXMIX,
      * XH2_INI,XHE3_INI,XLI6_INI,XLI7_INI,XBE9_INI,XB10_INI,XB11_INI
+C 10/12/26 MHP via Claude
+C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
+C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in
+C remap.f and in starin.f.
+C
+C These are namelist variables that exist only to set other quantities,
+C or that are reserved for future development; none is read by the wider
+C code.  Keeping them in their own block keeps them OUT of the single
+C consolidated namelist block being built, so that block holds only
+C variables the physics routines actually consume.  starin.f declares it
+C although it uses none of them yet, so the isotope and cross-section
+C machinery there can reach them without reopening this layout.
+C
+C Member order is NEWPARAM, then NEWCROSS, then XSECT, and the three
+C declarations are generated from one list so all files agree.
+      COMMON/NMLBYPASS/
+     * FLAG_DX,FLAG_DW,FLAG_DZ,TIME_CORE_MIN,TIME_DL,TIME_DP,TIME_DR,
+     * TIME_DT,TIME_DW_GLOBAL,TIME_DW_MIX,TIME_DX_CORE_FRAC,
+     * TIME_DX_CORE_TOT,TIME_DX_SHELL,TIME_DX_TOTAL,TIME_DY_CORE_FRAC,
+     * TIME_DY_CORE_TOT,TIME_DY_SHELL,TIME_DY_TOTAL,
+     * TOL_CZBASE_FINE_WIDTH,TOL_DL_MAX,TOL_DM_MAX,TOL_DM_MIN,
+     * TOL_DP_CORE_MAX,TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,TOL_DX_MAX,
+     * TOL_DZ_MAX,TIME_MAX_DT_FRAC,LSTRUCT_TIME,LNEWVARS,S0_1_1,
+     * S0_3_3,S0_3_4,S0_1_12,S0_1_13,S0_1_14,S0_1_16,S0_PEP,S0_1_BE7E,
+     * S0_1_BE7P,S0_HEP,S0_1_15_C12ALP,S0_1_15_O16,S0P_1_1,S0P_3_3,
+     * S0P_3_4,S0P_1_12,S0P_1_13,S0P_1_14,S0P_1_16,S0PP_1_12,
+     * S0PP_1_13,S0PP_1_16,S0P_1_BE7P,S0PP_1_BE7P,XSLI6,XSLI7,XSBE91,
+     * XSBE92,XSBE93,LXLI6,LXLI7,LXBE91,LXBE92,LXBE93
       DATA ATOMWT/23.0D0,26.99D0,24.32D0,55.86D0,28.1D0,12.015D0,
      * 1.008D0,16.0D0,14.01D0,39.96D0,20.19D0,4.004D0/
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
