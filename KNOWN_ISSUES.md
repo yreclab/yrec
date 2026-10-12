@@ -350,3 +350,44 @@ conversion lands. The audit scripts used here are
 member type resolution) and `implicit_per_unit.py` (per-scoping-unit
 `REAL*8` coverage); they are worth moving into the repo as a check if
 this is pursued.
+
+---
+
+## 7. Constraint: blocks serving the QENV/QATM callbacks cannot become arguments
+
+**Status:** not a defect. Recorded so further consolidation does not break
+it.
+
+`QATM` and `QENV` are declared `EXTERNAL` in `envint.f` and handed to
+`BSSTEP`, which passes them to `MMID` as its `DERIV` dummy procedure.
+They are therefore invoked polymorphically with a fixed argument list and
+**cannot take new arguments**. Anything they need must travel by COMMON.
+
+`COMMON/QENVMIX/CMIXLQ` exists for exactly this reason: it relays `CMIXL`
+to `QENV` after `CMIXL` was converted from COMMON storage to an explicit
+argument everywhere else. `envint.f` sets it immediately before every
+path that can reach `QENV`, direct calls and the `BSSTEP`/`MMID` callback
+alike. Both sides already carry a comment saying so (`qenv.f` at the
+subroutine header, `envint.f` at the declaration).
+
+So `QENVMIX` is **not** a merge or demotion candidate despite looking like
+an ideal one -- one member, two files. A census that ranks blocks by size
+and file count will keep proposing it; it must be skipped.
+
+`QATM` needs no such relay, but note it keeps unused dummy arguments alive
+with `IF (.FALSE.) PRINT *, B, FTL, LOCOND, RL` for the same
+interface-compatibility reason. Do not "clean up" that line.
+
+The blocks shared with these two routines form the callback's data
+channel and should be treated as load-bearing:
+
+- `envint.f` with `qenv.f`: `COMP`, `ENVPRT`, `PULSE`, `PULSE1`,
+  `PULSE2`, `QENVMIX` (plus `CONSTANTS`, `NMLPAR`)
+- `envint.f` with `qatm.f`: `ATMOS`, `ATMPRT`, `NEWOPAC`, `PULSE`,
+  `PULSE1`, `PULSE2` (plus `CONSTANTS`, `IOUNITS`, `NMLPAR`)
+
+Members of those blocks may still be demotable when they never cross the
+boundary -- `PULSE2`'s `QQET`, for instance, is set in `envint.f` and
+passed onward by argument, while `qenv.f` and `qatm.f` only carry it
+positionally and never use it -- but each case needs checking against
+this boundary first, not just a file count.
