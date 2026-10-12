@@ -152,10 +152,21 @@ untested. A case with both flags set is the only way to cover it.
 
 ---
 
-## 4. Two test cases write a start model that two others read
+## 4. The m9p0 TAMS cases do not reproduce their committed start model
 
-**Status:** open. This is the mechanism behind the long-standing
-"unexplained" divergence of the two m9p0 TAHB cases.
+**Status:** open.
+
+**Read this first:** chaining cases is intentional. `startmodels/` is a
+library of 690 committed start models, and the `examples/run_from_*_to_*`
+directories are a deliberate pipeline. A case that reads a start model
+some later case also writes is therefore normal: it reads the committed
+fixture, and the writer merely demonstrates regenerating it. An audit of
+the 2026-10-11 full run bears that out -- of 136 start-model files that
+are both written via `FLAST` and read via `FFIRST`, **133 were rewritten
+byte-identically** to the committed fixture. The design is self-consistent
+and only two files are anomalous, which is what this entry is about. An
+earlier version of this entry wrongly described the chaining itself as the
+defect.
 
 `testsuite/Test_m9p0feh+0p0GS98_base_TAMS.nml1` writes
 
@@ -173,33 +184,70 @@ as its starting model. The `yaleeos` pair does the same. So a test case
 writes an input of another test case, into `startmodels/`, where the file
 is tracked in git.
 
-Cases are collected with `sorted(glob('*.nml1'))` and `TAHB` sorts before
-`TAMS`, so within one run the TAHB case executes **first** and consumes
-whatever the *previous* run left behind; the TAMS case then overwrites it
-for the next run. Consequences:
+These two are the exception: after the 2026-10-11 run they were the **only**
+two tracked files in `startmodels/` that `git status` reported as modified.
+So the current code does not reproduce the committed fixture for this pair,
+which strongly suggests the committed `.last` predates some later code
+change.
 
-- the suite is not reproducible: a TAHB case's result depends on when the
-  corresponding TAMS case last ran, not only on the code
-- a run dirties two tracked files in `startmodels/`, so `git status` is
-  never clean after a full run
-- regenerating references does not converge. In the 2026-10-11 run the
-  TAHB output was produced at 17:10 from the committed `.last`, and the
-  TAMS case overwrote that file at 17:12 (17:18 for `yaleeos`). The
-  regenerated TAHB references therefore correspond to a start model that
-  is no longer the one on disk.
+That matters because cases are collected with `sorted(glob('*.nml1'))` and
+`TAHB` sorts before `TAMS`, so the TAHB case runs **first** and reads the
+fixture, after which the TAMS case overwrites it. Timing from the run: the
+TAHB output was written at 17:10, and the fixture was overwritten at 17:12
+(17:18 for `yaleeos`). Consequences while the fixture does not round-trip:
 
-As an interim measure the two `.last` files were restored with
-`git checkout` so they again match what produced the current references.
-Any full-suite run will dirty them again.
+- the TAHB result depends on whether a previous run had already overwritten
+  the fixture, not only on the code -- which is the mechanism behind the
+  divergence of these two cases that had been treated as unexplained
+- a full run leaves two tracked files dirty
+- reference regeneration does not converge: the TAHB references now in
+  `standard/` were produced from the committed fixture, while the fixture
+  a later run leaves on disk is different
 
-Candidate fixes, none applied:
+The two `.last` files were restored with `git checkout` so they match the
+start model that produced the current TAHB references. Any full run will
+dirty them again.
 
-- point each `FLAST` at the output directory instead of `startmodels/`,
-  and give the TAHB case its own frozen copy of the start model under
-  `startmodels/`. This decouples the two cases completely and is the
-  smallest change.
-- keep the chain but make the ordering explicit rather than incidental to
-  alphabetical sorting, and accept that the pair must always run together.
+To fix, first establish whether the pair is simply stale or genuinely
+irreproducible: run `Test_m9p0feh+0p0GS98_base_TAMS` twice and compare the
+`.last` it writes against the committed fixture and against itself.
 
-The first is preferable: a test that produces another test's input makes
-the suite order-dependent whichever way the ordering is expressed.
+- if it writes the same file twice but differs from the committed one, the
+  fixture is stale: commit the regenerated `.last` and regenerate the TAHB
+  reference from it, after which the chain round-trips like the other 133
+- if consecutive runs differ from each other, the TAMS model itself is not
+  reproducible, and the TAHB case cannot be stabilized by refreshing the
+  fixture
+
+---
+
+## 5. Five testsuite cases depend on a file produced by a later example case
+
+**Status:** open.
+
+The five `testsuite/Test_m2p0_feh+0p0_vzams150_*` cases read
+
+```
+ FFIRST = "{YREC_OUTPUT}/Test_m2000_feh0_noGS_ZAMS.last"
+```
+
+That file is written by
+`examples/run_from_dbl_to_zams/Test_m2000_feh0_noGS_ZAMS.nml1`. Unlike the
+designed chains in issue 4, this one is broken in three ways at once:
+
+- it points at `{YREC_OUTPUT}`, the transient shared output directory, not
+  at `{YREC_START}` where start models live
+- the file is **not tracked in git**, so on a fresh clone it does not exist
+  and these five cases have no starting model
+- the producer is collected at position 85 and the consumers at positions
+  28-32, so within a single run the consumers read whatever a previous run
+  happened to leave in the output directory
+
+It currently works only because earlier runs left the file on disk. These
+are among the newer rotation/settling cases, so this likely came in with
+them.
+
+Suggested fix: commit the start model under `startmodels/` and point
+`FFIRST` at `{YREC_START}`, matching the convention the other 690 start
+models follow. That removes the ordering dependency entirely rather than
+relying on directory order in `pytest.ini`.
