@@ -149,3 +149,57 @@ The routine requires **both** `LROT=.TRUE.` and `LDIFAD=.TRUE.`. No case in
 `testsuite/` or `examples/` sets both — all 21 `LROT=.TRUE.` cases have
 `LDIFAD=.FALSE.` — so these 589 lines are never executed and the fix is
 untested. A case with both flags set is the only way to cover it.
+
+---
+
+## 4. Two test cases write a start model that two others read
+
+**Status:** open. This is the mechanism behind the long-standing
+"unexplained" divergence of the two m9p0 TAHB cases.
+
+`testsuite/Test_m9p0feh+0p0GS98_base_TAMS.nml1` writes
+
+```
+ FLAST = "{YREC_START}/Test_m9p0feh+0p0GS98_base_TAMS.last"
+```
+
+and `testsuite/Test_m9p0feh+0p0GS98_base_TAHB.nml1` reads that same file
+
+```
+ FFIRST = "{YREC_START}/Test_m9p0feh+0p0GS98_base_TAMS.last"
+```
+
+as its starting model. The `yaleeos` pair does the same. So a test case
+writes an input of another test case, into `startmodels/`, where the file
+is tracked in git.
+
+Cases are collected with `sorted(glob('*.nml1'))` and `TAHB` sorts before
+`TAMS`, so within one run the TAHB case executes **first** and consumes
+whatever the *previous* run left behind; the TAMS case then overwrites it
+for the next run. Consequences:
+
+- the suite is not reproducible: a TAHB case's result depends on when the
+  corresponding TAMS case last ran, not only on the code
+- a run dirties two tracked files in `startmodels/`, so `git status` is
+  never clean after a full run
+- regenerating references does not converge. In the 2026-10-11 run the
+  TAHB output was produced at 17:10 from the committed `.last`, and the
+  TAMS case overwrote that file at 17:12 (17:18 for `yaleeos`). The
+  regenerated TAHB references therefore correspond to a start model that
+  is no longer the one on disk.
+
+As an interim measure the two `.last` files were restored with
+`git checkout` so they again match what produced the current references.
+Any full-suite run will dirty them again.
+
+Candidate fixes, none applied:
+
+- point each `FLAST` at the output directory instead of `startmodels/`,
+  and give the TAHB case its own frozen copy of the start model under
+  `startmodels/`. This decouples the two cases completely and is the
+  smallest change.
+- keep the chain but make the ordering explicit rather than incidental to
+  alphabetical sorting, and accept that the pair must always run together.
+
+The first is preferable: a test that produces another test's input makes
+the suite order-dependent whichever way the ordering is expressed.
