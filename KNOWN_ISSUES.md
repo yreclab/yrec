@@ -496,5 +496,16 @@ ROTGRID), and `COMMON/QUADRU/QUAD,GG`.
 blocks, so nothing is wrong, but any future merge touching either must not
 bring them into the same scoping unit.
 
+### Note: LLOT95E's extent is spelled two ways
+
+`getopal95.f`, `op952d.f` and `op95xtab.f` declare
+`CAPPAE(NUMT,NUMD)`, while `main.f` declares `CAPPAE(NUMTT,NUMD)`.
+Both parameters are 70 and `NUMD` is 19 everywhere, so the layout agrees
+today and nothing is wrong. It is a trap, though: changing one spelling
+without the other would resize the block in three files and not the
+fourth. The linker's "size of symbol changed" warning would catch it, so
+that warning must never be dismissed -- it is what the OP95INTERP
+corruption earlier in this work was signalling.
+
 MHP may revisit the larger ones later, so they are kept as a named
 category rather than simply dropped from the lists.
