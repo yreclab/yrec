@@ -559,24 +559,52 @@ model as of the start of the step and are read very widely -- `OLDMOD` by
 | `DWMAX` | 10,000 | 3 |
 | `DEUTER` | 10,002 | 22 |
 
-### b. Computed at intermediate steps -- candidates to pass explicitly
+### b. Reconstructed solutions held for output -- keep in COMMON
 
-These are produced partway through the solve and have no reason to be
-visible outside the routines that make and consume them. The strongest
-cases are the ones already confined to two or three files:
+Per MHP: `ENVSTRUCT` and `ATMSTRUCT` store the reconstructed envelope and
+atmosphere solutions for output, so they stay. The general test is whether
+an **output routine** reads the block: the output routines are entered at a
+different point in the control flow, so passing these explicitly would
+mean threading large per-shell arrays down through `main.f`.
 
-| block | words | files | writer -> reader |
-|---|---|---|---|
-| `ATMSTRUCT` | 75,001 | 2 | `envint.f` -> `surfbc.f` |
-| `ROTDER` | 25,000 | 2 | `coefft.f` -> `crrect.f` |
-| `GRAVSZ` | 20,000 | 2 | `setup_grsett.f` -> `model_to_equal.f` |
-| `ENVCZ` | 2 | 3 | `envint.f` -> `main.f`, `wrtout.f` |
-| `NEWEPS` | 2 | 3 | `engeb.f` -> `coefft.f`, `ytime.f` |
-| `NULOSS` | 2 | 2 | `engeb.f`, `sneut.f` |
-| `MASSCHG2` | 5 | 3 | `mdot.f` -> `coefft.f` |
+| block | words | read by |
+|---|---|---|
+| `ATMSTRUCT` | 75,001 | `stitch.f` |
+| `ENVSTRUCT` | 105,001 | `stitch.f` (plus physics readers `calcad.f`, `gettau.f`, `tauint.f`) |
+| `SOUND` | 5,001 | `putstore.f`, `stitch.f`, `wrtmod.f` |
+| `CENT` | 5 | `stitch.f` |
 
-Wider but the same character: `ENVSTRUCT`, `INTVAR`, `GRAVEZ`, `PUALPHA`,
-`GRAB`, `SOUND`, `FLUXES`, `CENT`, `DEBHU`, `DPMIX`.
+`stitch.f` is the routine that writes the stitched interior + envelope +
+atmosphere model, the `LSTCH` path that 51 namelists enable.
+
+An earlier draft of this entry recommended `ATMSTRUCT` as the first piece
+of work and described its hand-off as `envint.f -> surfbc.f`. Both were
+wrong: `surfbc.f` is an `ENVSTRUCT` writer, not an `ATMSTRUCT` reader, and
+`ATMSTRUCT`'s only reader is `stitch.f`, which is exactly why it must be
+retained.
+
+### c. Computed at intermediate steps -- candidates to pass explicitly
+
+Produced partway through the solve, consumed nearby, and **not** read by
+any output routine:
+
+| block | words | writer -> reader |
+|---|---|---|
+| `GRAVSZ` | 20,000 | `setup_grsett.f` -> `model_to_equal.f` |
+| `ROTDER` | 25,000 | `coefft.f` -> `crrect.f` |
+| `NEWEPS` | 2 | `engeb.f` -> `coefft.f`, `ytime.f` |
+| `NULOSS` | 2 | `engeb.f`, `parmin.f` only |
+| `MASSCHG2` | 5 | `mdot.f`, `massloss.f` -> `coefft.f` |
+
+Wider but the same character: `INTVAR`, `GRAVEZ`, `PUALPHA`, `GRAB`,
+`FLUXES`, `DEBHU`, `DPMIX`.
+
+### b2. Now dead: COMMON/ENVCZ/
+
+`ENVRCZ` is written once, at `envint.f:940`, and read nowhere. `RINT` has
+no references at all. Its only reader was the commented-out JVS block in
+`wrtout.f` removed in stage 4, so this block became dead as a side effect
+of that cleanup. Three declarations, removable.
 
 ### c. Rotation -- special handling
 
@@ -599,8 +627,10 @@ A further 21 are rotation-touched but not exclusive, so any rule framed as
 `QUADRU` is a physical quantity tied to rotation, not machinery, per
 issue 10.
 
-### Suggested order of work for group (b)
+### Suggested order of work
 
-`ATMSTRUCT` first: 75,001 words, two files, a single `envint.f` ->
-`surfbc.f` hand-off, and the largest single reduction available outside
-the excluded categories.
+1. `COMMON/ENVCZ/` -- delete it; it is dead.
+2. `GRAVSZ` -- 20,000 words, two files, a single
+   `setup_grsett.f` -> `model_to_equal.f` hand-off, not output-bound. The
+   cleanest large conversion left.
+3. `ROTDER`, then the small ones `NEWEPS`, `NULOSS`, `MASSCHG2`.
