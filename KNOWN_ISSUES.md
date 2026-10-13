@@ -468,9 +468,9 @@ and `OP95INTERP` is purely the interpolation index set for `LLOT95A`.
 | pure-Z / LAOL opacity | `ZLAOL`, `ZSLAOL` |
 | Fermi / degenerate EOS | `CCR` |
 | gray and KS atmosphere tables | `ATMOS2`, `ATMOS2C`, `FAC` |
-| interpolation workspace | `SPLIN` |
+| interpolation and solver machinery | `SPLIN`, `TRIDI`, `EGRID`, `EGRIDDER` |
 
-21 blocks, about 63% of all remaining COMMON storage.
+24 blocks, about 65% of all remaining COMMON storage.
 
 ### Interpolation workspace counts too
 
@@ -484,17 +484,35 @@ all regridding routines.
 So the dimension test separates input tables from per-shell state, but it
 does not catch numerical machinery. Arrays that exist to perform an
 interpolation or a solve are excluded on the same grounds as the tables
-they serve. Adjacent blocks of that kind, not yet ruled on:
-`COMMON/TRIDI/A,B,C,D,U,GAMA` (tridiagonal solver scratch),
-`COMMON/EGRID/` and `COMMON/EGRIDDER/` (the equal-grid remap used by
-ROTGRID), and `COMMON/QUADRU/QUAD,GG`.
+they serve, whatever they are dimensioned on. Also in that category, per
+MHP:
+
+- `COMMON/TRIDI/A,B,C,D,U,GAMA` -- tridiagonal solver scratch
+- `COMMON/EGRID/` and `COMMON/EGRIDDER/` -- the equal-grid remap used by
+  ROTGRID
+
+`COMMON/QUADRU/QUAD,GG` is **not** machinery despite sitting next to these:
+it is a physical quantity tied to rotation, so it stays a candidate.
 
 ### Note: XTAB is two different variables
 
-`XTAB` is a member of both `SPLIN` and `LLOT95E`, and `YTAB` of both
-`SPLIN` and the spline family's own usage. No file currently declares both
-blocks, so nothing is wrong, but any future merge touching either must not
-bring them into the same scoping unit.
+`XTAB` is a member of both `SPLIN` and `LLOT95E`, and the two uses are not
+merely separate storage -- they are different kinds of quantity:
+
+- **`LLOT95E/XTAB` is a composition.** `op95xtab.f:31` sets `XTAB = X`,
+  recording the hydrogen mass fraction the loaded table was built for, and
+  `getopal95.f:245` tests `IF(ABS(X-XTAB).LE.1.0D-4)` to ask whether the
+  requested X matches that table. Its sibling `LLOT95/ZTAB` follows the
+  same pattern, `ZTAB = Z` in `op95ztab.f`, for metallicity.
+- **`SPLIN/XTAB(JSON)` is a coordinate.** It is the array of tabulated
+  abscissae; `search.f` binary-searches `XTAB(1..NUM)` for a value.
+
+So the `*TAB` suffix means "the composition this table is for" in the
+opacity blocks and "the tabulated independent variable" in the spline
+workspace. A reader who knows one convention will misread the other. No
+file declares both blocks, so nothing is wrong today, but any future merge
+touching either must not bring them into the same scoping unit, and the
+names deserve to diverge before the module conversion.
 
 ### Note: LLOT95E's extent is spelled two ways
 
