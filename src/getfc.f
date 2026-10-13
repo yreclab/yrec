@@ -1,11 +1,14 @@
 C
 C$$$$$$GETFC
 C
-      SUBROUTINE GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA)
+      SUBROUTINE GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA,VFC)
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C VFC is now a dummy argument, formerly COMMON/VARFC/.
+      DIMENSION VFC(JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -56,7 +59,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/VARFC/VFC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VARFC/ with an explicit argument: seculr.f
+C clears VFC, GETFC fills it and CODIFF reads it, all inside seculr.f's
+C call tree, so seculr.f now owns the storage.
       DIMENSION HD(JSON),HRU(JSON),HV(JSON),
      *          OMEGA(JSON),ALPHA(JSON),V(JSON)
       SAVE

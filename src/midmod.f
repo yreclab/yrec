@@ -4,11 +4,14 @@ C      *            HS2,HSTOT,HT,LC,LCZ,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,  ! KC
      *            HS2,HSTOT,HT,LC,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,
      *            HLM,HPM,HRM,HSBOT,HSTOP,HTM,IMIN,IMAX,LALLCZ,LCM,
      *            LCZM,LCZSUR,OMEGAM,R0M,QIWM,MRZONE,MXZONE,NRZONE,
-     *            NZONE)
+     *            NZONE,HCOMPS)
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C HCOMPS is now a dummy argument, formerly COMMON/OLDAB/.
+      DIMENSION HCOMPS(15,JSON)
       COMMON/BURN/HCOMPM(15,JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
@@ -74,7 +77,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
      *     VISC(JSON)
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
-      COMMON/OLDAB/HCOMPS(15,JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
+C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
+C now owns the storage.
 C MHP 05/02 ADDED FOR DEUTERIUM BURNING
       COMMON/CTLIM/TENV
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ

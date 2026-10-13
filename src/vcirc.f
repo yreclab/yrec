@@ -1,11 +1,14 @@
 C $$$$$$
 C       SUBROUTINE VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,  ! KC 2025-05-31
       SUBROUTINE VCIRC(HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,
-     *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP)
+     *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP,FACI)
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C FACI is now a dummy argument, formerly COMMON/INTFAC/.
+      DIMENSION FACI(4,JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -58,7 +61,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
       COMMON/CCOUT/LPHHD
-      COMMON/INTFAC/FACI(4,JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/INTFAC/ with an explicit argument:
+C setupv.f fills FACI and vcirc.f reads it, both called only from
+C seculr.f, which now owns the storage.
 C MHP 3/92 COMMON BLOCKS ADDED FOR SHEAR VELOCITY AND MU INHIBITION.
       COMMON/TAUKH/FACT6(JSON),FES1(JSON),FES2(JSON),FGSFJ(JSON),
      *     FGSFK(JSON),FES3(JSON)
@@ -103,7 +109,8 @@ C 3/93 QUADRUPOLE DRIVING TERM ADDED.
       COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
       COMMON/QUADRU/QUAD(JSON),GG(JSON)
 C MHP 9/93
-      COMMON/VARFC/VFC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C MHP 11/94 ADVECTIVE VELOCITY AND DIFFUSIVE COMPONENT.
       COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
 C MHP 06/02

@@ -1,6 +1,6 @@
 C $$$$$$
 C       SUBROUTINE CODIFF(DELTS,HRU,HV,IMIN,IMAX,LC,LCZ,M,RMID,COD,COD2)  ! KC 2025-05-31
-      SUBROUTINE CODIFF(HRU,M,RMID,COD,COD2)
+      SUBROUTINE CODIFF(HRU,M,RMID,COD,COD2,VFC)
 
 C 2/91 SUBROUTINE ALTERED TO ALLOW DIFFERENT FC'S FOR DIFFERENT
 C      MECHANISMS (COMMON BLOCK VMULT2)
@@ -8,6 +8,9 @@ C      MECHANISMS (COMMON BLOCK VMULT2)
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C VFC is now a dummy argument, formerly COMMON/VARFC/.
+      DIMENSION VFC(JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -72,7 +75,10 @@ C there's nothing to share via COMMON. The existing blanket SAVE
 C statement below already preserves its values across calls, same as
 C COMMON did.
       DIMENSION FADV(JSON),FADV0(JSON)
-      COMMON/VARFC/VFC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VARFC/ with an explicit argument: seculr.f
+C clears VFC, GETFC fills it and CODIFF reads it, all inside seculr.f's
+C call tree, so seculr.f now owns the storage.
 C MHP 9/93
 C       DIMENSION HRU(JSON),HV(JSON),COD(JSON),LC(JSON),LCZ(JSON),  ! KC 2025-05-31
       DIMENSION HRU(JSON),COD(JSON),RMID(JSON),COD2(JSON)

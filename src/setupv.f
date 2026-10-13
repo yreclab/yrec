@@ -1,11 +1,14 @@
 C $$$$$$
 C       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,LCZ,M,HRU,  ! KC 2025-05-31
       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,M,HRU,
-     *                  QWRMAX)
+     *                  QWRMAX,FACI)
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C FACI is now a dummy argument, formerly COMMON/INTFAC/.
+      DIMENSION FACI(4,JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -18,7 +21,10 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
       COMMON/VFACT/FACT1(JSON),FACT2(JSON),FACT3(JSON),FACT4(JSON),
      *     FACT5(JSON),FACT7(JSON),FACT8(JSON)
-      COMMON/INTFAC/FACI(4,JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/INTFAC/ with an explicit argument:
+C setupv.f fills FACI and vcirc.f reads it, both called only from
+C seculr.f, which now owns the storage.
 C MHP 3/92 COMMON BLOCK ADDED FOR SHEAR VELOCITY
       COMMON/TAUKH/FACT6(JSON),FES1(JSON),FES2(JSON),FGSFJ(JSON),
      *             FGSFK(JSON),FES3(JSON)
@@ -85,7 +91,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/VARFC/VFC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C JvS 09/25 CHANGED CPM --> CPMI TO AVOID CONFLICT IN MDPHY      
       DIMENSION HD(JSON),HG(JSON),HL(JSON),HP(JSON),HR(JSON),HS1(JSON),
 C      *          HT(JSON),LCZ(JSON),HRU(JSON),QWRMAX(JSON),  ! KC 2025-05-31

@@ -270,7 +270,8 @@ C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
 C never read or written anywhere)
-      COMMON/VARFC/VFC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C 8/96 MHP NEW COMMON BLOCK FOR NUCLEAR REACTION RATES.
 C      COMMON/CROSS/SSTANDARD(17)
 C MHP 9/14 EXTENDED TO PERMIT USER RESCALING OF DERIVATES OF REACTION
