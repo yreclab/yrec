@@ -220,7 +220,10 @@ C JNT 6/14 SAME AS ATMOS2 BUT FOR KURUCZ/CASTELLI2004 ATMOSPHERES
 C 9/06 GN --- New neutrino loss common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/NULOSS/LNULOS1,DSNUDT,DSNUDD
-      COMMON/NULOSS/DSNUDT,DSNUDD
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/NULOSS/: engeb.f assigns DSNUDT and
+C DSNUDD and nothing reads them, in engeb.f or anywhere else, so they are
+C now plain locals there.  parmin.f declared the block without using it.
 C MHP 1/93 ADD OPTION TO AUTOMATICALLY CALIBRATE SOLAR MODEL.
 C      COMMON/CALS2/TOLL,TOLR,LCALS
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE

@@ -37,8 +37,15 @@ C Time change of theta
      *               DDELM(JSON),FESTIME(JSON),THP(JSON),
      *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C CAPPA AND EPSILON DERIVATIVES
-      COMMON/ROTDER/SQOD(JSON),SQOT(JSON),SQED(JSON),SQET(JSON),
-     *              FRACNUC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop the write-only members SQOD and SQED from
+C COMMON/ROTDER/.  coefft.f assigned both and nothing ever read them;
+C setupv.f, the block's only reader, uses SQOT, SQET and FRACNUC.  That
+C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
+C in different phases -- setupv.f is reached via seculr.f -- so passing
+C the rest explicitly would mean threading 15,000-word arrays through
+C main.f and GETW.
+      COMMON/ROTDER/SQOT(JSON),SQET(JSON),FRACNUC(JSON)
 C DEFINITION TERMS FOR THE SECOND AND THIRD DERIVATIVE
 C TERMS IN THE ZAHN FORMULATION
       COMMON/EGRIDDER/EQQCOD(JSON),EQQQCOD(JSON),QQCOD(JSON),

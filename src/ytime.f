@@ -58,7 +58,11 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 10/02 added missing common block
-      COMMON/NEWEPS/EALPCA,ENU
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
+C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
+C their own CALL ENGEB, so they are returned as arguments.  main.f, the
+C third caller, passes locals it does not use.
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HS1(JSON),
      * HT(JSON),EG(6)
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),
@@ -112,7 +116,7 @@ C      *        TL,QDT,QDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *        XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *        TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *        XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *        HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC)
+     *        HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC,EALPCA,ENU)
          E = SUM1
          EG(1) = EGG11
          EG(2) = EGG22

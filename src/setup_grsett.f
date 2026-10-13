@@ -1,10 +1,13 @@
 C $$$$$$
       SUBROUTINE SETUP_GRSETT(DT,HQPR,HR,HD,HS1,HT,LC,M,STOT,COD1,COD2,
-     *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X)
+     *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C formerly COMMON/GRAVSZ/, now dummy arguments.
+      DIMENSION COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
 
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
@@ -70,7 +73,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVSZ/COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/GRAVSZ/ with explicit arguments:
+C setup_grsett.f fills these four and model_to_equal.f reads them, and
+C grsett.f calls both, so grsett.f now owns the storage.
 C MHP 8/94 ADDED I/O FOR DIFFUSION
 C 10/13/26 MHP via Claude
 C code changed to remove COMMON/GSCOF/: none of its four members is

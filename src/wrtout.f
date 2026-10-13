@@ -134,7 +134,11 @@ C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
      *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-      COMMON/ENVCZ/ENVRCZ, RINT
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
+C envint.f and read nowhere, and RINT was never referenced at all.  Its
+C only reader was the commented-out JVS block deleted from wrtout.f
+C earlier in this work, so the block died with it.
       COMMON/SOUND/GAM1(JSON),LSOUND
 C G Somers 10/14, Add spot common block
       COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),

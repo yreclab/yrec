@@ -3,10 +3,13 @@ C       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HQPR,HRU,HS1,HTU,  ! KC 2025-0
       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HRU,HS1,
      *                          IBEGIN,IEND,M,QCOD1X,QCOD2X,DR,
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
-     *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT)
+     *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C formerly COMMON/GRAVSZ/, now dummy arguments.
+      DIMENSION COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -48,7 +51,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/GRAVSZ/COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/GRAVSZ/ with explicit arguments:
+C setup_grsett.f fills these four and model_to_equal.f reads them, and
+C grsett.f calls both, so grsett.f now owns the storage.
       COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
      *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),
      *              EZ_H(JSON)

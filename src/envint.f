@@ -161,7 +161,11 @@ C JvS SAVE ATMOSPHERE STRUCTURE TO MAKE PROFILE OUTPUT EASIER
      *     AGAM1(JSON),AQDT(JSON),AFXIONS(3,JSON),
      *     ATMOO(JSON),ATMOCP(JSON),NUMATM
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-      COMMON/ENVCZ/ENVRCZ,RINT
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
+C envint.f and read nowhere, and RINT was never referenced at all.  Its
+C only reader was the commented-out JVS block deleted from wrtout.f
+C earlier in this work, so the block died with it.
 
 C MHP 08/02 ADDED VECTOR FOR STORING THE OVERTURN TIMESCALE OF THE
 C SURFACE CONVECTION ZONE
@@ -937,7 +941,9 @@ C G Somers END
             FX = DD2/(DD2-DD1)
 
             ENVCZL = ENVR(JENV-1)+FX*(ENVR(JENV)-ENVR(JENV-1))-CRSUNL
-            ENVRCZ = EXP(CLN*ENVCZL)
+C 10/13/26 MHP via Claude
+C the ENVRCZ assignment is removed with COMMON/ENVCZ/; nothing read it.
+C ENVCZL above is still used below.
 
             DO I=1,NUMENV
                   ENVS1(I) = DEXP(CLN*(ENVS(I)+HSTOT))

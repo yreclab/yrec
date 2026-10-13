@@ -222,7 +222,17 @@ C            SCEN = SACC2 - SACC
          ENDIF
       ENDIF
 C CALL MASS LOSS OR ACCRETION ROUTINE
-      IF(LDOMDOT)CALL MDOT(BL,DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,
+C 10/13/26 MHP via Claude
+C BUG FIX: this call passed BL as a 24th actual argument to MDOT, which
+C declares only 23 dummies -- BL landed in DELTS, DELTS in HCOMP and so
+C on, every argument shifted by one, with SENVOLD having no dummy at all.
+C MDOT's body never references BL, so it was pruned from the dummy list
+C (as other routines were in the KC 2025-05-31 pass) without this call
+C site being updated.  Dropping BL realigns all 23.  F77 does no
+C cross-file interface checking, so nothing flagged it; it has never
+C misfired only because every namelist sets LMDOT = .FALSE., which makes
+C MASSLOSS return before reaching this line.
+      IF(LDOMDOT)CALL MDOT(DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,
      *          HSTOT,HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *          EACC,ETHAV,SUMDM,SENVOLD)
  9999 CONTINUE

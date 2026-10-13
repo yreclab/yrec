@@ -639,3 +639,25 @@ issue 10.
    `setup_grsett.f` -> `model_to_equal.f` hand-off, not output-bound. The
    cleanest large conversion left.
 3. `ROTDER`, then the small ones `NEWEPS`, `NULOSS`, `MASSCHG2`.
+
+---
+
+## 12. `COMMON/MASSCHG2/` is set aside with the experimental mass-loss code
+
+**Status:** set aside by MHP, 2026-10-13. Do not trim it.
+
+`COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT` looks trimmable: `SACC` is
+assigned in `massloss.f` and `SMASS0` in `mdot.f` and neither is read
+anywhere, while `SCEN` goes only from `massloss.f` to `MDOT`, which
+`massloss.f` itself calls. A first pass did reduce the block to
+`DLOGP,DLOGT` and was reverted.
+
+It belongs to the experimental, partially implemented mass-loss section.
+`SACC` (accreted-matter entropy) and `SMASS0` are computed for physics
+that is not wired up yet, so "write-only" here means "not finished", not
+"dead". Leave the block and its assignments alone.
+
+Fixing outright bugs in that code is still wanted -- see the `mdot.f`
+divisor guard in `6a3f560` and the `CALL MDOT` argument fix recorded
+below -- but its COMMON blocks and seemingly unused members are not
+consolidation material.

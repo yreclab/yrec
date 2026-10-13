@@ -103,7 +103,11 @@ C*** MHP 5/90 ADD COMMON BLOCK FOR SOLAR NEUTRINO I/O
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C*** MHP 5/91 ADD COMMON BLOCK FOR ENERGY FROM ALPHA CAPTURE REACTIONS
 C  AND LOSSES FROM NEUTRINO-COOLED CORES IN EVOVLED STARS.
-      COMMON/NEWEPS/EALPCA,ENU
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
+C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
+C their own CALL ENGEB, so they are returned as arguments.  main.f, the
+C third caller, passes locals it does not use.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
       COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
       COMMON/DPMIX/IOV1,IOV2,IOVIM
@@ -115,8 +119,15 @@ C MHP 7/96 COMMON BLOCK ADDED FOR SOUND SPEED
       COMMON/ROTEN/DEROT(JSON)
 C MHP 06/02 COMMON BLOCK ADDED FOR DERIVATIVES OF
 C CAPPA AND EPSILON
-      COMMON/ROTDER/SQOD(JSON),SQOT(JSON),SQED(JSON),SQET(JSON),
-     *              FRACNUC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop the write-only members SQOD and SQED from
+C COMMON/ROTDER/.  coefft.f assigned both and nothing ever read them;
+C setupv.f, the block's only reader, uses SQOT, SQET and FRACNUC.  That
+C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
+C in different phases -- setupv.f is reached via seculr.f -- so passing
+C the rest explicitly would mean threading 15,000-word arrays through
+C main.f and GETW.
+      COMMON/ROTDER/SQOT(JSON),SQET(JSON),FRACNUC(JSON)
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 
 C JVS 10/11 Common block for He3+He3 luminosity
@@ -271,7 +282,7 @@ C      *           TL,QDT,QDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *           XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *           TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *           XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC)
+     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC,EALPCA,ENU)
             E = SUM1
             EG(1) = EGG11
             EG(2) = EGG22
@@ -450,7 +461,6 @@ C JVS END
 
 
          IF(LROT)THEN
-            SQOD(IM) = QOD
             SQOT(IM) = QOT
 C MHP 10/02 variable index error
             IF(SESUM(IM).GT.0.0D0)THEN
@@ -463,7 +473,6 @@ C               EGNEUT = SEG(6,I)+SEG(7,I)
             ELSE
                FRACNUC(IM) = 0.0D0
             ENDIF
-            SQED(IM) = QED
             SQET(IM) = QET
          ENDIF
 C DBG PULSE
