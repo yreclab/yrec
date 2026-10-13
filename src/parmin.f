@@ -162,7 +162,7 @@ C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR,C_2
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
@@ -333,7 +333,16 @@ C never used it.  AWIND stays a PHYSICS namelist variable and is now a
 C local, kept across calls by the blanket SAVE.  Being last, its removal
 C moves no other member.
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/STRUCTFACTOR,C_2
+C 10/13/26 MHP via Claude
+C code changed to retire COMMON/CWIND/.  Its namelist members moved to the
+C consolidated block earlier, leaving two.  C_2 is a constant, set once in
+C parmin.f, so it is now the last member of COMMON/CONSTANTS/ -- appended
+C there rather than inserted, and added to every declaration so the block
+C keeps one size; parmin.f DATA-initializes CLSUN and CRSUN, so a short
+C declaration anywhere would be the OP95INTERP hazard again.  It may
+C eventually become a namelist variable.  STRUCTFACTOR, the loss-law
+C prefactor, is computed by AMCALC and read by its own two callers,
+C mwind.f and mcowind.f, so it is now an AMCALC output argument.
 C CREATE A NEW COMMON BLOCK FOR OVERTURN TIMESCALE THINGS (PPHOT,TAUCZ,LNEWTCZ)
 C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
