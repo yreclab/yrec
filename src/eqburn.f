@@ -51,7 +51,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
       DIMENSION XSUM(11)

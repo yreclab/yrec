@@ -9,7 +9,7 @@ C       SUBROUTINE STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,FP,  ! KC
 C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 2025-05-31
      * ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V,
-     * CMIXL)
+     * CMIXL,COMPMIX)
 
       PARAMETER (JSON=5000)
       PARAMETER (NTS=63, NPS=76)
@@ -178,7 +178,11 @@ C JvS 08/25 Updated with new elements
 C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/I2O/ with an explicit argument.  COMPMIX
+C is CHARACTER, which does not belong in a COMMON block.  GETMODEL2,
+C GETYREC7 and PUTMODEL2 already took it as an argument; only these three
+C files shared it through the block.
 C G Somers 10/14, Add spot common block
       COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C G Somers END

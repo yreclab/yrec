@@ -6,7 +6,7 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MHP 10/02 NKK removed from declared variable list
       SUBROUTINE WRTLST(IWRITE,HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *DAGE,DDAGE,OMEGA,CMIXL)
+     *DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
 
 C  WRTLST WRITES THE CONVERGED MODEL TO LAST MODEL A(STORES LAST
 C  CONVERGED MODEL) AND STORE MODELS D(EVERY NPUNCH MODELS)
@@ -81,7 +81,11 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/I2O/ with an explicit argument.  COMPMIX
+C is CHARACTER, which does not belong in a COMMON block.  GETMODEL2,
+C GETYREC7 and PUTMODEL2 already took it as an argument; only these three
+C files shared it through the block.
 
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.

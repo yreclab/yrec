@@ -72,7 +72,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
       COMMON/NEWOPAC/L2Z,LLAOL
       DIMENSION Y(3),DYDX(3),FXION(3)
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD

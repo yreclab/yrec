@@ -82,7 +82,8 @@ C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
 C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
 C now owns the storage.
 C MHP 05/02 ADDED FOR DEUTERIUM BURNING
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C MHP 06/02
 C 10/9/26 MHP via Claude

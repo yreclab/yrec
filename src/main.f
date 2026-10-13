@@ -19,6 +19,16 @@ C size do a global change on "JSON=2000" or whatever.
       PARAMETER (NUMXZ=126)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C COMPMIX was COMMON/I2O/ and XMSOL was COMMON/PULSE/; main.f now owns
+C both and threads them to the output routines.
+      CHARACTER*4 COMPMIX
+C 10/13/26 MHP via Claude
+C YRECVER and GITHASH were COMMON/VERSION/; main.f now owns them and
+C passes them to SETVERSION, which sets them, and to PARMIN, which
+C prints the banner.
+      CHARACTER*10 YRECVER
+      CHARACTER*20 GITHASH
 C DBGLAOL - to save space make tables single precision
 C MHP 8/25 Removed unused variables and added pass-through variables
 C 9/22/26 MHP via Claude
@@ -148,7 +158,11 @@ C sets LPRT0 and getw.f is its only reader.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
       COMMON/DISK/SAGE
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
+C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
+C not the running SMASS, so it cannot be replaced by the mass already in
+C scope there.
       COMMON/ATMOS/HRAS
 C MHP 8/25 Removed character file names from common block
 C 9/25/26 MHP via Claude
@@ -288,7 +302,7 @@ C code changed to remove the Monte Carlo option
 C*******
 C START
 C*******
-      CALL SETVERSION()
+      CALL SETVERSION(YRECVER,GITHASH)
 
       IOWR = 9
 C LPUNCH is TRUE once first model is calculated
@@ -296,7 +310,7 @@ C LPUNCH is TRUE once first model is calculated
 C read in user parameters
       CALL PARMIN(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
-     * FSCVHE,FSCVZ)
+     * FSCVHE,FSCVZ,YRECVER,GITHASH)
 C set up constants and read in tabular data
 C MHP 8/25 directly pass file names instead of using common blocks
       CALL SETUPS(FALEX06,FALLARD,FATM,FFERMI,
@@ -355,7 +369,7 @@ C        CALL STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,  ! KC 2025-05
 C      *    HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2025-05-31
      *    HSTOT,HT,IKUT,ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,
      *    NK,OMEGA,PS,QDP,QDT,QIW,R0,RS,SJTOT,SKEROT,SMASS,TEFFL,
-     *    TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL)
+     *    TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL,COMPMIX)
 
       IF((OMEGA(1) .EQ. 0) .AND. (LROT)) THEN
 
@@ -503,7 +517,7 @@ C or it will crash - so copy initial model to unit ILAST
              IWRITE = ILAST
              CALL WRTLST(IWRITE,HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,
      *         PS,TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,
-     *         SMASS,TEFFL,BL,HSTOT,DAGE,DDAGE,OMEGA,CMIXL)
+     *         SMASS,TEFFL,BL,HSTOT,DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
           ENDIF
        ENDIF
 
@@ -617,7 +631,7 @@ C              CALL STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,  ! KC 2
 C      *          HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2025-05-31
      *          HSTOT,HT,IKUT,ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,
      *          NK,OMEGA,PS,QDP,QDT,QIW,R0,RS,SJTOT,SKEROT,SMASS,TEFFL,
-     *          TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL)
+     *          TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL,COMPMIX)
              IF((OMEGA(1) .EQ. 0) .AND. (LROT)) THEN
 18               FORMAT('LROT set to TRUE, but OMEGA(1) = 0. Stopping.',
      *                  ' Initialize rotation rates or set LROT to',
@@ -986,7 +1000,7 @@ C WRTOUT IS THE OUTPUT DRIVER ROUTINE
      *        DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,
      *        JENV,TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,
 C      *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,NK)  ! KC 2025-05-31
-     *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL)
+     *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL,XMSOL,COMPMIX)
 
 C MHP 10/24 GENERALIZED STOP CONDITIONS
 C     IF EVOLVING TO A GIVEN AGE AND AGE IS REACHED, KIND CARD IS DONE
@@ -1040,7 +1054,7 @@ C STORE LAST MODEL IN ISTOR IF LSTORE, LSTPCH, AND LPUNCH ARE .TRUE.
   110    IF(LSTORE.AND.LSTPCH.AND.LPUNCH) THEN
           CALL PUTSTORE(HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,TS,RS,
      *           CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *           DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL)
+     *           DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL,XMSOL,COMPMIX)
             LPUNCH = .FALSE.
        ENDIF
 C 110  CONTINUE

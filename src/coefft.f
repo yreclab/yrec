@@ -78,7 +78,8 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 10/12/26 MHP via Claude
 C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
 C consolidated namelist block, every remaining member was write-only:
@@ -89,7 +90,8 @@ C removed opacity-table interpolation schemes.
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD

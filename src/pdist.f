@@ -64,7 +64,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/

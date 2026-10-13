@@ -91,7 +91,8 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
       COMMON/CTOL/FCORR
       COMMON/DPMIX/IOV1,IOV2,IOVIM
       COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)

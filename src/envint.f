@@ -100,7 +100,12 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/.  TENV is simply 0.5*(TENV0+TENV1)
+C and parmin.f was computing it there purely to share it with this, its
+C only reader.  Both TENV0 and TENV1 are members of the consolidated
+C namelist block declared here, so TENV is derived locally below
+C instead, which removes the block without touching any signature.
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
       COMMON/INTPAR/STOLR0,IMAX,NUSE
 C 10/12/26 MHP via Claude
@@ -111,7 +116,8 @@ C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
 C starin.f and read nowhere in the code.  They are leftovers from the
 C removed opacity-table interpolation schemes.
 C DBG PULSE
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD
@@ -793,6 +799,9 @@ C            WRITE(*,*)TAUCZENV/CSECYR
           ENDIF
           GOTO 300
        ELSE IF(.NOT.LLSTORE) THEN
+C 10/13/26 MHP via Claude
+C TENV was COMMON/CTLIM/, set by parmin.f; derived here instead.
+          TENV = 0.5D0*(TENV0 + TENV1)
           IF(Y(2).GE.TENV .AND. LSBC) THEN
              LLSTORE = .TRUE.
              ISTORE = IE

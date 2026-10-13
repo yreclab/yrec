@@ -56,7 +56,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
       COMMON/CTOL/FCORR
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK
 C MHP 6/14 DERIVATIVES ADDED
       COMMON/CROSS/QS0E(8),QQS0EE(8),FO16,FC12

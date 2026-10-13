@@ -47,7 +47,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
      *              ETA2X(JSON)
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
       DIMENSION OMEGA(JSON)
       SAVE
 C  FOR ROTATING MODELS, LIMIT TIMESTEP BASED ON MAX CHANGE IN OMEGA.

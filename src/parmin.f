@@ -15,7 +15,7 @@ C 9/24/26 MHP via Claude
 C code changed to remove the Alexander 1995 opacity tables
       SUBROUTINE PARMIN(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
-     * FSCVHE,FSCVZ)
+     * FSCVHE,FSCVZ,YRECVER,GITHASH)
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -157,7 +157,9 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CTLIM/TENV
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/; TENV is now derived in envint.f,
+C its only reader, from TENV0 and TENV1.
       COMMON/CTOL/FCORR
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
       COMMON/DPMIX/IOV1,IOV2,IOVIM
@@ -194,7 +196,8 @@ C <<< YCK
 C MHP 6/90 ADDITIONAL COMMON BLOCK FOR SETTLING.
 C GES 6/15 NEW COMMON BLOCK FOR LIGHT DIFFUSION AND NEW DIFF ROUTINE.
 C DBG PULSE
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C DBG PULSE OUT 7/92
 C VARIABLES USED TO CONTROL OUTPUT OF PULSATION MODELS.  MODEL
 C OUTPUT AFTER HAS TRAVELED POMAX IN HR DIAGRAM
@@ -385,7 +388,11 @@ C       COMMON/MAG/LCODM,CODM
 C
 C G Somers 6/14 ALLOW VARIABLE LI/BE DESTRUCTION CROSS SECTIONS
 C G Somers END
-      COMMON/VERSION/YRECVER, GITHASH
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VERSION/ with explicit arguments.  These
+C are CHARACTER, which does not belong in a COMMON block; SETVERSION sets
+C them and parmin.f is the only reader, so main.f now holds them and
+C passes them to both.
       SAVE
 C
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
@@ -1162,7 +1169,9 @@ C code changed to remove the LISO isochrone-output option
      *       ' LINSTB ',L1,' LJDOT ',L1,' WIND IND.',F6.3,' FK',
      *       1PE8.2/1X,' FV',0PF5.2,' FC',F5.2,' COUPLING'
      *       ,F6.3, ' F MU',F5.2,' RCRIT',F9.1)
-      TENV = 0.5D0*(TENV0 + TENV1)
+C 10/13/26 MHP via Claude
+C code changed to remove the TENV derivation: it existed only to populate
+C COMMON/CTLIM/ for envint.f, which now derives it itself.
       IF(LROT) THEN
          LNEW0 = .TRUE.
          IF(WALPCZ.LT.-2.0D0) WALPCZ = -2.0D0

@@ -7,7 +7,7 @@ C       SUBROUTINE WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,
 C      *HL,HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
 C      * DAGE)  ! KC 2025-05-31
       SUBROUTINE WRTMOD(M,JENV,HCOMP,HS1,HD,
-     *HL,HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL)
+     *HL,HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL,XMSOL)
       PARAMETER (JSON=5000)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -93,7 +93,11 @@ C module conversion
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
-      COMMON/PULSE/XMSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
+C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
+C not the running SMASS, so it cannot be replaced by the mass already in
+C scope there.
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD
