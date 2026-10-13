@@ -77,7 +77,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CCOUT/LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C 9/25/26 MHP via Claude
@@ -101,9 +102,8 @@ C scope there.
       COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
      *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
      *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
+C 10/13/26 MHP via Claude: removed the unused COMMON/PULSE2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 7/96 COMMON BLOCK INSERTED FOR SOUND SPEED
       COMMON/SOUND/GAM1(JSON),LSOUND
 C DBG
@@ -112,7 +112,8 @@ C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
-      COMMON/ROTEN/DEROT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ROTEN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION HCOMP(15,JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)
 C      *HS1(JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),HT(JSON),LC(JSON)
 C       DIMENSION OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),ID(JSON)
@@ -124,9 +125,10 @@ C KC 2025-05-30 addressed warning messages from Makefile.legacy
 C      DATA IHEADR/4H****/
 
 C G Somers 10/14, Add spot common block, and store common block.
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/QUADD/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
       SAVE

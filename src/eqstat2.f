@@ -83,22 +83,10 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-C 9/25/26 MHP via Claude
-C code changed to fix XXDY -> XXDH, matching every other file that
-C declares COMMON/DEBHU/ (pre-existing name-only inconsistency; this
-C slot was never read or written by name in this file)
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-C MHP 3/94 ADDED METAL DIFFUSION
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-C 10/9/26 MHP via Claude
-C code changed to rename this slot IDT -> IDTSCV: parmin.f and
-C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
-C slot was called IDTT there as a workaround. Renamed to IDTSCV
-C everywhere COMMON/SCVEOS/ is declared for one consistent name.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DATA NZP1/12/
       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
       DATA SCALET,SCALES/0.500D0, 2.000D0/

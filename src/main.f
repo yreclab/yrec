@@ -20,6 +20,22 @@ C size do a global change on "JSON=2000" or whatever.
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSTAR/ with explicit arguments.
+C setscal.f initializes ALRI, LSTAR and LPASSR, chkscal.f reads and
+C updates ALRI and sets the two flags, and main.f reads the flags; main.f
+C calls both routines, so it now owns all three.  ALRI is read as well as
+C written inside chkscal.f and is carried across calls there, which
+C main.f's blanket SAVE preserves exactly as the block did.
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
+C 10/13/26 MHP via Claude
 C COMPMIX was COMMON/I2O/ and XMSOL was COMMON/PULSE/; main.f now owns
 C both and threads them to the output routines.
       CHARACTER*4 COMPMIX
@@ -112,15 +128,12 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/NEWOPAC/L2Z,LLAOL
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/LABEL/XENV0,ZENV0
-C 10/11/26 MHP via Claude
-C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
-C positionally in all 17 files sharing this block but never read or
-C written in executable code anywhere, and no namelist file sets it.
-      COMMON/CCOUT/LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/CENV/SENV0,LSENV0
-      COMMON/CKIND/RESCAL(4,50),IRESCA(50)
 C 11/91 COMMON BLOCKS ADDED FOR PRESSURE SCALE HEIGHT CALC. FOR LIBURN
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
@@ -130,7 +143,8 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 05/02 ADDED OPTION TO ITERATE BETWEEN ROTATION AND
 C STRUCTURE CALCULATIONS - SET ITDIF1 GREATER THAN 1
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/LIOV/PSCAL0,PSCAL1
       COMMON/PREVCZ/RBASE0,BLI6OLD,BLI7OLD,BBE9OLD,JENVOS
 C 9/24/26 MHP via Claude
@@ -141,10 +155,10 @@ C block, to reduce implicit global state ahead of the F90 module
 C conversion
       COMMON/CTOL/FCORR
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/STRUCTFACTOR,C_2
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/LENDAG(50),LSETDT(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
 C 7/91 ENTROPY TERM COMMON BLOCK ADDED.
       COMMON/ENTROP/HTT0(JSON),HPP0(JSON),HLL0(JSON),HRR0(JSON)
@@ -163,7 +177,8 @@ C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
 C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
 C not the running SMASS, so it cannot be replaced by the mass already in
 C scope there.
-      COMMON/ATMOS/HRAS
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/25 Removed character file names from common block
 C 9/25/26 MHP via Claude
 C code changed to remove the LISO isochrone-output option
@@ -219,21 +234,23 @@ C 10/12/26 MHP via Claude
 C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
 C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
 C now locals there.  This file never referenced them.
-      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
 C MHP 7/96 common block added for sound speed
       COMMON/SOUND/GAM1(JSON),LSOUND
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/CROSS/QS0E(8),QQS0EE(8),FO16,FC12
+C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
 C MHP 3/96 central T,P,RHO added
       COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
-      COMMON /LLOT95A/TGR(NUMTT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ),
-     *                CAPPA2(NUMXZ,NUMTT,NUMD),NUMXM(NUMZ),NZ(NUMZ)
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95A/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C as above for the model Z.
-      COMMON /LLOT95/CAPPA(NUMX,NUMTT,NUMD),ZTAB
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C as above for desired surface value of X.
-      COMMON /LLOT95E/CAPPAE(NUMTT,NUMD),XTAB
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95E/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C indices for interpolation in Z,X,T, and R; interpolation factors
 C for Z,X,T, and R (and derivative factors for T and RHO).
 C 10/9/26 MHP via Claude
@@ -279,7 +296,8 @@ C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
       INTEGER NAO
       DATA NAO/1/
 C 10/11 He3+He3 luminosity info
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/GRAB/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
 C 10/13/26 MHP via Claude
 C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
@@ -346,7 +364,7 @@ C starting estimate of ALPHA and X
 C DBG 12/94 add option to automatically calculate a stellar model
 C of specified Teff and L
       IF (LCALST) THEN
-         CALL SETSCAL
+         CALL SETSCAL(ALRI,LSTAR,LPASSR)
       ENDIF
 
 C**********
@@ -1044,7 +1062,7 @@ C TEST IF MODEL IS NEAR DESIRED Teff AND L. IF NOT RESCALE AND TRY AGAIN.
              IF(MODELN.EQ.1) THEN
                 TEFFI = 10.0D0**TEFFL
              ELSE
-                CALL CHKSCAL(BL, TEFFL, DAGE, NK)
+                CALL CHKSCAL(BL, TEFFL, DAGE, NK,ALRI,LSTAR,LPASSR)
                 IF(LPASSR) GOTO 200
              END IF
           ENDIF

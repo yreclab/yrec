@@ -25,7 +25,8 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
+C 10/13/26 MHP via Claude: removed the unused COMMON/ENVPRT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -69,7 +70,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
 C LROT NEEDED TO KNOW IF YOU HAVE TO COMPUTE ROTATION TERMS.
 C HPTTOL USED TO SET THE SPATIAL RESOLUTION OF THE ENVELOPE INTEGRATION
-      COMMON/CTOL/FCORR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C TERMS NEEDED TO COMPUTE THE DEBYE-HUCKEL CORRECTION IN THE E.O.S.
       COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
 C TOLERANCES FOR THE ENVELOPE INTEGRATION; TEMPORARILY ASSIGN NEW

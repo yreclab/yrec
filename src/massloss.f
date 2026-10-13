@@ -73,8 +73,8 @@ C (nor SMASS0); it uses only SACC and SCEN, which are at the same
 C positions in both orderings, so this correction is behavior-neutral.
       COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C MHP 5/02 EFFICIENCY FACTOR FOR THE THERMAL ENERGY CONTENT

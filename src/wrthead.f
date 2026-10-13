@@ -13,6 +13,15 @@ C which already has NK as its own local run-index variable.
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C MHP 8/25 Removed character file names from common block
 C MHP 10/02 added proper dimensions for flaol2, fopal2
 C      CHARACTER*256 FISO,FLAOL2, FOPAL2
@@ -57,14 +66,9 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CKIND/RESCAL(4,50),IRESCA(50)
       COMMON/LABEL/XENV0,ZENV0
-C 9/25/26 MHP via Claude
-C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
-C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90

@@ -11,6 +11,15 @@ C      * JXMID,TLUMX,DAGE,DDAGE,QDT,QDP,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)  ! KC 
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -61,7 +70,6 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/LENDAG(50),LSETDT(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
 C       DIMENSION HD(JSON),HL(JSON),HS1(JSON),HT(JSON),LC(JSON),  ! KC 2025-05-31
       DIMENSION HD(JSON),HL(JSON),HS1(JSON),HT(JSON),

@@ -7,6 +7,15 @@ C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C      CHARACTER*256 FLAOL2, FOPAL2
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
@@ -59,7 +68,6 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CKIND/RESCAL(4,50),IRESCA(50)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C MHP 5/91 COMMON BLOCK ADDED TO FIX CORE RESCALING.

@@ -91,11 +91,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-C 10/11/26 MHP via Claude
-C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
-C positionally in all 17 files sharing this block but never read or
-C written in executable code anywhere, and no namelist file sets it.
-      COMMON/CCOUT/LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C 9/25/26 MHP via Claude
@@ -122,7 +119,8 @@ C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/ROTPRT/, declared here but never used.
 C MHP 4/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS 01/11 ACOUSTIC DEPTH
 C KC 2025-05-30 reordered common block elements
 C COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
@@ -139,17 +137,20 @@ C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
 C envint.f and read nowhere, and RINT was never referenced at all.  Its
 C only reader was the commented-out JVS block deleted from wrtout.f
 C earlier in this work, so the block died with it.
-      COMMON/SOUND/GAM1(JSON),LSOUND
+C 10/13/26 MHP via Claude: removed the unused COMMON/SOUND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 10/14, Add spot common block
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/ROTEN/DEROT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/ROTEN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
 
 C JVS END
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/GRAB/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS end
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
       COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP

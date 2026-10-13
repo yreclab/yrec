@@ -15,6 +15,15 @@ C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 
       PARAMETER (NTS=63, NPS=76)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C DBGLAOL
       INTEGER*4 KATM, KENV, KSAHA
 C      CHARACTER*256 OPECALEX(7)
@@ -94,7 +103,6 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
       COMMON/CENV/SENV0,LSENV0
-      COMMON/CKIND/RESCAL(4,50),IRESCA(50)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
       COMMON/COMP2/YENV,Y3ENV
@@ -108,7 +116,8 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
+C 10/13/26 MHP via Claude: removed the unused COMMON/ENVPRT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
       COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
@@ -146,23 +155,11 @@ C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
       COMMON/NEWOPAC/L2Z,LLAOL
-C 9/24/26 MHP via Claude
-C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
-C never read or written anywhere)
-C DBG 1/96 VNEW REPLACES V
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-C 10/9/26 MHP via Claude
-C code changed to rename this slot IDT -> IDTSCV (was IDTT here only,
-C since this file also declares COMMON/OPTAB/'s own, unrelated IDT at
-C line 78, a name collision with no cross-usage between the two
-C indices). Renamed throughout every file that declares
-C COMMON/SCVEOS/, so this slot now has one consistent name everywhere
-C instead of needing a special case here and in parmin.f.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/98 ADDED HPTTOL FOR CHANGING CORE FITTING POINT
-      COMMON/CTOL/FCORR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 07/02 ADDED FOR ENVELOPE INTEGRATION WHEN CHANGING THE
 C OUTER FITTING POINT
 C MHP 07/02 STORE CONTENTS OF ENVELOPE INTEGRATION INTO A
@@ -224,8 +221,8 @@ C declarations are generated from one list so all files agree.
      * PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,FO
       DATA ATOMWT/23.0D0,26.99D0,24.32D0,55.86D0,28.1D0,12.015D0,
      * 1.008D0,16.0D0,14.01D0,39.96D0,20.19D0,4.004D0/
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 
 C       DIMENSION MXZONE(12,2),MXZON0(12,2),MRZONE(13,2)  ! KC 2025-07-22
       DIMENSION MXZONE(12,2),MRZONE(13,2)

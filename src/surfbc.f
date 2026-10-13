@@ -72,8 +72,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CCOUT/LPHHD
-      COMMON/CENV/SENV0,LSENV0
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/CENV/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -84,10 +86,8 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *     SENV
       COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
-C MHP 9/01 ADDED COMMON BLOCK
-C NEEDED TO SWITCH TO GRAY ATMOSPHERE FROM KURUCZ/AH ABOVE LOG
-C TEFF = 3.95
-      COMMON/ATMOS/HRAS
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DATA NUMENV/0/
 
 C G Somers END

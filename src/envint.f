@@ -85,7 +85,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/NEWOPAC/L2Z,LLAOL
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
@@ -125,13 +126,11 @@ C code changed to drop COMMON/PULSE/, declared here but never used.
      *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
      *      QT, QP, QQDT, QEMU, QD, QFS
       COMMON/ATMOS/HRAS
-C MHP 8/25 Removed file names from common block
-C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JNT 6/14 ADD FOR KURUCZ/CASTELLI 2004 ATMOSPHERES
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2C/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 6/97 ADDED ALLARD MODEL ATMOSPHERES
 C      COMMON/ATMOS3/ATMZA,ATMPLA(NTA,NGA),
 C     *ATMTLA(NTA),ATMGLA(NGA),FALLARD,IOATMA
@@ -169,7 +168,8 @@ C earlier in this work, so the block died with it.
 
 C MHP 08/02 ADDED VECTOR FOR STORING THE OVERTURN TIMESCALE OF THE
 C SURFACE CONVECTION ZONE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION FXION(3),PS(3),RS(3),TS(3),ESTORE(4)
       DIMENSION Y(3),DYDX(3),YSCAL(3),YSTART(3),ERRSUM(3),ERR(3)
 
@@ -184,12 +184,8 @@ C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
      *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 
-C G Somers 11/14, ADD I/O COMMON BLOCK
-C 10/11/26 MHP via Claude
-C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
-C positionally in all 17 files sharing this block but never read or
-C written in executable code anywhere, and no namelist file sets it.
-      COMMON/CCOUT/LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK

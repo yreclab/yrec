@@ -42,8 +42,8 @@ C COMMON/IOUNITS/
      *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
      *  IOPALE,ISCVH,ISCVHE,ISCVZ
       COMMON/BURN/HCOMPM(15,JSON)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -100,13 +100,14 @@ C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
       COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C*** MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.
 C*** MHP 6/90 ADDITIONAL COMMON BLOCK FOR SETTLING.
 c GES 6/15 INCLUDED COMMON BLOCK FOR NEW DIFFUSION ROUTINES.
 
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),
-     *     HDO(JSON),HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
+C 10/13/26 MHP via Claude: removed the unused COMMON/OLDMOD/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C*** MHP 6/91 COMMON BLOCK FOR NEW MIXING AND SEMI-CONVECTION.
 C THESE ARE PARMIN PARAMETERS IN MARK6.
 C 10/13/26 MHP via Claude

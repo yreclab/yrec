@@ -96,48 +96,22 @@ C files shared it through the block.
 
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
-      COMMON/ATMOS/HRAS
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/STRUCTFACTOR,C_2
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-      COMMON/DISK/SAGE
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
-c      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,IOV1,IOV2,
-c     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV
-C OPACITY COMMON BLOCKS - modified 3/09
-C 9/23/26 MHP via Claude
-C code changed to remove the OPAL92 opacity tables
-C 9/23/26 MHP via Claude
-C code changed to remove the Kurucz 1990 opacity tables
-C 9/23/26 MHP via Claude
-C code changed to remove the LAOL89 opacity tables
-C 9/24/26 MHP via Claude
-C code changed to remove the Alexander 1995 opacity tables
-C 9/24/26 MHP via Claude
-C code changed to remove dead opacity-table Z-value inputs
-C 9/24/26 MHP via Claude
-C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
-C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/L2Z,LLAOL
-C MHP 8/25 Remove file names from common blocks
-C 9/24/26 MHP via Claude
-C code changed to remove the OPAL 1995/2001 equations of state
-C 9/25/26 MHP via Claude
-C code changed to use IDT here, matching most other files that
-C declare COMMON/SCVEOS/ (pre-existing name-only inconsistency with
-C parmin.f/starin.f, which used IDTT since they also declare
-C COMMON/OPTAB/'s own, unrelated IDT; this slot was never read or
-C written by name in this file)
-C 10/9/26 MHP via Claude
-C code changed to rename this slot IDT -> IDTSCV throughout every
-C file that declares COMMON/SCVEOS/, including parmin.f/starin.f
-C (previously IDTT there), fully resolving the OPTAB/SCVEOS IDT name
-C collision. Confirmed no file ever cross-uses OPTAB's index for
-C SCVEOS's or vice versa; this is a pure rename.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DISK/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
 C 10/11/26 MHP via Claude

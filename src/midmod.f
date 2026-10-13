@@ -12,7 +12,8 @@ C      *            HS2,HSTOT,HT,LC,LCZ,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,  ! KC
 C 10/13/26 MHP via Claude
 C HCOMPS is now a dummy argument, formerly COMMON/OLDAB/.
       DIMENSION HCOMPS(15,JSON)
-      COMMON/BURN/HCOMPM(15,JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/BURN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -61,7 +62,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/CWIND/STRUCTFACTOR,C_2
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
      *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
      *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
@@ -76,7 +78,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
       COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
      *     VISC(JSON)
-      COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/DWMAX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
 C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
@@ -102,7 +105,8 @@ C      *     LC(JSON),LCZ(JSON),ETA2M(JSON),HDM(JSON),HGM(JSON),  ! KC 2025-05-3
      *     LCM(JSON),LCZM(JSON),OMEGAM(JSON),R0M(JSON),QIWM(JSON),
      *     MRZONE(13,2),MXZONE(12,2)
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 3/09 ADDED FLAG TO ENFORCE SOLID BODY ROTATION AT ALL TIMES.
 C JNT 09/25 FOR 05/15 ADD IMPJMOD
 C MHP 06/02

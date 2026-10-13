@@ -70,7 +70,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/NEWOPAC/L2Z,LLAOL
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DBG 12/95 ARRAYS FOR PURE Z TABLE
       COMMON/ZLAOL/ZOLAOL(104,52), ZOT(52), ZORHO(104),
      *  NUMRHOZ, NUMTZ

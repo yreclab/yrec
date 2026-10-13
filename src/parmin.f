@@ -28,6 +28,15 @@ C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
       PARAMETER(NTA=54,NGA=5)
       PARAMETER (NTS=63, NPS=76)
       PARAMETER (JSON=5000)
+C 10/13/26 MHP via Claude
+C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
+C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
+C state after their namelist members moved to the consolidated block, both
+C are dimensioned on 50 -- the maximum number of runs, not a shell or
+C table extent -- and the same routines write both: parmin.f, setcal.f,
+C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
+C defined per large loop, not per model.
+      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 
       CHARACTER*10 YRECVER
       CHARACTER*20 GITHASH
@@ -144,8 +153,8 @@ C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or
 C written in executable code anywhere, and no namelist file sets it.
       COMMON/CCOUT/LPHHD
-      COMMON/CENV/SENV0,LSENV0
-      COMMON/CKIND/RESCAL(4,50),IRESCA(50)
+C 10/13/26 MHP via Claude: removed the unused COMMON/CENV/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C 9/25/26 MHP via Claude
@@ -160,9 +169,11 @@ C passed as an explicit argument where actually used
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/; TENV is now derived in envint.f,
 C its only reader, from TENV0 and TENV1.
-      COMMON/CTOL/FCORR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/INTPAR/STOLR0,IMAX,NUSE
       COMMON/LABEL/XENV0,ZENV0
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
@@ -179,9 +190,9 @@ C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
 C starin.f and read nowhere in the code.  They are leftovers from the
 C removed opacity-table interpolation schemes.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/LENDAG(50),LSETDT(50)
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/90 DIFFERENT FC FOR DIFFERENT MECHANISMS INTRODUCED.
 C ALSO OPTION FOR SMOOTHING VELOCITIES FOR LENGTH SCALE CALCULATIONS.
 C MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.
@@ -202,21 +213,14 @@ C DBG PULSE OUT 7/92
 C VARIABLES USED TO CONTROL OUTPUT OF PULSATION MODELS.  MODEL
 C OUTPUT AFTER HAS TRAVELED POMAX IN HR DIAGRAM
 C LPOUT AND POMAX ADDED TO CONTROL COMMON BLOCK, REST IN PHYSICS
-      COMMON/ATMOS/HRAS
-C DBGLAOL
-C MHP 8/25 Removed character file names from common block
-C DBG 11/11/91 ADDED TO NAMELIST
-C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
-C a set of runs.
-C MHP 8/25 Removed file names from common block
-C JMH 8/18/91
-C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JMH
 C JNT 6/14 SAME AS ATMOS2 BUT FOR KURUCZ/CASTELLI2004 ATMOSPHERES
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2C/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/06 GN --- New neutrino loss common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/NULOSS/LNULOS1,DSNUDT,DSNUDD
@@ -229,27 +233,8 @@ C      COMMON/CALS2/TOLL,TOLR,LCALS
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
 C DBG 7/92 ADDED DEBYE HUCKEL PARAMETERS TO NAMELIST, ETADH0, ETADH1
 
-C MHP 8/25 Removed character file names from common block
-C DBG 4/94 ADDED PARAMETERS TO CONTROL RAMP Z IN CORE
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-C 10/9/26 MHP via Claude
-C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
-C redundant copy of the run-index loop variable main.f already passes
-C explicitly to the subroutines that need it (STARIN/RSCALE), and was
-C never read by name in this file.
-C 10/13/26 MHP via Claude
-C code changed to remove COMMON/ZRAMP/: its sole remaining member
-C IOLAOL2 is neither written nor read anywhere.  The namelist members
-C that shared this block moved to the consolidated block in stage 2b.
-C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
-C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
-C DBG 12/94 ADDED CALIBRATE STELLAR MODEL
-C 10/12/26 MHP via Claude
-C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
-C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
-C now locals there.  This file never referenced them.
-      COMMON/CALSTAR/ALRI,LSTAR,LPASSR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CALSTAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C OPAL eos
       CHARACTER*256 FcondOpacP,FOPALE06
 C MHP 8/25 Remove file names from common blocks
@@ -271,18 +256,8 @@ C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
       COMMON/NEWOPAC/L2Z,LLAOL
       CHARACTER*256 FALEX06
-C 2006 version added 3/09
-C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
-C never read or written anywhere)
-C 10/13/26 MHP via Claude
-C code changed to drop COMMON/VARFC/, declared here but never used.
-C 8/96 MHP NEW COMMON BLOCK FOR NUCLEAR REACTION RATES.
-C      COMMON/CROSS/SSTANDARD(17)
-C MHP 9/14 EXTENDED TO PERMIT USER RESCALING OF DERIVATES OF REACTION
-C RATES AND THE BRANCHING RATION FOR N15
-      COMMON/CROSS/QS0E(8),QQS0EE(8),FO16,FC12
+C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude
 C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
 C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in
@@ -313,34 +288,10 @@ C declarations are generated from one list so all files agree.
      * XSBE92,XSBE93,LXLI6,LXLI7,LXBE91,LXBE92,LXBE93,NPENV,LNEWNUC,
      * LENVG,ISETMIX,ISETISO,R14_15,R16_17,ZXMIX,XB10_INI,XB11_INI,
      * PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,FO
-C 10/14 MHP NEW PARAMETERS - REPLACING DTDIF,DTWIND, HPTTOL & ATIME VECTORS
-C KC 2025-05-30 reordered common block elements
-C 9/24/26 MHP via Claude
-C code changed to remove the Monte Carlo option
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-C 10/9/26 MHP via Claude
-C code changed to rename this slot IDT -> IDTSCV (was IDTT here only,
-C since this file also declares COMMON/OPTAB/'s own, unrelated IDT at
-C line 142, a name collision with no cross-usage between the two
-C indices). Renamed throughout every file that declares
-C COMMON/SCVEOS/, so this slot now has one consistent name everywhere
-C instead of needing a special case here and in starin.f.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
-C MHP 8/25 Removed file names from common block
-C      COMMON/SCV2/FSCVH,FSCVHE,FSCVZ,ISCVH,ISCVHE,ISCVZ
-C LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines
-C MHP 8/25 Removed character file names from common block
-C 10/13/26 MHP via Claude
-C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
-C are placeholders that no file references in executable code.  Removing
-C it also retires the hazard behind the earlier alfilein.f fix, where a
-C mis-indented EXTERNAL was absorbed into this declaration and renamed
-C DUMMY4.
-C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
-C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DISK/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 2025/09/04 ADD IMPJMOD TO SOLID
@@ -384,7 +335,8 @@ C moves no other member.
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
       COMMON/CWIND/STRUCTFACTOR,C_2
 C CREATE A NEW COMMON BLOCK FOR OVERTURN TIMESCALE THINGS (PPHOT,TAUCZ,LNEWTCZ)
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MAG/LCODM,CODM

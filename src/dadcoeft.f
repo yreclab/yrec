@@ -7,7 +7,8 @@ C       SUBROUTINE DADCOEFT(DR,DT,EI,EJ,EW,NTOT,WIND1,WIND2,DJ,  ! KC 2025-05-31
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 3/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DIFFUSION COEFFICIENTS FOR THE TERMS INVOLVING D/DR (OMEGA)
 C (ECOD3) AND D/DR (D OMEGA/DR) (ECOD4).
       COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
@@ -74,7 +75,8 @@ C TERMS
      *                QQQCOD(JSON)
       DIMENSION FGEOMIX(JSON),VESN(JSON),REQ(JSON)
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/STRUCTFACTOR,C_2
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 10/11/26 MHP via Claude
 C BUG FIX: this file reads LROSSBY and PMMSOLTAU below (the Rossby
 C scaling of the saturation threshold) but never declared

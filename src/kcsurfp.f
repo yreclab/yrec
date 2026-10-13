@@ -29,7 +29,8 @@ C COMMON/IOUNITS/
      *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
      *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
      *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
       DIMENSION QT(4),QG(4),PP(4),DUM(3),QGG(3),QS(3),PTAB(4),
      *          YT(4),YG(4)

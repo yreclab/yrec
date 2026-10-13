@@ -106,7 +106,8 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * LROSSBY,LBSCALE,LPULSE,IPVER,LSCV,ENDAGE(50),SETDT(50),
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
-      COMMON/NEWOPAC/L2Z,LLAOL
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C NUMBER OF COMPOSITION TABLES AT LOWER Z FOR EACH ABUNDANCE
       DATA NZ/0,10,20,30,40,50,60,70,80,90,100,109,118/
 C NUMBER OF X TABLES AT EACH Z

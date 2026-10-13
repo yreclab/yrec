@@ -147,11 +147,12 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *SENV
-       COMMON/SOUND/GAM1(JSON),LSOUND
+C 10/13/26 MHP via Claude: removed the unused COMMON/SOUND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
@@ -170,17 +171,13 @@ C (see below); nothing reads it. NOTE: if those calls are ever
 C restored they need the real metallicity, which must come from the
 C full block declaration or (better) be passed in as an argument.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/LENDAG(50),LSETDT(50)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SETT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON/ATMOS/HRAS
-C 10/9/26 MHP via Claude
-C code changed to rename this slot IDT -> IDTSCV: parmin.f and
-C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
-C slot was called IDTT there as a workaround. Renamed to IDTSCV
-C everywhere COMMON/SCVEOS/ is declared for one consistent name.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/25 Remove file names from common blocks
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state

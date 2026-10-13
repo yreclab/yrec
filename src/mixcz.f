@@ -49,15 +49,12 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C JVS 02/12 COMMON BLOCKS ADDED FOR THE CALCULATION OF TAUCZ
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-C 9/25/26 MHP via Claude
-C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
-C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 
 C END JVS
 C MHP 02/12 ADDED ROTATION INFORMATION.  HG VECTOR IS NOT DEFINED FOR
@@ -71,12 +68,12 @@ C FOR 'FIRST CALL'. THIS IS A BOOL THAT IS TRUE IF MIXCZ IS
 C CALLED BEFORE MIDMOD, OR FALSE IF IT IS CALLED AFTER MIDMOD.
 C THIS ALLOWS THE CORRECT GRADIENTS TO BE USED WHEN CALCULATING TAUCZ.
 C THE COMMON BLOCK WITH THE NECESSARY VARIABLES IS IMPORTED HERE.
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/MDPHY/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       SAVE
 
 C COMPUTE STANDARD CONVECTION ZONES
