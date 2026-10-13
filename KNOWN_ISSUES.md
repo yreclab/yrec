@@ -468,8 +468,33 @@ and `OP95INTERP` is purely the interpolation index set for `LLOT95A`.
 | pure-Z / LAOL opacity | `ZLAOL`, `ZSLAOL` |
 | Fermi / degenerate EOS | `CCR` |
 | gray and KS atmosphere tables | `ATMOS2`, `ATMOS2C`, `FAC` |
+| interpolation workspace | `SPLIN` |
 
-20 blocks, 2,336,004 words -- about 63% of all remaining COMMON storage.
+21 blocks, about 63% of all remaining COMMON storage.
+
+### Interpolation workspace counts too
+
+`COMMON/SPLIN/XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON)` is excluded
+even though it is dimensioned on `JSON` rather than on a table grid. It is
+not physics state: it is the spline machinery's scratch, feeding
+`osplin.f`, `spline.f`, `slopes.f`, `search.f` and `meval.f`, and its four
+declaring files -- `eq2mod.f`, `mixcom.f`, `mixgrid.f`, `rotgrid.f` -- are
+all regridding routines.
+
+So the dimension test separates input tables from per-shell state, but it
+does not catch numerical machinery. Arrays that exist to perform an
+interpolation or a solve are excluded on the same grounds as the tables
+they serve. Adjacent blocks of that kind, not yet ruled on:
+`COMMON/TRIDI/A,B,C,D,U,GAMA` (tridiagonal solver scratch),
+`COMMON/EGRID/` and `COMMON/EGRIDDER/` (the equal-grid remap used by
+ROTGRID), and `COMMON/QUADRU/QUAD,GG`.
+
+### Note: XTAB is two different variables
+
+`XTAB` is a member of both `SPLIN` and `LLOT95E`, and `YTAB` of both
+`SPLIN` and the spline family's own usage. No file currently declares both
+blocks, so nothing is wrong, but any future merge touching either must not
+bring them into the same scoping unit.
 
 MHP may revisit the larger ones later, so they are kept as a named
 category rather than simply dropped from the lists.
