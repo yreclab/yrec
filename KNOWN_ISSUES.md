@@ -423,3 +423,53 @@ Likely to need preserving. Do not treat it as ordinary consolidation
 fodder until the flow between the two `liburn` routines and `main.f` has
 been traced -- in particular whether the values are expected to persist
 across calls, as with `chkcal.f`'s `BLP`/`RLP`.
+
+---
+
+## 10. Rule: table and index COMMON blocks are excluded from consolidation
+
+**Status:** standing rule, agreed 2026-10-13.
+
+Blocks holding input data tables, or the index and interpolation state for
+those tables, are **not** candidates for merging or for conversion to
+declared variables. They are read once from an input file during setup and
+then shared read-only by the physics routines; that is what COMMON is
+genuinely for here, and merging them would mix unrelated table families.
+
+### How to tell one
+
+The reliable discriminator is **what the array dimensions are**:
+
+- a **table or index block** is dimensioned on the table-grid parameters --
+  `NUMT`, `NUMD`, `NUMX`, `NUMZ`, `NUMXZ`, `NTA`, `NGA`, `NTS`, `NPS`,
+  `NTC`, `NGC`, `NG`, `NT`, `mx`, `mv`, `nr`, `nt` -- or on literals that
+  are table extents, such as `ZLAOL`'s `(104,52)` and `CCR`'s `(5,43,20)`
+- **working storage** is dimensioned on `JSON`, the maximum shell count
+
+Do not classify on literal dimensions alone: `CKIND`'s `RESCAL(4,50)` and
+`SETT`'s `LENDAG(50)` are dimensioned on the run-loop count, and `COMP`'s
+`FXENV(12)` on the ionization species, so none of those is a table.
+`DEBHU`'s `ZDH(18)` is per-element Debye-Huckel data and is a judgement
+call, currently left out of the category.
+
+Two members of the category have no array members and are included because
+they belong to a family: `ALATM05` holds the Allard table's Teff bounds,
+and `OP95INTERP` is purely the interpolation index set for `LLOT95A`.
+
+### The category, by family
+
+| family | blocks |
+|---|---|
+| OPAL 2006 EOS | `AEOS06`, `EEEOS06`, `EOS06MISC` |
+| SCV EOS | `SCVEOS` |
+| OPAL95 / Livermore opacity | `LLOT95A`, `LLOT95`, `LLOT95E`, `OP95INTERP` |
+| Alexander 2006 opacity | `ALOT06ALL`, `ALOT06`, `GALOT06` |
+| Allard atmospheres | `ALATM01`, `ALATM02`, `ALATM05` |
+| pure-Z / LAOL opacity | `ZLAOL`, `ZSLAOL` |
+| Fermi / degenerate EOS | `CCR` |
+| gray and KS atmosphere tables | `ATMOS2`, `ATMOS2C`, `FAC` |
+
+20 blocks, 2,336,004 words -- about 63% of all remaining COMMON storage.
+
+MHP may revisit the larger ones later, so they are kept as a named
+category rather than simply dropped from the lists.
