@@ -1,5 +1,5 @@
 C $$$$$$
-      SUBROUTINE CHKCAL(BL,RL,N,SOLZX)
+      SUBROUTINE CHKCAL(BL,RL,N,SOLZX,DLDX,DRDX,DLDA,DRDA,LSOL)
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
       IMPLICIT REAL*8(A-H,O-Z)
@@ -48,7 +48,13 @@ C linker's 'size of symbol changed' warning is the check that they are.
       COMMON/CKIND/RESCAL(4,50),IRESCA(50)
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/LENDAG(50),LSETDT(50)
-      COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSUN/ with explicit arguments.  This
+C routine wrote all nine members; only the four derivatives and LSOL are
+C read outside it, by main.f, so those are now arguments.  BLP, RLP, DX
+C and DA never left this routine and are now locals, kept across calls by
+C the blanket SAVE below -- which they need, since BLP and RLP are stored
+C on one call and differenced against on the next.
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
 C MHP 10/02 MISSING LOGICAL UNIT IOWR ADDED

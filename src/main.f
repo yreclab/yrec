@@ -162,7 +162,12 @@ C explicitly to PDIST and WRTHEAD instead of relying on them reading
 C it back out of the common block. RSCLZC/RSCLZM1/RSCLZM2/IOLAOL2/
 C LZRAMP (ZRAMP's other members) were never used in this file.
 C DBG 4/26/94 Tired of not have access to current age of model so...
-      COMMON/THEAGE/DAGE
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/THEAGE/.  DAGE, the stellar age, is a local
+C here and was already passed explicitly to every other routine using it
+C (STARIN, HTIMER, WRTOUT, PUTSTORE, CHKSCAL, MASSLOSS, CALCAD and the
+C model readers and writers); PDIST was the last reader taking it via
+C COMMON.
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
      *HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),LC(JSON),
      *HCOMP(15,JSON),HS1(JSON),HS2(JSON),HHC(JSON),
@@ -182,7 +187,15 @@ C variables used to contral output of pulsation models.  model
 C output after has traveled pomax in HR diagram
 C LPOUT and POMAX added to control common block, rest in physics
 C MHP 1/93 add common blocks for automatic calibration of solar models.
-      COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSUN/ with explicit arguments to
+C CHKCAL and SETCAL.  Only these five of the nine members are read here;
+C BLP, RLP, DX and DA stay inside chkcal.f.  They are given explicit
+C initial values because CALL SETCAL sits inside IF(LCALS) and so may
+C never run, while the test at IF(LCALS .AND. LSNU .AND. LSOL) below can
+C still evaluate LSOL -- Fortran does not promise .AND. short-circuits.
+C COMMON storage supplied that zero implicitly; a local would not.
+      DATA DLDX,DRDX,DLDA,DRDA,LSOL/4*0.0D0,.FALSE./
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
 C DBG 12/94 added calibrate stellar model
@@ -234,7 +247,9 @@ C      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
 C*** end test
 C LLP 8/07 Make LPTIME available for calibration
 C MHP 2/04 ADDED FOR NEUTRINO FLUX TABLE
-      COMMON/BE7/BE7MASSFRACTION
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/BE7/; BE7MASSFRACTION now comes back from
+C ENGEB as an argument and is stored into BE7M(I) just below.
 C JVS 02/11
 C KC 2025-05-30 reordered common block elements
 C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
@@ -299,7 +314,7 @@ C MHP 1/93 add option to automatically calibrate solar model.
 C MHP 3/96 added counter for # of iterations per converged model and
 C starting estimate of ALPHA and X
       IF(LCALS)THEN
-         CALL SETCAL(FACAGE)
+         CALL SETCAL(FACAGE,LSOL)
          ICONV = 1
          XGUESS = RESCAL(2,1)
          AGUESS = CMIXLA(1)
@@ -423,7 +438,7 @@ C      *TL,PDT,PDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *XO18,XH2,XLI6,XLI7,XBE9,I,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION)
 C BE7 MASS FRACTION.
          BE7M(I) = BE7MASSFRACTION
 C CONVERT FROM ERG/GM/S TO ERG/S FOR EACH SHELL BY MULTIPLYING
@@ -589,7 +604,7 @@ CFD end
             IF (LPOUT) THEN
 C MHP 8/25 changed to add file names as declared variables 
              CALL PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
-     *       FPENV,FPMOD)
+     *       FPENV,FPMOD,DAGE)
           ENDIF
 
 C STARIN called here for timestep cutting
@@ -1038,7 +1053,8 @@ C JVS Turn off calcad - speeds things up
                RLL = 0.5D0*(BL+CLSUNL-C4PIL-CSIGL-4.0D0*TEFFL)-CRSUNL
 C MHP 06/13 Add solar Z/X to observables
                SOLZX = HCOMP(3,M)/HCOMP(1,M)
-               CALL CHKCAL(BL,RLL,NK,SOLZX)
+               CALL CHKCAL(BL,RLL,NK,SOLZX,DLDX,DRDX,DLDA,DRDA,
+     *                     LSOL)
 C               CALL CHKCAL(BL,RLL,NK)
                lptime = lptimesv  ! Restore LPTIME to original value for next cycle
                kttau  = kttausv    ! Restore KTTAU to original value for next cycle

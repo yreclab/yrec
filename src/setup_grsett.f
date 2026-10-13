@@ -72,7 +72,9 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 3/94 ADDED METAL DIFFUSION
       COMMON/GRAVSZ/COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
 C MHP 8/94 ADDED I/O FOR DIFFUSION
-      COMMON/GSCOF/APP(JSON),ATP(JSON),APZP(JSON),ATZP(JSON)
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/GSCOF/: none of its four members is
+C referenced in executable code anywhere.
 C      COMMON/GSCOF2/TAPP(JSON),TATP(JSON),TCLP(JSON),TAPZP(JSON),
 C     *              TATZP(JSON)
 CFD 10/09 ADDED COMMON BLOCK FOR EXTRA MIXING. IT MIMIC SOME MIXING BY AFFECTING

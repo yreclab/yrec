@@ -12,7 +12,7 @@ C COMMON/ZRAMP/, which this file otherwise never used (NK was its only
 C member ever referenced here). See the CALL PDIST site in main.f,
 C which already has NK as its own local run-index variable.
       SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
-     * FPENV,FPMOD)
+     * FPENV,FPMOD,DAGE)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
@@ -20,7 +20,9 @@ C which already has NK as its own local run-index variable.
 C Removed variables not used in the routine
       CHARACTER*256 FPMOD, FPENV, FPATM
 C MHP 10/02 added proper dimensions to last 2 variables
-      COMMON/THEAGE/DAGE
+C 10/13/26 MHP via Claude
+C code changed to receive DAGE, the stellar age, as an argument instead of
+C through COMMON/THEAGE/.  main.f is PDIST's only caller.
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

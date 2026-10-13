@@ -85,7 +85,10 @@ C from main.f's own run-index loop variable through STARIN) from
 C COMMON/ZRAMP/. It was never read by name here, only declared for
 C positional alignment with the other members, so this file's own NK
 C argument is untouched.
-      COMMON/ZRAMP/IOLAOL2
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
       DIMENSION HCOMP(15,JSON),HS(JSON),HL(JSON),LC(JSON)
       SAVE
 

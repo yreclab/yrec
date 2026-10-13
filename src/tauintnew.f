@@ -57,7 +57,10 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
       COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
      *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/JTEST/ IMAX1, IMAX2, LJVS
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/JTEST/: IMAX1, IMAX2 and LJVS are
+C referenced nowhere in executable code.  The only code that used LJVS is
+C a commented-out block in wrtout.f, removed with it.
 C Needs access to this common block: grants knowledge of envellope
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements

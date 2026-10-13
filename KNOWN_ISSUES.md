@@ -391,3 +391,35 @@ boundary -- `PULSE2`'s `QQET`, for instance, is set in `envint.f` and
 passed onward by argument, while `qenv.f` and `qatm.f` only carry it
 positionally and never use it -- but each case needs checking against
 this boundary first, not just a file count.
+
+---
+
+## 8. `COMMON/LREADCO/`: the EOS table should be read much earlier
+
+**Status:** open, flagged during the 2026-10-13 consolidation pass.
+
+`COMMON/LREADCO/` holds one flag shared by `esac06.f` and `rhoofp06.f`. It
+gates the first-call read of the OPAL 2006 EOS table from inside a
+low-level routine, so a large table read is triggered lazily, deep in the
+call tree, rather than during setup.
+
+The table should instead be read once during initialization, alongside the
+other table reads, which would remove both the flag and the block. Left
+alone for now because it changes startup sequencing rather than just
+storage, and the lazy read is currently harmless.
+
+---
+
+## 9. `COMMON/PREVCZ/`: information flow needs tracing before any change
+
+**Status:** open, flagged for MHP to investigate.
+
+`COMMON/PREVCZ/` has five members shared by `liburn.f`, `liburn2.f` and
+`main.f`. It looks like a small merge or demotion candidate by size and
+file count, but the lithium-burning routines appear to use it to carry
+convection-zone state between timesteps, which a census cannot confirm.
+
+Likely to need preserving. Do not treat it as ordinary consolidation
+fodder until the flow between the two `liburn` routines and `main.f` has
+been traced -- in particular whether the values are expected to persist
+across calls, as with `chkcal.f`'s `BLP`/`RLP`.

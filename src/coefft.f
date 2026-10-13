@@ -260,12 +260,16 @@ C TEMPERATURE GRADIENT IS CONVECTIVE
        QLP = 0.0D0
        IF(TL.GT.TCUT(1)) THEN
 C SET UP NUCLEAR ENERGY TERMS
+C 10/13/26 MHP via Claude
+C code changed to pass BE7MFLOC for ENGEB's new BE7MASSFRACTION
+C argument, which replaces COMMON/BE7/.  This routine does not use the
+C value; only main.f reads it.
             CALL ENGEB(EGG11,EGG22,EGG33,EGG44,EGG55,QED,QET,SUM1,DL,
 C      *           TL,QDT,QDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *           XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *           TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *           XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC)
             E = SUM1
             EG(1) = EGG11
             EG(2) = EGG22

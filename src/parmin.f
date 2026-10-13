@@ -232,7 +232,10 @@ C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
 C redundant copy of the run-index loop variable main.f already passes
 C explicitly to the subroutines that need it (STARIN/RSCALE), and was
 C never read by name in this file.
-      COMMON/ZRAMP/IOLAOL2
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
 C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
 C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
 C DBG 12/94 ADDED CALIBRATE STELLAR MODEL
@@ -322,7 +325,12 @@ C MHP 8/25 Removed file names from common block
 C      COMMON/SCV2/FSCVH,FSCVHE,FSCVZ,ISCVH,ISCVHE,ISCVZ
 C LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
+C are placeholders that no file references in executable code.  Removing
+C it also retires the hazard behind the earlier alfilein.f fix, where a
+C mis-indented EXTERNAL was absorbed into this declaration and renamed
+C DUMMY4.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
       COMMON/DISK/SAGE
@@ -504,7 +512,17 @@ C (e.g. CMD, FCLCD, ICLCD, MRK, LAST_SLASH_IDX).
      *   LDIFY, LDIFZ, LTHOUL, LTHOULFIT, LNEW0, LNEWDIF, ILAMBDA,
      *   SLI6, SLI7, SBE91, SBE92, SBE93, FRAC_C, FRAC_N, FRAC_O,
      *   ZXMIX, SUM_FRAC, LISOTOPE, LMIXTURE, INEWCP,
-     *   LREL, CMIXL, KTTAU0, LTTAU
+C 10/13/26 MHP via Claude
+C code changed to drop CMIXL from the output-only DERIVED namelist.  The
+C mixing length actually used is the scalar CMIXL that main.f reads out of
+C the per-run vector CMIXLA at CMIXL = CMIXLA(NK), then passes on as an
+C explicit argument.  PARMIN is called once, before the run loop, so it
+C has no NK and cannot know that value: its own CMIXL never leaves this
+C routine and keeps its DATA default, so the echo reported 1.4 no matter
+C what the namelist asked for -- 1.4 against an actual 1.797279, for
+C instance.  CMIXLA is echoed with the CONTROL namelist, with the real
+C per-run values, so nothing is lost by removing this line.
+     *   LREL, KTTAU0, LTTAU
 C
 C DBG DATA CARDS FOR THE RUN PARAMETERS
 C 9/24/26 MHP via Claude

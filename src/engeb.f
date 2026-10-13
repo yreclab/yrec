@@ -6,7 +6,7 @@ C      *TL,PDT,PDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION)
 
 
 C 3/92 DBG Added new neutrino loss calculation routines
@@ -205,7 +205,12 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/NEWEPS/EALPCA,ENU
       COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/BE7/BE7MASSFRACTION
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/BE7/ with an explicit argument.  ENGEB
+C computes BE7MASSFRACTION and main.f is its only reader, storing it into
+C BE7M(I) right after the call, so it is now ENGEB's last argument.
+C ENGEB's other two callers, coefft.f and ytime.f, pass a local they do
+C not use.
 C 9/06 GN ---  New neutrino loss common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/NULOSS/LNULOS1,DSNUDT,DSNUDD

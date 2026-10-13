@@ -525,32 +525,11 @@ C     *            PLIM,RLL,ATEFFL,X,Z,DUM1,IDUM,KATM,KENV,KSAHA,
 C     *            DUM2,DUM3,DUM4,LPULPT)
 CC G Somers END
 C
-CC JVS 08/13 TRACKS CZ EVEN WHEN OUTSIDE THE ENVELOPE FITTING POINT
-C      IF(JENV.GE.M .AND. .NOT. LC(M)) THEN
-C            ENVR = ENVRCZ
-C      ELSE IF(JENV.GE.M .AND. LC(M)) THEN
-C            DO I=1,M
-C                  DEL1(I) = SDEL(1,I)
-C                  DEL2(I) = SDEL(3,I)
-C            ENDDO
-C                  LJVS = .TRUE.
-C                  CALL TAUINT(HCOMP,HS2,HS1,LC,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
-C                  LJVS = .FALSE.
-C                  DD2 = DEL1(JENV-1)-DEL2(JENV-1)
-C                  DD1 = DEL1(JENV)-DEL2(JENV)
-C                  FX = DD2/(DD2-DD1)
-C                  ENVCZL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))
-C                  ENVR = EXP(CLN*ENVCZL)/CRSUN
-C      ELSE
-C            DO I=1,M
-C                  DEL1(I) = SDEL(1,I)
-C                  DEL2(I) = SDEL(3,I)
-C            ENDDO
-C                  LJVS = .TRUE.
-C                  CALL TAUINT(HCOMP,HS2,HS1,LC,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
-C                  LJVS = .FALSE.
-C      ENDIF
-C
+C 10/13/26 MHP via Claude
+C code changed to remove a commented-out JVS block that tracked the CZ
+C outside the envelope fitting point.  It was the only code referencing
+C LJVS, whose COMMON/JTEST/ is removed in this change, and it also read
+C ENVRCZ, which is why that COMMON/ENVCZ/ member has no live consumer.
 C G Somers 3/17, ADDED CALL TO NEW TAUCZ AND PPHOT CALCULATION ROUTINE.
 
 C       CALL GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,  ! KC 2025-05-31

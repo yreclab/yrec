@@ -85,7 +85,10 @@ C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
 C redundant copy of the run-index loop variable main.f already passes
 C explicitly to the subroutines that need it (STARIN/RSCALE), and was
 C never read by name in this file.
-      COMMON/ZRAMP/IOLAOL2
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
       SAVE
 
 C

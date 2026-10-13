@@ -56,7 +56,9 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
      *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
       COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
      *       LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/THEAGE/DAGE
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/THEAGE/, which this routine declared but
+C never used.  DAGE, the stellar age, is passed explicitly elsewhere.
       DIMENSION ER(JSON),ESPEC(3,JSON),EDEN(JSON),ETEM(JSON),  ! ED(JSON)
      *          EHQPR(JSON),EDELR(JSON),ECOD1(JSON),ECOD2(JSON),
      *          ATOMWT(4),ZSPEC(4),XFRAC(4),TCL(4,4),TAP(4),TAT(4),TAC(4,4),

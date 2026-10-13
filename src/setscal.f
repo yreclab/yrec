@@ -72,7 +72,10 @@ C redundant copy of the run-index loop variable main.f already passes
 C explicitly to the subroutines that need it (STARIN/RSCALE), and was
 C never read by name in this file (the "NK-1" in the comment below is
 C just documentation, not live code).
-      COMMON/ZRAMP/IOLAOL2
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

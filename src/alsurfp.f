@@ -143,7 +143,12 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * END_DCEN(50),END_XCEN(50),END_YCEN(50),LVFC,LDIFAD,FW,FC,FES,
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
+C are placeholders that no file references in executable code.  Removing
+C it also retires the hazard behind the earlier alfilein.f fix, where a
+C mis-indented EXTERNAL was absorbed into this declaration and renamed
+C DUMMY4.
 
       Dimension iGL(4),PL1(4),P100L1(4),
      x    T100L1(4),PL2(4),P100L2(4),T100L2(4)

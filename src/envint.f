@@ -130,7 +130,12 @@ C MHP 6/97 ADDED ALLARD MODEL ATMOSPHERES
 C      COMMON/ATMOS3/ATMZA,ATMPLA(NTA,NGA),
 C     *ATMTLA(NTA),ATMGLA(NGA),FALLARD,IOATMA
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
+C are placeholders that no file references in executable code.  Removing
+C it also retires the hazard behind the earlier alfilein.f fix, where a
+C mis-indented EXTERNAL was absorbed into this declaration and renamed
+C DUMMY4.
 C DBG 7/95 To store variables for pulse output
       COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
      *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)

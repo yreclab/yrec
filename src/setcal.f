@@ -1,5 +1,5 @@
 C $$$$$$
-      SUBROUTINE SETCAL(FACAGE)
+      SUBROUTINE SETCAL(FACAGE,LSOL)
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -48,7 +48,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
       COMMON/SETT/LENDAG(50),LSETDT(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSUN/ with an explicit argument.  This
+C routine touched only LSOL, which it clears; the block's other eight
+C members were carried here positionally and never used.
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
@@ -57,7 +60,10 @@ C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
 C redundant copy of the run-index loop variable main.f already passes
 C explicitly to the subroutines that need it (STARIN/RSCALE), and was
 C never read by name in this file.
-      COMMON/ZRAMP/IOLAOL2
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
       SAVE
 
 C SET UP RUN TO CALIBRATE A SOLAR MODEL.
