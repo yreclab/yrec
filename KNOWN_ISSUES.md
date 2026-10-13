@@ -3,6 +3,29 @@
 Deferred items with enough context to be picked up cold. Each entry records
 what was observed, where in the code it lives, and what decision was taken.
 
+## Status of the original tasks
+
+Both original tasks are **closed** as of 2026-10-13.
+
+*Remove obsolete functions* -- the obsolete physics options were removed
+over the preceding sessions (OPAL92, Kurucz 1990, LAOL89 and Alexander 1995
+opacities, the MHD and OPAL 1995/2001 equations of state, the Monte Carlo
+option, RTAB, LPMM, PMMWMAX, LSCRIB), and the 183 stale COMMON declarations
+they left behind were swept in `84fba4e`.
+
+*Consolidate or remove COMMON blocks* -- 153 blocks became 86. The namelist
+consolidation went from 62 blocks to 2 (`COMMON/NMLPAR/`, 234 members, and
+`COMMON/NMLBYPASS/`, 83), with all 367 namelist variables accounted for and
+no `CHARACTER` data left in any COMMON block. Every remaining block is
+classified: 6 settled, 24 tables/indices/machinery (issue 10), 17
+start-of-timestep and 8 output stores (issue 11), 7 rotation, and the rest
+set aside by ruling. No unclassified consolidation candidates remain.
+
+Issues 1 to 13 below are what those tasks surfaced and did not resolve;
+issues 14 to 20 were added when closing them out. The next body of work,
+F90 modules and `IMPLICIT NONE`, is planned separately in
+`F90_CONVERSION_PLAN.md`.
+
 ---
 
 ## 1. `SECULR`'s `LCODM` whole-domain override is not gated on solid-body rotation
@@ -396,7 +419,12 @@ this boundary first, not just a file count.
 
 ## 8. `COMMON/LREADCO/`: the EOS table should be read much earlier
 
-**Status:** open, flagged during the 2026-10-13 consolidation pass.
+**Status: RESOLVED 2026-10-13 in `17b669b`.** The one-time work moved into
+a new `SETEOS06`, called from `SETUPS` under `IF(lopale06)` beside the SCV
+table read, and `rhoofp06.f`'s fabricated `ESAC06` call -- made purely to
+force the read -- is gone. Retained here for the record.
+
+Original report:
 
 `COMMON/LREADCO/` holds one flag shared by `esac06.f` and `rhoofp06.f`. It
 gates the first-call read of the OPAL 2006 EOS table from inside a
@@ -699,3 +727,131 @@ settled/consolidated, 20 tables and indices plus 4 interpolation and
 solver machinery (issue 10), 17 start-of-timestep (issue 11a), 8 output
 stores (issue 11b), 7 rotation (issue 11c), and the rest set aside by
 ruling. No unclassified candidates remain.
+
+---
+
+## 14. Name divergences to settle before the module conversion
+
+**Status:** open. These are benign under COMMON and become errors or
+silent confusion under `USE`.
+
+A COMMON block may be declared with different member *names* in different
+files, since matching is positional. A module has one set of names, so
+each divergence must be resolved first.
+
+| block | spelling A | spelling B |
+|---|---|---|
+| `ATMPRT` | `TAU,AP,AT,AD,AO,AFXION(3)` | `TAUL,AP,...` |
+| `EGRID` | `CHI,ECHI,ES1,DCHI,NTOT` | `CHI,ECHI,EQS1,...` |
+| `LLOT95E` | `CAPPAE(NUMT,NUMD),XTAB` | `CAPPAE(NUMTT,NUMD),XTAB` |
+
+`NUMT` and `NUMTT` are both 70 today, so `LLOT95E`'s layout agrees; the
+risk is that changing one spelling resizes the block in three files and
+not the fourth.
+
+Separately, **`XTAB` means two different things** and both would be
+imported by a file that `USE`s each module: in `LLOT95E` it is a
+*composition* (`op95xtab.f` sets `XTAB = X`, and `getopal95.f` tests
+`ABS(X-XTAB)` to ask whether the requested X matches the loaded table),
+while in `SPLIN` it is a *coordinate* (the tabulated abscissae that
+`search.f` binary-searches). The `*TAB` suffix therefore means "the
+composition this table is for" in the opacity blocks and "the tabulated
+independent variable" in the spline workspace. One of them should be
+renamed, as `OP95INTERP`'s `RL`/`RLL` were renamed to
+`RHO_T63L`/`RHO_T63LL` for the same reason.
+
+---
+
+## 15. `LENVG` is a dead namelist variable awaiting staged removal
+
+**Status:** open, deliberately staged by MHP.
+
+`LENVG` has no executable use anywhere: its only occurrences are the
+`COMMON/NMLBYPASS/` declaration continuations in `parmin.f`, `remap.f` and
+`starin.f`, the `PHYSICS` namelist entry, and its `DATA` default. But
+**106 namelist files set it**, so it cannot simply be dropped from the
+namelist -- a namelist read would then fail on those inputs.
+
+MHP's required order: strip `LENVG` from all namelist files first, then
+remove it from the namelist and the code. Not urgent; it costs one word.
+
+---
+
+## 16. Every test case writes to one shared output directory
+
+**Status:** open.
+
+All cases resolve `OUTPUT placed in` to the same directory,
+`/home/pinsonneault.1/model/output`. Consequences:
+
+- Cases with the same base name in different test directories overwrite
+  each other's output. Three such pairs existed between `testsuite/` and
+  `examples/giant_differential_rotation/`; the content-based deduplication
+  in `4cd6c72` stops them being *run* twice, but the shared directory is
+  still the underlying fragility.
+- A case cannot be re-run concurrently with another, so the suite cannot
+  be parallelised with `pytest-xdist` as it stands, which is why a full
+  run takes about five hours.
+
+Per-case output directories would fix both.
+
+---
+
+## 17. `read_track_table` silently zeroes columns it cannot parse
+
+**Status:** open.
+
+`wrappers/modelgrid_tools/alternate_tools/read_output_files.py` catches
+parse failures and substitutes zero (`except: track[k] = 0`, and similar
+at lines 51, 79 and 157). A malformed or unexpectedly formatted column
+therefore reads as 0.0 rather than raising.
+
+This made the reader unusable for comparing physics during this work: when
+checking whether a change had moved a model, most columns came back as
+zeros and only `Step` and `Age_gyr` could be trusted. It should raise, or
+return a sentinel the caller must handle.
+
+---
+
+## 18. Reference standards are not tracked in git
+
+**Status:** open, for MHP to decide.
+
+`git ls-files` returns nothing for `testsuite/standard` or
+`examples/*/standard`: all 903 reference files, about 493 MB, exist only on
+disk. A regeneration that went wrong would be unrecoverable, and a fresh
+clone has no references at all until a first run creates them -- at which
+point the harness silently adopts whatever that run produced as the
+standard, since it copies a missing reference and then compares it against
+itself.
+
+If they stay untracked, the auto-copy behaviour in `test_all.py` deserves a
+warning, because a case with no reference always passes.
+
+---
+
+## 19. `getopac.f`: unused statement label 100
+
+**Status:** open, cosmetic.
+
+`getopac.f:114` defines label 100 with nothing branching to it, giving the
+build's one remaining warning:
+`Label 100 at (1) defined but not used`. Pre-existing, and almost
+certainly another remnant of the removed opacity schemes. Worth clearing so
+that the build is warning-free and a new warning stands out.
+
+---
+
+## 20. Repository housekeeping
+
+**Status:** open.
+
+- A stash is still unpopped: `stash@{0}: On development: pre-existing stray
+  local edits, unrelated to this session, found blocking rebase`. It should
+  be inspected and dropped or applied.
+- `origin/doc_update` was reviewed and merged except for `spot_evol`, which
+  MHP excluded as new code. The stale remote branch can be deleted.
+- `main` is ahead 2 and behind 14 relative to `origin/main`, which wants
+  sorting out separately from `development`.
+- A full suite run leaves the two m9p0 `.last` fixtures modified every time;
+  see issue 4.
