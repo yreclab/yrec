@@ -527,3 +527,80 @@ corruption earlier in this work was signalling.
 
 MHP may revisit the larger ones later, so they are kept as a named
 category rather than simply dropped from the lists.
+
+---
+
+## 11. Classification of the per-shell working blocks
+
+**Status:** classification agreed 2026-10-13; no code changes yet.
+
+The remaining candidates are dominated by `JSON`-dimensioned per-shell
+arrays. MHP's split, with the evidence behind each group.
+
+### a. Start-of-timestep state -- keep in COMMON for now
+
+`hpoint.f` is the routine that stores the model state, and it writes
+exactly these: `OLDMOD`, `OLDPHY`, `OLDROT`, `OLDROT2`, `TEMP`, `SCRTCH`,
+`DWMAX`, `ENTROP`, `DEUTER`, `BURN`. Together with the model-level state
+`ACDPTH`, `CENV`, `LABEL`, `COMP2`, `CROSS` and `OVRTRN`, these hold the
+model as of the start of the step and are read very widely -- `OLDMOD` by
+19 files, `OVRTRN` by 22, `DEUTER` by 22. They stay in COMMON.
+
+| block | words | files |
+|---|---|---|
+| `OLDMOD` | 115,002 | 19 |
+| `OLDPHY` | 60,000 | 3 |
+| `OLDROT2` | 45,000 | 5 |
+| `OLDROT` | 30,000 | 6 |
+| `TEMP` | 25,000 | 5 |
+| `ACDPTH` | 25,017 | 6 |
+| `ENTROP` | 20,000 | 2 |
+| `OLDRAT` | 15,000 | 5 |
+| `DWMAX` | 10,000 | 3 |
+| `DEUTER` | 10,002 | 22 |
+
+### b. Computed at intermediate steps -- candidates to pass explicitly
+
+These are produced partway through the solve and have no reason to be
+visible outside the routines that make and consume them. The strongest
+cases are the ones already confined to two or three files:
+
+| block | words | files | writer -> reader |
+|---|---|---|---|
+| `ATMSTRUCT` | 75,001 | 2 | `envint.f` -> `surfbc.f` |
+| `ROTDER` | 25,000 | 2 | `coefft.f` -> `crrect.f` |
+| `GRAVSZ` | 20,000 | 2 | `setup_grsett.f` -> `model_to_equal.f` |
+| `ENVCZ` | 2 | 3 | `envint.f` -> `main.f`, `wrtout.f` |
+| `NEWEPS` | 2 | 3 | `engeb.f` -> `coefft.f`, `ytime.f` |
+| `NULOSS` | 2 | 2 | `engeb.f`, `sneut.f` |
+| `MASSCHG2` | 5 | 3 | `mdot.f` -> `coefft.f` |
+
+Wider but the same character: `ENVSTRUCT`, `INTVAR`, `GRAVEZ`, `PUALPHA`,
+`GRAB`, `SOUND`, `FLUXES`, `CENT`, `DEBHU`, `DPMIX`.
+
+### c. Rotation -- special handling
+
+Rotation **cross-cuts** the other two groups rather than partitioning
+them, which is worth stating plainly: of the candidates, only three are
+touched exclusively by the rotation routines.
+
+| block | words | writer -> reader |
+|---|---|---|
+| `TAUKH` | 30,000 | `setupv.f` -> `vcirc.f` |
+| `DIFAD2` | 20,000 | `vcirc.f` -> `checkj.f`, `rotgrid.f` |
+| `DIFAD` | 10,000 | `dadcoeft.f`, `rotgrid.f` -> `checkj.f`, `dcoeft.f` |
+
+A further 21 are rotation-touched but not exclusive, so any rule framed as
+"rotation blocks" will catch blocks that belong in groups (a) or (b):
+`CENT`, `DIFAD3`, `DWMAX`, `ENVSTRUCT`, `INTVAR`, `LIOV`, `MDPHY`,
+`NEWRAT`, `OLDMOD`, `OLDPHY`, `OLDRAT`, `OLDROT`, `OLDROT2`, `OVRTRN`,
+`QUADD`, `QUADRU`, `ROTDER`, `SCRTCH`, `TEMP`, `TEMP2`, `VFACT`.
+
+`QUADRU` is a physical quantity tied to rotation, not machinery, per
+issue 10.
+
+### Suggested order of work for group (b)
+
+`ATMSTRUCT` first: 75,001 words, two files, a single `envint.f` ->
+`surfbc.f` hand-off, and the largest single reduction available outside
+the excluded categories.
