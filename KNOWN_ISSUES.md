@@ -661,3 +661,41 @@ Fixing outright bugs in that code is still wanted -- see the `mdot.f`
 divisor guard in `6a3f560` and the `CALL MDOT` argument fix recorded
 below -- but its COMMON blocks and seemingly unused members are not
 consolidation material.
+
+---
+
+## 13. Write-only members that are potential output items -- retained
+
+**Status:** retained by MHP, 2026-10-13. Do not delete these as dead.
+
+Some COMMON members are assigned and never read. In this codebase that
+does **not** reliably mean dead: several are quantities computed for
+physics or diagnostics that are not yet wired up. MHP's ruling is to keep
+them.
+
+| block | members | written in | read |
+|---|---|---|---|
+| `GRAB` | `ENGHE3`, `HE3ALL`, `UMHE33`, `UMHEAL` | `coefft.f`, `engeb.f` | nowhere -- a potential output item |
+| `INTVAR` | `DELAMI`, `DELMI`, `EPSILM`, `HS3`, `PM`, `QDTMI`, `TM` | `setupv.f` | nowhere (35,000 words) |
+| `MASSCHG2` | `SACC`, `SMASS0` | `massloss.f`, `mdot.f` | nowhere -- see issue 12 |
+
+`INTVAR`'s other four members, `ALM`, `DM`, `HGM` and `RM`, *are* consumed
+outside `setupv.f`: `RM` by `getfc.f`, `seculr.f` and `vcirc.f`, `DM` by
+`getfc.f`, and `ALM` and `HGM` by `vcirc.f`. Converting just those four to
+arguments was considered and declined: the block survives either way
+because of the seven retained members, so the structural gain is marginal
+against adding nine array arguments to `SECULR`, `VCIRC` and `SETUPV`, the
+rotation core.
+
+Note when reading a census: the apparent uses of the seven members in
+`getfc.f`, `seculr.f` and `vcirc.f` are only the `COMMON/INTVAR/`
+declaration lines, which list all eleven. Executable use is confined to
+`setupv.f`.
+
+### Consolidation status
+
+With this, all 86 remaining COMMON blocks are classified: 6
+settled/consolidated, 20 tables and indices plus 4 interpolation and
+solver machinery (issue 10), 17 start-of-timestep (issue 11a), 8 output
+stores (issue 11b), 7 rotation (issue 11c), and the rest set aside by
+ruling. No unclassified candidates remain.
