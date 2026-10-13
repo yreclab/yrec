@@ -9,7 +9,10 @@ C       function rhoofp06(x,ztab,t6,p,irad)  ! KC 2025-05-31
 
       parameter (mx=5,mv=10,nr=169,nt=197)
       IMPLICIT REAL*8 (A-H,O-Z)
-      common/lreadco/itime
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/LREADCO/; the table is now read once by
+C SETEOS06 from SETUPS, so this routine no longer needs the first-time
+C switch or the fabricated ESAC06 call that used to force the read.
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
      . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
@@ -37,15 +40,6 @@ c--------------------------------------------------------------------
       pr=0D0
       if(irad .eq. 1) pr=4D0/3D0*rat*t6**4   ! Mb
       pnr=p-pr
-
-      if (itime .ne. 12345678) then
-      XDBG = 0.5D0
-      T6DBG = 1.0D0
-      RDBG = 0.001D0
-      IDBG = 1
-C       CALL ESAC06 (XDBG,ZTAB,T6DBG,RDBG,IDBG,IRAD,*999)  ! KC 2025-05-31
-      CALL ESAC06 (XDBG,T6DBG,RDBG,IDBG,IRAD,*999)
-      endif
 
         ilo=2
         ihi=mx

@@ -367,6 +367,14 @@ C          should break when trying to find surface P.
 C END JNT 6/14
       ENDIF
 
+C 10/13/26 MHP via Claude
+C code changed to read the OPAL 2006 EOS table here, with the other table
+C reads, instead of lazily on the first call to ESAC06.  The gate matches
+C the OPEN of IOPALE in parmin.f.  This and the SCV read below are
+C independent; a run may use both.
+      IF(lopale06)THEN
+         CALL SETEOS06
+      ENDIF
 C MHP 5/97 ADDED OPTION FOR NEW SCV EQUATION OF STATE TABLES.
       IF(LSCV)THEN
          OPEN(UNIT=ISCVH,FILE=FSCVH,STATUS='OLD')
