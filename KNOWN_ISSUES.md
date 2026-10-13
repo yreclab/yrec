@@ -562,10 +562,15 @@ model as of the start of the step and are read very widely -- `OLDMOD` by
 ### b. Reconstructed solutions held for output -- keep in COMMON
 
 Per MHP: `ENVSTRUCT` and `ATMSTRUCT` store the reconstructed envelope and
-atmosphere solutions for output, so they stay. The general test is whether
-an **output routine** reads the block: the output routines are entered at a
-different point in the control flow, so passing these explicitly would
-mean threading large per-shell arrays down through `main.f`.
+atmosphere solutions for output, so they stay. `SOUND` and `CENT` are
+confirmed by MHP as the same category.
+
+The general test is whether an **output routine** reads the block: the
+output routines are entered at a different point in the control flow, so
+passing these explicitly would mean threading large per-shell arrays down
+through `main.f`. The test was derived from `ENVSTRUCT`/`ATMSTRUCT` and
+then correctly predicted `SOUND` and `CENT`, so it is worth applying to
+any further block before proposing it for conversion.
 
 | block | words | read by |
 |---|---|---|
