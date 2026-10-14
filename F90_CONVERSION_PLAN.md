@@ -127,19 +127,94 @@ failure is immediate and loud:
 
 ## Stage 1 -- pilot, one module end to end
 
-Convert one small block and take it all the way through, to exercise the
-whole pipeline before committing to scale. `COMMON/RUNLOOP/` is a good
-candidate: 4 members, 10 files, no `DATA` initialization, and it is
+**Status: done on 2026-10-14.** `COMMON/RUNLOOP/` is now `RUNLOOP_MOD` in
+`runloop_mod.f`, imported by all ten files that declared the block.
+
+It was the right pilot: 4 members, 10 files, no `DATA` initialization, and
 per-run-loop control rather than hot-path physics.
 
-Deliverable: the pattern other stages copy -- module file naming, the
-`_MOD` suffix convention to keep module names clear of routine names,
-whether to use `USE ... , ONLY:` or a blanket `USE`, and where `SAVE`
-belongs.
+### The pattern other stages copy
 
-On `SAVE`: module variables with an initializer are implicitly saved, which
-matches COMMON semantics. Declare it explicitly rather than relying on the
-Fortran 2008 rule, since `ifort` Classic is older.
+1. **File and module naming.** One block per file, `<block>_mod.f` holding
+   `MODULE <BLOCK>_MOD`. The `_MOD` suffix keeps module names clear of
+   routine names, and the `*_mod.f` glob is what the Makefile's `MODOBJS`
+   matches, so a new module needs no Makefile edit.
+2. **`USE ... , ONLY:`, naming only the members the routine references.**
+   This is the decision worth keeping. A blanket `USE` imports every name
+   in the block, which is precisely the hazard the `RL`/`RLL` rename had to
+   pre-empt; `ONLY` makes that class of collision impossible and documents
+   what each routine actually touches. Six of the ten files here use a
+   strict subset, so the lists carry real information:
+
+   | file | imports |
+   |---|---|
+   | `chkcal.f`, `rscale.f` | `RESCAL` |
+   | `starin.f`, `wrthead.f` | `IRESCA` |
+   | `htimer.f` | `LENDAG, LSETDT` |
+   | `chkscal.f` | `RESCAL, LENDAG` |
+   | `main.f` | `RESCAL, IRESCA, LENDAG` |
+   | `parmin.f`, `setcal.f`, `setscal.f` | all four |
+
+   For a very large block the list gets unwieldy -- `NMLPAR` has 234
+   members across 121 files -- but it is mechanical to generate from actual
+   usage, and the generated list is the useful artifact. **Decide this for
+   `NMLPAR` before Stage 2 starts**; the fallback is a blanket `USE` there
+   and `ONLY` everywhere else, accepting that the big block reserves 234
+   names in every routine that imports it.
+3. **Where the `USE` goes, and why this is not a substitution in place.**
+   `USE` must be the first thing in the specification part, ahead of
+   `IMPLICIT`, so the statement cannot simply replace the `COMMON` line
+   where it stood. It goes immediately after the program-unit header and
+   all of that header's continuation lines. `main.f` is the awkward case:
+   it is a main program written with no `PROGRAM` statement, so the `USE`
+   becomes the unit's first statement, ahead of its `PARAMETER`s.
+4. **Explicit types, restating what the implicit rules gave.** The module
+   declares `REAL*8`, `INTEGER*4` and `LOGICAL*4` to match
+   `IMPLICIT REAL*8(A-H,O-Z)`, the default `INTEGER` rule for `I`, and
+   `IMPLICIT LOGICAL*4(L)`. Writing them out is what makes Stage 5
+   possible, and it can remove latent inconsistency: only `parmin.f`
+   carried `IMPLICIT INTEGER*4(I,...)`, so `IRESCA` was default `INTEGER`
+   in the other nine files and would have become `INTEGER*8` under
+   `-fdefault-integer-8`, silently disagreeing with `parmin.f`.
+5. **`SAVE` stated explicitly**, not relied on. Module variables are
+   implicitly saved only from Fortran 2008 and `ifort` Classic predates
+   it. A bare `SAVE` in the module covers every member and matches
+   COMMON's semantics.
+6. **Keep the block's history comment.** The 8-line note explaining what
+   `RUNLOOP` is moved into the module, where it belongs, and each importer
+   carries a short note pointing at it rather than a copy.
+
+### On zero-initialization
+
+Worth stating because the code relies on it: `COMMON` members land in
+static storage and are zero-filled in practice, which this code depends on
+in places -- `starin.f` calls `RSCALE` when `IRESCA(NK).NE.1`. A `SAVE`d
+module variable is static storage too, so the behaviour is unchanged, and
+`parmin.f:1454` sets `IRESCA` from the namelist per run in any case. For
+blocks that genuinely depend on an implicit zero, consider an explicit
+initializer in the module, which is legal there and makes the dependence
+visible. Note that this is also the one thing that cannot be left in the
+importing file: `DATA` on a `USE`-associated name is rejected outright
+("Cannot change attributes of USE-associated symbol"), so a block whose
+members are `DATA`-initialized must have that initialization moved into
+the module.
+
+### Test coverage of this stage, which is thinner than it looks
+
+A compile proves the conversion is well formed; it does not prove the
+routines run. Of the ten files, `parmin.f`, `starin.f`, `main.f`,
+`htimer.f` and `wrthead.f` run in every case, and `rscale.f` runs whenever
+`IRESCA(NK).NE.1`. But:
+
+- `setcal.f` and `chkcal.f` sit behind `IF(LCALS)`, and exactly one case
+  in the whole suite sets it:
+  `examples/run_standard_solar_model/Test_solarcal_noGS_norot`. It is in
+  the targeted set for that reason alone.
+- `setscal.f` and `chkscal.f` sit behind `IF(LCALST)`, and **no case sets
+  `LCALST`**. Their conversion is compile-checked only. This is the same
+  kind of gap as `LADON`/`LACOUT` leaving the `ISOUND` write path
+  unexercised, and it is worth recording whenever a stage touches a file
+  the suite cannot reach.
 
 ## Stage 2 -- the consolidated blocks
 

@@ -7,19 +7,16 @@ C       SUBROUTINE HTIMER(DELTS,DELTSH,M,HD,HL,HS1,HS2,HT,LC,HCOMP,JCORE,
 C      * JXMID,TLUMX,DAGE,DDAGE,QDT,QDP,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)  ! KC 2025-05-31
       SUBROUTINE HTIMER(DELTS,DELTSH,M,HD,HL,HS1,HS2,HT,HCOMP,JCORE,
      * JXMID,TLUMX,DAGE,DDAGE,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  ONLY lists
+C the members this routine references, so no unused name from the block
+C is imported.  See runloop_mod.f for the block history and for why the
+C module declares the types the implicit rules used to supply.
+      USE RUNLOOP_MOD, ONLY: LENDAG, LSETDT
 
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C 10/13/26 MHP via Claude
-C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
-C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
-C state after their namelist members moved to the consolidated block, both
-C are dimensioned on 50 -- the maximum number of runs, not a shell or
-C table extent -- and the same routines write both: parmin.f, setcal.f,
-C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
-C defined per large loop, not per model.
-      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

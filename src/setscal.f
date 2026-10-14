@@ -5,6 +5,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SETSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETSCAL(ALRI,LSTAR,LPASSR)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  ONLY lists
+C the members this routine references, so no unused name from the block
+C is imported.  See runloop_mod.f for the block history and for why the
+C module declares the types the implicit rules used to supply.
+      USE RUNLOOP_MOD, ONLY: RESCAL, IRESCA, LENDAG, LSETDT
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
@@ -14,15 +20,6 @@ C updates ALRI and sets the two flags, and main.f reads the flags; main.f
 C calls both routines, so it now owns all three.  ALRI is read as well as
 C written inside chkscal.f and is carried across calls there, which
 C main.f's blanket SAVE preserves exactly as the block did.
-C 10/13/26 MHP via Claude
-C code changed to merge COMMON/CKIND/ and COMMON/SETT/ into
-C COMMON/RUNLOOP/.  Both held what is left of the per-run-loop control
-C state after their namelist members moved to the consolidated block, both
-C are dimensioned on 50 -- the maximum number of runs, not a shell or
-C table extent -- and the same routines write both: parmin.f, setcal.f,
-C setscal.f and chkscal.f.  Retained as a COMMON block per MHP; these are
-C defined per large loop, not per model.
-      COMMON/RUNLOOP/RESCAL(4,50),IRESCA(50),LENDAG(50),LSETDT(50)
 C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL2, FOPAL2
 C 10/12/26 MHP via Claude
