@@ -48,9 +48,17 @@ C LLOT95E/LLOT95A, which hold the actual 2D/3D/4D opacity tables and
 C are intentionally left separate), with no member name colliding
 C with any dummy argument across the 6 files that declare any of
 C them.
+C 10/13/26 MHP via Claude
+C code changed to rename COMMON/OP95INTERP/'s RL and RLL to RHO_T63L and
+C RHO_T63LL.  RL is log(rho/T6**3), set here as RL = DL - 3*(TL-6); the
+C old names clash with RL and RLL as used for radius throughout the rest
+C of the code, which is why main.f declared only a 10-member prefix of
+C this block to avoid importing them.  With the clash gone main.f can
+C declare the full block, which a USE statement will require once this
+C becomes a module.
       COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
      *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4),
-     *     RL,RLL,RLH(4),LEXTL,LEXTH,LEXH(4)
+     *     RHO_T63L,RHO_T63LL,RLH(4),LEXTL,LEXTH,LEXH(4)
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
@@ -65,7 +73,7 @@ C END JVS
       SAVE
 C ENSURE THAT WE ARE WITHIN THE OPAL 95 TABLES.
 C COMPUTE LOG R = RHO/T6**3
-      RL = DL - 3.0D0*(TL-6.0D0)
+      RHO_T63L = DL - 3.0D0*(TL-6.0D0)
 C  CHECK T
       IF(TL.LT.TGR(1) .OR. TL.GT.TGR(NUMT))THEN
          WRITE(*,5)TL
@@ -74,15 +82,15 @@ C  CHECK T
       ENDIF
 C CHECK TO SEE IF EXTRAPOLATION BELOW THE FIRST TABLE ELEMENT
 C IN DENSITY IS NEEDED.
-      IF(RL.LT.R0GR(1))THEN
+      IF(RHO_T63L.LT.R0GR(1))THEN
          LEXTL = .TRUE.
       ELSE
          LEXTL = .FALSE.
       ENDIF
 C  THIS SECTION IS REPLACED BY LINEAR EXTRAPOLATION IN R FROM THE
 C  LAST TWO OPACITY VALUES.
-C      IF(RL.LT.(R0GR(1)-4.0D0) .OR. RL.GT.(R0GR(NUMD)+1.0D0))THEN
-C         WRITE(*,7)RL,TL
+C      IF(RHO_T63L.LT.(R0GR(1)-4.0D0) .OR. RHO_T63L.GT.(R0GR(NUMD)+1.0D0))THEN
+C         WRITE(*,7)RHO_T63L,TL
 C 7       FORMAT(' LOG R OF',F11.6,' OUT OF OPAL 95 TABLE RANGE;TL'
 C     *          ,F11.6)
 C         STOP
@@ -118,9 +126,9 @@ C GET INTERPOLATION FACTORS IN T
          BTT(I) = C(I)
       END DO
 C GET INDICES IN RHO FOR EACH OF THE 4 T VALUES.
-      IF(RL.GE.R0GR(JD(1)+2))THEN
+      IF(RHO_T63L.GE.R0GR(JD(1)+2))THEN
          DO I = JD(1)+3,NUMD-1
-            IF(RL.LT.R0GR(I))THEN
+            IF(RHO_T63L.LT.R0GR(I))THEN
                JD(1) = I - 2
                GOTO 30
             ENDIF
@@ -129,7 +137,7 @@ C GET INDICES IN RHO FOR EACH OF THE 4 T VALUES.
  30      CONTINUE
       ELSE
          DO I = JD(1)+1,2,-1
-            IF(RL.GT.R0GR(I))THEN
+            IF(RHO_T63L.GT.R0GR(I))THEN
                JD(1) = I - 1
                GOTO 40
             ENDIF
@@ -194,10 +202,10 @@ C ASSIGN ALL THE SAME VALUES IF GRID IN R IS SAME FOR ALL T.
             A(I) = R0GR(JD(1)+I-1)
          END DO
          IF(.NOT.LEXTL)THEN
-            CALL INTERP(A,B,C,RL)
+            CALL INTERP(A,B,C,RHO_T63L)
          ELSE
-            RLL = R0GR(1)
-            CALL INTERP(A,B,C,RLL)
+            RHO_T63LL = R0GR(1)
+            CALL INTERP(A,B,C,RHO_T63LL)
          ENDIF
          DO J = 1,4
             JD(J) = JD(1)
@@ -214,7 +222,7 @@ C ASSIGN ALL THE SAME VALUES IF GRID IN R IS SAME FOR ALL T.
 C IF EXTRAPOLATION IS BEING PERFORMED, ASSIGN R=REDGE
 C AND EXTRAPOLATE LINEARLY LATER
             IF(.NOT.LEXH(J))THEN
-               CALL INTERP(A,B,C,RL)
+               CALL INTERP(A,B,C,RHO_T63L)
             ELSE
                RR = R0GR(JD(J)+3)
                CALL INTERP(A,B,C,RR)

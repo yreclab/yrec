@@ -60,17 +60,26 @@ C COMMON/IOUNITS/
       COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
      *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
      *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+     *  IOPALE,ISCVH,ISCVHE,ISCVZ,ISOUND
       COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
      *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      DIMENSION A(56),B(7),W(7),XSUM(11)
+C 10/13/26 MHP via Claude
+C code changed to remove EQUIVALENCE (A(50),B(1)), the only EQUIVALENCE
+C left in the code.  A holds the 7x7 Jacobian in A(1:49) and the
+C right-hand side in A(50:56); SIMEQC, which declares DIMENSION A(56),
+C is handed the whole array and solves in place, leaving the solution in
+C A(50:56).  B existed only as an alias for reading that solution back,
+C in three lines of the convergence check below, so those now index A
+C directly as A(49+I) -- identical by the definition of the EQUIVALENCE,
+C since the loop runs I = 1,7.  A itself is untouched, so the contiguity
+C SIMEQC relies on is preserved.
+      DIMENSION A(56),W(7),XSUM(11)
       DIMENSION HT(JSON),HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),
 C      *HR5(JSON),HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),
 C      *HR11(JSON),HR12(JSON),HR13(JSON),HF1(JSON),HCOMP(15,JSON),  ! KC 2025-05-31
      *HR5(JSON),HR6(JSON),HR7(JSON),HR8(JSON),HR10(JSON),
      *HR11(JSON),HR12(JSON),HF1(JSON),HCOMP(15,JSON),
      * HS2(JSON)
-      EQUIVALENCE (A(50),B(1))
       SAVE
 
 C KEMCOM USES THE REACTION RATES COMPUTED IN ENGEB TO IMPLICITLY SOLVE
@@ -368,12 +377,12 @@ C CHECK TO SEE IF THE SYSTEM HAS CONVERGED WITHIN THE DESIRED TOLERANCES.
       BIGB = 0.D0
       BIGD = 0.D0
       DO 30 I = 1,7
-         W(I) = W(I)-B(I)
-         IF(DABS(B(I)).GE.BIGD) BIGD = DABS(B(I))
+         W(I) = W(I)-A(49+I)
+         IF(DABS(A(49+I)).GE.BIGD) BIGD = DABS(A(49+I))
          IF(W(I).LT.DCMIN) THEN
             W(I) = 0.D0
          ELSE
-            XB = DABS(B(I)/W(I))
+            XB = DABS(A(49+I)/W(I))
             IF(XB.GE.BIGB) BIGB = XB
          ENDIF
    30 CONTINUE

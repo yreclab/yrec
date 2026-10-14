@@ -27,9 +27,17 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/OP95INDX/, COMMON/OP95FACT/, and
 C COMMON/OP95EXT/ into COMMON/OP95INTERP/ (see getopal95.f for the
 C full rationale).
+C 10/13/26 MHP via Claude
+C code changed to rename COMMON/OP95INTERP/'s RL and RLL to RHO_T63L and
+C RHO_T63LL.  RL is log(rho/T6**3), set here as RL = DL - 3*(TL-6); the
+C old names clash with RL and RLL as used for radius throughout the rest
+C of the code, which is why main.f declared only a 10-member prefix of
+C this block to avoid importing them.  With the clash gone main.f can
+C declare the full block, which a USE statement will require once this
+C becomes a module.
       COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
      *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4),
-     *     RL,RLL,RLH(4),LEXTL,LEXTH,LEXH(4)
+     *     RHO_T63L,RHO_T63LL,RLH(4),LEXTL,LEXTH,LEXH(4)
       DIMENSION C(4),QC(4),CC(4),CCT(4),CCD(4),CZ(4),CZT(4),CZD(4)
       SAVE
 C FIND OPACITY AT EACH OF THE 4 NEARBY VALUES OF Z
@@ -57,7 +65,7 @@ C D LOG CAPPA/D LOG R FOR EACH OF THE 4 DESIRED T.
 C CHECK ON WHETHER RHO IS OUTSIDE OF THE TABLE AND NEEDS EXTRAPOLATION
             IF(LEXTL)THEN
 C FACTOR IN R
-               DELTAR = RL-RLL
+               DELTAR = RHO_T63L-RHO_T63LL
 C CORRECT CAPPA BY USING THE DERIVATIVE AT THE BOUNDARY.
                DO I = 1,4
                   C(I) = C(I)+DELTAR*QC(I)
@@ -65,7 +73,7 @@ C CORRECT CAPPA BY USING THE DERIVATIVE AT THE BOUNDARY.
             ELSE IF(LEXTH)THEN
                DO I = 1,4
                   IF(LEXH(I))THEN
-                     DELTAR = RL - RLH(I)
+                     DELTAR = RHO_T63L - RLH(I)
                      C(I) = C(I)+DELTAR*QC(I)
                   ENDIF
                END DO
