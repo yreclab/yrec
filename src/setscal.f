@@ -6,11 +6,11 @@ C SETSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SETSCAL(ALRI,LSTAR,LPASSR)
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  ONLY lists
-C the members this routine references, so no unused name from the block
-C is imported.  See runloop_mod.f for the block history and for why the
-C module declares the types the implicit rules used to supply.
-      USE RUNLOOP_MOD, ONLY: RESCAL, IRESCA, LENDAG, LSETDT
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude

@@ -11,11 +11,11 @@ C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V,
      * CMIXL,COMPMIX)
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  ONLY lists
-C the members this routine references, so no unused name from the block
-C is imported.  See runloop_mod.f for the block history and for why the
-C module declares the types the implicit rules used to supply.
-      USE RUNLOOP_MOD, ONLY: IRESCA
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
 
       PARAMETER (JSON=5000)
       PARAMETER (NTS=63, NPS=76)

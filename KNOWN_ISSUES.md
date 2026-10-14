@@ -1034,3 +1034,117 @@ member and so touches `main.f` too; `ENVRL` also appears in `taucal.f`.
 
 The same question should be asked of any other prefix that names both a
 profile array and a scalar sampled from it.
+
+---
+
+## 22. Names a future `USE` would capture
+
+**Status:** open as a standing hazard, not a defect. Measured on
+2026-10-14 and re-measurable at any time with `shadow_census.py`.
+
+The module conversion uses a **blanket `USE`**, decided in
+`F90_CONVERSION_PLAN.md` stage 1. That is safe for the conversion itself
+because of three properties that hold across the code after the issue 14
+renames:
+
+- every block is declared identically in every file that holds it,
+- no member name appears in two blocks,
+- no member name is also a procedure name.
+
+A blanket `USE` placed where the `COMMON` declaration stood therefore
+imports exactly the names that declaration already made global in that
+scoping unit. It cannot change meaning, which is a stronger guarantee
+than `USE ... , ONLY:` offers: an `ONLY` list that omits a scalar member
+compiles and links clean, leaving an implicitly typed local whose writes
+go nowhere.
+
+**The risk is the next edit, not the conversion.** If a file uses a name
+as a local and later imports a module exporting that name, the local is
+captured. The census over all 212 files finds 159 (file, name) pairs
+where that could happen, and how each would fail depends on how the local
+is declared:
+
+| | count | outcome if that module is `USE`d |
+|---|---|---|
+| dummy argument | 93 (58%) | compile error -- loud |
+| declared local | 21 (13%) | compile error -- loud |
+| **implicitly typed local** | **45 (28%)** | **silent capture** |
+
+So 114 of the 159 announce themselves. The dangerous set is 45, it is
+enumerable, and **none of it affects the conversion**: each of those
+files does not declare the owning block, so a faithful conversion gives
+it no `USE` of that module.
+
+`IMAX` from `INTPAR` is the worst single name -- an implicitly typed
+local in 8 files, and referenced in 21 files altogether. Four of the 45
+are issue 21's `ENV*` overload: `wrtout.f` uses `ENVD`, `ENVO`, `ENVP`
+and `ENVT` as convection-zone-base scalars while `ENVSTRUCT` exports them
+as profile arrays. That makes issue 21's rename a safety fix, not only a
+clarity one, since `ENVSTRUCT` exists for output and `wrtout.f` is an
+output routine.
+
+### Two checks to run by habit
+
+Before adding a `USE` to a file:
+
+```
+./shadow_census.py --file wrtout.f
+```
+
+Before adding a member to a module:
+
+```
+./shadow_census.py --member IMAX
+```
+
+The first lists what that file would have captured; the second lists
+every file already using the name, so a new member cannot quietly collide
+with an existing local. Run with no arguments for the full census.
+
+### The silent 45
+
+- `bsrotmix.f` `IMAX` -- captured from `INTPAR`
+- `calcad.f` `TAUCZ` -- captured from `OVRTRN`
+- `codiff.f` `AMUM` -- captured from `MDPHY`
+- `codiff.f` `THDIFM` -- captured from `MDPHY`
+- `codiff.f` `VISCM` -- captured from `MDPHY`
+- `envint.f` `GAM1` -- captured from `SOUND`
+- `eqsaha.f` `FACT1` -- captured from `VFACT`
+- `eqsaha.f` `FACT2` -- captured from `VFACT`
+- `eqsaha.f` `SQET` -- captured from `ROTDER`
+- `eqstat2.f` `AMUO` -- captured from `OLDPHY`
+- `eqstat2.f` `DELAO` -- captured from `OLDPHY`
+- `eqstat2.f` `QDTO` -- captured from `OLDPHY`
+- `eqstat2.f` `RAT` -- captured from `QUADD`
+- `getopac.f` `SQOT` -- captured from `ROTDER`
+- `gettau.f` `IMAX` -- captured from `INTPAR`
+- `getw.f` `ENVR` -- captured from `ENVSTRUCT`
+- `getw.f` `IMAX` -- captured from `INTPAR`
+- `getw.f` `IMIN` -- captured from `FAC`
+- `grsett.f` `IMAX` -- captured from `INTPAR`
+- `hpoint.f` `DCHI` -- captured from `EGRID`
+- `hpoint.f` `DSS` -- captured from `DIFAD3`
+- `hpoint.f` `NTOT` -- captured from `EGRID`
+- `mcowind.f` `TCZ` -- captured from `ACDPTH`
+- `mdot.f` `DELM` -- captured from `MDPHY`
+- `microdiff_cod.f` `CON_RAD` -- captured from `CONFAC`
+- `microdiff_cod.f` `CON_TEMP` -- captured from `CONFAC`
+- `microdiff_run.f` `IMAX` -- captured from `INTPAR`
+- `momi.f` `ETA2X` -- captured from `OLDROT`
+- `mwind.f` `FCORR` -- captured from `CTOL`
+- `mwind.f` `TCZ` -- captured from `ACDPTH`
+- `oeqos06.f` `DLOGP` -- captured from `MASSCHG2`
+- `oeqos06.f` `ZTAB` -- captured from `LLOT95`
+- `radsub06.f` `RAT` -- captured from `QUADD`
+- `ratext.f` `IMAX` -- captured from `INTPAR`
+- `rhoofp06.f` `RAT` -- captured from `QUADD`
+- `simeqc.f` `IMAX` -- captured from `INTPAR`
+- `surfbc.f` `NUMENV` -- captured from `ENVSTRUCT`
+- `taucal.f` `ENVR` -- captured from `ENVSTRUCT`
+- `tauint.f` `IMAX` -- captured from `INTPAR`
+- `tauintnew.f` `IMAX` -- captured from `INTPAR`
+- `tpgrad.f` `CAPPA` -- captured from `LLOT95`
+- `wrtout.f` `ENVD` -- captured from `ENVSTRUCT`
+- `wrtout.f` `ENVO` -- captured from `ENVSTRUCT`
+- `wrtout.f` `ENVP` -- captured from `ENVSTRUCT`
+- `wrtout.f` `ENVT` -- captured from `ENVSTRUCT`

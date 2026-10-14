@@ -37,10 +37,21 @@ C SAVE is stated explicitly rather than relying on module variables being
 C implicitly saved, since that became implicit only in Fortran 2008 and
 C ifort Classic predates it.  This matches COMMON's semantics exactly.
 C
-C Importers use USE ... , ONLY: and name just the members they reference,
-C so no routine can capture a name it does not use.  That is the failure
-C the RL/RLL rename had to pre-empt: a blanket USE imports every name in
-C the block.
+C Importers use a blanket USE, which is the convention for the whole
+C conversion.  It is safe because of three properties that hold across the
+C code as of 10/14/26: every block is declared identically in every file
+C that holds it, no member name appears in two blocks, and no member name
+C is also a procedure name.  A blanket USE therefore imports exactly the
+C names the COMMON declaration already made global in that scoping unit,
+C so it cannot change meaning.
+C
+C The residual risk is the next edit, not this one: adding a USE to a file
+C that already uses one of these names as an implicitly typed local would
+C capture it silently.  Run shadow_census.py in the repository root before
+C adding a USE to a file or a member to a module: --file names what a
+C given file would capture, --member names every file already using a
+C name.  See KNOWN_ISSUES.md issue 22 for the 45 places in the tree where
+C that would currently happen.
       MODULE RUNLOOP_MOD
 
       IMPLICIT NONE

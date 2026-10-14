@@ -139,12 +139,46 @@ per-run-loop control rather than hot-path physics.
    `MODULE <BLOCK>_MOD`. The `_MOD` suffix keeps module names clear of
    routine names, and the `*_mod.f` glob is what the Makefile's `MODOBJS`
    matches, so a new module needs no Makefile edit.
-2. **`USE ... , ONLY:`, naming only the members the routine references.**
-   This is the decision worth keeping. A blanket `USE` imports every name
-   in the block, which is precisely the hazard the `RL`/`RLL` rename had to
-   pre-empt; `ONLY` makes that class of collision impossible and documents
-   what each routine actually touches. Six of the ten files here use a
-   strict subset, so the lists carry real information:
+2. **A blanket `USE`.** Settled on 2026-10-14 after measurement, and
+   applied to all ten files here. The pilot was first written with
+   `USE ... , ONLY:` and then realigned, so that the code carries one
+   convention rather than two.
+
+   A blanket `USE` is safe *because of* the issue 14 renames. Three
+   properties now hold across the code: every block is declared
+   identically in every file that holds it, no member name appears in two
+   blocks, and no member name is also a procedure name. A blanket `USE`
+   placed where the `COMMON` declaration stood therefore imports exactly
+   the names that declaration already made global in that scoping unit --
+   provably a no-op on meaning, across all 861 declarations.
+
+   `ONLY` turned out to be the weaker option, for three reasons:
+
+   - **It can be got wrong, silently.** An `ONLY` list that omits a
+     *scalar* member leaves an implicitly typed local that compiles and
+     links clean, with writes going nowhere. Array members fail loudly at
+     link (`U rescal_`), scalars do not. Verified both ways.
+   - **The obvious check does not work yet.** Compiling a file with
+     `IMPLICIT NONE` substituted catches an omission on a clean file, but
+     not on these: gfortran stops resolving a statement whose assignment
+     target is already an error, so in `rscale.f` -- 344 undeclared
+     locals -- the omitted `RESCAL` is never diagnosed. Raising
+     `-fmax-errors` changes nothing. The probe only becomes reliable
+     after stage 5 has declared that file's locals.
+   - **It gives back the main maintenance win.** Adding a member to
+     `NMLPAR` under `COMMON` means editing 104 declarations. Under a
+     blanket `USE` it is a one-file edit; under `ONLY` it is the module
+     plus every importer that needs it.
+
+   The residual risk is the *next* edit, not the conversion: adding a
+   `USE` to a file that already uses one of the module's names as an
+   implicitly typed local captures it silently. That is measured, bounded
+   and enumerable -- 45 cases tree-wide, listed in `KNOWN_ISSUES.md`
+   issue 22 -- and `shadow_census.py` checks it per file or per member.
+
+   For the record, the per-file usage the `ONLY` lists would have carried.
+   Six of the ten files reference a strict subset, which is why `ONLY`
+   looked attractive before the risk was measured:
 
    | file | imports |
    |---|---|
