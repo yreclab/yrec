@@ -739,26 +739,76 @@ A COMMON block may be declared with different member *names* in different
 files, since matching is positional. A module has one set of names, so
 each divergence must be resolved first.
 
-| block | spelling A | spelling B |
-|---|---|---|
-| `ATMPRT` | `TAU,AP,AT,AD,AO,AFXION(3)` | `TAUL,AP,...` |
-| `EGRID` | `CHI,ECHI,ES1,DCHI,NTOT` | `CHI,ECHI,EQS1,...` |
-| `LLOT95E` | `CAPPAE(NUMT,NUMD),XTAB` | `CAPPAE(NUMTT,NUMD),XTAB` |
+A full census was run on 2026-10-14 over all 861 declarations, parsed at
+the 132-column width the Makefile actually compiles at. **80 of the 82
+blocks are declared identically in every file that holds them.** For
+those, a module import is semantically identical to the `COMMON`
+declaration it replaces.
 
-`NUMT` and `NUMTT` are both 70 today, so `LLOT95E`'s layout agrees; the
-risk is that changing one spelling resizes the block in three files and
-not the fourth.
+An earlier pass of this census reported four divergent blocks. Two of
+them, `OLDMOD` and `SCRTCH`, were artifacts of truncating statements at
+column 72: `hpoint.f:103` runs to column 79, so `TEFFLO,MO` was read as
+`TEFF`, inventing a variant. All 17 `OLDMOD` and all 16 `SCRTCH`
+declarations agree. The lesson is the recurring one in this work -- a
+tool that does not honour the real column rules produces a clean-looking
+wrong answer.
 
-Separately, **`XTAB` means two different things** and both would be
-imported by a file that `USE`s each module: in `LLOT95E` it is a
-*composition* (`op95xtab.f` sets `XTAB = X`, and `getopal95.f` tests
-`ABS(X-XTAB)` to ask whether the requested X matches the loaded table),
-while in `SPLIN` it is a *coordinate* (the tabulated abscissae that
-`search.f` binary-searches). The `*TAB` suffix therefore means "the
-composition this table is for" in the opacity blocks and "the tabulated
-independent variable" in the spline workspace. One of them should be
-renamed, as `OP95INTERP`'s `RL`/`RLL` were renamed to
-`RHO_T63L`/`RHO_T63LL` for the same reason.
+### The complete set, five items
+
+**1. `ATMPRT` position 1: `TAU` in five files, `TAUL` in `qatm.f`.**
+The only one with physics in it, and the majority spelling is the wrong
+one: the slot holds log<sub>10</sub>&tau;. `qatm.f:89-90` sets
+`TAUL = X0` and derives a *local* linear `TAU = DEXP(CLN*TAUL)`, while
+`envint.f:439` independently does `TAUN = DEXP(CLN*TAU)`. Both treat the
+shared slot as a log, so there is no bug -- but five files call a log
+quantity `TAU`. Resolve by renaming the five to `TAUL`, adopting the
+minority spelling because it is accurate. Free: none of the five already
+has a `TAUL`, and four only declare the block, `envint.f` being the sole
+user.
+
+**2. `EGRID` position 3: `ES1` in six files, `EQS1` in `seculr.f`.**
+`seculr.f:125` is declaration-only and never references the name, so
+renaming it to `ES1` carries no risk.
+
+**3. `XTAB` is two different things.** In `LLOT95E` (3 files) it is a
+**scalar**, the composition the loaded opacity table is for --
+`op95xtab.f` sets `XTAB = X` and `getopal95.f` tests `ABS(X-XTAB)`. In
+`SPLIN` (4 files) it is `XTAB(JSON)`, an **array** of tabulated
+abscissae that `search.f` binary-searches. The `*TAB` suffix thus means
+"the composition this table is for" in the opacity blocks and "the
+tabulated independent variable" in the spline workspace. Rename
+`LLOT95E`'s scalar: it is the smaller change and it preserves `SPLIN`'s
+`XVAL/YVAL/XTAB/YTAB` symmetry, which a one-sided rename would break.
+Same reasoning as `OP95INTERP`'s `RL`/`RLL` to
+`RHO_T63L`/`RHO_T63LL`.
+
+**4. `ENVR` is in two blocks.** `ENVSTRUCT` (7 files) has
+`ENVR(JSON)`, one of eighteen `ENV*` envelope profile members; `CENT`
+(2 files) has a scalar `ENVR` beside `TCENTER`, `PCENTER`, `DCENTER` and
+`ENVLM`. Rename `CENT`'s: 2 files rather than 7, and `ENVSTRUCT`'s name
+is the one consistent with its siblings. Both blocks are retained as
+output storage per MHP.
+
+**5. `QUAD` -- no rename needed.**
+`REAL*8 FUNCTION QUAD(IC,I,X,Y1,Y2,Y3,X1,X2,X3)` in `quad.f` is
+referenced nowhere in the tree; the `QUAD(I)` in `getqua.f`, `getw.f`
+and `vcirc.f` is `QUADRU`'s array. The clash resolves by deleting the
+dead function, which also drops `quad.o` from the link.
+
+### Closed
+
+`LLOT95E`'s `CAPPAE(NUMT,...)` versus `CAPPAE(NUMTT,...)` divergence,
+previously listed here, is **gone**: all three real declarations now read
+`CAPPAE(NUMT,NUMD),XTAB`, and `main.f`'s is a comment recording the
+removal. `NUMT` and `NUMTT` are both 70 in any case.
+
+### Why `USE ... , ONLY:` shrinks this problem
+
+With `ONLY` adopted (see `F90_CONVERSION_PLAN.md` stage 1), an import
+names just the members a routine references, so a name a routine does not
+use cannot be captured. That removes the prefix-subset class entirely --
+the `RL`/`RLL` situation could not recur -- and leaves only these five,
+each of which is a genuine ambiguity worth fixing on its own merits.
 
 ---
 
