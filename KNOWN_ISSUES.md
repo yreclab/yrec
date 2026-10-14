@@ -1210,13 +1210,52 @@ So **371 of 413 (90%)** are the tabulated nuclear data in `engeb.f` and
 like. Relative errors run to 5.8e-8, i.e. the eighth significant digit
 onward is wrong.
 
-### A genuine exception class
+### The single-precision routines: delete rather than convert
 
-`splinnr.f` and `splnr.f` declare `REAL yp1,ypn,x(n),y(n),y2(n)` and
-`REAL p,qn,sig,un,u(NMAX)`: Numerical Recipes spline routines kept
-deliberately in single precision. Both contain **zero** lossy literals
-today, so nothing is at stake, but a sweep must key on the declared type
-rather than assume `REAL*8` everywhere.
+MHP's ruling on 2026-10-14: single precision has no clear benefit here
+and complicates the work, so the `REAL*4` declarations should become
+`REAL*8` at the same time as the explicit-typing stage.
+
+Investigating what that involves gives a better answer. The only
+single-precision declarations in the entire tree are four lines in two
+files:
+
+```
+splinnr.f:3   REAL yp1,ypn,x(n),y(n),y2(n)
+splinnr.f:6   REAL p,qn,sig,un,u(NMAX)
+splnr.f:3     REAL yp1,ypn,x(n),y(n),y2(n)
+splnr.f:6     REAL p,qn,sig,un,u(NMAX)
+```
+
+and **both routines are dead**. `splinnr_` and `splnr_` are defined in
+their own objects and referenced nowhere: no `CALL` site in any case or
+spacing, no `EXTERNAL` declaration, and no undefined reference to either
+symbol in any object file. They are also **byte-identical to each other
+apart from the subroutine name** -- the same Numerical Recipes `spline`
+routine copied twice, 34 lines each.
+
+(An earlier check appeared to find two references to them. That was a
+false positive: `nm -u *.o` prints a `filename:` header line per object,
+and those headers matched the grep. Filtering to lines actually marked
+`U` shows nothing references either routine.)
+
+The tree already has nine live spline routines -- `cspline.f`,
+`kspline.f`, `osplin.f`, `ksplint.f`, `splinj.f`, `splinc.f`,
+`splintd2.f`, `splint.f`, `ysplin.f` -- and `boole.f`, whose comment at
+line 13 still refers to "numerical recipes SPLINE (renamed splinnr)",
+in fact calls `SPLINJ` and `SPLINT`.
+
+**Recommended: delete both files**, as `quad.f` was deleted. That removes
+68 lines of duplicated dead code and eliminates single precision from the
+codebase entirely, which satisfies the intent of the ruling more
+completely than retyping them would. The stale comment in `boole.f:13`
+should be corrected in the same change.
+
+If instead they are to be kept for future use, converting `REAL` to
+`REAL*8` in all four lines is the alternative; it is behaviour-neutral
+because nothing calls them. Either way, after this change a type-aware
+literal sweep no longer needs an exception for declared single
+precision.
 
 ### Why after the module conversion, and all at once
 
