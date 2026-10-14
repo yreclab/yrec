@@ -72,7 +72,34 @@ Still to do, and the first stage below:
 
 ## Stage 0 -- build system
 
-The only real barrier found. `Makefile:40` is
+**Status: done on 2026-10-14, except item 3, which is deliberately
+deferred until a module first `USE`s another.**
+
+What landed: `MODOBJS` (sources named `*_mod.f` by convention) built ahead
+of `OBJS` via an `$(OBJS): $(MODOBJS)` dependency, `OBJS` narrowed with
+`filter-out` so module objects are not listed twice, `*.mod` and
+`$(MODOBJS)` added to `clean`, and the `.mod` directory stated explicitly
+for all three compilers (`-J.` for gfortran, `-module .` for ifort and
+ifx).
+
+**Pitfall found while testing, worth remembering.** The ordering rule was
+first placed next to the `OBJS` definition near the top of the file. The
+first target in a makefile becomes make's default goal, so that silently
+redefined a bare `make` to build `chkscal.o` and stop -- it reported
+"Nothing to be done" and left the binary untouched, which is easy to
+mistake for an up-to-date tree. The rule now sits with the other targets,
+and `.DEFAULT_GOAL := default` is pinned so a future rule added above
+cannot do the same thing again. Any new rule in this file belongs below
+the targets section.
+
+Verified three ways: a scratch tree whose module sorts alphabetically last
+(`zz_mod.f`) and whose user sorts first (`aaa.f`) fails under the old rule
+with exactly the predicted `Can't open module file` error and builds and
+runs under the new one, both serially and under `make -j4`; and a full
+`make clean && make` of the real tree rebuilds without error and gives
+outputs byte-identical to the references on three cases.
+
+The original finding, for the record. `Makefile:40` was
 
 ```make
 OBJS := $(patsubst %.f,%.o,$(wildcard *.f))
@@ -83,19 +110,20 @@ order. A module must be compiled before anything that `USE`s it, and the
 failure is immediate and loud:
 `Fatal Error: Can't open module file 'nmlpar_mod.mod' for reading`.
 
-1. Add a `MODOBJS` list compiled ahead of `OBJS`. Sufficient while modules
-   are few and do not `USE` one another.
-2. Add `*.mod` to the `clean` target. It currently removes only `$(NAME)`
-   and `$(OBJS)`, so a stale `.mod` survives -- and a `.mod` from another
-   compiler produces the confusing `#7013` above. This must land before the
-   first module.
-3. When modules start depending on each other, move to generated
-   dependencies (`makedepf90` or a short script) as a make prerequisite.
-4. Check the `ifort`/`ifx` branches: both honour `-module <dir>` for `.mod`
-   output. Worth setting explicitly if those builds are maintained.
-
-Validation: a no-op build must still produce a working binary and pass the
-targeted cases.
+1. **Done.** Add a `MODOBJS` list compiled ahead of `OBJS`. Sufficient
+   while modules are few and do not `USE` one another.
+2. **Done.** Add `*.mod` to the `clean` target. It removed only `$(NAME)`
+   and `$(OBJS)`, so a stale `.mod` survived -- and a `.mod` from another
+   compiler produces the confusing `#7013` above. This had to land before
+   the first module.
+3. **Deferred by design.** When modules start depending on each other,
+   move to generated dependencies (`makedepf90` or a short script) as a
+   make prerequisite. The current rule orders modules against ordinary
+   objects but not against one another, so the first module that `USE`s
+   another is the trigger for this item. Until then it would be
+   unexercised machinery.
+4. **Done.** The `ifort`/`ifx` branches both honour `-module <dir>`, now
+   set explicitly alongside gfortran's `-J.`.
 
 ## Stage 1 -- pilot, one module end to end
 
