@@ -17,6 +17,9 @@ C code changed to remove the Alexander 1995 opacity tables
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
      * FSCVHE,FSCVZ,YRECVER,GITHASH)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
+      USE INTPAR_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/14/26 MHP via Claude
@@ -176,7 +179,6 @@ C (no member referenced here; residue of the obsolete-option removals).
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
 C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
       COMMON/LABEL/XENV0,ZENV0
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
 C ISOTOPIC RATIOS(C,N,O) AND D/HE3/LI/BE/B ABUNDANCES.
@@ -536,7 +538,12 @@ C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
       DATA ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX/3.0D-4,1.0D-10,1.0D-1,
      *     1.0D-1,5.0D-1/
       DATA ENVERR,ENVBEG,ENVMIN,ENVMAX/3.0D-4,1.0D-1,1.0D-1,5.0D-1/
-      DATA STOLR0,IMAX,NUSE/1.0D-3,11,7/
+C 10/14/26 MHP via Claude
+C code changed to move DATA STOLR0,IMAX,NUSE/1.0D-3,11,7/ into
+C INTPAR_MOD as initializers.  DATA on a USE-associated name is rejected,
+C so the defaults had to move with the block.  Same effect: all three are
+C PHYSICS namelist variables, and the module initializer is applied once
+C at load time, before PARMIN runs and before the namelist read.
       DATA DTDIF,DJOK,ITDIF1,ITDIF2/1.0D-2,1.0D-4,1,1/
       DATA HTOLER/6.0D-5,4.5D-5,3.0D-5,9.0D-5,3.0D-5,9.0D-1,5.0D-1,
      *     5.0D-1,2.0D0,2.5D-6/

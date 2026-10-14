@@ -7,6 +7,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT,CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
+      USE INTPAR_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
@@ -107,7 +110,6 @@ C only reader.  Both TENV0 and TENV1 are members of the consolidated
 C namelist block declared here, so TENV is derived locally below
 C instead, which removes the block without touching any signature.
       COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
 C 10/12/26 MHP via Claude
 C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
 C consolidated namelist block, every remaining member was write-only:
