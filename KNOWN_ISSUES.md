@@ -1289,3 +1289,69 @@ one. The fix makes the constants match their written values, so present
 behaviour is defensibly wrong, but it is the behaviour every existing
 published YREC model was computed with. That argues for one deliberate,
 well-documented change rather than a quiet sweep.
+
+---
+
+## 24. Fifteen unreachable routines, mostly left by the physics removals
+
+**Status:** open, awaiting MHP's triage. Found on 2026-10-14 in answer to
+his question of whether the earlier physics removals left dead routines
+behind. They did.
+
+`dead_code.py` answers this from the linker's symbol table rather than by
+grepping for `CALL`, which misses function references, `EXTERNAL`
+declarations and unexpected casing. It records what each object defines
+and references, then walks outward from whichever object defines
+`MAIN__`. The walk is **transitive**, which matters: a routine called
+only by another dead routine still looks referenced if you merely ask
+"is this symbol undefined somewhere".
+
+Of 215 objects, 200 are reachable and **15 are not**, totalling 1001
+lines:
+
+| file | lines | what it is | why it is probably dead |
+|---|---|---|---|
+| `findex.f` | | "INTERPOLATION PKG FOR COX'S AND FOR KURUCZ'S OPACITIES" | Kurucz 1990 opacities were removed |
+| `quadeos01.f` | | `QUADEOSS01` | OPAL 2001 EOS was removed; `quadeos06.f` is live |
+| `gmass01.f` | | the 2001 counterpart of `gmass06.f` | same removal; `gmass06.f` is live |
+| `gmass.f` | | the original of the same family | superseded by `gmass06.f` |
+| `intpt.f` | | "GROUP: SR_P" table interpolation | calls only `lir.f` |
+| `lir.f` | | `lir_`, `lir1_` | called only from `intpt.f` |
+| `intpol.f` | | spline interpolation package | calls only `ysplin.f` |
+| `ysplin.f` | | | called only from `intpol.f` |
+| `putyrec7.f` | | "Write out a stellar model in YREC7 format" | the reader `getyrec7.f` is live; only the writer is unused |
+| `splinnr.f` | 34 | Numerical Recipes spline, single precision | see issue 23 |
+| `splnr.f` | 34 | byte-identical copy of `splinnr.f` | see issue 23 |
+| `rabu.f` | | | |
+| `quint.f` | | | |
+| `wcz.f` | | | `wczimp.f` is live |
+| `zero.f` | | | |
+
+The two transitive pairs are worth noting as evidence the method works:
+`LIR` has two call sites and `YSPLIN` one, so a naive check would call
+them live -- but every caller is itself unreachable.
+
+### Why this is worth doing before the rest of the conversion
+
+Three of the fifteen -- `intpt.f`, `rabu.f` and `wcz.f` -- declare
+`COMMON/NMLPAR/`, and `wcz.f` also declares `COMMON/NMLBYPASS/`. Those
+are the two blocks still to convert, and `NMLPAR` spans 104 files, so
+removing the dead ones first takes three files off the largest remaining
+stage.
+
+It is also already costing work: `putyrec7.f`, `intpol.f` and `wcz.f`
+received module conversions earlier today, so dead code is being
+carefully migrated for no benefit.
+
+### Triage needed
+
+Not all fifteen are necessarily disposable. `putyrec7.f` writes the YREC7
+format whose reader is still live, so it may be wanted even though
+nothing calls it, in the way `COMMON/MASSCHG2/` was retained with the
+experimental mass-loss code (issue 12). The rest look like straight
+leftovers of the OPAL 2001 EOS, the Kurucz opacities and the old table
+interpolation packages.
+
+Each deletion is verifiable the same way `quad.f` was: no call site, no
+`EXTERNAL`, no undefined reference to the symbol in any object, and a
+clean build plus byte-identical outputs afterwards.
