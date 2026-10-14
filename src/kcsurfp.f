@@ -12,7 +12,7 @@ C PARAMETERS NTC AND NGC FOR TABULATED SURFACE PRESSURES.
 C MHP 8/25 Removed file names from common block
 C      CHARACTER*256 FATM
 
-      COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
+      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
       COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
      *              ATMGLC(NGC)
 C MHP 8/25 Removed file names from common block

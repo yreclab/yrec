@@ -87,7 +87,7 @@ C linker's 'size of symbol changed' warning is the check that they are.
      * FGSF,FMU,FSS,RCRIT,RSCLZC(50),RSCLZM1(50),RSCLZM2(50),LZRAMP
 C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
+      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
       COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
      *     SENV
 C DBG PULSE: CONSTANTS NEEDED FOR DEL AND DELA CALCULATION
@@ -406,7 +406,7 @@ c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
             CV = QQCP - EXP(CLN*(AP-AD-AT))*CHT**2/CHRH
             GAM1 = CHRH*QQCP/CV
           IF(.NOT.LSTCH)THEN  
-            WRITE(ISTOR,20)TAU,AP,AT,AD,AO,(AFXION(I),I=1,3),
+            WRITE(ISTOR,20)TAUL,AP,AT,AD,AO,(AFXION(I),I=1,3),
      *               KSAHA,KATM,GAM1,QQDP,QQDT,BETA,QQCP,CV
           ENDIF
 C JvS: SAVE STRUCTURE TO COMMON BLOCK
@@ -436,7 +436,7 @@ C JVS 02/11 - Added LCLCD option to IF statement
           QFS = 1.0D0
           ON = QO
           DN = DEXP(CLN*QDL)
-          TAUN = DEXP(CLN*TAU)
+          TAUN = DEXP(CLN*TAUL)
 C SEE J.P. COX PRINC. OF STELL. STRUC. P590
           DELTR =  (TAUN - TAUP)/(((DN*ON)+(DP*OP))/2)
           PELPF = CGAS * QT * QD * QEMU

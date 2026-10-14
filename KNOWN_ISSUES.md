@@ -732,8 +732,35 @@ ruling. No unclassified candidates remain.
 
 ## 14. Name divergences to settle before the module conversion
 
-**Status:** open. These are benign under COMMON and become errors or
-silent confusion under `USE`.
+**Status:** RESOLVED on 2026-10-14. After these changes **all 82 blocks
+declare identically in every file, and no member name appears in two
+blocks.**
+
+| case | action taken | files |
+|---|---|---|
+| `ATMPRT` position 1 | `TAU` → `TAUL` | 5 |
+| `EGRID` position 3 | `EQS1` → `ES1` | 1 |
+| `LLOT95E` scalar | `XTAB` → `XOP95` | 3 |
+| `CENT` scalar | `ENVR` → `CZsurf_R` | 2 |
+| `QUAD` | `quad.f` deleted | -- |
+
+`quad.f` held `REAL*8 FUNCTION QUAD(IC,I,X,Y1,Y2,Y3,X1,X2,X3)`, a
+quadratic interpolation helper with saved `XX12`/`XX13`/`XX23`
+coefficient arrays -- the signature of the OPAL table interpolator. MHP
+confirms it is a leftover of an OPAL equation-of-state table that was
+removed earlier. It was referenced nowhere: no `EXTERNAL` declaration, no
+call site outside the three files where `QUAD(I)` is `QUADRU`'s array,
+and no undefined `quad_` reference in any object. `COMMON/QUADRU/`'s
+member `QUAD` is now unambiguous and needs no rename.
+
+The `TAU` → `TAUL` rename deliberately left comments alone. Eleven
+comment lines in `alsurfp.f` and `envint.f` mention `TAU`, but every one
+states physics -- `TAU = 2/3`, `TAU=100`, `DP/DTAU`, the T-tau relations
+-- not the variable. Rewriting them would have made them false, since the
+slot holds log<sub>10</sub>&tau;.
+
+The original analysis follows, since the reasoning for each choice is
+worth keeping.
 
 A COMMON block may be declared with different member *names* in different
 files, since matching is positional. A module has one set of names, so
@@ -953,3 +980,57 @@ that the build is warning-free and a new warning stands out.
   sorting out separately from `development`.
 - A full suite run leaves the two m9p0 `.last` fixtures modified every time;
   see issue 4.
+
+---
+
+## 21. The `ENV*` prefix carries two unrelated meanings
+
+**Status:** open. One name fixed on 2026-10-14 (`CENT`'s `ENVR` is now
+`CZsurf_R`); MHP asked that the rest of the family be noted for a later
+pass, and that the same rule be applied to related variables in future.
+
+`ENV*` currently names two different kinds of quantity.
+
+**Family 1 -- envelope profile arrays**, `COMMON/ENVSTRUCT/`, 18 members
+over 8 files, each dimensioned `(JSON)`: `ENVP`, `ENVT`, `ENVS`,
+`ENVD`, `ENVR`, `ENVX`, `ENVZ`, `ENVO`, `ENVL`, plus `LCENV`, `EDELS`,
+`EVELS`, `EBETAS`, `EGAM1`, `EQCP`, `EFXIONS`, `EQDT`, `NUMENV`. These
+hold the reconstructed envelope solution and are retained as COMMON for
+output, per MHP.
+
+**Family 2 -- scalars at the convection-zone base**, computed in
+`wrtout.f` around the `MHP 2/98 FIND RADIUS OF CZ BASE` comment:
+
+| name | meaning | where it lives |
+|---|---|---|
+| `ENVLM` | mass in the convection zone | `COMMON/CENT/` |
+| `CZsurf_R` | radius at the CZ base (was `ENVR`) | `COMMON/CENT/` |
+| `ENVRL` | log radius at the CZ base | local, `wrtout.f` + `taucal.f` |
+| `ENVTL`, `ENVDL`, `ENVPL` | log T, density, pressure at the CZ base | locals, `wrtout.f` |
+| `ENVT`, `ENVD`, `ENVP` | the same three, delinearized | locals, `wrtout.f` |
+| `ENVO` | opacity at the CZ base | local, `wrtout.f` |
+
+**Why this matters for the module conversion.** Four names --
+`ENVT`, `ENVD`, `ENVP` and `ENVO` -- are simultaneously `ENVSTRUCT`
+array members in 8 files and *scalar locals* in `wrtout.f`. Nothing is
+broken today only because `wrtout.f` does not declare `ENVSTRUCT`. The
+moment it needs the envelope arrays -- plausible, since `ENVSTRUCT`
+exists precisely for output and `wrtout.f` is an output routine -- a
+blanket `USE` would silently alias those four scalars to the arrays.
+`USE ... , ONLY:` prevents it, but the name reuse remains a trap for a
+reader and for whoever next edits `wrtout.f`.
+
+**Proposed rule.** Prefix by what the quantity is attached to, and keep
+`L` as the log suffix:
+
+- `CZsurf_` for the convection-zone-base scalars: `CZsurf_R` (done),
+  `CZsurf_RL`, `CZsurf_M` (was `ENVLM`), `CZsurf_T`/`CZsurf_TL`,
+  `CZsurf_D`/`CZsurf_DL`, `CZsurf_P`/`CZsurf_PL`, `CZsurf_O`.
+- `ENV*` reserved for the `ENVSTRUCT` profile arrays.
+
+Cost is low: every family-2 name except `ENVLM` and `ENVRL` is local to
+`wrtout.f`, so the rename is confined to one file. `ENVLM` is a `CENT`
+member and so touches `main.f` too; `ENVRL` also appears in `taucal.f`.
+
+The same question should be asked of any other prefix that names both a
+profile array and a scalar sampled from it.

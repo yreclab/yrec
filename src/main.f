@@ -239,7 +239,7 @@ C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
 C MHP 3/96 central T,P,RHO added
-      COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
+      COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,CZsurf_R
 C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95A/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C as above for the model Z.
@@ -1172,7 +1172,7 @@ C INITIAL ALPHA,Y,Z,ALPHA; FINAL R, L
          WRITE(ISNU,1521)CMIXLA(NK),YINI,ZINI,BL,RLL
  1521    FORMAT(F7.4,2F8.5,1P2E10.3)
 C CZ DEPTH (R,M), SURFACE Y, Z, Z/X (ADD T CZ BASE, RHO CZ BASE)
-         WRITE(ISNU,1522)ENVR,ENVLM,HCOMP(2,M),HCOMP(3,M),ZTOX
+         WRITE(ISNU,1522)CZsurf_R,ENVLM,HCOMP(2,M),HCOMP(3,M),ZTOX
  1522    FORMAT(F8.5,F9.6,2F8.5,F9.6)
 C ENERGY GENERATION FRACTIONS PP I,II,III,CNO,EGRAV
          WRITE(ISNU,1523)(TLUMX(J),J=1,4),TLUMX(7)

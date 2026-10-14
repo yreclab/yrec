@@ -122,7 +122,7 @@ C both were uninitialized locals -- LCODM was always .FALSE. and the
 C branch never executed, even though ~101 test/example namelists set
 C LCODM = .TRUE. explicitly. Declaring the block (same layout as
 C codiff.f) makes the namelist values actually arrive here.
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),EQS1(JSON),DCHI,NTOT
+      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
 C Time change of theta
       COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
      *               DDELM(JSON),FESTIME(JSON),THP(JSON),
