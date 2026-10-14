@@ -1148,3 +1148,105 @@ with an existing local. Run with no arguments for the full census.
 - `wrtout.f` `ENVO` -- captured from `ENVSTRUCT`
 - `wrtout.f` `ENVP` -- captured from `ENVSTRUCT`
 - `wrtout.f` `ENVT` -- captured from `ENVSTRUCT`
+
+---
+
+## 23. Floating literals missing a `D` exponent lose precision
+
+**Status:** open, to be fixed as its own stage **after** the F90 module
+conversion. Flagged by MHP on 2026-10-14: the code is designed so that
+floating point is `REAL*8` throughout, so a literal written without `D0`
+is far more likely an accident than an intention, and should be treated
+as a defect rather than preserved.
+
+A literal with no `D` exponent is a default-real (single precision)
+constant. Reaching a `REAL*8` variable it is widened, so the stored value
+is the *single* approximation of the decimal rather than the decimal:
+
+```
+0.9828    ->  0.98280000686645508
+0.9828D0  ->  0.98280000000000000
+```
+
+An `E` exponent is single too: `1.32E30` is as lossy as `1.32`.
+
+### Scope, measured with `literal_audit.py`
+
+| | count |
+|---|---|
+| literals already carrying a `D` exponent | 4001 |
+| no `D`, but exactly representable in binary32 -- harmless | 476 |
+| **no `D`, and lossy when widened -- defects** | **413** |
+
+The harmless 476 are values such as `0.0`, `1.0`, `0.5` and `2.0`, which
+are exact in binary32, so widening them costs nothing and they need no
+change. Separating those two groups is the point of the audit: a blanket
+sweep over every literal lacking `D0` would touch 889 and change nothing
+in 476 of them.
+
+**FORMAT statements must be excluded**, and the first pass of this audit
+did not. A FORMAT is full of tokens that look like real literals but are
+edit descriptors -- `1P6E13.5`, `16E16.8`, `12E10.3` from
+`wrtout.f:1800`. They carry no precision at all. Counting them inflated
+the figure to 459 and produced an entirely spurious set of "worst files"
+(`wrtmod.f` 13, `envint.f` 12, `wrtout.f` 7, `starin.f` 4), every one of
+which is in fact clean. `literal_audit.py` now skips FORMAT statements
+and their continuation lines.
+
+The real 413 are concentrated far more sharply:
+
+| file | lossy literals | what they are |
+|---|---|---|
+| `engeb.f` | 211 | nuclear masses and Q-values |
+| `rates.f` | 160 | reaction-rate coefficients |
+| `parmin.f` | 17 | namelist defaults |
+| `eqsaha.f` | 11 | Saha equation constants |
+| `esac06.f` | 5 | |
+| `sneut.f` | 4 | |
+| 5 further files | 5 | one each |
+
+So **371 of 413 (90%)** are the tabulated nuclear data in `engeb.f` and
+`rates.f` -- `ANUC/1.008665,1.007276,2.013553,.../`, `Q6`, `Q7` and the
+like. Relative errors run to 5.8e-8, i.e. the eighth significant digit
+onward is wrong.
+
+### A genuine exception class
+
+`splinnr.f` and `splnr.f` declare `REAL yp1,ypn,x(n),y(n),y2(n)` and
+`REAL p,qn,sig,un,u(NMAX)`: Numerical Recipes spline routines kept
+deliberately in single precision. Both contain **zero** lossy literals
+today, so nothing is at stake, but a sweep must key on the declared type
+rather than assume `REAL*8` everywhere.
+
+### Why after the module conversion, and all at once
+
+- **Byte-identity is the conversion's only validation criterion**, and it
+  has caught real defects. A precision fix changes outputs by design, so
+  interleaving the two makes a diff ambiguous: a conversion bug and the
+  intended change become indistinguishable.
+- **Interference is minimal.** 371 of the 413 are in `engeb.f` and
+  `rates.f`, which the conversion does not touch. Only `parmin.f`'s 17
+  are in `DATA` statements that migrate into modules, and they migrate
+  verbatim, so fixing them afterwards in the module is one edit each.
+- **Doing it first would leave every later conversion stage validating
+  against freshly regenerated, unreviewed references.**
+- **All at once**, with a single reference regeneration. Each fix is
+  text-preserving -- only the exponent marker changes -- so per-fix risk
+  is nil; what needs judgement is the aggregate physics change, best read
+  in one diff. Incremental would mean repeated five-hour regenerations
+  for no gain. Review the diff by group: nuclear data, namelist defaults,
+  output routines.
+
+### What to expect when it is done
+
+Every one of the 298 references will change. The shifts start at ~5e-8
+but amplify over Gyr of nonlinear evolution -- see issue 4 for the m9p0
+TAHB case, which already diverges chaotically from a last-digit
+difference in its start model. Validation must therefore be the 2% float
+tolerance and physics review, not byte-identity.
+
+Note also that this is a scientific-provenance decision as much as a code
+one. The fix makes the constants match their written values, so present
+behaviour is defensibly wrong, but it is the behaviour every existing
+published YREC model was computed with. That argues for one deliberate,
+well-documented change rather than a quiet sweep.
