@@ -764,16 +764,49 @@ renamed, as `OP95INTERP`'s `RL`/`RLL` were renamed to
 
 ## 15. `LENVG` is a dead namelist variable awaiting staged removal
 
-**Status:** open, deliberately staged by MHP.
+**Status:** step 1 of 2 done on 2026-10-14. The code-side removal is still
+open, and MHP is consulting the other developers before it happens.
 
 `LENVG` has no executable use anywhere: its only occurrences are the
 `COMMON/NMLBYPASS/` declaration continuations in `parmin.f`, `remap.f` and
 `starin.f`, the `PHYSICS` namelist entry, and its `DATA` default. But
-**106 namelist files set it**, so it cannot simply be dropped from the
-namelist -- a namelist read would then fail on those inputs.
+**960 tracked namelist files set it**, so it cannot simply be dropped from
+the namelist -- a namelist read would then fail on every one of those
+inputs.
 
 MHP's required order: strip `LENVG` from all namelist files first, then
 remove it from the namelist and the code. Not urgent; it costs one word.
+
+**Step 1, done.** All 960 tracked namelist files had their single
+`LENVG = .FALSE.` line removed, comment included: `testsuite` (51),
+the nine `examples` case directories (55), `examples/class_exercises`
+(6), `grid` (516), `sample_cases` (200) and `startmodels/sample_cases`
+(132). Every line was byte-identical in form and held no other
+assignment, so each file lost exactly one line and gained none.
+
+This changed no output, for two independent reasons: the value removed
+(`.FALSE.`) is the `DATA` default, and the `.short` echo is generated
+from the `PHYSICS` namelist group rather than from the input text, so
+`LENVG` is still echoed as `F`. That is why no reference regeneration
+and no `[ignore]` rule were needed, unlike the `CMIXL` removal.
+
+**Step 2, still open.** Removing `LENVG` from `COMMON/NMLBYPASS/` in the
+three files, from the `PHYSICS` namelist group, and from the `DATA`
+statement at `parmin.f:520`. That `DATA` statement also initializes
+`ATMSTP` and `ENVSTP`, which are live, so only the `LENVG` item and its
+`.FALSE.` value may be removed. Doing this *will* shorten the `.short`
+echo by one line and so needs either regenerated references or an
+`[ignore]` rule, the same treatment `CMIXL` received.
+
+**Related stale comments, left alone.** 973 namelist files carry
+`ATMSTP`/`ENVSTP` lines whose comments read "Maximum step in atmosphere
+integrator for LENVG". `ATMSTP` and `ENVSTP` are live -- read in
+`calcad.f:213-218`, `stitch.f:159-164` and `wrtmod.f:207-212`, each
+assigning them into `ATMBEG/ATMMIN/ATMMAX` and `ENVBEG/ENVMIN/ENVMAX`.
+Their lines were therefore not touched, since deleting them would change
+the integrator step sizes from the namelist value 0.05 back to the `DATA`
+default 0.5. Only the comment text is stale, and rewording it is a
+cosmetic follow-up best done alongside step 2.
 
 ---
 
