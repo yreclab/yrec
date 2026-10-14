@@ -790,6 +790,21 @@ from the `PHYSICS` namelist group rather than from the input text, so
 `LENVG` is still echoed as `F`. That is why no reference regeneration
 and no `[ignore]` rule were needed, unlike the `CMIXL` removal.
 
+All 13 untracked namelists in `ClassExercises/` and
+`examples/class_exercises/exercise_4/` were stripped too, so no namelist
+in the tree names `LENVG` any more.
+
+**Guard against reintroduction.** `pytest.ini` has a `[banned]` section
+listing namelist variables that no test input may assign, and
+`test_namelists_free_of_banned_variables` fails with the file and line of
+each offender. `LENVG` is the first entry. This covers the dangerous
+window: while the code still declares `LENVG` in the `PHYSICS` group, a
+case that reintroduces it reads perfectly well and nothing complains --
+right up until step 2 lands, when every such input breaks at once. The
+check matches assignments only, so the `ATMSTP`/`ENVSTP` comments that
+mention `LENVG` do not trip it. Remove the entry once step 2 is done,
+since the namelist read is then its own check.
+
 **Step 2, still open.** Removing `LENVG` from `COMMON/NMLBYPASS/` in the
 three files, from the `PHYSICS` namelist group, and from the `DATA`
 statement at `parmin.f:520`. That `DATA` statement also initializes

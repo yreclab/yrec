@@ -43,6 +43,23 @@ if config.has_section('ignore'):
                 f"pytest.ini [ignore] patterns: {pattern!r} is not a valid "
                 f"regular expression ({ex})")
 
+# Namelist variables that must not appear in any test-suite input file.
+# A variable lands here once it is dead in the code but still named by the
+# inputs: a namelist read fails on a name the group no longer declares, so
+# the inputs have to be cleaned before the code is, and nothing may
+# reintroduce the name in between.  test_namelists_free_of_banned_variables
+# enforces it over every collected case.
+banned_nml_vars = []
+if config.has_section('banned'):
+    for name in config['banned'].get('variables', '').split('\n'):
+        name = name.strip()
+        if name:
+            banned_nml_vars.append(name)
+
+banned_nml_res = [
+    (name, re.compile(rf'^[^!]*\b{re.escape(name)}\s*=', re.IGNORECASE))
+    for name in banned_nml_vars]
+
 if not os.path.exists(yrec_exe):
     raise FileNotFoundError(f"YREC executable {yrec_exe} not found!")
 
@@ -285,6 +302,52 @@ def color_indicator(line, indices):
 test_cases = drop_duplicate_cases(collect_tests(tests))
 
 
+def test_namelists_free_of_banned_variables():
+    '''Fail if any collected case names a variable listed in pytest.ini
+    [banned] variables.
+
+    This guards the window between cleaning a dead variable out of the
+    namelist inputs and removing it from the code.  During that window the
+    name still exists in the namelist group, so a stale input file reads
+    without complaint and nothing reveals that a case reintroduced it --
+    until the code-side removal lands, at which point the namelist read
+    fails on every input that still names it.
+
+    Deliberately one test over all cases rather than one test per case, so
+    that adding this guard does not multiply the collected test count.  It
+    reads input files only and never runs YREC, so it costs nothing.
+    '''
+    if not banned_nml_res:
+        pytest.skip("no banned variables configured in pytest.ini [banned]")
+
+    offenders = []
+    checked = set()
+    for tdir, nml1, nml2 in test_cases:
+        for name in (nml1, nml2):
+            path = os.path.join(tdir, name)
+            if path in checked:
+                continue
+            checked.add(path)
+            try:
+                with open(path, 'r', errors='replace') as fh:
+                    lines = fh.readlines()
+            except OSError:
+                # A missing nml2 is legitimate: collect_tests falls back to
+                # the per-directory file, which another case already
+                # checked.  Nothing to test here.
+                continue
+            for lineno, line in enumerate(lines, start=1):
+                for var, regex in banned_nml_res:
+                    if regex.search(line):
+                        offenders.append(f"{path}:{lineno}: {var}: "
+                                         f"{line.strip()}")
+
+    assert not offenders, (
+        f"{len(offenders)} banned namelist variable assignment(s) found in "
+        f"{len(checked)} input files.\n"
+        "These names are dead in the code and must not appear in test "
+        "inputs; remove the line, comment included.\n"
+        + "\n".join(offenders))
 
 
 @pytest.mark.parametrize("tdir,nml1,nml2", test_cases)
