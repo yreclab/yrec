@@ -7,6 +7,9 @@ C      *XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
      *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION,EALPCA,ENU)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
 
 C 3/92 DBG Added new neutrino loss calculation routines
@@ -193,9 +196,6 @@ C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR,C_2
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
 C computes EALPCA and ENU, and coefft.f and ytime.f read them right after

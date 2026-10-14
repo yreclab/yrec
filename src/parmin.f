@@ -17,6 +17,9 @@ C code changed to remove the Alexander 1995 opacity tables
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
      * FSCVHE,FSCVZ,YRECVER,GITHASH)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
       USE INTPAR_MOD
 C 10/14/26 MHP via Claude
@@ -165,9 +168,6 @@ C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR,C_2
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
@@ -616,7 +616,13 @@ C DBG PULSE DATA CARD FOR PULSATION
       DATA IPVER/1/
       DATA ITRVER/1/
       DATA KTTAU/0/
-      DATA CLSUN,CRSUN/3.8515D33,6.9598D10/
+C 10/14/26 MHP via Claude
+C code changed to move DATA CLSUN,CRSUN/3.8515D33,6.9598D10/ into
+C CONSTANTS_MOD as initializers, since DATA on a USE-associated name is
+C rejected.  Same effect: both are PHYSICS namelist variables, and the
+C module initializer is applied at load time, before this routine runs
+C and before the namelist read.  CLSUNL and CRSUNL are derived from them
+C later, in setups.f.
 C DBG If LCORE is TRUE then calculate shells interior to start up
 C     model's inner most shell.
       DATA LCORE,MCORE,FCORE/.FALSE.,0,1.0/
