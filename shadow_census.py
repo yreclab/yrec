@@ -59,6 +59,16 @@ HEADER = re.compile(
     r'([A-Za-z0-9_]+)\s*\(([^)]*)\)', re.I)
 COMMON = re.compile(r'\s*COMMON\s*/\s*([A-Za-z0-9_]+)\s*/(.*)')
 USE = re.compile(r'\s*USE\s+([A-Za-z0-9_]+)', re.I)
+MODULE = re.compile(r'\s*MODULE\s+([A-Za-z0-9_]+)\s*$', re.I)
+# A module variable declaration, e.g. "REAL*8    :: RESCAL(4,50)".
+MODVAR = re.compile(r'\s*(?:REAL|INTEGER|LOGICAL|DOUBLE\s+PRECISION|CHARACTER)'
+                    r'\*?\d*\s*(?:,[^:]*)?::\s*(.*)', re.I)
+
+
+def block_name(module):
+    """RUNLOOP_MOD -> RUNLOOP, so converted blocks keep one identity."""
+    m = module.upper()
+    return m[:-4] if m.endswith('_MOD') else m
 
 
 def is_comment(line):
@@ -126,7 +136,28 @@ def scan(srcdir):
         fname = os.path.basename(path)
         stmts = logical_lines(path)
         dummies, declared = set(), set()
+        # A module file contributes its variables as that block's members,
+        # so the census keeps working as blocks convert. Without this it
+        # goes blind on every block already turned into a module: the
+        # members are in no COMMON statement any more, and a collision
+        # with them stops being reported.
+        in_module = None
         for s in stmts:
+            mod = MODULE.match(s)
+            if mod:
+                in_module = block_name(mod.group(1))
+                continue
+            if in_module:
+                mv = MODVAR.match(s)
+                if mv:
+                    # Strip any initializer, so "JSON = 5000" yields JSON.
+                    names = {n.split('=')[0].strip()
+                             for n in comma_names(mv.group(1))}
+                    block_members[in_module] |= {n for n in names if n}
+                    # The module's own file holds the block, or it would be
+                    # reported as shadowing the names it defines.
+                    declares[fname].add(in_module)
+                    continue
             m = COMMON.match(s)
             if m:
                 blk = m.group(1).upper()
@@ -136,7 +167,7 @@ def scan(srcdir):
                 continue
             u = USE.match(s)
             if u:
-                imports[fname].add(u.group(1).upper())
+                imports[fname].add(block_name(u.group(1)))
             h = HEADER.match(s)
             if h:
                 dummies |= comma_names(h.group(2))
