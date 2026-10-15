@@ -1463,3 +1463,124 @@ corrected in the same change.
 This also removes the last single-precision declarations in the tree, so
 issue 23's exception for declared `REAL*4` no longer applies: every
 floating variable is now `REAL*8` and a literal sweep can be uniform.
+
+---
+
+## 25. The module conversion orphaned 94 `PARAMETER` declarations
+
+**Status:** open. Found 2026-10-15. Residue of the conversion itself, not
+pre-existing debt.
+
+Of the integer `PARAMETER` declarations in the non-module sources, **225
+are still used and 94 are now declared and never referenced.** The arrays
+that needed them moved into the modules, which carry their own `PRIVATE`
+copies, so the importer's declaration was left behind with nothing to
+size.
+
+Worst offenders, by name, with the count of files where the same name is
+still live for comparison:
+
+| name | orphaned in | still live in |
+|---|---|---|
+| `JSON` | 12 | 108 |
+| `NPS` | 12 | **0** |
+| `NUMXZ` | 10 | 1 |
+| `NTS` | 8 | 4 |
+| `NGA`, `NTA` | 7 each | 1 each |
+| `NUMX`, `NUMZ` | 6 each | 5 each |
+| `NT`, `NUMT`, `NUMD`, `NG` | 4 each | 10, 6, 7, 2 |
+| `NGC`, `NTC` | 3 each | 2 each |
+
+Two names are now **entirely dead**: `NPS`, orphaned in all 12 files that
+declare it and live in none, and `NUMXZ`, live in only one of eleven.
+
+A separate group predates the conversion. `NTA=54` and `NGA=5` in
+`envint.f`, `parmin.f`, `remap.f` and `setups.f` are the *old* NextGen
+Allard dimensions, in four files that do not touch the Allard tables at
+all -- the current format is `NTA=250, NGA=25` and lives in the four
+`al*.f` files. Those four declarations were stale before any of this
+work.
+
+The fix is pure subtraction and should be byte-identical: delete a
+`PARAMETER` entry wherever the name is unreferenced in that file, and
+remove the statement entirely where nothing is left in it. Verify with a
+clean build plus the targeted set, as usual.
+
+Detect them with the same method used to find them: for each file, parse
+its `PARAMETER` statements and ask whether each name appears in any other
+statement of that file. Note that the check must honour fixed-form column
+rules and inline comments, for the reasons recorded in issues 22 and 24.
+
+---
+
+## 26. Centralise `JSON` in a parameters module -- but not the table dimensions
+
+**Status:** open, scoped on 2026-10-15 at MHP's suggestion, with his
+distinction between input-table dimensions and the code's own structural
+dimensions. They need opposite treatments, which is the point of this
+entry.
+
+### Do centralise: `JSON`, and anything else like it
+
+`JSON` is the maximum shell count: a property of the code's own arrays,
+not of any input file, so a single global value is correct by
+construction. It is declared `PARAMETER (JSON=5000)` in **120 files with
+no exceptions**, and it is genuinely live -- 108 of those files reference
+it in **183 places**, mostly local declarations such as
+`DIMENSION HR(JSON)` rather than block members.
+
+A module exporting it replaces 120 identical `PARAMETER` statements with
+120 `USE` statements. Mechanically this is the operation already
+performed 83 times in stages 1 to 4, with one difference that is not
+optional: **each importer must drop its own `PARAMETER (JSON=5000)` as it
+gains the `USE`**, because keeping both is a conflict error. That clash
+is precisely why the block modules declare their dimension parameters
+`PRIVATE`.
+
+**Sequencing matters here.** The 83 block modules each declare `JSON` as
+a `PRIVATE` parameter. They can stay exactly as they are, since `PRIVATE`
+is not exported and so cannot clash with a parameters module. Switching
+them to `USE` the parameters module instead would remove that
+duplication, but it would be **the first module importing another module
+in this code**, which is the trigger condition for
+`F90_CONVERSION_PLAN.md` stage 0 item 3: the Makefile's
+`$(OBJS): $(MODOBJS)` rule orders modules against ordinary objects but
+not among themselves. So the importer work can be done now; dedupicating
+the modules is a separate step that needs generated inter-module
+dependencies first.
+
+### Do NOT centralise: the input-table dimensions
+
+These describe the shape of specific data files, and the same name
+legitimately carries different values:
+
+| name | values | families |
+|---|---|---|
+| `NUMT` | 70 / 85 | OPAL95 opacities / Alexander 2006 |
+| `NUMX` | 10 / 9 | same two |
+| `NUMZ` | 13 / 16 | same two |
+| `NUMXZ` | 126 / 143 | same two |
+| `NT` | 57 / 197 | surface-pressure tables / OPAL06 EOS |
+| `NTA`, `NGA` | 250,25 / 54,5 | current Allard / old NextGen |
+
+A single global module cannot hold `NUMT` twice. The conversion already
+resolved this the right way: each table's module declares its own
+`PRIVATE` copy, so the two values coexist **by scope**, with no renaming.
+
+An earlier draft of this plan proposed renaming them per family --
+`NUMT_OP95` against `NUMT_A06` and so on. **That suggestion is
+withdrawn.** Scoping gives the same separation for free, and renaming
+table identifiers to work around a scoping problem that no longer exists
+would be the worse trade, touching physics-table indexing for no gain.
+
+### Do NOT centralise: per-routine scratch bounds
+
+`NMAX` is 15 in `ratext.f`, 42 in `thdiff.f`, 100 in `ludcmp.f` and 8000
+in `bandw.f` and `dadcoeft.f`. It sizes local workspace and is
+deliberately per-routine. Centralising it would be actively wrong.
+
+### Order of work
+
+Issue 25 first. Deleting the 94 orphans removes 12 of `JSON`'s 120
+declarations before any of them has to be converted, and it is pure
+subtraction, so it is the cheaper and safer half.
