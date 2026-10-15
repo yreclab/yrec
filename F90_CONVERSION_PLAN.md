@@ -252,6 +252,83 @@ routines run. Of the ten files, `parmin.f`, `starin.f`, `main.f`,
 
 ## Stage 2 -- the consolidated blocks
 
+**Status: done on 2026-10-14.** All six blocks are modules, and the
+tree-wide warning count fell from 1684 to 20.
+
+| block | members | files | `DATA` migrated |
+|---|---|---|---|
+| `RUNLOOP` | 4 | 10 | 0 |
+| `IOUNITS` | 29 | 58 | 0 |
+| `INTPAR` | 3 | 3 | 3 |
+| `CONSTANTS` | 30 | 90 | 2 |
+| `NMLBYPASS` | 83 | 3 | 82 |
+| `NMLPAR` | 234 | 103 | 202 |
+
+**The warning collapse is the headline.** Of the 1684 warnings this build
+carried all session, **1664 were `-Walign-commons` on `NMLPAR` alone** --
+gfortran reporting, in every one of its 103 files, that the block's
+interleaved `REAL*8`/`LOGICAL*4`/`INTEGER*4` members required 4-byte
+padding. A module has no storage-layout constraint, so they are simply
+gone. That matters beyond tidiness: with 1664 lines of noise it was not
+practically possible to notice a *new* warning, and now it is.
+
+The 20 remaining are pre-existing and unrelated: unused `laltptau100`
+locals in `alprint.f` and `altabinit.f` (neither imports the module, so
+these are plain unused locals), a few other unused variables, and two
+`may be used uninitialized` notes.
+
+### What the `DATA` migration required
+
+`NMLPAR` and `NMLBYPASS` were converted **together**, which halves the
+hard part. Measured separately they have 8 and 13 `DATA` statements
+mixing members with non-members; most of that mixing is with each other,
+so as a single target only 9 statements need surgery and 78 can be
+removed whole.
+
+Four shapes had to be handled, and each was a real trap:
+
+- **Element counts across names.**
+  `DATA NUMRUN, KINDRN, LFIRST, NMODLS /1,50*1,50*.TRUE.,50*0/` cannot be
+  split without knowing `KINDRN` is `(50)`, which a `DIMENSION` statement
+  declares rather than any `COMMON` block. Sizing it as a scalar gave 102
+  elements against 151 values.
+- **Rank.** `HTOLER(5,2)` needs `RESHAPE`; a flat `(/.../)` constructor is
+  a rank mismatch. It is the only multi-dimensional member in either
+  block, so the wrong form would have failed at the end of a 202-member
+  edit.
+- **Column 132.** These initializers are long, and a single line would be
+  silently truncated, surfacing as a syntax error mid-constructor.
+- **Inline comments.** `DATA LSOLID, IMPJMOD/.FALSE.,0/ !JNT 09/2025`
+  carries a comment containing `/`, which corrupts value-group splitting
+  unless stripped first.
+
+**Literal text is copied verbatim**, never normalised. `DATA
+SSTANDARD/0.9828,.../` into a `REAL*8` widens a single-precision literal,
+and an initializer does the same; rewriting it as `0.9828D0` would change
+the stored bits. A direct test confirmed initializers and `DATA` store
+identical values for every shape used here, including that `RESHAPE` fills
+column-major exactly as `DATA` does. See `KNOWN_ISSUES.md` issue 23 for
+why those literals are nonetheless wrong and will be fixed separately.
+
+The residue of a rewritten statement is recomputed from the same
+element-count distribution that produces the initializers, never by
+string surgery on the original text, and uniform runs are recompressed to
+`n*v` form so the diff stays small:
+
+```
+- DATA NUMRUN, KINDRN, LFIRST, NMODLS /1,50*1,50*.TRUE.,50*0/
++ DATA KINDRN/50*1/
+```
+
+### Method note
+
+The `NMLPAR` conversion was rehearsed in full on a scratch copy of `src/`
+before the real tree was touched -- 103 files edited, both modules
+written, clean build -- because 317 members and 284 migrations in one
+step is not something to attempt first on the live tree.
+
+### The original plan text
+
 The biggest single win, because these hold most of the 32,351 member names.
 
 | block | members | files |
