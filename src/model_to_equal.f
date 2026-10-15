@@ -4,13 +4,16 @@ C       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HQPR,HRU,HS1,HTU,  ! KC 2025-0
      *                          IBEGIN,IEND,M,QCOD1X,QCOD2X,DR,
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
      *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/GRAVEZ/ into GRAVEZ_MOD.
       USE GRAVEZ_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude

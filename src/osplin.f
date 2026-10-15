@@ -10,7 +10,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C OSPLIN
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE OSPLIN(XVAL,YVAL,XTAB,YTAB,N,K)
-      PARAMETER (JSON=5000)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
       REAL*8 XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON),
      *       M(JSON),EPS
       INTEGER N,K,ERR

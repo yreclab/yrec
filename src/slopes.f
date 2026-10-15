@@ -2,13 +2,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SLOPES
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SLOPES(XTAB,YTAB,MTAB,NUM)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C
 C                                 SHAPE PRESERVING QUADRATIC SPLINES
 C                                   BY D.F.MCALLISTER & J.A.ROULIER
 C                                     CODED BY S.L.DODD & M.ROULIER
 C                                       N.C.STATE UNIVERSITY
 C
-      PARAMETER (JSON=5000)
       REAL*8 XTAB(JSON),YTAB(JSON),MTAB(JSON),M1,M2,XBAR,XHAT,
      *     YDIF1,YDIF2,YXMID,XMID,M1S,M2S
 C

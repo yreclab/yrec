@@ -6,10 +6,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE REDUCE(I,HHA,HHB,HL,HMAX,HP,HR,HS,HT,QP0,QP,QPR0,QPR,
      1QPP0,QPP,QT0,QT,QTR0,QTR,QTL0,QTL,QTP0,QTP,QTT0,QTT,QR0,QR,QRR0,
      2QRR,QRP0,QRP,QRT0,QRT,QL0,QL,QLP0,QLP,QLT0,QLT)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION Q(4,4),HHA(4,2,JSON),HHB(4,JSON),HL(JSON),HMAX(4),
      1HP(JSON),HR(JSON),HS(JSON),HT(JSON)

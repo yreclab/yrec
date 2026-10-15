@@ -9,12 +9,15 @@ C (WITH THE XA[I]'S IN ORDER), AND GIVEN THE ARRAY Y2A, WHICH IS THE
 C OUTPUT OF SPLINE ABOVE, AND GIVEN A VALUE OF X, THIS ROUTINE RETURNS
 C A CUBIC-SPLINE INTERPOLATED VALUE Y.
       SUBROUTINE SPLINTD2(XA, YA, N, Y2A, X, Y, KLO, KHI)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      PARAMETER (JSON=5000)
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

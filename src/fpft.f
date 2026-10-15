@@ -1,5 +1,9 @@
 C $$$$$$
       SUBROUTINE FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/QUADD/ into QUADD_MOD.
       USE QUADD_MOD
@@ -7,7 +11,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
-      PARAMETER (JSON=5000)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration

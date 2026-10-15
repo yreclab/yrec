@@ -1531,10 +1531,34 @@ rules and inline comments, for the reasons recorded in issues 22 and 24.
 
 ## 26. Centralise `JSON` in a parameters module -- but not the table dimensions
 
-**Status:** open, scoped on 2026-10-15 at MHP's suggestion, with his
-distinction between input-table dimensions and the code's own structural
-dimensions. They need opposite treatments, which is the point of this
-entry.
+**Status:** RESOLVED 2026-10-15 for the importer side. `dimensions_mod.f`
+now holds `JSON = 5000` as the single public definition and 108 files take
+it by `USE`; no code-level `PARAMETER(JSON=...)` remains outside the
+modules. Build clean, 19 targeted cases byte-identical.
+
+**Still open, deliberately:** the 36 `PRIVATE` copies inside the block
+modules. They cannot clash with `DIMENSIONS_MOD` because `PRIVATE` is not
+exported, so leaving them costs only duplication. Removing them means a
+module importing another module, which needs generated inter-module
+dependencies in the Makefile first -- stage 0 item 3. Ordering was
+checked rather than assumed when the importer work landed:
+`dimensions_mod.o` compiles at position 10 and the first ordinary object
+at 85, so the existing `$(OBJS): $(MODOBJS)` rule already suffices while
+no module imports another.
+
+**A fix folded in.** `microdiff_mte.f` had `INTEGER HALFJSON` set to a
+hardcoded `5000` and used as `NPT = MIN(NPT,HALFJSON)`. The name says half
+of `JSON`, but the value was all of it, so the cap had evidently been
+raised to the full array bound without renaming -- and duplicating the
+literal meant a future change to `JSON` would silently desynchronise the
+cap from the bound it exists to enforce. It now reads `HALFJSON = JSON`.
+The name is kept so the change is behaviour-neutral; correcting it is a
+loose end. It was the only hardcoded `5000` outside a `PARAMETER` or
+module in the tree.
+
+The original scoping follows, with MHP's distinction between input-table
+dimensions and the code's own structural dimensions. They need opposite
+treatments, which is the point of this entry.
 
 ### Do centralise: `JSON`, and anything else like it
 

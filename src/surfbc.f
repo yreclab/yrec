@@ -7,6 +7,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C      *       LNEW,LRESET,LSBC,KSAHA,KENV,KATM,HSTOT,BL,  ! KC 2025-05-31
      *       LNEW,LRESET,KSAHA,KENV,KATM,HSTOT,BL,
      *       TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/COMP/ into COMP_MOD.
       USE COMP_MOD
@@ -23,7 +27,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
-      PARAMETER(JSON=5000)
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
 C INPUTS   LRESET = .T.  REDO ALL 3 ENVELOPES AND RETRIANGULATE IF NEED
 C BOTH LNEW AND LRESET ARE RESET TO .FALSE.

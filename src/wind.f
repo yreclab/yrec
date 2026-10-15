@@ -3,6 +3,10 @@ C MHP 10/02 UNUSED LFIRST REMOVED FROM CALL
       SUBROUTINE WIND(BL,DELTS,HSBOT,HSTOP,JSTART,JEND,LJDOT,OMEGAS,
 C      *                SJTOT,SMASS,TEFFL,HICZ,HJM,LFIRST)  ! KC 2025-05-31
      *                SMASS,TEFFL,HICZ,HJM)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
       USE OVRTRN_MOD
@@ -13,7 +17,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HJM(JSON)

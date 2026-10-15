@@ -6,6 +6,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENVINT(B,FPL,FTL,GL,HSTOT,IE,LPRT,LSBC,PLIM,RL,TEFFL,
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
       USE ACDPTH_MOD
@@ -55,7 +59,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
-      PARAMETER(JSON=5000)
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES OF KURUCZ.
 C JNT 06/14 ADDED NTC/NGC FOR KTTAU=5
 C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE TABLES

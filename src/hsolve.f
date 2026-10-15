@@ -4,8 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C HSOLVE
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE HSOLVE(M,HHA,HHB,HSRF)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION HHA(4,2,JSON),HHB(4,JSON),HSRF(6)
       SAVE

@@ -5,6 +5,10 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C       SUBROUTINE GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,  ! KC 2025-05-31
       SUBROUTINE GETTAU(HCOMP,HR,HP,HD,HS1,HT,FP,FT,TEFFL,HSTOT,BL,M,
      *                  LC,RBCZ,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
       USE SCRTCH_MOD
@@ -22,7 +26,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      PARAMETER (JSON=5000)
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude

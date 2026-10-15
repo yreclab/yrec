@@ -3,7 +3,10 @@ C $$$$$$
 C      *                   HSTOT,HV,IBEG,IEND,IMAX,IMIN,LCZ,LOK,M,NTOT,  ! KC 2025-05-31
      *                   HSTOT,HV,IBEG,IEND,IMAX,IMIN,LCZ,LOK,M,
      *                   HCOMP,JBEG,JEND)
-      PARAMETER (JSON=5000)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION COD2(JSON),ECOD2(JSON),EM(JSON),HD(JSON),HL(JSON),

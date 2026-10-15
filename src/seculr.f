@@ -10,6 +10,10 @@ C      *                  BL,HSTOT,SJTOT,SMASS,TEFFL,LREDO,IREDO,  ! KC 2025-05-
      *                  HICZ,HSBOT,HSTOP,OMEGAS,LCZSUR,
 C      *                  MRZONE,MXZONE,NRZONE,NZONE,  ! KC 2025-05-31
      *                  COD2,HV,LOK,HCOMPS)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
       USE OLDROT2_MOD
@@ -32,7 +36,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude

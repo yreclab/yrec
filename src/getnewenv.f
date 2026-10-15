@@ -7,6 +7,10 @@ C THE DESIRED ENVELOPE MASS
 C      *                     HSTOT,HT,LC,ETA2,HG,HI,HJM,QIW,R0,  ! KC 2025-05-31
      *                     HSTOT,HT,LC,ETA2,HI,HJM,QIW,R0,
      *                     HKEROT,BL,SJTOT,SKEROT,TEFFL,M,LNEW,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
       USE ENVSTRUCT_MOD
@@ -22,7 +26,6 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C SENV IS THE DIFFERENCE IN MASS BETWEEN THE TOTAL AND THE LAST MODEL

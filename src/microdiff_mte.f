@@ -5,6 +5,10 @@ C      *               IEND,M,DR,NPT,LC,ODEN,OTEM,EM,ER,EDEN,ETEM,EHQPR,EDELR,  
      *               IEND,M,DR,NPT,ODEN,OTEM,EM,ER,EDEN,ETEM,EHQPR,EDELR,
      *               EX,EY,EZ,ELI,EM_H,ER_H,EDEN_H,ETEM_H,EHQPR_H,EDELR_H,
      *               EX_H,EY_H,EZ_H,ELI_H)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
       USE SCRTCH_MOD
@@ -12,7 +16,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude
@@ -56,7 +59,15 @@ C JVS add additional trap to deal with models with NPT=1
       IF (NPT .EQ. 1) NPT=NPT+1
 C  ENSURE THAT NUMBER OF POINTS DOES NOT EXCEED JSON.
 
-      HALFJSON = 5000
+C 10/15/26 MHP via Claude
+C code changed to take this cap from JSON rather than repeating its
+C value.  The name says half of JSON, but the value was 5000, which is
+C all of JSON -- presumably the cap was raised from JSON/2 to the full
+C array bound and the name was left behind.  Hardcoding 5000 meant that
+C if JSON ever changed, this cap would silently stop matching the bound
+C it exists to enforce.  The name is kept for now so this change stays
+C behaviour-neutral; see KNOWN_ISSUES.md issue 26.
+      HALFJSON = JSON
       NPT=MIN(NPT,HALFJSON)
       DR = DRTOT/DFLOAT(NPT-1)
 C  SET UP VECTOR OF EQUALLY SPACED RADII AT ZONE MIDPOINTS.

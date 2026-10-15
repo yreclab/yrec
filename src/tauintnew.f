@@ -3,13 +3,16 @@ C       RECURSIVE SUBROUTINE TAUINTNEW(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,MINT,SVEL
 C      *                     DEL1,DEL2,HSTOT,RBCZ)  ! KC 2025-05-31
       SUBROUTINE TAUINTNEW(HS1,LCZ,HR,HP,HD,HG,M,MINT,SVEL,
      *                     DEL1,DEL2,RBCZ)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
       USE OVRTRN_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration

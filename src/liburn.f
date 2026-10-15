@@ -6,6 +6,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
 C       SUBROUTINE LIBURN(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)  ! KC 2025-05-31
       SUBROUTINE LIBURN(DELTS,HCOMP,HR,HS1,HS2,HT,JNENV,JNENV0,M)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
       USE SCRTCH_MOD
@@ -39,7 +43,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

@@ -9,6 +9,10 @@ C   llp  06/15/2009
       SUBROUTINE MASSLOSS(BL,DAGE,DELTS,HCOMP,HD,HJM,HP,HR,HS,
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
       USE OVRTRN_MOD
@@ -27,7 +31,6 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HS(JSON),

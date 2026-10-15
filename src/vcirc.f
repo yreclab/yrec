@@ -2,6 +2,10 @@ C $$$$$$
 C       SUBROUTINE VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,  ! KC 2025-05-31
       SUBROUTINE VCIRC(HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,
      *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP,FACI)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/VFACT/ into VFACT_MOD.
       USE VFACT_MOD
@@ -42,7 +46,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude

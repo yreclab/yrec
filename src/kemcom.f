@@ -4,6 +4,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE KEMCOM(HT,IBEGIN,IEND,HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,
 C      *HR9,HR10,HR11,HR12,HR13,HF1,HS2,HCOMP,DDAGE,ITLVL)  ! KC 2025-05-31
      *HR10,HR11,HR12,HF1,HS2,HCOMP,DDAGE)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
       USE OLDMOD_MOD
@@ -14,7 +18,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude

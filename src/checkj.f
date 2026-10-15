@@ -4,6 +4,10 @@ C MHP 10/02 ECOD, ECOD2 NO LONGER USED; OMITTED FROM CALL
 C      *                  LPRT,M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,  ! KC 2025-05-31
      *                  M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,
      *                  QIW,R0,WSAV,ID,IDM,LOKAD)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
       USE TEMP2_MOD
@@ -32,7 +36,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude
