@@ -72,8 +72,15 @@ C needed COMMON/EEOS06/, which it hardcoded as eos(10) instead.
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
       REAL*8 ABEG0,AMIN0,AMAX0,EBEG0,EMIN0,EMAX0
+C 10/15/26 MHP via Claude
+C code changed to drop TNORM, TCZ and TAUCZN from this REAL*8 statement.
+C All three are COMMON/ACDPTH/ members, declared at line 99 below, and
+C explicitly typing a COMMON member is legal while doing the same to a
+C USE-associated name is rejected, so they had to go before ACDPTH
+C becomes a module.  Removing them changes nothing: IMPLICIT
+C REAL*8(A-H,O-Z) already gives all three that type, T being in O-Z.
       REAL*8 STARR(JSON),START(JSON),STARD(JSON),STARX(JSON),STARP(JSON),
-     *       STARZ(JSON),STARC(JSON),TNORM,TCZ,TAUCZN,STARCZ(JSON),STARRZ(JSON)
+     *       STARZ(JSON),STARC(JSON),STARCZ(JSON),STARRZ(JSON)
 C      REAL*8 ATMOSX, ATMOST(JSON),ATMOSD(JSON),ATMOSP(JSON),ADELAD(JSON),ATMOSC(JSON),
 C     *       ATGAM1(JSON), ATMOSR(JSON),GM1(JSON)
       REAL*8 ATMOSX, GM1(JSON)

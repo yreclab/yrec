@@ -983,23 +983,37 @@ that the build is warning-free and a new warning stands out.
 
 ---
 
-## 21. The `ENV*` prefix carries two unrelated meanings
+## 21. CZ-base output scalars were borrowing the envelope integrator's prefix
 
-**Status:** open. One name fixed on 2026-10-14 (`CENT`'s `ENVR` is now
-`CZsurf_R`); MHP asked that the rest of the family be noted for a later
-pass, and that the same rule be applied to related variables in future.
+**Status:** RESOLVED on 2026-10-15.
 
-`ENV*` currently names two different kinds of quantity.
+### The naming scheme, per MHP
 
-**Family 1 -- envelope profile arrays**, `COMMON/ENVSTRUCT/`, 18 members
-over 8 files, each dimensioned `(JSON)`: `ENVP`, `ENVT`, `ENVS`,
-`ENVD`, `ENVR`, `ENVX`, `ENVZ`, `ENVO`, `ENVL`, plus `LCENV`, `EDELS`,
-`EVELS`, `EBETAS`, `EGAM1`, `EQCP`, `EFXIONS`, `EQDT`, `NUMENV`. These
-hold the reconstructed envelope solution and are retained as COMMON for
-output, per MHP.
+An earlier draft of this entry framed the problem as "`ENV*` carries two
+unrelated meanings" and proposed reserving `ENV*` for the profile arrays.
+That mis-described the code, and MHP corrected it:
 
-**Family 2 -- scalars at the convection-zone base**, computed in
-`wrtout.f` around the `MHP 2/98 FIND RADIUS OF CZ BASE` comment:
+- **`ENV*` and its `E*` abbreviations belong to the envelope integrator
+  and its solution, and follow one set of rules.** That covers both
+  `COMMON/ENVSTRUCT/`'s members -- the `ENV*` profile arrays *and* the
+  `E*` ones, `EDELS`, `EVELS`, `EBETAS`, `EGAM1`, `EQCP`, `EFXIONS`,
+  `EQDT` -- and the integrator controls in `NMLPAR`: `ENVERR`, `ENVBEG`,
+  `ENVMIN`, `ENVMAX`, `ENVSTP`. None of these is a defect and none is to
+  be renamed. In particular the `E*` abbreviation inside `ENVSTRUCT` is
+  part of that scheme, not an inconsistency; a suggestion to normalise
+  those seven members to `ENV*` was withdrawn.
+- **`CZsurf_` is only for the global scalars used for output that hold
+  surface convection-zone properties.** Those are the `COMMON/CENT/`
+  members and the `wrtout.f` locals feeding them.
+
+So there was only ever one genuine conflation: the CZ-base output scalars
+were using the envelope integrator's prefix. That is what is fixed here,
+and `ENVSTRUCT` needed nothing.
+
+### The scalars that were misnamed
+
+Computed in `wrtout.f` around the `MHP 2/98 FIND RADIUS OF CZ BASE`
+comment:
 
 | name | meaning | where it lives |
 |---|---|---|
@@ -1019,6 +1033,73 @@ exists precisely for output and `wrtout.f` is an output routine -- a
 blanket `USE` would silently alias those four scalars to the arrays.
 `USE ... , ONLY:` prevents it, but the name reuse remains a trap for a
 reader and for whoever next edits `wrtout.f`.
+
+### Done on 2026-10-15, and what the survey found beyond it
+
+Renamed, all in `wrtout.f` except `ENVLM`, which is a `CENT` member and so
+also touches `main.f`: `ENVLM` to `CZsurf_M`, `ENVRL` to `CZsurf_RL`,
+`ENVTL`/`ENVDL`/`ENVPL` to `CZsurf_TL`/`CZsurf_DL`/`CZsurf_PL`, and
+`ENVT`/`ENVD`/`ENVP`/`ENVO` to `CZsurf_T`/`CZsurf_D`/`CZsurf_P`/`CZsurf_O`.
+44 references in total. `ENVSTRUCT`'s members of those four names, in the
+other seven files, are untouched -- which was the point.
+
+**Effect on the shadow census:** the silent-capture set drops from 45 to
+41, and `wrtout.f` goes to zero. `shadow_census.py --file wrtout.f` now
+reports that any `USE` can be added safely. That was the safety argument
+for doing this before `ENVSTRUCT` converts.
+
+**`taucal.f` is deliberately untouched**, although it holds its own
+`ENVRL` and `ENVR` locals computing the same CZ-base radius. Renaming
+them would make matters worse: its `ENVR` currently shadows
+`ENVSTRUCT`'s `ENVR(JSON)`, an **array**, so a future `USE` of that module
+fails loudly on a rank mismatch, whereas `CZsurf_R` would shadow `CENT`'s
+**scalar** of the same name and alias silently. A loud future failure is
+worth more than a consistent name.
+
+### Related daughter variables, surveyed but not changed
+
+MHP asked whether other variables share the prefix. They do, in three
+groups, none addressed above.
+
+**1. `ENVSTRUCT`'s `E*` members -- NOT a defect, suggestion withdrawn.**
+Of its 18 members, 9 are `ENV*` profile arrays, 2 are `LCENV` and
+`NUMENV`, and 7 use a bare `E` prefix: `EDELS(3,JSON)`, `EVELS`,
+`EBETAS`, `EGAM1`, `EQCP`, `EFXIONS(3,JSON)`, `EQDT` -- envelope del,
+velocities, beta, gamma-1, Cp, ionization fractions, dT. This entry
+originally proposed normalising them to `ENV*` as a cosmetic tidy-up.
+MHP's ruling is that `ENVSTRUCT` belongs to the envelope integrator and
+follows its rules, abbreviations included, so these are correct as they
+stand and must be left alone.
+
+**2. `NMLPAR` holds a third `ENV*` family -- EXCLUDED by MHP on
+2026-10-15.** `ENVERR`, `ENVBEG`, `ENVMIN`, `ENVMAX` and `ENVSTP` are
+envelope *integrator controls*: convergence tolerance and the beginning,
+minimum and maximum step sizes. MHP's ruling is that they serve a
+different purpose from the envelope solution and should not be folded
+into any `ENV*`/`CZsurf_` scheme. They are not to be renamed.
+
+This means `ENV*` deliberately retains two senses -- the `ENVSTRUCT`
+profile arrays and these integrator controls -- which is a decision, not
+an oversight. They collide with nothing, so nothing is at risk; the
+`CZsurf_` split removed the only pair that did.
+
+**3. The CZ-base computation is duplicated under three local names.**
+Besides `wrtout.f`:
+
+```
+taucal.f:127     ENVRL  = HR(IMAX-1)+FX*(HR(IMAX)-HR(IMAX-1))
+tauint.f:100     ENVRCL = HR(IMAX-1)+FX*(HR(IMAX)-HR(IMAX-1))
+```
+
+with `tauintnew.f` also holding `ENVRCL`. Three files compute the same
+radius independently under different names, which is a consolidation
+question rather than a naming one. `rscale.f` adds a fourth sense of the
+prefix with `ENVOLD`, `ENVNEW` and `ENVTOTAL` for envelope *mass*.
+
+Discount two apparent hits: `ENVELOPE` occurs only in comments and
+`ENVINT` is a subroutine name. `shadow_census.py` reads identifiers from
+statement text including quoted and commented content, so both show up in
+a naive survey.
 
 **Proposed rule.** Prefix by what the quantity is attached to, and keep
 `L` as the log suffix:

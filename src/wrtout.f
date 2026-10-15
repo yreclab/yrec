@@ -54,7 +54,7 @@ C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,CZsurf_R
+      COMMON/CENT/TCENTER,PCENTER,DCENTER,CZsurf_M,CZsurf_R
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -240,37 +240,37 @@ C     *           (SDEL(3,JENV)-SDEL(1,JENV-1))
             FX = DD2/(DD2-DD1)
 c            HSB = 0.5D0*(HS1(JENV)+HS1(JENV-1))
             HSB = HS1(JENV-1)+FX*(HS1(JENV)-HS1(JENV-1))
-            ENVLM = (EXP(CLN*HSTOT) - HSB)/CMSUN
+            CZsurf_M = (EXP(CLN*HSTOT) - HSB)/CMSUN
 C           ENVLM = SMASS-HS1(JENV-1)/CMSUN
 C          HSR = 0.5D0*(10.0D0**HR(JENV)+10.0D0**HR(JENV-1))
 C          ENVX = HSR/(10.0D0**RL)
 C MHP 2/98 FIND RADIUS OF CZ BASE
-            ENVRL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))-CRSUNL
-            CZsurf_R = EXP(CLN*ENVRL)
-            ENVO = SO(JENV-1)+FX*(SO(JENV)-SO(JENV-1))
-            ENVTL = HT(JENV-1)+FX*(HT(JENV)-HT(JENV-1))
-            ENVDL = HD(JENV-1)+FX*(HD(JENV)-HD(JENV-1))
-            ENVPL = HP(JENV-1)+FX*(HP(JENV)-HP(JENV-1))
-            ENVT = EXP(CLN*ENVTL)
-            ENVD = EXP(CLN*ENVDL)
-            ENVP = EXP(CLN*ENVPL)
+            CZsurf_RL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))-CRSUNL
+            CZsurf_R = EXP(CLN*CZsurf_RL)
+            CZsurf_O = SO(JENV-1)+FX*(SO(JENV)-SO(JENV-1))
+            CZsurf_TL = HT(JENV-1)+FX*(HT(JENV)-HT(JENV-1))
+            CZsurf_DL = HD(JENV-1)+FX*(HD(JENV)-HD(JENV-1))
+            CZsurf_PL = HP(JENV-1)+FX*(HP(JENV)-HP(JENV-1))
+            CZsurf_T = EXP(CLN*CZsurf_TL)
+            CZsurf_D = EXP(CLN*CZsurf_DL)
+            CZsurf_P = EXP(CLN*CZsurf_PL)
        ELSE
-          ENVLM = SMASS
+          CZsurf_M = SMASS
           CZsurf_R = 0.0D0
-            ENVT = 10.0D0**TCENTER
-            ENVD = 10.0D0**DCENTER
-            ENVP = 10.0D0**PCENTER
-            ENVO = SO(1)
+            CZsurf_T = 10.0D0**TCENTER
+            CZsurf_D = 10.0D0**DCENTER
+            CZsurf_P = 10.0D0**PCENTER
+            CZsurf_O = SO(1)
        ENDIF
       ELSE
-       ENVLM = 0.0D0
+       CZsurf_M = 0.0D0
        CZsurf_R = 0.0D0
-         ENVT = 0.0D0
-         ENVD = 0.0D0
-         ENVP = 0.0D0
-         ENVO = 0.0D0
+         CZsurf_T = 0.0D0
+         CZsurf_D = 0.0D0
+         CZsurf_P = 0.0D0
+         CZsurf_O = 0.0D0
       ENDIF
-      WRITE(ISHORT,50)M,XENV0,ZENV0,COREM,ENVLM, CZsurf_R
+      WRITE(ISHORT,50)M,XENV0,ZENV0,COREM,CZsurf_M, CZsurf_R
    50 FORMAT(1X,'SHELLS=',I5,2X,'(X0,Z0)=(',F9.7,',',F9.7,')',2X,
      *'CONV. ZONE MASSES(MSUN): CORE',F10.7,' ENV.',F10.7,
      *' RAD. FRAC.',F10.7)
@@ -525,8 +525,8 @@ C       CALL GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,  ! KC 2025-05-31
       PPHOT0 = PPHOT
 
 C JVS 02/12 Added PPHOT and SMASS to the output
-            WRITE(ITRACK, 1499) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *      CZsurf_R,ENVT,ENVD,ENVP,ENVO,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
+            WRITE(ITRACK, 1499) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *      CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1      HCOMP(3,1),(TLUMX(J),J = 1,5),TLUMX(8),TLUMX(7),TLUMX(6),
      2      CLSNU,GASNU,(FLUXTOT(I),I=1,10),(HCOMP(I,1),I=4,11),
      3      (HCOMP(I,M),I=4,15),(HCOMP(I,M),I=1,3),HCOMP(3,M)/HCOMP(1,M),
@@ -537,8 +537,8 @@ C     1499       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4,16E16.8,12E10.3,41E16.8)
 C MCR 12/25 Preserve precision and 'E' for values w/ 3-digit exponents
  1499       FORMAT(1X,2I8,1P7E17.8E3,1P5E12.4,16E17.8E3,12E10.3,41E17.8E3)
          ELSE IF(ITRVER .EQ.1 .OR. ITRVER .EQ.2) THEN
-            WRITE(ITRACK,1500)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *                     CZsurf_R,ENVT,ENVD,ENVP,ENVO
+            WRITE(ITRACK,1500)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *                     CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O
  1500       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4)
             WRITE(ITRACK,1509)TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1                     HCOMP(3,1),HITOT
@@ -606,7 +606,7 @@ C 4/09 ADDED TAUCZ TO ROTATION INFORMATION
          IF (ITRVER .EQ. 3) THEN
 C        RATIO OF GRAV TO TOTAL ENERGY
 C       GROTOT = 100.0*TLUMX(7)/HL(M)
-            WRITE(ITRACK,1501)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
+            WRITE(ITRACK,1501)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
      *      CZsurf_R, XNEW
  1501       FORMAT(1X,2I8,1P5E13.5, 1P2E11.3, 0PF8.4, 1PE13.5)
 
@@ -665,7 +665,7 @@ C together the interior and envelope pieces. Columns 68,69,70 are normalized
 C acoustic depth, depth to CZ and acoustic crossing time, respectively.
         IF (LACOUT) THEN
             IF(JENV.GT.1 .AND. LADON) THEN
-                  CALL CALCAD(HR, ENVRL, M, HD, HP,HT,BL, FP, FT, HSTOT,
+                  CALL CALCAD(HR, CZsurf_RL, M, HD, HP,HT,BL, FP, FT, HSTOT,
 C      *            LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
      *            TEFFL, HCOMP, DAGE, JENV, CMIXL)
             ELSE IF (JENV.EQ.1) THEN
@@ -684,8 +684,8 @@ C      *            LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
      *   DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
         ENDIF
 
-            WRITE(ITRACK, 1800) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *      CZsurf_R,ENVT,ENVD,ENVP,ENVO,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
+            WRITE(ITRACK, 1800) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *      CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1      HCOMP(3,1),(TLUMX(J),J = 1,5),TLUMX(8),TLUMX(7),TLUMX(6),
      2      CLSNU,GASNU,(FLUXTOT(I),I=1,10),(HCOMP(I,1),I=4,11),
      3      (HCOMP(I,M),I=4,15),(HCOMP(I,M),I=1,3),HCOMP(3,M)/HCOMP(1,M),
