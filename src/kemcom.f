@@ -4,32 +4,56 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE KEMCOM(HT,IBEGIN,IEND,HR1,HR2,HR3,HR4,HR5,HR6,HR7,HR8,
 C      *HR9,HR10,HR11,HR12,HR13,HF1,HS2,HCOMP,DDAGE,ITLVL)  ! KC 2025-05-31
      *HR10,HR11,HR12,HF1,HS2,HCOMP,DDAGE)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
 
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/BURTOL/CMIN,ABSTOL,RELTOL,KEMMAX
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      DIMENSION A(56),B(7),W(7),XSUM(11)
+C 10/13/26 MHP via Claude
+C code changed to remove EQUIVALENCE (A(50),B(1)), the only EQUIVALENCE
+C left in the code.  A holds the 7x7 Jacobian in A(1:49) and the
+C right-hand side in A(50:56); SIMEQC, which declares DIMENSION A(56),
+C is handed the whole array and solves in place, leaving the solution in
+C A(50:56).  B existed only as an alias for reading that solution back,
+C in three lines of the convergence check below, so those now index A
+C directly as A(49+I) -- identical by the definition of the EQUIVALENCE,
+C since the loop runs I = 1,7.  A itself is untouched, so the contiguity
+C SIMEQC relies on is preserved.
+      DIMENSION A(56),W(7),XSUM(11)
       DIMENSION HT(JSON),HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),
 C      *HR5(JSON),HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),
 C      *HR11(JSON),HR12(JSON),HR13(JSON),HF1(JSON),HCOMP(15,JSON),  ! KC 2025-05-31
      *HR5(JSON),HR6(JSON),HR7(JSON),HR8(JSON),HR10(JSON),
      *HR11(JSON),HR12(JSON),HF1(JSON),HCOMP(15,JSON),
      * HS2(JSON)
-      EQUIVALENCE (A(50),B(1))
       SAVE
 
 C KEMCOM USES THE REACTION RATES COMPUTED IN ENGEB TO IMPLICITLY SOLVE
@@ -327,12 +351,12 @@ C CHECK TO SEE IF THE SYSTEM HAS CONVERGED WITHIN THE DESIRED TOLERANCES.
       BIGB = 0.D0
       BIGD = 0.D0
       DO 30 I = 1,7
-         W(I) = W(I)-B(I)
-         IF(DABS(B(I)).GE.BIGD) BIGD = DABS(B(I))
+         W(I) = W(I)-A(49+I)
+         IF(DABS(A(49+I)).GE.BIGD) BIGD = DABS(A(49+I))
          IF(W(I).LT.DCMIN) THEN
             W(I) = 0.D0
          ELSE
-            XB = DABS(B(I)/W(I))
+            XB = DABS(A(49+I)/W(I))
             IF(XB.GE.BIGB) BIGB = XB
          ENDIF
    30 CONTINUE

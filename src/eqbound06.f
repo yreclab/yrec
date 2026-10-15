@@ -9,11 +9,23 @@ C       SUBROUTINE EQBOUND06(T,DL,DL0,FAC,LTAB,LRAMP)  ! KC 2025-05-31
       parameter (mx=5,mv=10,nr=169,nt=197)
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
+     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
+C 10/9/26 MHP via Claude
+C code changed to rename AEOS06's M member to MIDX: M is such a
+C universally-used name elsewhere in this codebase (e.g. shell count
+C in calcad.f) that keeping it here was just asking for a future
+C collision. M is genuinely used (as a composition/mixture-axis
+C index) in esac06.f and readcoeos06.f; declared but never read or
+C written by name in this file.
 C KC 2025-05-30 reordered common block elements
 C       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
-      common/beos06/ zz(mx),iri(10),index(10),nta(nr),nra(nt)
-      common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale). AEOS06 (above) is left untouched.
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
       SAVE
       T6 = T*1.0D-6

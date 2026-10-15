@@ -1,47 +1,82 @@
 C$$$$$$
       SUBROUTINE MIDMOD(DELTS,DT,FX,HCOMP,HD,HG,HJM,HL,HP,HR,HS,HS1,
-C      *            HS2,HSTOT,HT,LC,LCZ,LFIRST,M,ETA2M,HDM,HGM,HICZ,HIM,  ! KC 2025-05-31
-     *            HS2,HSTOT,HT,LC,LFIRST,M,ETA2M,HDM,HGM,HICZ,HIM,
+C      *            HS2,HSTOT,HT,LC,LCZ,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,  ! KC 2025-05-31
+     *            HS2,HSTOT,HT,LC,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,
      *            HLM,HPM,HRM,HSBOT,HSTOP,HTM,IMIN,IMAX,LALLCZ,LCM,
      *            LCZM,LCZSUR,OMEGAM,R0M,QIWM,MRZONE,MXZONE,NRZONE,
-     *            NZONE)
+     *            NZONE,HCOMPS)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP/ into TEMP_MOD.
+      USE TEMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDPHY/ into OLDPHY_MOD.
+      USE OLDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/BURN/HCOMPM(15,JSON)
+C 10/13/26 MHP via Claude
+C HCOMPS is now a dummy argument, formerly COMMON/OLDAB/.
+      DIMENSION HCOMPS(15,JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/BURN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
-C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/FLAG/LEXCOM
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *              ETA2X(JSON)
-      COMMON/OLDPHY/DELO(JSON),DELAO(JSON),AMUO(JSON),OO(JSON),
-     *              CPO(JSON),QDTO(JSON),VELO(JSON),VISCO(JSON),
-     *              THDIFO(JSON),ESUMO(JSON),DELRO(JSON),EPSO(JSON)
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
-     *     VISC(JSON)
-      COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
-      COMMON/OLDAB/HCOMPS(15,JSON)
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DWMAX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
+C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
+C now owns the storage.
 C MHP 05/02 ADDED FOR DEUTERIUM BURNING
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 06/02
-      COMMON/PREVMID/DDELP(JSON),DDELN(JSON),HRP(JSON),LCP(JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/PREVMID/ to plain local arrays:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves their values across calls, same
+C as COMMON did. LCP keeps its LOGICAL*4 type via the IMPLICIT
+C LOGICAL*4(L) rule already in effect in this file.
+      DIMENSION DDELP(JSON),DDELN(JSON),HRP(JSON),LCP(JSON)
       DIMENSION HCOMP(15,JSON),HD(JSON),HG(JSON),HJM(JSON),HL(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HS2(JSON),HT(JSON),
 C      *     LC(JSON),LCZ(JSON),ETA2M(JSON),HDM(JSON),HGM(JSON),  ! KC 2025-05-31
@@ -50,10 +85,10 @@ C      *     LC(JSON),LCZ(JSON),ETA2M(JSON),HDM(JSON),HGM(JSON),  ! KC 2025-05-3
      *     LCM(JSON),LCZM(JSON),OMEGAM(JSON),R0M(JSON),QIWM(JSON),
      *     MRZONE(13,2),MXZONE(12,2)
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 3/09 ADDED FLAG TO ENFORCE SOLID BODY ROTATION AT ALL TIMES.
 C JNT 09/25 FOR 05/15 ADD IMPJMOD
-      COMMON/SBROT/LSOLID,IMPJMOD
 C MHP 06/02
       LOGICAL*4 LCHG(JSON)
 C ADDED VECTOR FOR DEUTERIUM BURNING
@@ -75,7 +110,7 @@ C  HCOMPM IS THE ARRAY OF CHANGES IN COMPOSITION DUE TO NUCLEAR BURNING
 C  DURING THE COURSE OF THE MODEL TIMESTEP.
 C MHP 06/02 SAVE CHANGES IN R, CZ DEPTH, DELAD-DELRAD FROM THE
 C PRIOR STEP.
-      IF(LFIRST)THEN
+      IF(LFIRSTIT)THEN
          DO 20 J = 1,M
             LCP(J) = LCO(J)
             HRP(J) = HRO(J)
@@ -287,7 +322,7 @@ C       CALL ROTMIX(DT,HCOMP,HS2,HTM,5,M,MRZONE,MXZONE,  ! KC 2025-05-31
 C MHP 05/02 ADDED DEUTERIUM BURNING
       IF(HCOMPP(12,M).GT.1.0D-14)THEN
 C INCREMENT THE TIMESTEP
-         IF(LFIRST) THEN
+         IF(LFIRSTIT) THEN
             DO I = 1,M
                DRATEM(I) = DRATE0(I)+FAC2*(DRATE(I)-DRATE0(I))
                DRATEM0(I) = DRATE0(I)

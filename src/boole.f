@@ -10,8 +10,12 @@ C      YI: returned interpolated values of Y
 C
 C       Data need to be evenly gridded for the integration formula to work.
 C      Data that are not already so are interpolated onto an even grid
-C      using spline interpolation (numerical recipes SPLINE (renamed splinnr)
-C      and SPLINT)
+C      using spline interpolation (SPLINJ for the second derivatives and
+C      SPLINT to evaluate).
+C 10/14/26 MHP via Claude
+C comment corrected: it credited "numerical recipes SPLINE (renamed
+C splinnr)", but this routine calls SPLINJ and SPLINT.  splinnr was never
+C reachable and has been deleted; see KNOWN_ISSUES.md issue 24.
 C*************************************************************
 C      PARAMETER(NN = 17)
 C      PARAMETER(N = 16)

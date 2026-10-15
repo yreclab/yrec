@@ -5,6 +5,27 @@ C QENV
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QENV(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,
      *                LSAVE,RL,TEFFL,X,Z,KENV,KSAHA)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QENVMIX/ into QENVMIX_MOD.
+      USE QENVMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVPRT/ into ENVPRT_MOD.
+      USE ENVPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 C 9/24/26 MHP via Claude
 C QENV's argument list must stay fixed: it is invoked polymorphically as
 C the DERIV callback by MMID/BSSTEP (see EXTERNAL QENV in envint.f),
@@ -18,26 +39,13 @@ C may reach QENV (direct calls and the BSSTEP/MMID callback alike).
       IMPLICIT LOGICAL*4(L)
 
       DIMENSION Y(3),DYDX(3),FXION(3)
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *            SENV
+C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/FLAG/LEXCOM
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
-      COMMON/QENVMIX/CMIXLQ
       SAVE
 
       PL = X0

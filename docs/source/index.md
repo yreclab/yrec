@@ -24,5 +24,6 @@ python_package.md
 :caption: YREC Internals
 namelist_control.md
 namelist_physics.md
+namelist_modules.md
 microphysics.md
 ```

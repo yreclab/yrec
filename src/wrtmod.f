@@ -7,7 +7,37 @@ C       SUBROUTINE WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,
 C      *HL,HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
 C      * DAGE)  ! KC 2025-05-31
       SUBROUTINE WRTMOD(M,JENV,HCOMP,HS1,HD,
-     *HL,HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL)
+     *HL,HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL,XMSOL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
       PARAMETER (JSON=5000)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -18,10 +48,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ,ISOUND
 C 9/25/26 MHP via Claude
 C code changed to add ISOUND (Csound.dat unit) to COMMON/IOUNITS/
 C 9/24/26 MHP via Claude
@@ -31,47 +57,45 @@ C code changed to remove dead IDYN from COMMON/LUNUM/
 C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)
-      COMMON/LABEL/XENV0,ZENV0
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
-      COMMON/FLAG/LEXCOM
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
+C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
+C not the running SMASS, so it cannot be replaced by the mass already in
+C scope there.
+C 10/13/26 MHP via Claude: removed the unused COMMON/PULSE2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 7/96 COMMON BLOCK INSERTED FOR SOUND SPEED
-      COMMON/SOUND/GAM1(JSON),LSOUND
 C DBG
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
-      COMMON/ROTEN/DEROT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ROTEN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION HCOMP(15,JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)
 C      *HS1(JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),HT(JSON),LC(JSON)
 C       DIMENSION OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),ID(JSON)
@@ -83,10 +107,10 @@ C KC 2025-05-30 addressed warning messages from Makefile.legacy
 C      DATA IHEADR/4H****/
 
 C G Somers 10/14, Add spot common block, and store common block.
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/QUADD/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
       SAVE

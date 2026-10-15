@@ -13,6 +13,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
      *AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,LDERIV,
      *LATMO,KSAHA)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 c
 c  Input Arguments: TL, PL, X, Z, LDERIV, LATMO
 c
@@ -25,48 +31,33 @@ c
       PARAMETER (NTS=63, NPS=76)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C       DIMENSION ATOMWT(4),FXION(3),ATOMW2(12)  ! FX(12)  ! KC 2025-05-31
       DIMENSION FXION(3)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-C 9/25/26 MHP via Claude
-C code changed to fix XXDY -> XXDH, matching every other file that
-C declares COMMON/DEBHU/ (pre-existing name-only inconsistency; this
-C slot was never read or written by name in this file)
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1     YYDH,ZZDH,DHNUE(18),LDH
-C YCK 2/95 OPAL eos
-C LLP 2001 OPAL eos Mar 2003
-C LLP 2006 OPAL eos Oct 2006
-C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-C MHP 8/25 Remove unused variables
-C 9/24/26 MHP via Claude
-C code changed to remove the OPAL 1995/2001 equations of state
-      COMMON/OPALEOS/lopale06,lNumDeriv
-C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C       DATA NZP1/12/
 C       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
 C       DATA SCALET,SCALES/0.500D0, 2.000D0/

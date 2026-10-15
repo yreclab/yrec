@@ -2,6 +2,15 @@ c     This is to evaluate the EOS with the new tables and call eqstat to
 c     compute the new equation of state and compare to the old one...
 
       SUBROUTINE SETSCV
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
+      USE SCVEOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
       PARAMETER (NTS=63, NPS=76)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -10,15 +19,8 @@ c     compute the new equation of state and compare to the old one...
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C       DIMENSION ATOMWT(4),QR(3),FT(3),FTD(3),FP(3),FPD(3)  ! KC 2025-05-31
       DIMENSION QR(3),FT(3),FTD(3),FP(3),FPD(3)
 C       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
@@ -92,14 +94,14 @@ C  NOW COMPUTE EQUATION OF STATE VARIABLES FOR THE SURFACE MIXTURE.
          T = (10.0D0**TL)
 C TEMPERATURE INTERPOLATION FACTORS
         IF(I.EQ.1)THEN
-           IDT = 1
+           IDTSCV = 1
         ELSE IF(I.EQ.NTS)THEN
-           IDT = I - 2
+           IDTSCV = I - 2
         ELSE
-           IDT = I - 1
+           IDTSCV = I - 1
         ENDIF
         DO K = 1,3
-           QR(K) = CLN*TLOGX(K+IDT-1)
+           QR(K) = CLN*TLOGX(K+IDTSCV-1)
         END DO
         TLN = CLN*TL
         CALL INTER3(QR,FT,FTD,TLN)
@@ -138,8 +140,8 @@ C RADIATION PRESSURE AND USE THE CORRECTED QDP, QPT TO GET QDT.
 C ENTROPY.  OBEYS ADDITIVE VOLUME RULE, BUT ALSO NEED TO INCLUDE THE
 C ENTROPY OF MIXING.
             S0 = X*SX + Y*SY + SMIX(I,J)
-            QSMIXT = FTD(1)*SMIX(IDT,J)+FTD(2)*SMIX(IDT+1,J)+
-     *               FTD(3)*SMIX(IDT+2,J)
+            QSMIXT = FTD(1)*SMIX(IDTSCV,J)+FTD(2)*SMIX(IDTSCV+1,J)+
+     *               FTD(3)*SMIX(IDTSCV+2,J)
 C D LN S/ D LN T
             QST0 = (X*SX*TABLEX(I,J,9) + Y*SY*TABLEY(I,J,9) +
      *              QSMIXT)/S0
@@ -171,14 +173,14 @@ C D LN DEL(AD) / D LN T
       DO I = 1, NTS
 C TEMPERATURE INTERPOLATION FACTORS
         IF(I.EQ.1)THEN
-           IDT = 1
+           IDTSCV = 1
         ELSE IF(I.EQ.NTS)THEN
-           IDT = I - 2
+           IDTSCV = I - 2
         ELSE
-           IDT = I - 1
+           IDTSCV = I - 1
         ENDIF
         DO K = 1,3
-           QR(K) = CLN*TLOGX(K+IDT-1)
+           QR(K) = CLN*TLOGX(K+IDTSCV-1)
         END DO
         TL = CLN*TLOGX(I)
         CALL INTER3(QR,FT,FTD,TL)
@@ -200,25 +202,25 @@ C PRESSURE INTERPOLATION FACTORS
 C DERIVATIVES OF D LN RHO/ D LN T
            QDTP = TABLENV(I,IDP,3)*FPD(1)+TABLENV(I,IDP+1,3)*FPD(2)
      *           +TABLENV(I,IDP+2,3)*FPD(3)
-           QDTT = TABLENV(IDT,J,3)*FTD(1)+TABLENV(IDT+1,J,3)*FTD(2)
-     *           +TABLENV(IDT+2,J,3)*FTD(3)
+           QDTT = TABLENV(IDTSCV,J,3)*FTD(1)+TABLENV(IDTSCV+1,J,3)*FTD(2)
+     *           +TABLENV(IDTSCV+2,J,3)*FTD(3)
 C DERIVATIVES OF LN CP
            DO K = 1,3
               QR(K) = DLOG(TABLENV(I,IDP+K-1,5))
            END DO
            QCPP = QR(1)*FPD(1)+QR(2)*FPD(2)+QR(3)*FPD(3)
            DO K = 1,3
-              ii = IDT+K-1
+              ii = IDTSCV+K-1
             jj = min(NPTSX(ii),j)
             QR(K) = DLOG(TABLENV(ii,jj,5))
            END DO
            QCPT = QR(1)*FTD(1)+QR(2)*FTD(2)+QR(3)*FTD(3)
 C DERIVATIVES OF DU/DT
            DO K = 1,3
-              ii = IDT+K-1
+              ii = IDTSCV+K-1
             jj = min(NPTSX(ii),j)
             QR(K) = TABLENV(ii,jj,6)
-              QR(K) = TABLENV(IDT+K-1,J,6)
+              QR(K) = TABLENV(IDTSCV+K-1,J,6)
            END DO
            QAT = QR(1)*FTD(1)+QR(2)*FTD(2)+QR(3)*FTD(3)
            DO K = 1,3

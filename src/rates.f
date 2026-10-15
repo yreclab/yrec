@@ -6,6 +6,15 @@ C      *XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
       SUBROUTINE RATES(DL,TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
      *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CROSS/ into CROSS_MOD.
+      USE CROSS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
 C JULY 3, 1991 (MHP)
 C THIS SUBROUTINE COMPUTES THE NUCLEAR BURNING RATES FOR USE IN KEMCOM.
@@ -83,24 +92,32 @@ C IU IS THE SHELL NUMBER.
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4 (L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK.
 C      COMMON/CROSS/SSTANDARD(17)
 C MHP 6/14 DERIVATIVES ADDED
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),
      1 HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),HR11(JSON),
      2 HR12(JSON),HR13(JSON),HF1(JSON),HF2(JSON)
       DIMENSION XFRAC(13),RATE(13),UTOT(13),ZPRD(13),Z53(13),Z43(13),
      1 Z23(13),Z86(13),Q1(8),Q2(8),Q3(8),Q4(8),Q5(8),Q6(7),Q7(7),Q8(7)
       DIMENSION ANUC(13), ZNUC(13)
-      COMMON/WEAK/WEAKSCREENING
 
 C ***************************
 C ANUC ARE ATOMIC MASS UNITS.

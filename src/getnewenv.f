@@ -7,53 +7,64 @@ C THE DESIRED ENVELOPE MASS
 C      *                     HSTOT,HT,LC,ETA2,HG,HI,HJM,QIW,R0,  ! KC 2025-05-31
      *                     HSTOT,HT,LC,ETA2,HI,HJM,QIW,R0,
      *                     HKEROT,BL,SJTOT,SKEROT,TEFFL,M,LNEW,CMIXL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C SENV IS THE DIFFERENCE IN MASS BETWEEN THE TOTAL AND THE LAST MODEL
 C POINT.  IT IS SET TO A DIFFERENT VALUE IN THIS ROUTINE.
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C PHYSICAL CONSTANTS.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-C EXTENDED COMPOSITION FLAG
-      COMMON/FLAG/LEXCOM
+C 10/13/26 MHP via Claude: removed the unused COMMON/ENVPRT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C LROT NEEDED TO KNOW IF YOU HAVE TO COMPUTE ROTATION TERMS.
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
 C HPTTOL USED TO SET THE SPATIAL RESOLUTION OF THE ENVELOPE INTEGRATION
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
-     1     NITER1,NITER2,NITER3
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C TERMS NEEDED TO COMPUTE THE DEBYE-HUCKEL CORRECTION IN THE E.O.S.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1     YYDH,ZZDH,DHNUE(18),LDH
 C TOLERANCES FOR THE ENVELOPE INTEGRATION; TEMPORARILY ASSIGN NEW
 C VALUES FOR THE INTEGRATION TO FIND THE NEW POINTS AND THEN RESET.
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
 C STORED CONTENTS OF THE ENVELOPE INTEGRATION.
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
       DIMENSION HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),
      * LC(JSON),HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),
      * QIW(JSON),ETA2(JSON),HI(JSON),HJM(JSON),R0(JSON),
 C      * HKEROT(JSON),HG(JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)  ! KC 2025-05-31
      * HKEROT(JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)
 C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
 C G Somers END
       SAVE
       IF(LEXCOM)THEN

@@ -6,6 +6,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 C       subroutine esac06 (xh,ztab,t6,r,iorder,irad,*)  ! KC 2025-05-31
       subroutine esac06 (xh,t6,r,iorder,irad,*)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
 
 c..... The purpose of this subroutine is to interpolate
 c      the equation of state and its derivatives in X, T6, density
@@ -72,14 +75,10 @@ c***************************************************************************
 
       character blank*1
       Character*15 ID
-      common/lreadco/itime
-
-c***************************************************************************
-c    common lreadco definitions:
-c      itime is the first time switch.  It is initially true. After the
-c      first pass it is set to false.  When it is true, the tables are
-c      read and associated variables are initialized.
-c***************************************************************************
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/LREADCO/ and its itime first-time switch.
+C The table read and the one-time index setup now happen in SETEOS06,
+C called from SETUPS under IF(lopale06) with the other table reads.
 
 
       common/eeeos06/ epl(mx,nt,nr),xx(mx)
@@ -89,10 +88,16 @@ c    common eeeos06 definitions
 c      xx is an auxilliary array containing the same values of x as array xa.
 c***************************************************************************
 
-      common/aaeos06/ q(4),h(4),xxh
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
+     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
+C 10/9/26 MHP via Claude
+C code changed to rename AEOS06's M member to MIDX throughout: M is
+C such a universally-used name elsewhere in this codebase (e.g. shell
+C count in calcad.f) that keeping it here was just asking for a
+C future collision. Used in this file as the composition/mixture-axis
+C loop index below (MF/MG/MH/MI are local, unshared bracket indices,
+C unaffected).
 
 c***************************************************************************
 c
@@ -156,7 +161,6 @@ c***************************************************************************
 
 C KC 2025-05-30 reordered common block elements
 C       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
-      common/beos06/ zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c***************************************************************************
 c
@@ -185,8 +189,16 @@ c      It can be used for checking purposes.
 c
 c***************************************************************************
 
-      common/bbeos06/l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      common/eeos06/esact,eos(mv)
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/: all four are small
+C (<2KB combined) and no member name collides with any dummy argument
+C in any file that declares this block (checked codebase-wide), unlike
+C COMMON/AEOS06/ and COMMON/EEEOS06/ (both left untouched -- AEOS06 is
+C ~14MB and collides with calcad.f's own M argument; EEEOS06 is ~1.3MB).
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c***************************************************************************
 c    common eeos06 definitions:
@@ -202,10 +214,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
             dimension frac(7)
       data aprop/83.14511/
       data ID/"OPALEOS/ESAC06:"/
@@ -238,29 +246,22 @@ c
       slt=t6
       slr=r
 c
-      if(itime .ne. 12345678) then
-        itime=12345678
-        do i=1,10
-          do j=1,10
-            if  (index(i) .eq. j) iri(i)=j
-          enddo
-        enddo
-        do  i=1,mx
-          xx(i)=xa(i)
-        enddo
-c
-c..... read the data files
-        call readcoeos06
-        z=zz(1)
-c        if (ztab .ne. z) then
-c        write (ISHORT,'(A, "requested z=",f10.6," EOS5_data is for z=",
-c     x             f10.6)')
-c     x    ID,ztab,z
-c        stop
-c        endif
-
-        if(z+xh-1.D-6 .gt. 1 ) go to 61
-      endif
+C 10/13/26 MHP via Claude
+C code changed to move the one-time work out of here.  The index setup,
+C the xx=xa copy and the CALL READCOEOS06 are now in SETEOS06, run once
+C from SETUPS, so this routine no longer reads tables on its first call
+C and rhoofp06.f no longer has to fake a call to force that read.
+C
+C z is simply taken from the table each call: zz is filled by READCOEOS06
+C and z feeds GMASS06 below, which uses it for the metal fraction and for
+C the helium number fraction, so it is needed on every call.
+C
+C The old "z+xh > 1" test that lived here is dropped.  It gated on the
+C composition of whichever call happened to be first, which was
+C rhoofp06.f's fabricated XDBG=0.5, so it never tested a real model; the
+C composition cannot be checked before the model is read in, and it is
+C checked elsewhere.  Its label 61 handler is removed with it.
+      z=zz(1)
 c
 c
 c..... Determine T6,rho grid points to use in the
@@ -353,21 +354,21 @@ c     table boundaries.  choose largest allowed size.
       sum2=0.0D0
       sum23=0.0D0
       sum33=0.0D0
-      do m=mf,mf2
+      do midx=mf,mf2
         do ir=l1,l1+1
           do it=k1,k1+1
-            sum1=sum1+xz(m,1,it,ir)
+            sum1=sum1+xz(midx,1,it,ir)
           enddo
         enddo
         do ir=l1,l1+2
           do it=k1,k1+2
-            sum2=sum2+xz(m,1,it,ir)
+            sum2=sum2+xz(midx,1,it,ir)
           enddo
         enddo
         if (ipu .eq. 3) then
           do ir=l1,l1+2
             do it=k1,k1+ipu
-              sum23=sum23+xz(m,1,it,ir)
+              sum23=sum23+xz(midx,1,it,ir)
             enddo
           enddo
         else
@@ -376,7 +377,7 @@ c     table boundaries.  choose largest allowed size.
         if (iqu .eq. 3) then
           do ir=l1,l1+3
             do it=k1,k1+ipu
-              sum33=sum33+xz(m,1,it,ir)
+              sum33=sum33+xz(midx,1,it,ir)
             enddo
           enddo
         else
@@ -411,13 +412,13 @@ c     table boundaries.  choose largest allowed size.
 
    15 continue
       do 124 iv=1,iorder
-      do 123 m=mf,mf2
+      do 123 midx=mf,mf2
 
       is=0
 c__________
       do ir=l1,l1+iq
         do it=k1,k1+ip
-        epl(m,it,ir)=xz(m,iv,it,ir)
+        epl(midx,it,ir)=xz(midx,iv,it,ir)
         is=1
         enddo
       enddo
@@ -490,9 +491,6 @@ c
       endif
       return
 
-   61 write(ISHORT,*)ID,"Mass fractions exceed unity (61)"
-      WRITE(ISHORT,*)'Z, XH', Z, XH
-      stop
    62 write(ISHORT,*) ID," T6/LogR outside of table range (62)"
       write(ISHORT,*) "slt, t6a(1),t6a(nt):", slt, t6a(1),t6a(nt)
       write(ISHORT,*) "slr, rho(1), rho(nr):", slr, rho(1), rho(nr)
@@ -509,3 +507,39 @@ c
 
       end
 
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+C 10/13/26 MHP via Claude
+C SETEOS06 - one-time setup for the OPAL 2006 equation of state.
+C
+C This is the work that ESAC06 used to do behind an itime first-time
+C switch in COMMON/LREADCO/: map index into iri, copy the tabulated x
+C values into xx, and read the table.  SETUPS calls it under
+C IF(lopale06), matching the gate on the OPEN of IOPALE in parmin.f, and
+C alongside the SCV table read -- both may be active in the same run.
+C
+C index and xa are COMMON members initialized by DATA in ESAC06, so they
+C already hold their values when this runs.  The file on IOPALE is opened
+C by parmin.f; READCOEOS06 only reads it.
+C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+      subroutine seteos06
+      IMPLICIT REAL*8 (A-H,O-Z)
+      parameter (mx=5,mv=10,nr=169,nt=197)
+      common/aeos06/  xz(mx,mv,nt,nr),
+     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
+     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
+      common/eeeos06/ epl(mx,nt,nr),xx(mx)
+      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
+     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
+     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
+      save
+      do i=1,10
+        do j=1,10
+          if (index(i) .eq. j) iri(i)=j
+        enddo
+      enddo
+      do i=1,mx
+        xx(i)=xa(i)
+      enddo
+      call readcoeos06
+      return
+      end

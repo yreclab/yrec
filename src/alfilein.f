@@ -30,6 +30,15 @@ C created.
 
 
        SUBROUTINE ALFILEIN(FALLARD)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM01/ into ALATM01_MOD.
+      USE ALATM01_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
 C
 C Parameters NTA and NGA are respectively the maximum expected numbers
 C of Teff's and GL's we expect to encounter, even in future tables
@@ -44,26 +53,54 @@ C associated max number of GL's is nGL.
       CHARACTER*35 inrec
       CHARACTER*256 inrec2
       DIMENSION TEFFs(NTA)
-      LOGICAL*4 LALTPTau100
+C 10/14/26 MHP via Claude
+C code changed to drop the redundant LOGICAL*4 LALTPTau100 declaration.
+C LALTPTau100 is a COMMON/NMLPAR/ member, and explicitly typing a COMMON
+C member is legal while doing the same to a USE-associated name is
+C rejected, so it has to go before NMLPAR becomes a module.  Removing it
+C changes nothing: IMPLICIT LOGICAL*4(L) already gives that type.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 
-      COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
-     x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
-     x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
-      COMMON/ALATM03/ALATM_FeH,ALATM_Alpha,LALTPTau100
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
+C are placeholders that no file references in executable code.  Removing
+C it also retires the hazard behind the earlier alfilein.f fix, where a
+C mis-indented EXTERNAL was absorbed into this declaration and renamed
+C DUMMY4.
 
-     EXTERNAL sort_shell
+C 10/11/26 MHP via Claude
+C code changed to re-indent EXTERNAL to column 7.  It had only 5 leading
+C blanks, putting the "E" in column 6, which in fixed form marks a
+C CONTINUATION line.  The compiler therefore read the previous statement
+C as
+C      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4EXTERNALSORT_SHELL
+C a legal 24-character name, so it compiled silently: the EXTERNAL
+C declaration was discarded and the 4th block member was renamed.
+C Behavior-neutral today -- sort_shell is only reached via CALL (and is
+C defined in this file), and DUMMY4EXTERNALSORT_SHELL was one implicit
+C REAL*8 at the same position as DUMMY4 in the other five files that
+C declare ALATM04 -- but it would break the moment a 5th member were
+C added, sort_shell were passed as an actual argument, or this file were
+C converted to free form.
+      EXTERNAL sort_shell
 
       SAVE
 

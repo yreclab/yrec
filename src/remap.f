@@ -5,6 +5,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C REMAP
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE REMAP
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CROSS/ into CROSS_MOD.
+      USE CROSS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
+      USE NMLBYPASS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
@@ -14,30 +23,41 @@ C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
       PARAMETER(NTA=54,NGA=5)
       PARAMETER (NTS=63, NPS=76)
       PARAMETER (JSON=5000)
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
-     1     NITER1,NITER2,NITER3
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
-      COMMON/CT2/DTWIND
-      COMMON/CT3/LPTIME
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK
 C MHP 6/14 DERIVATIVES ADDED
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
-      COMMON/NEWCROSS/S0_1_1,S0_3_3,S0_3_4,S0_1_12,S0_1_13,S0_1_14,
-     *  S0_1_16,S0_PEP,S0_1_BE7E,S0_1_BE7P,S0_HEP,S0_1_15_C12ALP,
-     *  S0_1_15_O16,S0P_1_1,S0P_3_3,S0P_3_4,S0P_1_12,S0P_1_13,S0P_1_14,
-     *  S0P_1_16,S0PP_1_12,S0PP_1_13,S0PP_1_16,S0P_1_BE7P,S0PP_1_BE7P
+C 10/12/26 MHP via Claude
+C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
+C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in
+C remap.f and in starin.f.
+C
+C These are namelist variables that exist only to set other quantities,
+C or that are reserved for future development; none is read by the wider
+C code.  Keeping them in their own block keeps them OUT of the single
+C consolidated namelist block being built, so that block holds only
+C variables the physics routines actually consume.  starin.f declares it
+C although it uses none of them yet, so the isotope and cross-section
+C machinery there can reach them without reopening this layout.
+C
+C Member order is NEWPARAM, then NEWCROSS, then XSECT, and the three
+C declarations are generated from one list so all files agree.
 C 10/14 MHP NEW PARAMETERS - REPLACING DTDIF,DTWIND, HPTTOL & ATIME VECTORS
 C KC 2025-05-30 reordered common block elements
-C       COMMON/NEWPARAM/FLAG_DX,FLAG_DW,FLAG_DZ,LSTRUCT_TIME,
-      COMMON/NEWPARAM/FLAG_DX,FLAG_DW,FLAG_DZ,
-     * TIME_CORE_MIN,TIME_DL,TIME_DP,TIME_DR,TIME_DT,TIME_DW_GLOBAL,
-     * TIME_DW_MIX,TIME_DX_CORE_FRAC,TIME_DX_CORE_TOT,TIME_DX_SHELL,
-     * TIME_DX_TOTAL,TIME_DY_CORE_FRAC,TIME_DY_CORE_TOT,TIME_DY_SHELL,
-     * TIME_DY_TOTAL,TOL_CZBASE_FINE_WIDTH,TOL_DL_MAX,TOL_DM_MAX,
-     * TOL_DM_MIN,TOL_DP_CORE_MAX,TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,
-C      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FAC,LNEWVARS
-     * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LSTRUCT_TIME,LNEWVARS
       SAVE
       DATA S0_1_1_REF,S0_3_3_REF,S0_3_4_REF,S0_1_12_REF,S0_1_13_REF/
      *     4.07D-22,5.15D3,5.4D-1,1.45D0,5.5D0/

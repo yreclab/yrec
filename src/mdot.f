@@ -5,38 +5,84 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MDOT(DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,HSTOT,
      *                HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *                EACC,ETHAV,SUMDM,SENVOLD)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/FLAG/LEXCOM
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
-      COMMON/MASSCHG3/DMSUN,DMWSUN,DMWMAX,LSOLWIND
+C 10/12/26 MHP via Claude
+C code changed to drop COMMON/MASSCHG3/ entirely.  mdot.f was its only
+C declaring file once LSOLWIND moved to the consolidated block, so
+C DMSUN, DMWSUN and DMWMAX are now locals.  They are given an explicit
+C zero below rather than relying on static storage happening to be
+C zeroed, which makes the guarded branch provably inert until these
+C three are given a real source.
+      DATA DMSUN,DMWSUN,DMWMAX/3*0.0D0/
       DIMENSION HCOMP(15,JSON),HS(JSON),HS1(JSON),HS2(JSON),
      *          HT(JSON),HJM(JSON),OMEGA(JSON),HR(JSON),
      *          HP(JSON),HD(JSON)
       SAVE
       SENVOLD = HS(M) - HSTOT
 C MHP 8/10- CHECK FOR SCALED SOLAR WIND MASS LOSS
-      IF(LSOLWIND .AND. LROT) THEN
+C 10/12/26 MHP via Claude
+C BUG FIX: added the DMWSUN guard below.  DMSUN, DMWSUN and DMWMAX are
+C set NOWHERE in the code -- no assignment, no DATA statement, and no
+C namelist entry in any of the 315 input files -- and COMMON/MASSCHG3/ is
+C declared only here, so all three are permanently zero.  The branch
+C therefore evaluated (OMEGA(M)/0)**2, and DMDT = 0*Infinity = NaN.
+C
+C It has never fired, for two separate reasons: parmin.f's
+C COMMON/MASSCHG3/ declaration is commented out (two variants, both
+C inactive), so the PHYSICS namelist's LSOLWIND is a local there and its
+C value never reaches this routine, where LSOLWIND is itself never
+C written and so always .FALSE.; and every one of the 315 namelists sets
+C LMDOT = .FALSE., which makes MASSLOSS return before calling MDOT.
+C
+C That matters because the namelist consolidation will put LSOLWIND in
+C the shared block and so repair the propagation.  Nine namelists set
+C LSOLWIND = .TRUE. and all nine also set LROT = .TRUE., so without this
+C guard they would start entering the branch and taking a NaN mass-loss
+C rate.  The option stays inert until DMSUN/DMWSUN/DMWMAX are given a
+C source, which is a separate decision for the experimental mass-loss
+C code.
+      IF(LSOLWIND .AND. LROT .AND. DMWSUN.GT.0.0D0) THEN
          F1 = (OMEGA(M)/DMWSUN)**2
          F2 = (DMWMAX/DMWSUN)**2
          DMDT = DMSUN*MIN(F1,F2)

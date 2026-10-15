@@ -5,6 +5,24 @@ C QATM
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QATM(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,
      *                RL,TEFFL,X,Z,KATM,KSAHA)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS/ into ATMOS_MOD.
+      USE ATMOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 C QATM CALCULATES THE DERIVATIVE D(P)/D(TAU), USING THE EDDINGTON
 C APPROXIMATION FOR A T-TAU RELATION.
 C IT ALSO RETURNS TL,O, AND FXION FOR OUTPUT PURPOSES
@@ -13,40 +31,28 @@ C   Q(TAU) = 0.6666667
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C MHP 8/25 Removed unused variables
-C      CHARACTER*256 FLAOL, FPUREZ
-C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
-C COMMON /NEWOPAC/
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION Y(3),DYDX(3),FXION(3)
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
       SAVE
 
 C EDDINGTON APPROXIMATION

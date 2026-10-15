@@ -6,8 +6,19 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C calculates the distance the star has travelled in the HR diagram
 C if far enough, output pulsation model
 C MHP 8/25 passed file names directly and removed common block with file names
-      SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,FPATM,FPENV,
-     * FPMOD)
+C 10/9/26 MHP via Claude
+C code changed to pass NK as an explicit argument instead of via
+C COMMON/ZRAMP/, which this file otherwise never used (NK was its only
+C member ever referenced here). See the CALL PDIST site in main.f,
+C which already has NK as its own local run-index variable.
+      SUBROUTINE PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
+     * FPENV,FPMOD,DAGE)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
@@ -15,15 +26,24 @@ C MHP 8/25 passed file names directly and removed common block with file names
 C Removed variables not used in the routine
       CHARACTER*256 FPMOD, FPENV, FPATM
 C MHP 10/02 added proper dimensions to last 2 variables
-      COMMON/THEAGE/DAGE
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
+C 10/13/26 MHP via Claude
+C code changed to receive DAGE, the stellar age, as an argument instead of
+C through COMMON/THEAGE/.  main.f is PDIST's only caller.
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude
@@ -34,10 +54,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)

@@ -7,27 +7,40 @@ C       SUBROUTINE HTIMER(DELTS,DELTSH,M,HD,HL,HS1,HS2,HT,LC,HCOMP,JCORE,
 C      * JXMID,TLUMX,DAGE,DDAGE,QDT,QDP,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)  ! KC 2025-05-31
       SUBROUTINE HTIMER(DELTS,DELTSH,M,HD,HL,HS1,HS2,HT,HCOMP,JCORE,
      * JXMID,TLUMX,DAGE,DDAGE,NK,HP,HR,OMEGA,DWMAX,JXBEG,TEFFL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
 
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C 9/24/26 MHP via Claude
-C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
-C passed as an explicit argument where actually used
-      COMMON/CT3/LPTIME
-      COMMON/FLAG/LEXCOM
-      COMMON/GOVS/LTRIST
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
 C       DIMENSION HD(JSON),HL(JSON),HS1(JSON),HT(JSON),LC(JSON),  ! KC 2025-05-31
       DIMENSION HD(JSON),HL(JSON),HS1(JSON),HT(JSON),

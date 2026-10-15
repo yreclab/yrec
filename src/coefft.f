@@ -6,76 +6,117 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *HS2,HT,HTT,HCOMP,LC,TLUMX,LATMO,LDERIV,LMIX,LOCOND,QDT,QDP,KSAHA,
 C      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)  ! KC 2025-05-31
      *FP,FT,HKEROT,HKEROTO,JENV,TEFFL,CMIXL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTEN/ into ROTEN_MOD.
+      USE ROTEN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTDER/ into ROTDER_MOD.
+      USE ROTDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAB/ into GRAB_MOD.
+      USE GRAB_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+      USE FLUXES_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 C 2/91 MHP FLAG TO TOGGLE BETWEEN OLD/NEW ENERGY GENERATION ROUTINES
 C ADDED (COMMON BLOCK NEWENG).
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/FLAG/LEXCOM
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C DBG
 C*** MHP 5/90 ADD COMMON BLOCK FOR SOLAR NEUTRINO I/O
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
 C*** MHP 5/91 ADD COMMON BLOCK FOR ENERGY FROM ALPHA CAPTURE REACTIONS
 C  AND LOSSES FROM NEUTRINO-COOLED CORES IN EVOVLED STARS.
-      COMMON/NEWEPS/EALPCA,ENU
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
+C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
+C their own CALL ENGEB, so they are returned as arguments.  main.f, the
+C third caller, passes locals it does not use.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C MHP 7/96 COMMON BLOCK ADDED FOR SOUND SPEED
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/ROTEN/DEROT(JSON)
 C MHP 06/02 COMMON BLOCK ADDED FOR DERIVATIVES OF
 C CAPPA AND EPSILON
-      COMMON/ROTDER/SQOD(JSON),SQOT(JSON),SQED(JSON),SQET(JSON),
-     *              FRACNUC(JSON)
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
+C 10/13/26 MHP via Claude
+C code changed to drop the write-only members SQOD and SQED from
+C COMMON/ROTDER/.  coefft.f assigned both and nothing ever read them;
+C setupv.f, the block's only reader, uses SQOT, SQET and FRACNUC.  That
+C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
+C in different phases -- setupv.f is reached via seculr.f -- so passing
+C the rest explicitly would mean threading 15,000-word arrays through
+C main.f and GETW.
 
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
 C JVS end
 
       DIMENSION FXION(3),EG(6),TLUMX(8),HD(JSON),HHA(4,2,JSON),
@@ -114,10 +155,6 @@ c      ENDIF
       DO 10 J = 1,8
        TLUMX(J) = 0.0D0
    10 CONTINUE
-      IDT = 15
-      DO 15 J = 1,4
-       IDD(J) = 5
-   15 CONTINUE
       DO 30 IM = 1,M
 C SET UP LOCAL VARIABLES FOR CALLS TO BASIC PHYSICS ROUTINES
        THL = 0.0D0
@@ -221,12 +258,16 @@ C TEMPERATURE GRADIENT IS CONVECTIVE
        QLP = 0.0D0
        IF(TL.GT.TCUT(1)) THEN
 C SET UP NUCLEAR ENERGY TERMS
+C 10/13/26 MHP via Claude
+C code changed to pass BE7MFLOC for ENGEB's new BE7MASSFRACTION
+C argument, which replaces COMMON/BE7/.  This routine does not use the
+C value; only main.f reads it.
             CALL ENGEB(EGG11,EGG22,EGG33,EGG44,EGG55,QED,QET,SUM1,DL,
 C      *           TL,QDT,QDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *           XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *           TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *           XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *           HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC,EALPCA,ENU)
             E = SUM1
             EG(1) = EGG11
             EG(2) = EGG22
@@ -405,7 +446,6 @@ C JVS END
 
 
          IF(LROT)THEN
-            SQOD(IM) = QOD
             SQOT(IM) = QOT
 C MHP 10/02 variable index error
             IF(SESUM(IM).GT.0.0D0)THEN
@@ -418,7 +458,6 @@ C               EGNEUT = SEG(6,I)+SEG(7,I)
             ELSE
                FRACNUC(IM) = 0.0D0
             ENDIF
-            SQED(IM) = QED
             SQET(IM) = QET
          ENDIF
 C DBG PULSE

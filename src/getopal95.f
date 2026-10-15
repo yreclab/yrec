@@ -15,6 +15,21 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     GETOPAL95
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GETOPAL95(DL,TL,X,Z,O,OL,QOD,QOT)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OP95INTERP/ into OP95INTERP_MOD.
+      USE OP95INTERP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LLOT95A/ into LLOT95A_MOD.
+      USE LLOT95A_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LLOT95E/ into LLOT95E_MOD.
+      USE LLOT95E_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LLOT95/ into LLOT95_MOD.
+      USE LLOT95_MOD
 C 7/98 MHP DRIVER ROUTINE FOR OPACITY GIVEN RHO,T, X, AND Z.
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
@@ -31,44 +46,39 @@ C THIRD METAL ABUNDANCE (3 X 10**-4)BEGIN AT TABLE 21 AND END AT TABLE 30.
 C FOR THE HIGH VALUES OF Z, THE NUMBER OF X TABLES IS NOT THE SAME (I.E.
 C X<0.9 FOR Z=0.1).
 C FOR EACH COMPOSITION A FULL GRID IN (T,RHO/T6**3) IS RETAINED.
-      COMMON /LLOT95A/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ),
-     *                CAPPA2(NUMXZ,NUMT,NUMD),NUMXM(NUMZ),NZ(NUMZ)
 C AS ABOVE FOR THE MODEL Z.
-      COMMON /LLOT95/CAPPA(NUMX,NUMT,NUMD),ZTAB
 C AS ABOVE FOR DESIRED SURFACE VALUE OF X.
-      COMMON /LLOT95E/CAPPAE(NUMT,NUMD),XTAB
-C INDICES FOR INTERPOLATION IN Z,X,T, AND R
-      COMMON/OP95INDX/JZ,JX(4,4),JT,JD(4)
-C INTERPOLATION FACTORS FOR Z,X,T, AND R, AS WELL AS DERIVATIVE
-C FACTORS FOR T AND RHO.
-      COMMON/OP95FACT/BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4)
-      COMMON/OP95EXT/RL,RLL,RLH(4),LEXTL,LEXTH,LEXH(4)
-C JVS Acoustic depth common block
-C KC 2025-05-30 reordered common block elements
-C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C INDICES FOR INTERPOLATION IN Z,X,T, AND R; INTERPOLATION FACTORS FOR
+C Z,X,T, AND R (AND DERIVATIVE FACTORS FOR T AND RHO); AND DATA FOR
+C LINEAR EXTRAPOLATION WHEN OUTSIDE THE TABLE IN RHO.
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/OP95INDX/, COMMON/OP95FACT/, and
+C COMMON/OP95EXT/ into COMMON/OP95INTERP/: all three are small
+C interpolation-support arrays (not table data, unlike LLOT95/
+C LLOT95E/LLOT95A, which hold the actual 2D/3D/4D opacity tables and
+C are intentionally left separate), with no member name colliding
+C with any dummy argument across the 6 files that declare any of
+C them.
+C 10/13/26 MHP via Claude
+C code changed to rename COMMON/OP95INTERP/'s RL and RLL to RHO_T63L and
+C RHO_T63LL.  RL is log(rho/T6**3), set here as RL = DL - 3*(TL-6); the
+C old names clash with RL and RLL as used for radius throughout the rest
+C of the code, which is why main.f declared only a 10-member prefix of
+C this block to avoid importing them.  With the clash gone main.f can
+C declare the full block, which a USE statement will require once this
+C becomes a module.
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 C END JVS
       DIMENSION A(4),B(4),C(4)
       SAVE
 C ENSURE THAT WE ARE WITHIN THE OPAL 95 TABLES.
 C COMPUTE LOG R = RHO/T6**3
-      RL = DL - 3.0D0*(TL-6.0D0)
+      RHO_T63L = DL - 3.0D0*(TL-6.0D0)
 C  CHECK T
       IF(TL.LT.TGR(1) .OR. TL.GT.TGR(NUMT))THEN
          WRITE(*,5)TL
@@ -77,15 +87,15 @@ C  CHECK T
       ENDIF
 C CHECK TO SEE IF EXTRAPOLATION BELOW THE FIRST TABLE ELEMENT
 C IN DENSITY IS NEEDED.
-      IF(RL.LT.R0GR(1))THEN
+      IF(RHO_T63L.LT.R0GR(1))THEN
          LEXTL = .TRUE.
       ELSE
          LEXTL = .FALSE.
       ENDIF
 C  THIS SECTION IS REPLACED BY LINEAR EXTRAPOLATION IN R FROM THE
 C  LAST TWO OPACITY VALUES.
-C      IF(RL.LT.(R0GR(1)-4.0D0) .OR. RL.GT.(R0GR(NUMD)+1.0D0))THEN
-C         WRITE(*,7)RL,TL
+C      IF(RHO_T63L.LT.(R0GR(1)-4.0D0) .OR. RHO_T63L.GT.(R0GR(NUMD)+1.0D0))THEN
+C         WRITE(*,7)RHO_T63L,TL
 C 7       FORMAT(' LOG R OF',F11.6,' OUT OF OPAL 95 TABLE RANGE;TL'
 C     *          ,F11.6)
 C         STOP
@@ -121,9 +131,9 @@ C GET INTERPOLATION FACTORS IN T
          BTT(I) = C(I)
       END DO
 C GET INDICES IN RHO FOR EACH OF THE 4 T VALUES.
-      IF(RL.GE.R0GR(JD(1)+2))THEN
+      IF(RHO_T63L.GE.R0GR(JD(1)+2))THEN
          DO I = JD(1)+3,NUMD-1
-            IF(RL.LT.R0GR(I))THEN
+            IF(RHO_T63L.LT.R0GR(I))THEN
                JD(1) = I - 2
                GOTO 30
             ENDIF
@@ -132,7 +142,7 @@ C GET INDICES IN RHO FOR EACH OF THE 4 T VALUES.
  30      CONTINUE
       ELSE
          DO I = JD(1)+1,2,-1
-            IF(RL.GT.R0GR(I))THEN
+            IF(RHO_T63L.GT.R0GR(I))THEN
                JD(1) = I - 1
                GOTO 40
             ENDIF
@@ -197,10 +207,10 @@ C ASSIGN ALL THE SAME VALUES IF GRID IN R IS SAME FOR ALL T.
             A(I) = R0GR(JD(1)+I-1)
          END DO
          IF(.NOT.LEXTL)THEN
-            CALL INTERP(A,B,C,RL)
+            CALL INTERP(A,B,C,RHO_T63L)
          ELSE
-            RLL = R0GR(1)
-            CALL INTERP(A,B,C,RLL)
+            RHO_T63LL = R0GR(1)
+            CALL INTERP(A,B,C,RHO_T63LL)
          ENDIF
          DO J = 1,4
             JD(J) = JD(1)
@@ -217,7 +227,7 @@ C ASSIGN ALL THE SAME VALUES IF GRID IN R IS SAME FOR ALL T.
 C IF EXTRAPOLATION IS BEING PERFORMED, ASSIGN R=REDGE
 C AND EXTRAPOLATE LINEARLY LATER
             IF(.NOT.LEXH(J))THEN
-               CALL INTERP(A,B,C,RL)
+               CALL INTERP(A,B,C,RHO_T63L)
             ELSE
                RR = R0GR(JD(J)+3)
                CALL INTERP(A,B,C,RR)
@@ -234,7 +244,7 @@ C INTERPOLATION IS NEEDED TO GET THE OPACITY.
 C JVS 04/11 force 4d interpolation for acoustic depth calculations
       IF (LADON .AND. LACOUT) GOTO 153  ! If we're worrying about the acoustic depth, default to 4d interp
       IF(ABS(Z-ZTAB)/MAX(ZTAB,1.0D-6).LE.1.0D-4)THEN
-         IF(ABS(X-XTAB).LE.1.0D-4)THEN
+         IF(ABS(X-XOP95).LE.1.0D-4)THEN
 C 2D INTERPOLATION IN SURFACE TABLE
             CALL OP952D(O,OL,QOD,QOT)
             GOTO 9999

@@ -6,7 +6,28 @@ C      *TL,PDT,PDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION,EALPCA,ENU)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAB/ into GRAB_MOD.
+      USE GRAB_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+      USE FLUXES_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CROSS/ into CROSS_MOD.
+      USE CROSS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
 
 C 3/92 DBG Added new neutrino loss calculation routines
@@ -144,46 +165,48 @@ C  IU IS THE SHELL NUMBER.
       IMPLICIT LOGICAL*4 (L)
 
 
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C ADDED SECONDS PER YEAR
-C 9/24/26 MHP via Claude
-C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
-C passed as an explicit argument where actually used
-C 7/91 COMMON BLOCK ADDED TO SKIP FLUX CALCULATIONS IF LSNU=F
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
-      COMMON/NEWEPS/EALPCA,ENU
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/BE7/BE7MASSFRACTION
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
+C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
+C their own CALL ENGEB, so they are returned as arguments.  main.f, the
+C third caller, passes locals it does not use.
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/BE7/ with an explicit argument.  ENGEB
+C computes BE7MASSFRACTION and main.f is its only reader, storing it into
+C BE7M(I) right after the call, so it is now ENGEB's last argument.
+C ENGEB's other two callers, coefft.f and ytime.f, pass a local they do
+C not use.
 C 9/06 GN ---  New neutrino loss common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/NULOSS/LNULOS1,DSNUDT,DSNUDD
-      COMMON/NULOSS/DSNUDT,DSNUDD,LNULOS1
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/NULOSS/: engeb.f assigns DSNUDT and
+C DSNUDD and nothing reads them, in engeb.f or anywhere else, so they are
+C now plain locals there.  parmin.f declared the block without using it.
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK.
 C      COMMON/CROSS/SSTANDARD(17)
 C MHP 6/14 DERIVATIVES ADDED
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
-      COMMON/WEAK/ WEAKSCREENING
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),
      1 HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),HR11(JSON),
      2 HR12(JSON),HR13(JSON),HF1(JSON),HF2(JSON)
@@ -1120,7 +1143,13 @@ C COMPUTE BE7MASSFRACTION. THIS IS NOT REQUIRED FOR THE NEUTRINO
 C  FLUXES SINCE BE7 IS ALWAYS IN EQUILIBRIUM WITH THE SLOWER PRODUCTION
 C  RATE OF HE3 + HE4.  HOWEVER, IT IS OF INTEREST IN SOME APPLICATIONS
 C  TO KNOW THE BE7 MASS FRACTION, SO I COMPUTE IT HERE AND IT CAN BE
-C  EXTRACTED WITH A COMMON STATEMENT IF DESIRED.
+C 10/13/26 MHP via Claude
+C  RETURNED AS AN ARGUMENT.  THE LINE ABOVE PREVIOUSLY READ "EXTRACTED
+C  WITH A COMMON STATEMENT IF DESIRED", WHICH DESCRIBED COMMON/BE7/;
+C  THAT BLOCK IS GONE AND BE7MASSFRACTION IS NOW THE LAST ARGUMENT.
+C  NOTE THIS ASSIGNMENT SITS INSIDE A CONDITIONAL, SO CALLERS MUST KEEP
+C  THE VARIABLE STATIC TO RETAIN THE LAST COMPUTED VALUE AS THE COMMON
+C  BLOCK DID; main.f's BLANKET SAVE PROVIDES THAT.
          BE7MASSFRACTION = EG(3)/(BE7PROTON + BE7ELECTRON)
 C END OF NOVEMBER 6, 1990  ADDITION.
 C FLUX OF BE7 NEUTRINOS.

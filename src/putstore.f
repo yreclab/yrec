@@ -12,7 +12,31 @@ C 06
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE PUTSTORE(HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL)
+     *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL,XMSOL,COMPMIX)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTEN/ into ROTEN_MOD.
+      USE ROTEN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCOUT/ into CCOUT_MOD.
+      USE CCOUT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
 
 C  PUTSTORE PUTS THE MOST RECENT VERBOSE OUTPUT FILE INTO THE .STORE FILE,
 C  EITHER AT SPECIFIED AGES, EVERY NPRTMOD MODELS, OR AT THE END OF RUNS.
@@ -36,17 +60,18 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-C 9/24/26 MHP via Claude
-C code changed to pass CMIXL as an explicit argument instead of via
-C common block, to reduce implicit global state ahead of the F90
-C module conversion
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HP(JSON),HR(JSON),
      * HS(JSON),HT(JSON),LC(JSON),TRIT(3),TRIL(3),PS(3),TS(3),RS(3),
      * CFENV(9),TLUMX(8),OMEGA(JSON),FP(JSON),FT(JSON),ETA2(JSON),R0(JSON),
@@ -54,67 +79,45 @@ C module conversion
 C llp  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/I2O/ with an explicit argument.  COMPMIX
+C is CHARACTER, which does not belong in a COMMON block.  GETMODEL2,
+C GETYREC7 and PUTMODEL2 already took it as an argument; only these three
+C files shared it through the block.
 
 C llp 3/19/03 Add required COMMON blocks such that header flags
 C     ATM, EOS, HIK and LOK can be determined.
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
-c      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,IOV1,IOV2,
-c     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV
-      COMMON/GRAVST/GRTOL,ILAMBDA,NITER_GS,LDIFY
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
-C OPACITY COMMON BLOCKS - modified 3/09
-C 9/23/26 MHP via Claude
-C code changed to remove the OPAL92 opacity tables
-C 9/23/26 MHP via Claude
-C code changed to remove the Kurucz 1990 opacity tables
-C 9/23/26 MHP via Claude
-C code changed to remove the LAOL89 opacity tables
-C 9/24/26 MHP via Claude
-C code changed to remove the Alexander 1995 opacity tables
-C 9/24/26 MHP via Claude
-C code changed to remove dead opacity-table Z-value inputs
-C 9/24/26 MHP via Claude
-C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
-C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
-C MHP 8/25 Remove file names from common blocks
-C 9/24/26 MHP via Claude
-C code changed to remove the OPAL 1995/2001 equations of state
-      COMMON/OPALEOS/lopale06,lNumDeriv
-C 9/25/26 MHP via Claude
-C code changed to fix IDTT -> IDT, matching most other files that
-C declare COMMON/SCVEOS/ (pre-existing name-only inconsistency; this
-C slot was never read or written by name in this file)
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DISK/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 
 C INCLUDE COMMON BLOCKS WITH REQUIRED PHYSICS AND OUTPUT FLAGS
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LMILNE below (gating CALL WRTMIL) but never
+C declared COMMON/CCOUT2/, so it was an uninitialized local, always
+C .FALSE. -- the Milne output call here was dead code. No namelist
+C file currently sets LMILNE, so this has no effect on any existing
+C run; it only restores the intended behavior if someone enables it.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/ROTEN/DEROT(JSON)
 
       SAVE
 
@@ -333,7 +336,7 @@ C        CALL WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,HL,
 C      *   HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
 C      *   DAGE)  ! KC 2025-05-31
          CALL WRTMOD(M,JENV,HCOMP,HS1,HD,HL,
-     *               HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL)
+     *               HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL,XMSOL)
       ENDIF
 
       WRITE(ISTOR,65)

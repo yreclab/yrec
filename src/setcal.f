@@ -1,26 +1,47 @@
 C $$$$$$
-      SUBROUTINE SETCAL(FACAGE)
+      SUBROUTINE SETCAL(FACAGE,LSOL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
 
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-C      CHARACTER*256 FLAOL2, FOPAL2
-C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
-      COMMON/CALS2/TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLZX,CALSOLAGE
-      COMMON /CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1        NUMRUN
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     * SENV0A(50)
-      COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSUN/ with an explicit argument.  This
+C routine touched only LSOL, which it clears; the block's other eight
+C members were carried here positionally and never used.
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
+C 10/9/26 MHP via Claude
+C code changed to remove NK from COMMON/ZRAMP/: it was only ever a
+C redundant copy of the run-index loop variable main.f already passes
+C explicitly to the subroutines that need it (STARIN/RSCALE), and was
+C never read by name in this file.
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
       SAVE
 
 C SET UP RUN TO CALIBRATE A SOLAR MODEL.

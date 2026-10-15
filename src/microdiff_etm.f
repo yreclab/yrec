@@ -1,13 +1,27 @@
 C $$$$$$
       SUBROUTINE MICRODIFF_ETM(DT,ER,EDELX,EDELZ,EDELLI,IBEGIN,IEND,NPT,
      *     HCOMP,HQPR,HRU,HS1,HTU,M,STOT,NLIGHT,CSLIGHT)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONFAC/ into CONFAC_MOD.
+      USE CONFAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CONFAC/CON_RAD,CON_MASS,CON_TEMP,CON_TIME
-C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
-      COMMON/GRAVS4/LNEWDIF,LDIFLI
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
       DIMENSION ER(JSON),EDELX(JSON),EDELZ(JSON),EDELLI(NLIGHT,JSON),
      *          HCOMP(15,JSON),HQPR(JSON),HRU(JSON),HS1(JSON),
 C KC 2025-05-30 fixed -Wconversion

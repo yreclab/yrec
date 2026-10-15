@@ -1,76 +1,106 @@
 C $$$$$$
 C       SUBROUTINE VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,  ! KC 2025-05-31
       SUBROUTINE VCIRC(HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,
-     *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP)
+     *                 QWLNR,QWRMAX,HV,CLTOT,DT,HP,FACI)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/VFACT/ into VFACT_MOD.
+      USE VFACT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TAUKH/ into TAUKH_MOD.
+      USE TAUKH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADRU/ into QUADRU_MOD.
+      USE QUADRU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADD/ into QUADD_MOD.
+      USE QUADD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRIDDER/ into EGRIDDER_MOD.
+      USE EGRIDDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD3/ into DIFAD3_MOD.
+      USE DIFAD3_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD2/ into DIFAD2_MOD.
+      USE DIFAD2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C FACI is now a dummy argument, formerly COMMON/INTFAC/.
+      DIMENSION FACI(4,JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/INTFAC/FACI(4,JSON)
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/INTFAC/ with an explicit argument:
+C setupv.f fills FACI and vcirc.f reads it, both called only from
+C seculr.f, which now owns the storage.
 C MHP 3/92 COMMON BLOCKS ADDED FOR SHEAR VELOCITY AND MU INHIBITION.
-      COMMON/TAUKH/FACT6(JSON),FES1(JSON),FES2(JSON),FGSFJ(JSON),
-     *     FGSFK(JSON),FES3(JSON)
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *     EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *     QDTMI(JSON),RM(JSON),TM(JSON)
-C      JvS 09/25 RENAMED ARRAYS IN INTVR2 TO PLAY NICELY WITH MDPHY     
-C      COMMON/INTVR2/AMUM(JSON),THDIFM(JSON),VISCM(JSON),WM(JSON)
-      COMMON/INTVR2/AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      JvS 09/25 CHANGED VARIABLE NAMES TO BE CONSISTENT ACROSS ALL SUBROUTINES
 C      COMMON/MDPHY/HAMU(JSON),CP(JSON),DELM(JSON),DELAM(JSON),
 C     *     DELRM(JSON),SESUM(JSON),OM(JSON),SQDT(JSON),
 C     *     THDIF(JSON),SVEL(JSON),VISC(JSON),EPSM(JSON)
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
 C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
-      COMMON/VFACT/FACT1(JSON),FACT2(JSON),FACT3(JSON),FACT4(JSON),
-     *     FACT5(JSON),FACT7(JSON),FACT8(JSON)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
-      COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-      COMMON/PREVMU/VMUP(JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/PREVMU/ and COMMON/INTVR2/ to plain
+C local arrays: both are declared only in this file (confirmed via a
+C codebase-wide scan), so there's nothing to share via COMMON. The
+C existing blanket SAVE statement below already preserves their
+C values across calls, same as COMMON did (VMUP specifically needs
+C this: it holds the prior iteration's VMU for a damping blend when
+C IT.GT.1).
+      DIMENSION VMUP(JSON)
+      DIMENSION AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
 C 3/93 QUADRUPOLE DRIVING TERM ADDED.
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
-      COMMON/QUADRU/QUAD(JSON),GG(JSON)
 C MHP 9/93
-      COMMON/NOTRAN/LNOJ
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C MHP 11/94 ADVECTIVE VELOCITY AND DIFFUSIVE COMPONENT.
-      COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
 C MHP 06/02
 C HIGHER ORDER TERMS IN M.C. VELOCITY
-      COMMON/DIFAD3/FACD2(JSON),FACD3(JSON),VESD2(JSON),VESD3(JSON),
-     *              ECOD5(JSON),ECOD6(JSON),FGEOM(JSON),FV0(JSON),
-     *              FV1A(JSON),FV1B(JSON),FV2A(JSON),FV2B(JSON),
-     *              EV0(JSON),EV1A(JSON),EV1B(JSON),EV2A(JSON),
-     *              EV2B(JSON),DSS(JSON),DGSF(JSON),ESS(JSON),EGSF(JSON)
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C DEFINITION TERMS FOR THE SECOND AND THIRD DERIVATIVE
 C TERMS
-      COMMON/EGRIDDER/EQQCOD(JSON),EQQQCOD(JSON),QQCOD(JSON),
-     *                QQQCOD(JSON)
 C MHP 4/26 RESTORED VMU2, NOW USED
 C     DIMENSION HJM(JSON),HR(JSON),HRU(JSON),LCZ(JSON),OMEGA(JSON),  ! KC 2025-05-31
       DIMENSION HR(JSON),HRU(JSON),LCZ(JSON),OMEGA(JSON),

@@ -9,62 +9,104 @@ C      *                  BL,HSTOT,SJTOT,SMASS,TEFFL,LREDO,IREDO,  ! KC 2025-05-
      *                  BL,HSTOT,SMASS,TEFFL,LREDO,IREDO,
      *                  HICZ,HSBOT,HSTOP,OMEGAS,LCZSUR,
 C      *                  MRZONE,MXZONE,NRZONE,NZONE,  ! KC 2025-05-31
-     *                  COD2,HV,LOK)
+     *                  COD2,HV,LOK,HCOMPS)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
 C MHP 6/00 ADDED MRZONE,MXZONE,NRZONE,NZONE FOR BS MIX PLUS BURN
       PARAMETER(JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C FACI was COMMON/INTFAC/; seculr.f now owns it and passes it to SETUPV
+C and VCIRC, its only users.
+      DIMENSION FACI(4,JSON)
+C 10/13/26 MHP via Claude
+C VFC was COMMON/VARFC/; seculr.f now owns it and passes it to GETFC and
+C CODIFF.
+      DIMENSION VFC(JSON)
+C 10/13/26 MHP via Claude
+C HCOMPS is now a dummy argument, formerly COMMON/OLDAB/.
+      DIMENSION HCOMPS(15,JSON)
 
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
-C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 6/00 ADDED FLAG FOR CALL TO NDIFCOM
-      COMMON/FLAG/LEXCOM
 C 3/92 COMMON BLOCK ADDED FOR CENTERED DW/DLNR.
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *     EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *     QDTMI(JSON),RM(JSON),TM(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/OLDAB/HCOMPS(15,JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/OLDMOD/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
+C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
+C now owns the storage.
 C ADD OPTION FOR VARIABLE FC.
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VARFC/ with an explicit argument: seculr.f
+C clears VFC, GETFC fills it and CODIFF reads it, all inside seculr.f's
+C call tree, so seculr.f now owns the storage.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/ROTPRT/LPRT0
-      COMMON/NOTRAN/LNOJ
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/ROTPRT/, declared here but never used.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),EQS1(JSON),DCHI,NTOT
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LCODM and CODM below (the constant
+C diffusion coefficient option) but never declared COMMON/MAG/, so
+C both were uninitialized locals -- LCODM was always .FALSE. and the
+C branch never executed, even though ~101 test/example namelists set
+C LCODM = .TRUE. explicitly. Declaring the block (same layout as
+C codiff.f) makes the namelist values actually arrive here.
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 09/25 FOR 05/15 ADD IMPJMOD
-      COMMON/SBROT/LSOLID,IMPJMOD
       DIMENSION HD(JSON),HI(JSON),HG(JSON),HP(JSON),HS(JSON),
 C      * HR(JSON),LC(JSON),OMEGA(JSON),HL(JSON),ETA2(JSON),QIW(JSON),  ! KC 2025-05-31
      * HR(JSON),OMEGA(JSON),HL(JSON),ETA2(JSON),QIW(JSON),
@@ -104,7 +146,7 @@ C  TREATED AS 'CONVECTIVE' FOR DIFFUSION PURPOSES. FIX THIS.
       LCZM = LCZ(M)
 C  SET UP FACTORS USED TO COMPUTE DIFFUSION VELOCITIES.
 C       CALL SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,LCZ,M,HRU,QWRMAX)  ! KC 2025-05-31
-      CALL SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,M,HRU,QWRMAX)
+      CALL SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,M,HRU,QWRMAX,FACI)
       CLTOT = CLSUN*HL(M)
 C  COMPUTE ANGULAR VELOCITY GRADIENTS
       DO 10 I = IMIN,IMAX
@@ -125,8 +167,8 @@ C  AND THE GSF INSTABILITY.
 C MHP 06/02 added timestep to call
 C       CALL VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,QWLNR,  ! KC 2025-05-31
       CALL VCIRC(HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,QWLNR,
-     *           QWRMAX,HV,CLTOT,DT,HP)
-      IF(LVFC) CALL GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA)
+     *           QWRMAX,HV,CLTOT,DT,HP,FACI)
+      IF(LVFC) CALL GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA,VFC)
 C  STORE INITIAL ANGULAR MOMENTUM DISTRIBUTION.
       DO 20 I =1,M
          HJMP(I) = HJMSAV(I)
@@ -165,8 +207,8 @@ C  ITERATION.
 C MHP 06/02 added pressure and timestep to call
 C             CALL VCIRC(HJM,HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,QWLNR,  ! KC 2025-05-31
             CALL VCIRC(HR,HRU,IMIN,IMAX,IT,LCZ,M,OMEGA,LDO,QWLNR,
-     *                 QWRMAX,HV,CLTOT,DT,HP)
-            IF(LVFC) CALL GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA)
+     *                 QWRMAX,HV,CLTOT,DT,HP,FACI)
+            IF(LVFC) CALL GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA,VFC)
 C  NOW THAT THE NEW DIFFUSION VELOCITIES HAVE BEEN COMPUTED, RESET THE
 C  ANGULAR MOMENTUM AND COMPOSITION ARRAYS TO THEIR ORIGINAL VALUES.
             DO 50 I = 1,M
@@ -231,7 +273,7 @@ C  (SHOULD BE FIXED TO GIVE BETTER CENTRAL/SURFACE B.C.)
 C  UNSTABLE REGION EXISTS.
 C  FIND DIFFUSION COEFFICIENTS(COD) FOR ALL UNSTABLE REGIONS.
 C          CALL CODIFF(DELTS,HRU,HV,IMIN,IMAX,LC,LCZ,M,RMID,COD,COD2)  ! KC 2025-05-31
-         CALL CODIFF(HRU,M,RMID,COD,COD2)
+         CALL CODIFF(HRU,M,RMID,COD,COD2,VFC)
 C  EACH UNSTABLE REGION IS SOLVED SEPARATELY STARTING HERE.
 C  LTEST IS SET T IF A NON-ZERO VELOCITY IS ENCOUNTERED.
 C  IBEG IS THE ZONE BELOW THE FIRST NON-ZERO V;IEND IS THE ZONE ABOVE

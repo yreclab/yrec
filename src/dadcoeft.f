@@ -3,38 +3,74 @@ C MHP 06/02
 C       SUBROUTINE DADCOEFT(DR,DT,EI,EJ,EW,NTOT,WIND1,WIND2,DJ,  ! KC 2025-05-31
       SUBROUTINE DADCOEFT(DR,DT,EI,EW,NTOT,WIND1,WIND2,DJ,
      *                    ECOD2,SUMDJ,LFIX,LOKAD)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRIDDER/ into EGRIDDER_MOD.
+      USE EGRIDDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD3/ into DIFAD3_MOD.
+      USE DIFAD3_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
+      USE DIFAD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
       PARAMETER (JSON=5000, NMAX=8000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 3/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DIFFUSION COEFFICIENTS FOR THE TERMS INVOLVING D/DR (OMEGA)
 C (ECOD3) AND D/DR (D OMEGA/DR) (ECOD4).
-      COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
-      COMMON/DIFAD3/FACD2(JSON),FACD3(JSON),VESD2(JSON),VESD3(JSON),
-     *              ECOD5(JSON),ECOD6(JSON),FGEOM(JSON),FV0(JSON),
-     *              FV1A(JSON),FV1B(JSON),FV2A(JSON),FV2B(JSON),
-     *              EV0(JSON),EV1A(JSON),EV1B(JSON),EV2A(JSON),
-     *              EV2B(JSON),DSS(JSON),DGSF(JSON),ESS(JSON),EGSF(JSON)
 C time change of theta
-      COMMON/DIFADDT/ETHVN(JSON),ETHVP(JSON),EWST(JSON),EQWRST(JSON)
-C CONVERGENCE CRITERION
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/DIFADDT/, COMMON/EGRIDCHI/, and
+C COMMON/DIFAD4/ (below) to plain local arrays: all three are declared
+C only in this file (confirmed via a codebase-wide scan), so there's
+C nothing to share via COMMON. The existing blanket SAVE statement
+C below already preserves their values across calls, same as COMMON
+C did.
+      DIMENSION ETHVN(JSON),ETHVP(JSON),EWST(JSON),EQWRST(JSON)
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C VALUES OF D CHI/DR AT THE ZONE EDGES AND ZONE CENTERS
-      COMMON/EGRIDCHI/QCHIRE(JSON),QCHIRC(JSON)
+      DIMENSION QCHIRE(JSON),QCHIRC(JSON)
 C DEFINITION TERMS FOR THE SECOND AND THIRD DERIVATIVE
 C TERMS
-      COMMON/EGRIDDER/EQQCOD(JSON),EQQQCOD(JSON),QQCOD(JSON),
-     *                QQQCOD(JSON)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
-      COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-      COMMON/DIFAD4/FGEOMIX(JSON),VESN(JSON),REQ(JSON)
+      DIMENSION FGEOMIX(JSON),VESN(JSON),REQ(JSON)
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/11/26 MHP via Claude
+C BUG FIX: this file reads LROSSBY and PMMSOLTAU below (the Rossby
+C scaling of the saturation threshold) but never declared
+C COMMON/PMMWIND/, so both were uninitialized locals -- LROSSBY was
+C always .FALSE. and the branch never executed, even though its
+C namelist default is .TRUE. and ~105 test/example namelists set it
+C .TRUE. explicitly. Declaring the block (same layout as mwind.f)
+C makes the namelist values actually arrive here.
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C this file never referenced AWIND.  It is now a local of parmin.f, the
+C only routine that reads it.  Being last, its removal moves no other
+C member, and the block shrinks identically in all five files.
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C       DIMENSION EI(JSON),EW(JSON),EJ(JSON),DJ(JSON),  ! KC 2025-05-31
       DIMENSION EI(JSON),EW(JSON),DJ(JSON),
      *          A(NMAX,10),B(NMAX),EWPREV(JSON),DWIT(50),IWIT(50),

@@ -4,29 +4,47 @@ C WRTHEAD
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C write the headers for all the appropriate output files
 
-      SUBROUTINE WRTHEAD (SMASS,CMIXL)
+C 10/9/26 MHP via Claude
+C code changed to pass NK as an explicit argument instead of via
+C COMMON/ZRAMP/, which this file otherwise never used (NK was its only
+C member ever referenced here). See the CALL WRTHEAD site in main.f,
+C which already has NK as its own local run-index variable.
+      SUBROUTINE WRTHEAD (SMASS,CMIXL,NK)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
 
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C MHP 8/25 Removed character file names from common block
 C MHP 10/02 added proper dimensions for flaol2, fopal2
 C      CHARACTER*256 FISO,FLAOL2, FOPAL2
-      COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1       NUMRUN
-C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
-      COMMON/TRACK/ITRVER
-      COMMON/LABEL/XENV0,ZENV0
-C 9/25/26 MHP via Claude
-C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
-C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
@@ -37,10 +55,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude
@@ -51,8 +65,6 @@ C assigned a unit number, but never opened or read anywhere)
 C MHP 8/25 Removed character file names from common block
 C 9/25/26 MHP via Claude
 C code changed to remove the LISO isochrone-output option
-      COMMON/CHRONE/LRWSH
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
       SAVE
 
       IF (IRESCA(NK) .EQ. 1) THEN
