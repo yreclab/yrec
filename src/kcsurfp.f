@@ -1,5 +1,14 @@
       SUBROUTINE KCSURFP(TEFFL,GL,LPRT)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FAC/ into FAC_MOD.
+      USE FAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS2C/ into ATMOS2C_MOD.
+      USE ATMOS2C_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C JNT 06/2014
@@ -15,9 +24,6 @@ C PARAMETERS NTC AND NGC FOR TABULATED SURFACE PRESSURES.
 C MHP 8/25 Removed file names from common block
 C      CHARACTER*256 FATM
 
-      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
 C MHP 8/25 Removed file names from common block
 C JMH 8/18/91
 C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
@@ -30,7 +36,6 @@ C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
 C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
       DIMENSION QT(4),QG(4),PP(4),DUM(3),QGG(3),QS(3),PTAB(4),
      *          YT(4),YG(4)
       SAVE

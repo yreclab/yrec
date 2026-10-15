@@ -3,6 +3,9 @@ C     HSUBP
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE HSUBP (HCOMP,HD,HP,HR,HS,HT,JEDGE,PSCAHE)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -28,7 +31,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HR(JSON),HS(JSON),
      *          HT(JSON),FXION(3)
       SAVE

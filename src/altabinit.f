@@ -20,6 +20,15 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
 
       SUBROUTINE ALTABINIT
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM05/ into ALATM05_MOD.
+      USE ALATM05_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM02/ into ALATM02_MOD.
+      USE ALATM02_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM01/ into ALATM01_MOD.
+      USE ALATM01_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
@@ -34,11 +43,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
-     x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
-     x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
-      COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),      ! Shared: ALTABINIT and ALSURFP
-     x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/25 Removed character file names from common block
@@ -48,7 +52,6 @@ C are placeholders that no file references in executable code.  Removing
 C it also retires the hazard behind the earlier alfilein.f fix, where a
 C mis-indented EXTERNAL was absorbed into this declaration and renamed
 C DUMMY4.
-      COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
 C 1. Find the minimum (TEFFLmin) and maximum (TEFFLmax) permissable values of TEFFL. These are
 C    one row's width below the bottom and above the top of the table. Because the first level

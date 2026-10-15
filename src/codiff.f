@@ -2,6 +2,9 @@ C $$$$$$
 C       SUBROUTINE CODIFF(DELTS,HRU,HV,IMIN,IMAX,LC,LCZ,M,RMID,COD,COD2)  ! KC 2025-05-31
       SUBROUTINE CODIFF(HRU,M,RMID,COD,COD2,VFC)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -26,8 +29,6 @@ C (no member referenced here; residue of the obsolete-option removals).
       !COMMON/INTVR2/AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
 C 10/13/26 MHP via Claude: removed the unused COMMON/MDPHY/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

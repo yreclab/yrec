@@ -1,14 +1,18 @@
 C $$$$$$
       SUBROUTINE DCOEFT(ECOD,DR,DT,EI,EJ,EW,NTOT,WIND1,WIND2,LFIX)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
+      USE DIFAD_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
-      COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
 C MHP 7/93
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the

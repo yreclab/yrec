@@ -5,6 +5,12 @@ C     GET LAOL OPACITY FOR PURE Z
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GTPURZ(DL,TL,O,OL,QOD,QOT)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ZSLAOL/ into ZSLAOL_MOD.
+      USE ZSLAOL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ZLAOL/ into ZLAOL_MOD.
+      USE ZLAOL_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -46,10 +52,6 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C DBG 12/95 ARRAYS FOR PURE Z TABLE
-      COMMON/ZLAOL/ZOLAOL(104,52), ZOT(52), ZORHO(104),
-     *  NUMRHOZ, NUMTZ
-      COMMON/ZSLAOL/ZSLAOLL(104,52),ZSRHOL(104,52),
-     *  ZSDORL(104,52), NUMRSZ(52)
       SAVE
 C
 C     1. CUBIC SPLINE INTERPOLATE IN DENSITY

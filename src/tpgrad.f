@@ -7,6 +7,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *DEL,DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
      *VEL,LDERIV,LCONV,FPL,FTL,TEFFL,CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -54,10 +60,7 @@ C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *     VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C G Somers END
       DATA VTOL/1.0D-10/
       SAVE

@@ -5,6 +5,9 @@ C       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HQPR,HRU,HS1,HTU,  ! KC 2025-0
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
      *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAVEZ/ into GRAVEZ_MOD.
+      USE GRAVEZ_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
       PARAMETER (JSON=5000)
@@ -29,9 +32,6 @@ C 10/13/26 MHP via Claude
 C code changed to replace COMMON/GRAVSZ/ with explicit arguments:
 C setup_grsett.f fills these four and model_to_equal.f reads them, and
 C grsett.f calls both, so grsett.f now owns the storage.
-      COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
-     *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),
-     *              EZ_H(JSON)
 C       DIMENSION COD1(JSON),COD2(JSON),HCOMP(15,JSON),HQPR(JSON),
 C      *   HRU(JSON),HS1(JSON),HTU(JSON),QCOD1X(JSON),QCOD2X(JSON),  ! KC 2025-05-31
       DIMENSION COD1(JSON),COD2(JSON),HCOMP(15,JSON),

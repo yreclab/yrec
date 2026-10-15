@@ -2,6 +2,12 @@ C$$$$$$
 C       SUBROUTINE TAUINT(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)  ! KC 2025-05-31
       SUBROUTINE TAUINT(HS1,LCZ,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -36,13 +42,7 @@ C a commented-out block in wrtout.f, removed with it.
 C Needs access to this common block: grants knowledge of envellope
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C       DIMENSION HCOMP(15,JSON),HS2(JSON),LCZ(JSON),
       DIMENSION LCZ(JSON),
      *     HR(JSON), HP(JSON), HD(JSON), HG(JSON), HS1(JSON),  ! XSUM(15)

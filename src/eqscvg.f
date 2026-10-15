@@ -4,6 +4,9 @@ C       SUBROUTINE EQSCVG(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
 C      *AMU,EMU,ETA,QDT,QDP,QCP,DELA,LCALC)  ! KC 2025-05-31
       SUBROUTINE EQSCVG(TL,T,P,DL,D,X,Z,BETA,FXION,QDT,QDP,QCP,DELA,LCALC)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
+      USE SCVEOS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
@@ -15,9 +18,6 @@ C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C       DIMENSION ATOMWT(4),QR(4),FT(4),FTD(4),  ! KC 2025-05-31

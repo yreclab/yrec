@@ -7,6 +7,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C      1   DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,X)  ! KC 2025-05-31
      1   DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCR/ into CCR_MOD.
+      USE CCR_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -34,7 +40,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -61,7 +66,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
       DIMENSION DF1(5,3),DF2(5,3),FF(5,3),FFE(5)
       SAVE
 

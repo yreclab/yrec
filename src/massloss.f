@@ -10,6 +10,18 @@ C   llp  06/15/2009
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -21,7 +33,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HS(JSON),
      *          HS1(JSON),HS2(JSON),HT(JSON),HJM(JSON),
      *          OMEGA(JSON),HR(JSON),FXION(3)
-      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -45,12 +56,9 @@ C transposed here, so DLOGT in this file aliased mdot.f's DLOGP and
 C vice versa. Harmless so far only because this file uses neither
 C (nor SMASS0); it uses only SACC and SCEN, which are at the same
 C positions in both orderings, so this correction is behavior-neutral.
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C MHP 5/02 EFFICIENCY FACTOR FOR THE THERMAL ENERGY CONTENT
 C OF ACCRETED MATTER.
       DATA FACC/1.0D0/

@@ -7,6 +7,42 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)  ! KC 2025-05-31
      *FP,FT,HKEROT,HKEROTO,JENV,TEFFL,CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTEN/ into ROTEN_MOD.
+      USE ROTEN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTDER/ into ROTDER_MOD.
+      USE ROTDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAB/ into GRAB_MOD.
+      USE GRAB_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+      USE FLUXES_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -54,20 +90,11 @@ C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
 C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
 C starin.f and read nowhere in the code.  They are leftovers from the
 C removed opacity-table interpolation schemes.
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/PULSE/, declared here but never used.
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
 C DBG
 C*** MHP 5/90 ADD COMMON BLOCK FOR SOLAR NEUTRINO I/O
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C*** MHP 5/91 ADD COMMON BLOCK FOR ENERGY FROM ALPHA CAPTURE REACTIONS
 C  AND LOSSES FROM NEUTRINO-COOLED CORES IN EVOVLED STARS.
 C 10/13/26 MHP via Claude
@@ -76,14 +103,8 @@ C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
 C their own CALL ENGEB, so they are returned as arguments.  main.f, the
 C third caller, passes locals it does not use.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C MHP 7/96 COMMON BLOCK ADDED FOR SOUND SPEED
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/ROTEN/DEROT(JSON)
 C MHP 06/02 COMMON BLOCK ADDED FOR DERIVATIVES OF
 C CAPPA AND EPSILON
 C 10/13/26 MHP via Claude
@@ -94,11 +115,8 @@ C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
 C in different phases -- setupv.f is reached via seculr.f -- so passing
 C the rest explicitly would mean threading 15,000-word arrays through
 C main.f and GETW.
-      COMMON/ROTDER/SQOT(JSON),SQET(JSON),FRACNUC(JSON)
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
 C JVS end
 
       DIMENSION FXION(3),EG(6),TLUMX(8),HD(JSON),HHA(4,2,JSON),

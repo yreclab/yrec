@@ -2,6 +2,12 @@ C $$$$$$
       SUBROUTINE SETUP_GRSETT(DT,HQPR,HR,HD,HS1,HT,LC,M,STOT,COD1,COD2,
      *             HCOMP,HRU,HTU,IBEGIN,IEND,LALLCZ,QCOD1X,QCOD2X,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONFAC/ into CONFAC_MOD.
+      USE CONFAC_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -30,7 +36,6 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CONFAC/CON_RAD,CON_MASS,CON_TEMP,CON_TIME
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -43,8 +48,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C MHP 3/94 ADDED METAL DIFFUSION
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/GRAVSZ/ with explicit arguments:

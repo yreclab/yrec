@@ -6,6 +6,9 @@ C REMAP
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE REMAP
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CROSS/ into CROSS_MOD.
+      USE CROSS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
       USE NMLBYPASS_MOD
 C 10/14/26 MHP via Claude
@@ -38,7 +41,6 @@ C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK
 C MHP 6/14 DERIVATIVES ADDED
-      COMMON/CROSS/QS0E(8),QQS0EE(8),FO16,FC12
 C 10/12/26 MHP via Claude
 C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
 C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in

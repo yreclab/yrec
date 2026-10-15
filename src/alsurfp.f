@@ -80,6 +80,15 @@ C       If LPRT  is .TRUE. print Log(P) at the associated Log(Teff) to ISHORT an
 
       SUBROUTINE ALSURFP(TEFFL,GL,LPRT,LAlFail)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM02/ into ALATM02_MOD.
+      USE ALATM02_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM01/ into ALATM01_MOD.
+      USE ALATM01_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -102,12 +111,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
-      COMMON /ALATM01/ TEFFLs(NTA),GLs(NGA),FeHs(NGA),      ! Shared: ALFILEIN, ALTABINIT and ALSURFP
-     x   ALPHAs(NGA),PLs(NTA,NGA),P100Ls(NTA,NGA),T100Ls(NTA,NGA),
-     x   LOldNextGen,nTEFF,nGL,nFeH,nALPHA
-      COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),      ! Shared: ALTABINIT and ALSURFP
-     x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

@@ -6,6 +6,18 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *                HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *                EACC,ETHAV,SUMDM,SENVOLD)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -14,15 +26,12 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -35,8 +44,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/DISK/SAGE
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGP,DLOGT
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX

@@ -4,6 +4,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       SUBROUTINE AMCALC(SMASS,BL,TEFFL,STRUCTFACTOR)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -53,7 +56,6 @@ C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
 C this file never referenced AWIND.  It is now a local of parmin.f, the
 C only routine that reads it.  Being last, its removal moves no other
 C member, and the block shrinks identically in all five files.
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       SAVE
 
 C G Somers, 6/16

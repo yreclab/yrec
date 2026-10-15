@@ -16,6 +16,30 @@ C code changed to remove the Alexander 1995 opacity tables
       SUBROUTINE SETUPS(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPUREZ,FSCVH,FSCVHE,FSCVZ)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
+      USE SCVEOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FAC/ into FAC_MOD.
+      USE FAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCR/ into CCR_MOD.
+      USE CCR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS2C/ into ATMOS2C_MOD.
+      USE ATMOS2C_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS2/ into ATMOS2_MOD.
+      USE ATMOS2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS/ into ATMOS_MOD.
+      USE ATMOS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -79,36 +103,24 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
-      COMMON/ATMOS/HRAS
 C MHP 8/25 Removed file names from common block
 C JMH 8/18/91
 C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
 C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
 C JNT 06/14
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
 C MHP 8/92 COMMON BLOCK ADDED FOR LOWER EDGE OF TABLE IN LOG G.
-      COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
 C 10/9/26 MHP via Claude
 C code changed to rename this slot IDT -> IDTSCV: parmin.f and
 C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
 C slot was called IDTT there as a workaround. Renamed to IDTSCV
 C everywhere COMMON/SCVEOS/ is declared for one consistent name.
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
 C MHP 8/25 Removed file names from common block
 
       SAVE

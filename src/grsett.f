@@ -3,6 +3,9 @@ C GRESETT
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GRSETT(DT,HCOMP,HQPR,HR,HD,HS1,HT,LC,M,STOT)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAVEZ/ into GRAVEZ_MOD.
+      USE GRAVEZ_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -32,9 +35,6 @@ C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
-     *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),
-     *              EZ_H(JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

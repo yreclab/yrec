@@ -8,6 +8,12 @@ C      *       LNEW,LRESET,LSBC,KSAHA,KENV,KATM,HSTOT,BL,  ! KC 2025-05-31
      *       LNEW,LRESET,KSAHA,KENV,KATM,HSTOT,BL,
      *       TEFFL,X,Z,FPL,FTL,LFLP,PLIM,LC,M,CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALATM05/ into ALATM05_MOD.
+      USE ALATM05_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -55,9 +61,6 @@ C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON /ALATM05/ AL_TEFFLmin,AL_TEFFLmax
 
 C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).

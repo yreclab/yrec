@@ -3,6 +3,30 @@ C       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,LCZ,M,HRU,  ! KC 2025-
       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,M,HRU,
      *                  QWRMAX,FACI)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/VFACT/ into VFACT_MOD.
+      USE VFACT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TAUKH/ into TAUKH_MOD.
+      USE TAUKH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTDER/ into ROTDER_MOD.
+      USE ROTDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRIDDER/ into EGRIDDER_MOD.
+      USE EGRIDDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD3/ into DIFAD3_MOD.
+      USE DIFAD3_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -18,27 +42,14 @@ C FACI is now a dummy argument, formerly COMMON/INTFAC/.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
 C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
-      COMMON/VFACT/FACT1(JSON),FACT2(JSON),FACT3(JSON),FACT4(JSON),
-     *     FACT5(JSON),FACT7(JSON),FACT8(JSON)
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/INTFAC/ with an explicit argument:
 C setupv.f fills FACI and vcirc.f reads it, both called only from
 C seculr.f, which now owns the storage.
 C MHP 3/92 COMMON BLOCK ADDED FOR SHEAR VELOCITY
-      COMMON/TAUKH/FACT6(JSON),FES1(JSON),FES2(JSON),FGSFJ(JSON),
-     *             FGSFK(JSON),FES3(JSON)
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *              EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *              QDTMI(JSON),RM(JSON),TM(JSON)
 C MHP 06/02
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C CAPPA AND EPSILON DERIVATIVES
 C 10/13/26 MHP via Claude
 C code changed to drop the write-only members SQOD and SQED from
@@ -48,18 +59,10 @@ C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
 C in different phases -- setupv.f is reached via seculr.f -- so passing
 C the rest explicitly would mean threading 15,000-word arrays through
 C main.f and GETW.
-      COMMON/ROTDER/SQOT(JSON),SQET(JSON),FRACNUC(JSON)
 C DEFINITION TERMS FOR THE SECOND AND THIRD DERIVATIVE
 C TERMS IN THE ZAHN FORMULATION
-      COMMON/EGRIDDER/EQQCOD(JSON),EQQQCOD(JSON),QQCOD(JSON),
-     *                QQQCOD(JSON)
 C MHP 06/02
 C HIGHER ORDER TERMS IN M.C. VELOCITY
-      COMMON/DIFAD3/FACD2(JSON),FACD3(JSON),VESD2(JSON),VESD3(JSON),
-     *              ECOD5(JSON),ECOD6(JSON),FGEOM(JSON),FV0(JSON),
-     *              FV1A(JSON),FV1B(JSON),FV2A(JSON),FV2B(JSON),
-     *              EV0(JSON),EV1A(JSON),EV1B(JSON),EV2A(JSON),
-     *              EV2B(JSON),DSS(JSON),DGSF(JSON),ESS(JSON),EGSF(JSON)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

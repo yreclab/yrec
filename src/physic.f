@@ -3,6 +3,27 @@ C       SUBROUTINE PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,LCZ,M,TEFFL)  ! KC
       SUBROUTINE PHYSIC(FP,FT,HCOMP,HD,HG,HL,HP,HR,HS,HT,LC,M,TEFFL,
      *                  CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP/ into TEMP_MOD.
+      USE TEMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DWMAX/ into DWMAX_MOD.
+      USE DWMAX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP2/ into COMP2_MOD.
+      USE COMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -13,9 +34,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/COMP2/YENV,Y3ENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -38,14 +56,7 @@ C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
 C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
 C starin.f and read nowhere in the code.  They are leftovers from the
 C removed opacity-table interpolation schemes.
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
-     *     VISC(JSON)
-      COMMON/DWMAX/QWRMAX(JSON),QWRMX0(JSON)
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
       DIMENSION HCOMP(15,JSON),HD(JSON),HL(JSON),HG(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HT(JSON),LC(JSON),
 C      *     FXION(3),FP(JSON),FT(JSON),ATOMWT(4),LCZ(JSON),  ! KC 2025-05-31

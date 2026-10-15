@@ -14,6 +14,9 @@ C code changed to remove the Alexander 1995 opacity tables
       SUBROUTINE SETUPOPAC(XENV, FALEX06,
      *FLIV95,FPUREZ)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
+      USE NEWOPAC_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
@@ -36,7 +39,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/NEWOPAC/L2Z,LLAOL
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/

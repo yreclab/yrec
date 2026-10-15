@@ -3,6 +3,18 @@ C $$$$$$
      *                   HT,HV,IMAX,IMIN,JENV0,JENV1,LOK,LCZ,M,MRZONE,
      *                   MXZONE,NRZONE,NZONE)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDRAT/ into OLDRAT_MOD.
+      USE OLDRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWRAT/ into NEWRAT_MOD.
+      USE NEWRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+      USE LIOV_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
       PARAMETER (JSON=5000)
@@ -20,11 +32,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/LIOV/PSCAL0,PSCAL1
-      COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
-      COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C INPUT VARIABLES
       DIMENSION COD2(JSON),HCOMP(15,JSON),HD(JSON),HL(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HS2(JSON),HT(JSON),

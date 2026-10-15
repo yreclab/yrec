@@ -1,6 +1,9 @@
 C $$$$$$
       SUBROUTINE FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADD/ into QUADD_MOD.
+      USE QUADD_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
@@ -16,7 +19,6 @@ C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
       DIMENSION HD(JSON),HS(JSON),HR(JSON),OMEGA(JSON),FP(JSON),
      * FT(JSON),ETA2(JSON),R0(JSON),H(20),XA(20),YA(20),AINT0(10),
      * HG(JSON)

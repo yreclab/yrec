@@ -27,6 +27,12 @@ C CONTAIN NEUTRINO FLUXES FOR SOLAR NEUTRINO CALCULATIONS.
 C      *     HT,ITLVL,LC,M,QDT,QDP,DDAGE,JCORE,JENV,  ! KC 2025-05-31
      *     HT,ITLVL,LC,M,DDAGE,JCORE,JENV,MXZONE,MXZON0,TEFFL,CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/BURN/ into BURN_MOD.
+      USE BURN_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -46,7 +52,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/BURN/HCOMPM(15,JSON)
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
@@ -72,7 +77,6 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C*** MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.

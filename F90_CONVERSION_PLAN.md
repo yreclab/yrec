@@ -352,7 +352,67 @@ Blanket `USE` is safe here: the stage-2 collision scan established that no
 file declaring one of these blocks has a local of the same name as any
 member, and the two prefix declarations that would have broken it are gone.
 
-## Stage 3 -- table and index families
+## Stages 3 and 4 -- every remaining block
+
+**Status: done on 2026-10-15. There are no `COMMON` blocks left in the
+code.**
+
+All 77 remaining blocks are modules: 70 that carried no `DATA` and 7 that
+did. The tree now holds 83 modules, 893 module variables and 624 `USE`
+statements, and zero `COMMON` declarations.
+
+The 25 `DATA` migrations were grouped by the file holding them, for the
+same reason `NMLPAR` and `NMLBYPASS` had to be converted together -- one
+`DATA` statement can name members of two blocks:
+
+| group | blocks | initializers |
+|---|---|---|
+| `parmin.f` | `ACDPTH`, `LABEL`, `NEWOPAC` | 8 |
+| `readalex06.f` | `ALOT06`, `GALOT06` | 9 |
+| `ll95tbl.f` | `LLOT95A`, `OP95INTERP` | 8 |
+
+Unlike stage 2, **no statement needed surgery**: all 14 dropped whole.
+
+### Two defects the stage exposed
+
+Both were caught by the compiler or by checking a surprising number,
+not by inspection, and both are worth knowing about.
+
+**Inline comments inside a `COMMON` declaration.** `ALATM02` is declared
+
+```fortran
+      COMMON /ALATM02/ GLmin(NTA),GLmax(NTA),IGLmin(NTA),   ! Shared: ALTABINIT and ALSURFP
+     x   IGLmax(NTA),TEFFLmin,TEFFLmax,GLXmin,GLXmax
+```
+
+The parsers stripped *full-line* comments but not inline ones before
+joining continuations, so the comment text landed inside the member list
+and generated `REAL*8 :: ! Shared: ALTABINIT and ALSURFP   IGLmax(NTA)`.
+Only `ALATM01` and `ALATM02` are declared this way. Fixed quote-aware in
+both tools, and the whole batch was reverted and redone rather than
+patched around.
+
+**Missing `PRIVATE` dimension parameters.** The `DATA`-group converter
+inherited stage 2's module generator, which never needed them because
+`NMLPAR`'s members use literal bounds. The table blocks are dimensioned
+on `NUMT` and `NUMD`, so the module failed with `Symbol 'numt' has no
+IMPLICIT type` and `must have constant shape`. Values are now read from
+the declaring file rather than hardcoded, which matters because the
+OPAL95 family uses `NUMT=70` and Alexander 2006 uses `85`.
+
+**A third fix, to `shadow_census.py`:** it counted those `PRIVATE`
+parameters as exported members, inflating the census from 151 pairs to
+392 -- `JSON` alone is declared by 122 files as their own `PARAMETER`, so
+every one looked like a shadow. `PRIVATE` entities cannot be reached
+through `USE`, so they are now excluded. The census reads 151 pairs and
+37 silent, slightly better than the 155/41 before the conversion because
+the inline-comment fix also corrected `ALATM01`/`ALATM02`'s member lists.
+
+Validation: clean build, 0 errors, 280 objects for 280 sources, warnings
+unchanged at 20. 19 targeted cases pass with all 54 output files
+byte-identical.
+
+### The original plan text for this stage
 
 The 24 blocks of issue 10 group naturally into about eight family modules,
 which is a readability gain over 24 separate ones:

@@ -3,6 +3,12 @@ C DBURN - COMPUTE THE ABUNDANCE CHANGES RESULTING FROM DEUTERIUM BURNING
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE DBURNM(IBEGIN,IEND,M,HS2,HCOMP,DT,DRATEM,DRATEM0,FAC2)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -17,7 +23,6 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -30,8 +35,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),
-     *     HDO(JSON),HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C       DATA C21/5.240358E-8/
       DIMENSION HS2(JSON),HCOMP(15,JSON),DRATEM(JSON),DRATEM0(JSON)
       SAVE

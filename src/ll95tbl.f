@@ -5,6 +5,12 @@ C     LL95TBL
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE LL95TBL(FLIV95)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OP95INTERP/ into OP95INTERP_MOD.
+      USE OP95INTERP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LLOT95A/ into LLOT95A_MOD.
+      USE LLOT95A_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -33,8 +39,6 @@ C THIRD METAL ABUNDANCE (3 X 10**-4)BEGIN AT TABLE 21 AND END AT TABLE 30.
 C FOR THE HIGH VALUES OF Z, THE NUMBER OF X TABLES IS NOT THE SAME (I.E.
 C X<0.9 FOR Z=0.1).
 C FOR EACH COMPOSITION A FULL GRID IN (T,RHO/T6**3) IS RETAINED.
-      COMMON /LLOT95A/TGR(NUMT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ),
-     *                CAPPA2(NUMXZ,NUMT,NUMD),NUMXM(NUMZ),NZ(NUMZ)
 C INDICES FOR INTERPOLATION IN Z,X,T, AND R; INTERPOLATION FACTORS FOR
 C Z,X,T, AND R (AND DERIVATIVE FACTORS FOR T AND RHO); AND DATA FOR
 C LINEAR EXTRAPOLATION WHEN OUTSIDE THE TABLE IN RHO.
@@ -56,9 +60,6 @@ C of the code, which is why main.f declared only a 10-member prefix of
 C this block to avoid importing them.  With the clash gone main.f can
 C declare the full block, which a USE statement will require once this
 C becomes a module.
-      COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
-     *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4),
-     *     RHO_T63L,RHO_T63LL,RLH(4),LEXTL,LEXTH,LEXH(4)
 C 9/23/26 MHP via Claude
 C code changed to remove the OPAL92 opacity tables
 C 9/23/26 MHP via Claude
@@ -90,18 +91,10 @@ C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C NUMBER OF COMPOSITION TABLES AT LOWER Z FOR EACH ABUNDANCE
-      DATA NZ/0,10,20,30,40,50,60,70,80,90,100,109,118/
 C NUMBER OF X TABLES AT EACH Z
-      DATA NUMXM/10,10,10,10,10,10,10,10,10,10,9,9,8/
 C TABULTED SET OF X
-      DATA XXG/0.0D0, 0.1D0,0.2D0,0.35D0,0.5D0,0.7D0,0.8D0,0.9D0,
-     *          0.95D0,1.0D0/
 C TABULATED SET OF Z
-      DATA ZZG/0.0D0, 0.0001D0, 0.0003D0, 0.001D0, 0.002D0,
-     +         0.004D0, 0.01D0, 0.02D0, 0.03D0,
-     +         0.04D0, 0.06D0, 0.08D0, 0.10D0/
 c INDICES FOR INTERPOLATION
-      DATA JZ,JX,JT,JD/1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1/
 C  LOCAL VECTOR, USED TO SKIP LONG HEADER.
       CHARACTER*132 DUMMY
 C     READ IN OPACITY TABLES, SKIPPING HEADER.  HEY, IT WORKS.

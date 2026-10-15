@@ -17,6 +17,21 @@ C code changed to remove the Alexander 1995 opacity tables
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
      * FSCVHE,FSCVZ,YRECVER,GITHASH)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
+      USE NEWOPAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCOUT/ into CCOUT_MOD.
+      USE CCOUT_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
       USE NMLBYPASS_MOD
 C 10/14/26 MHP via Claude
@@ -137,11 +152,8 @@ C 10/11/26 MHP via Claude
 C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or
 C written in executable code anywhere, and no namelist file sets it.
-      COMMON/CCOUT/LPHHD
 C 10/13/26 MHP via Claude: removed the unused COMMON/CENV/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -156,7 +168,6 @@ C (no member referenced here; residue of the obsolete-option removals).
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
 C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/LABEL/XENV0,ZENV0
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
 C ISOTOPIC RATIOS(C,N,O) AND D/HE3/LI/BE/B ABUNDANCES.
 C THESE CONTROLS ONLY ALTER THE MIXTURE IN THE STARTING MODEL AND ONLY
@@ -235,7 +246,6 @@ C code changed to remove dead opacity-table Z-value inputs
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/L2Z,LLAOL
       CHARACTER*256 FALEX06
 C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
@@ -278,9 +288,6 @@ C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 C JVS END
 C JVS 04/14 Common block for additional timestep governors
@@ -471,7 +478,6 @@ c
 C MHP 7/93 VARIABLE FC OPTION
 C MHP 9/94 COMBINED DIFFUSION/ADVECTION OPTION
 C MHP 9/93
-      DATA XENV0, ZENV0/0.7,0.02/
       DATA KINDRN/50*1/
 C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
       DATA RSCLM, RSCLX, RSCLZ, RSCLCM/50*0.0, 50*0.0, 50*0.0, 50*0.0/
@@ -534,7 +540,6 @@ C DBG If LCORE is TRUE then calculate shells interior to start up
 C     model's inner most shell.
 C MHP 5/90 NEW DATA STATEMENTS FOR NEW PARAMETERS
 C DBGLAOL
-      DATA LLAOL/.FALSE./
 C DBG 11/11/91
 C 9/25/26 MHP via Claude
 C code changed to add a default for FSOUND matching the previous
@@ -599,8 +604,6 @@ C      DATA LSOLWIND,DMSUN,DMWSUN,DMWMAX/.FALSE.,-2.0D-14,2.863E-6,9.054E-5/
 C 3/09 Alexander 2006 opacity table options and opacity ramp options
 CFD 10/09 Mimic mixing options - acting on setling and differential settling
 C JVS 02/11 Initialize acoustic depth common block values appropriately
-      DATA AGEOUT/0.5D0, 1.0D0, 5.0D0, 10.0D0, 20.0D0/
-      DATA LCLCD, LJLAST, LJWRT, LACOUT/.FALSE.,.FALSE., .FALSE.,.FALSE./
 C JVS end
 C MHP 02/12 NEW PARAMETERIZATION OF ANGULAR MOMENTUM AND MASS LOSS
 C FROM MAGNETIZED SOLAR-LIKE WINDS

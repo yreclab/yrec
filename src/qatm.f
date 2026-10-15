@@ -6,6 +6,18 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QATM(X0,Y,DYDX,B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,
      *                RL,TEFFL,X,Z,KATM,KSAHA)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS/ into ATMOS_MOD.
+      USE ATMOS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -38,17 +50,9 @@ C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION Y(3),DYDX(3),FXION(3)
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/PULSE/, declared here but never used.
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/ATMPRT/TAUL,AP,AT,AD,AO,AFXION(3)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/ATMOS/HRAS
       SAVE
 
 C EDDINGTON APPROXIMATION

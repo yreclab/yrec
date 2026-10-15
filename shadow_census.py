@@ -71,6 +71,41 @@ def block_name(module):
     return m[:-4] if m.endswith('_MOD') else m
 
 
+def strip_inline(body):
+    """Remove an inline ! comment from one physical line's text.
+
+    Fixed-form statements here use F90 inline comments, and a COMMON
+    declaration may carry one mid-list:
+
+        COMMON /ALATM02/ GLmin(NTA),IGLmin(NTA),   ! Shared: ALTABINIT
+       x   IGLmax(NTA),TEFFLmin,...
+
+    Joining continuations without stripping first embeds the comment text
+    inside the member list, which produced a module declaration reading
+    "REAL*8 :: ! Shared: ALTABINIT and ALSURFP   IGLmax(NTA)". Quotes are
+    honoured so a ! inside a CHARACTER literal is not treated as a
+    comment.
+    """
+    out, inside = [], False
+    i, n = 0, len(body)
+    while i < n:
+        ch = body[i]
+        if ch == "'":
+            if inside and i + 1 < n and body[i + 1] == "'":
+                out.append("''")
+                i += 2
+                continue
+            inside = not inside
+            out.append(ch)
+            i += 1
+            continue
+        if ch == '!' and not inside:
+            break
+        out.append(ch)
+        i += 1
+    return ''.join(out)
+
+
 def is_comment(line):
     return bool(line) and line[0] in 'Cc*!'
 
@@ -88,7 +123,7 @@ def logical_lines(path):
         if is_comment(line) or not line.strip():
             i += 1
             continue
-        stmt = line[6:WIDTH] if len(line) > 6 else ''
+        stmt = strip_inline(line[6:WIDTH] if len(line) > 6 else '')
         j = i + 1
         while j < len(lines):
             nxt = lines[j]
@@ -96,7 +131,8 @@ def logical_lines(path):
                 j += 1
                 continue
             if len(nxt) > 5 and nxt[5] not in ' 0':
-                stmt += nxt[6:WIDTH] if len(nxt) > 6 else ''
+                stmt += strip_inline(
+                    nxt[6:WIDTH] if len(nxt) > 6 else '')
                 j += 1
                 continue
             break
@@ -148,6 +184,15 @@ def scan(srcdir):
                 in_module = block_name(mod.group(1))
                 continue
             if in_module:
+                # A PRIVATE entity is not accessible through USE, so it can
+                # never be captured and must not be counted. The dimension
+                # parameters the conversion adds -- JSON, NUMT, NUMD and
+                # friends -- are all PRIVATE, and counting them inflated
+                # the census from 155 pairs to 392: JSON alone is declared
+                # by 122 files as their own PARAMETER, every one of which
+                # then looked like a shadow of a module it does not import.
+                if re.search(r'\bPRIVATE\b', s, re.I):
+                    continue
                 mv = MODVAR.match(s)
                 if mv:
                     # Strip any initializer, so "JSON = 5000" yields JSON.

@@ -1,5 +1,11 @@
       SUBROUTINE GETQUA(HD,HG,HRU,OMEGA,M)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADRU/ into QUADRU_MOD.
+      USE QUADRU_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
@@ -9,8 +15,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
-      COMMON/QUADRU/QUAD(JSON),GG(JSON)
       DIMENSION HD(JSON),HG(JSON),HRU(JSON),OMEGA(JSON),DW2(JSON)
       SAVE
 

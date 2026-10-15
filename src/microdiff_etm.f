@@ -2,12 +2,14 @@ C $$$$$$
       SUBROUTINE MICRODIFF_ETM(DT,ER,EDELX,EDELZ,EDELLI,IBEGIN,IEND,NPT,
      *     HCOMP,HQPR,HRU,HS1,HTU,M,STOT,NLIGHT,CSLIGHT)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONFAC/ into CONFAC_MOD.
+      USE CONFAC_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/CONFAC/CON_RAD,CON_MASS,CON_TEMP,CON_TIME
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

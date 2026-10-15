@@ -3,13 +3,18 @@ C SOLID
       SUBROUTINE SOLID(HD,HJM,HR,HS,HS2,JSTART,JEND,ETA2,HI,OMEGA,
      *                 QIW,R0,M)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ERRMOM/ into ERRMOM_MOD.
+      USE ERRMOM_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
-      COMMON/ERRMOM/TOLERI
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
@@ -26,7 +31,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/DISK/SAGE
       DIMENSION HJM(JSON),HI(JSON),QIW(JSON),OMEGA(JSON),ETA2(JSON),
      * R0(JSON),HD(JSON),HS2(JSON),HR(JSON),HS(JSON)
       SAVE

@@ -6,6 +6,9 @@ C      *               IEND,M,DR,NPT,LC,ODEN,OTEM,EM,ER,EDEN,ETEM,EHQPR,EDELR,  
      *               EX,EY,EZ,ELI,EM_H,ER_H,EDEN_H,ETEM_H,EHQPR_H,EDELR_H,
      *               EX_H,EY_H,EZ_H,ELI_H)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
@@ -24,8 +27,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *       LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C       DIMENSION HCOMP(15,JSON),HQPR(JSON),HRU(JSON),HS1(JSON),HTU(JSON),  ! KC 2025-05-31
       DIMENSION HCOMP(15,JSON),HQPR(JSON),HRU(JSON),HS1(JSON),
      *          ODEN(JSON),OTEM(JSON),EM(JSON),ER(JSON),EDEN(JSON),ETEM(JSON),

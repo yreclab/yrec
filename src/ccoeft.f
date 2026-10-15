@@ -1,5 +1,8 @@
 C $$$$$$
       SUBROUTINE CCOEFT(COD,DR,DT,ECOMP,EM,NTOT)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
 
       PARAMETER (JSON=5000)
       IMPLICIT REAL*8(A-H,O-Z)
@@ -10,7 +13,6 @@ C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
       DIMENSION COD(JSON),ECOMP(JSON),EM(JSON)
       SAVE
 C  SET UP COEFFICIENTS OF DIFFUSION DIFFERENCE EQUATIONS FOR COMPOSITION

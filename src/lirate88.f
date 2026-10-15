@@ -5,6 +5,15 @@ C LIRATE88
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE LIRATE88(HCOMP,HD,HT,M,J)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDRAT/ into OLDRAT_MOD.
+      USE OLDRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWRAT/ into NEWRAT_MOD.
+      USE NEWRAT_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -17,10 +26,6 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

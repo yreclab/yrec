@@ -2,6 +2,9 @@ C$$$$$$
 C       SUBROUTINE MIXCZ(HCOMP,HS2,HS1,LCZ,HR,HP,HD,HG,M,IFSTCL)  ! KC 2025-05-31
       SUBROUTINE MIXCZ(HCOMP,HS2,LCZ,M)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 
@@ -20,8 +23,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C JVS 02/12 COMMON BLOCKS ADDED FOR THE CALCULATION OF TAUCZ
 C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
 C (no member referenced here; residue of the obsolete-option removals).

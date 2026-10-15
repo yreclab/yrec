@@ -5,6 +5,27 @@ C      *                  LPRT,M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,  ! KC 202
      *                  M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,
      *                  QIW,R0,WSAV,ID,IDM,LOKAD)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADD/ into QUADD_MOD.
+      USE QUADD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ERRMOM/ into ERRMOM_MOD.
+      USE ERRMOM_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD2/ into DIFAD2_MOD.
+      USE DIFAD2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
+      USE DIFAD_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -26,26 +47,17 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/ERRMOM/TOLERI
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *     ETA2X(JSON)
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
 C MHP 7/93
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/VARFC/, declared here but never used.
 C MHP 3/93
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
 C MHP 11/94
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
-      COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
-      COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
       DIMENSION HD(JSON),HJM(JSON),HJMP(JSON),HR(JSON),HS(JSON),
      *   HS2(JSON),LCZ(JSON),ETA2(JSON),HI(JSON),OMEGA(JSON),
      *   QIW(JSON),R0(JSON),HJMSAV(JSON),DELJI(16),IMAXI(16),

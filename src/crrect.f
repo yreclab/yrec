@@ -17,6 +17,18 @@ C      *OMEGA,R0,ITDONE,HG,HI,HJM, ITLVL,LCZ,MRZONE,MXZONE,NRZONE,NZONE,  ! KC 2
      *OMEGA,R0,ITDONE,HG,HI,HJM, ITLVL,LCZ,MXZONE,QIW,HKEROT,HKEROT0,
      *CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CTOL/ into CTOL_MOD.
+      USE CTOL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -61,16 +73,10 @@ C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/CENV/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CTOL/FCORR
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
       DIMENSION MXZONE(12,2),MXZON0(12,2)
       DIMENSION TRIT(3),TRIL(3),CFENV(9),PS(3),TS(3),RS(3),ESTORE(4),
      *TLUMX(8),FP(JSON),FT(JSON),ETA2(JSON),OMEGA(JSON),R0(JSON)

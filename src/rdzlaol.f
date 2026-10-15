@@ -5,6 +5,9 @@ C     READ PURE Z LAOL89
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE RDZLAOL(FPUREZ)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ZLAOL/ into ZLAOL_MOD.
+      USE ZLAOL_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C MHP 10/02 vector v not used
@@ -17,8 +20,6 @@ C      SUBROUTINE RDZLAOL(V)
 
 C MHP 8/25 Removed character file names from common block
 C DBG 12/95 ARRAYS FOR PURE Z TABLE
-      COMMON/ZLAOL/ZOLAOL(104,52), ZOT(52), ZORHO(104),
-     *  NUMRHOZ, NUMTZ
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

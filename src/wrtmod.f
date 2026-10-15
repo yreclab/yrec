@@ -9,6 +9,27 @@ C      * DAGE)  ! KC 2025-05-31
       SUBROUTINE WRTMOD(M,JENV,HCOMP,HS1,HD,
      *HL,HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL,XMSOL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -36,7 +57,6 @@ C code changed to remove dead IDYN from COMMON/LUNUM/
 C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)
-      COMMON/LABEL/XENV0,ZENV0
 C 10/11/26 MHP via Claude
 C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or
@@ -55,8 +75,6 @@ C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -64,27 +82,18 @@ C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
 C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
 C not the running SMASS, so it cannot be replaced by the mass already in
 C scope there.
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
 C 10/13/26 MHP via Claude: removed the unused COMMON/PULSE2/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 7/96 COMMON BLOCK INSERTED FOR SOUND SPEED
-      COMMON/SOUND/GAM1(JSON),LSOUND
 C DBG
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C 10/13/26 MHP via Claude: removed the unused COMMON/ROTEN/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION HCOMP(15,JSON),DUM1(4),DUM2(3),DUM3(3),DUM4(3)

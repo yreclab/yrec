@@ -8,6 +8,21 @@ C      *XO18,XH2,XLI6,XLI7,XBE9,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
      *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION,EALPCA,ENU)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAB/ into GRAB_MOD.
+      USE GRAB_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+      USE FLUXES_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CROSS/ into CROSS_MOD.
+      USE CROSS_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -150,7 +165,6 @@ C  IU IS THE SHELL NUMBER.
       IMPLICIT LOGICAL*4 (L)
 
 
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude
@@ -175,7 +189,6 @@ C code changed to replace COMMON/NEWEPS/ with explicit arguments: engeb.f
 C computes EALPCA and ENU, and coefft.f and ytime.f read them right after
 C their own CALL ENGEB, so they are returned as arguments.  main.f, the
 C third caller, passes locals it does not use.
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/BE7/ with an explicit argument.  ENGEB
 C computes BE7MASSFRACTION and main.f is its only reader, storing it into
@@ -192,11 +205,8 @@ C now plain locals there.  parmin.f declared the block without using it.
 C MHP 8/96 CROSS SECTIONS PUT IN COMMON BLOCK.
 C      COMMON/CROSS/SSTANDARD(17)
 C MHP 6/14 DERIVATIVES ADDED
-      COMMON/CROSS/QS0E(8),QQS0EE(8),FO16,FC12
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
       DIMENSION HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),HR5(JSON),
      1 HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),HR11(JSON),
      2 HR12(JSON),HR13(JSON),HF1(JSON),HF2(JSON)

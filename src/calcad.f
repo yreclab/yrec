@@ -49,6 +49,15 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
      *                  TEFFL, HCOMP, DAGE, JENV, CMIXL)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -103,15 +112,7 @@ C COMMON/IOUNITS/
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -129,8 +130,6 @@ C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *SENV
 C 10/13/26 MHP via Claude: removed the unused COMMON/SOUND/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/9/26 MHP via Claude

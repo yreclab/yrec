@@ -3,6 +3,12 @@ c     compute the new equation of state and compare to the old one...
 
       SUBROUTINE SETSCV
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
+      USE SCVEOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
@@ -15,11 +21,6 @@ C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/SCVEOS/
-     * TLOGX(NTS),TABLEX(NTS,NPS,12),TABLEY(NTS,NPS,12),SMIX(NTS,NPS),
-     * TABLEZ(NTS,NPS,13),TABLENV(NTS,NPS,12),NPTSX(NTS),IDTSCV,IDP
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C       DIMENSION ATOMWT(4),QR(3),FT(3),FTD(3),FP(3),FPD(3)  ! KC 2025-05-31
       DIMENSION QR(3),FT(3),FTD(3),FP(3),FPD(3)
 C       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/

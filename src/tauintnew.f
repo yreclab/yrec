@@ -4,6 +4,9 @@ C      *                     DEL1,DEL2,HSTOT,RBCZ)  ! KC 2025-05-31
       SUBROUTINE TAUINTNEW(HS1,LCZ,HR,HP,HD,HG,M,MINT,SVEL,
      *                     DEL1,DEL2,RBCZ)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
       PARAMETER(JSON=5000)
@@ -15,7 +18,6 @@ C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

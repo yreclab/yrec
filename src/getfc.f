@@ -3,6 +3,9 @@ C$$$$$$GETFC
 C
       SUBROUTINE GETFC(HD,HRU,HV,IMIN,IMAX,OMEGA,VFC)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -18,9 +21,6 @@ C VFC is now a dummy argument, formerly COMMON/VARFC/.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *              EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *              QDTMI(JSON),RM(JSON),TM(JSON)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

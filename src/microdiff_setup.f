@@ -4,6 +4,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE MICRODIFF_SETUP(DT,HQPR,HR,HD,HS1,HT,LC,M,STOT,HCOMP,HRU,HTU,
      *            IBEGIN,IEND,LALLCZ,ODEN,OTEM)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONFAC/ into CONFAC_MOD.
+      USE CONFAC_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -29,7 +32,6 @@ C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CONFAC/CON_RAD,CON_MASS,CON_TEMP,CON_TIME
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

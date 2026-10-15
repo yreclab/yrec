@@ -11,6 +11,18 @@ C      *                  BL,HSTOT,SJTOT,SMASS,TEFFL,LREDO,IREDO,  ! KC 2025-05-
 C      *                  MRZONE,MXZONE,NRZONE,NZONE,  ! KC 2025-05-31
      *                  COD2,HV,LOK,HCOMPS)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -61,9 +73,6 @@ C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 6/00 ADDED FLAG FOR CALL TO NDIFCOM
 C 3/92 COMMON BLOCK ADDED FOR CENTERED DW/DLNR.
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *     EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *     QDTMI(JSON),RM(JSON),TM(JSON)
 C 10/13/26 MHP via Claude: removed the unused COMMON/OLDMOD/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
@@ -87,7 +96,6 @@ C 10/13/26 MHP via Claude
 C code changed to drop COMMON/ROTPRT/, declared here but never used.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE
 C 10/11/26 MHP via Claude
 C BUG FIX: this file reads LCODM and CODM below (the constant
 C diffusion coefficient option) but never declared COMMON/MAG/, so
@@ -95,11 +103,7 @@ C both were uninitialized locals -- LCODM was always .FALSE. and the
 C branch never executed, even though ~101 test/example namelists set
 C LCODM = .TRUE. explicitly. Declaring the block (same layout as
 C codiff.f) makes the namelist values actually arrive here.
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 09/25 FOR 05/15 ADD IMPJMOD

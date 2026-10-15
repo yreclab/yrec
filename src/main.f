@@ -22,6 +22,51 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENT/ into CENT_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENV/ into CENV_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CTOL/ into CTOL_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENTROP/ into ENTROP_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PREVCZ/ into PREVCZ_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OP95INTERP/ into OP95INTERP_MOD.
+      USE OP95INTERP_MOD
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+      USE SOUND_MOD
+      USE PREVCZ_MOD
+      USE OVRTRN_MOD
+      USE OLDMOD_MOD
+      USE LIOV_MOD
+      USE FLUXES_MOD
+      USE ENTROP_MOD
+      USE DISK_MOD
+      USE DEUTER_MOD
+      USE CTOL_MOD
+      USE CENV_MOD
+      USE CENT_MOD
       USE NMLPAR_MOD
       USE CONSTANTS_MOD
       USE IOUNITS_MOD
@@ -103,10 +148,8 @@ C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/LABEL/XENV0,ZENV0
 C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/CENV/SENV0,LSENV0
 C 11/91 COMMON BLOCKS ADDED FOR PRESSURE SCALE HEIGHT CALC. FOR LIBURN
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
@@ -115,15 +158,12 @@ C MHP 05/02 ADDED OPTION TO ITERATE BETWEEN ROTATION AND
 C STRUCTURE CALCULATIONS - SET ITDIF1 GREATER THAN 1
 C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/LIOV/PSCAL0,PSCAL1
-      COMMON/PREVCZ/RBASE0,BLI6OLD,BLI7OLD,BBE9OLD,JENVOS
 C 9/24/26 MHP via Claude
 C code changed to make CMIXL a plain local variable set from the
 C user-input CMIXLA(NK) vector and passed as an explicit argument to
 C every routine that needs it, instead of broadcasting it via common
 C block, to reduce implicit global state ahead of the F90 module
 C conversion
-      COMMON/CTOL/FCORR
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
 C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
@@ -131,17 +171,13 @@ C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
 C 7/91 ENTROPY TERM COMMON BLOCK ADDED.
-      COMMON/ENTROP/HTT0(JSON),HPP0(JSON),HLL0(JSON),HRR0(JSON)
 C 7/91 FLAG TO TOGGLE BETWEEN NEW/OLD RATES ADDED.
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C MHP 9/94
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/ROTPRT/ with an explicit argument: main.f
 C sets LPRT0 and getw.f is its only reader.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
 C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
@@ -205,14 +241,11 @@ C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
 C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
 C now locals there.  This file never referenced them.
 C MHP 7/96 common block added for sound speed
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
 C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
 C MHP 3/96 central T,P,RHO added
-      COMMON/CENT/TCENTER,PCENTER,DCENTER,CZsurf_M,CZsurf_R
 C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95A/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C as above for the model Z.
@@ -241,9 +274,6 @@ C of the code, which is why main.f declared only a 10-member prefix of
 C this block to avoid importing them.  With the clash gone main.f can
 C declare the full block, which a USE statement will require once this
 C becomes a module.
-      COMMON/OP95INTERP/JZ,JX(4,4),JT,JD(4),
-     *     BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4),
-     *     RHO_T63L,RHO_T63LL,RLH(4),LEXTL,LEXTH,LEXH(4)
 C MHP 05/02 ADDED FOR ITERATION BETWEEN ROTATION AND STRUCTURE CALCULATION
 C 10/9/26 MHP via Claude
 C code changed to convert COMMON/ORIGSTART/ to a plain local array:
@@ -253,7 +283,6 @@ C statement already preserves its values across calls, same as
 C COMMON did.
       DIMENSION HJM0(JSON),HCOMPP0(15,JSON)
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C***MHP 1/04 inserted for test
 C      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
 C*** end test
@@ -268,9 +297,6 @@ C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
       INTEGER NAO
       DATA NAO/1/
@@ -285,7 +311,6 @@ C only reader was the commented-out JVS block deleted from wrtout.f
 C earlier in this work, so the block died with it.
 C JVS 04/14 Common block for additional timestep governors
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C     MHP 10/24 NEW VARIABLES FOR STOP CONDITIONS ON CENTRAL ABUNDANCE
 C       REAL*8 XCEN(2,15),DTPREV
 C       LOGICAL*4 L_LASTSTEP

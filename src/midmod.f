@@ -6,6 +6,27 @@ C      *            HS2,HSTOT,HT,LC,LCZ,LFIRSTIT,M,ETA2M,HDM,HGM,HICZ,HIM,  ! KC
      *            LCZM,LCZSUR,OMEGAM,R0M,QIWM,MRZONE,MXZONE,NRZONE,
      *            NZONE,HCOMPS)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP/ into TEMP_MOD.
+      USE TEMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDPHY/ into OLDPHY_MOD.
+      USE OLDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -38,20 +59,6 @@ C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *              ETA2X(JSON)
-      COMMON/OLDPHY/DELO(JSON),DELAO(JSON),AMUO(JSON),OO(JSON),
-     *              CPO(JSON),QDTO(JSON),VELO(JSON),VISCO(JSON),
-     *              THDIFO(JSON),ESUMO(JSON),DELRO(JSON),EPSO(JSON)
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
-     *     VISC(JSON)
 C 10/13/26 MHP via Claude: removed the unused COMMON/DWMAX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude
@@ -61,7 +68,6 @@ C now owns the storage.
 C MHP 05/02 ADDED FOR DEUTERIUM BURNING
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C MHP 06/02
 C 10/9/26 MHP via Claude
 C code changed to convert COMMON/PREVMID/ to plain local arrays:

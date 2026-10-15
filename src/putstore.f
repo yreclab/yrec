@@ -14,6 +14,21 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
      *DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL,XMSOL,COMPMIX)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+      USE SOUND_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTEN/ into ROTEN_MOD.
+      USE ROTEN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCOUT/ into CCOUT_MOD.
+      USE CCOUT_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -94,7 +109,6 @@ C 10/11/26 MHP via Claude
 C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or
 C written in executable code anywhere, and no namelist file sets it.
-      COMMON/CCOUT/LPHHD
 C 10/11/26 MHP via Claude
 C BUG FIX: this file reads LMILNE below (gating CALL WRTMIL) but never
 C declared COMMON/CCOUT2/, so it was an uninitialized local, always
@@ -104,12 +118,6 @@ C run; it only restores the intended behavior if someone enables it.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/ROTEN/DEROT(JSON)
 
       SAVE
 

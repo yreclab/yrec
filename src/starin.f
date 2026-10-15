@@ -11,6 +11,36 @@ C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V,
      * CMIXL,COMPMIX)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
+      USE NEWOPAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP2/ into COMP2_MOD.
+      USE COMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENV/ into CENV_MOD.
+      USE CENV_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
       USE NMLBYPASS_MOD
 C 10/14/26 MHP via Claude
@@ -78,10 +108,6 @@ C
 C Declared identically in all 121 files that hold any of these members.
 C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
-      COMMON/CENV/SENV0,LSENV0
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/COMP2/YENV,Y3ENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
@@ -91,10 +117,6 @@ C common block, to reduce implicit global state ahead of the F90
 C module conversion
 C 10/13/26 MHP via Claude: removed the unused COMMON/ENVPRT/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *     ETA2X(JSON)
 C 10/12/26 MHP via Claude
 C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
 C consolidated namelist block, every remaining member was write-only:
@@ -103,8 +125,6 @@ C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
 C starin.f and read nowhere in the code.  They are leftovers from the
 C removed opacity-table interpolation schemes.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ZDH(18),XXDH,YYDH,ZZDH,DHNUE(18)
-      COMMON/DPMIX/IOV1,IOV2,IOVIM
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
      *HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),LC(JSON),
      *HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),QIW(JSON),
@@ -127,7 +147,6 @@ C code changed to remove dead opacity-table Z-value inputs
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/L2Z,LLAOL
 C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/98 ADDED HPTTOL FOR CHANGING CORE FITTING POINT
@@ -140,11 +159,6 @@ C SET OF VECTORS, WHICH ARE FLIPPED AND CONVERTED INTO AN ASCENDING
 C SERIES AFTER THE INTEGRATION IS DONE.
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
 C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
@@ -154,7 +168,6 @@ C is CHARACTER, which does not belong in a COMMON block.  GETMODEL2,
 C GETYREC7 and PUTMODEL2 already took it as an argument; only these three
 C files shared it through the block.
 C G Somers 10/14, Add spot common block
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C G Somers END
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
 C ISOTOPIC RATIOS(C,N,O) AND D/HE3/LI/BE/B ABUNDANCES.

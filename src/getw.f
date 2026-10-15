@@ -18,6 +18,42 @@ C      *             HS1,HS2,HSTOT,HT,LC,LJDOT,M,MODEL,SJTOT,SMASS,  ! KC 2025-0
      *             HS1,HS2,HSTOT,HT,LC,LJDOT,M,SMASS,
      *                 TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0,CMIXL,LPRT0)
 C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP/ into TEMP_MOD.
+      USE TEMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADRU/ into QUADRU_MOD.
+      USE QUADRU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDRAT/ into OLDRAT_MOD.
+      USE OLDRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDPHY/ into OLDPHY_MOD.
+      USE OLDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWRAT/ into NEWRAT_MOD.
+      USE NEWRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+      USE LIOV_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -62,7 +98,6 @@ C Generated from one member list, so every copy is byte-identical; the
 C linker's 'size of symbol changed' warning is the check that they are.
 C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/LIOV/PSCAL0,PSCAL1
 C 10/13/26 MHP via Claude
 C code changed to drop COMMON/CTLIM/, declared here but never used.
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
@@ -70,21 +105,7 @@ C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *     DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *     THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
-      COMMON/OLDPHY/DELO(JSON),DELAO(JSON),AMUO(JSON),OO(JSON),
-     *     CPO(JSON),QDTO(JSON),VELO(JSON),VISCO(JSON),
-     *     THDIFO(JSON),ESUMO(JSON),DELRO(JSON),EPSO(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),
-     *     R0X(JSON),ETA2X(JSON)
-      COMMON/TEMP/CP(JSON),HAMU(JSON),SQDT(JSON),THDIF(JSON),
-     *     VISC(JSON)
 C 7/91 NEW LITHIUM BURNING COMMON BLOCKS ADDED.
-      COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
-      COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/OLDAB/ with an explicit argument: midmod.f
 C fills HCOMPS and seculr.f reads it, both called only from getw.f, which
@@ -93,20 +114,14 @@ C 8/92 COMMON BLOCK FOR COMPUTATION OF BEGINNING OF STEP MU
 C BARRIER.
 C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      COMMON/QUADRU/QUAD(JSON),GG(JSON)
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/ROTPRT/ with an explicit argument: main.f
 C sets LPRT0 and getw.f is its only reader.
-      COMMON/DISK/SAGE
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 09/2025 FOR 05/15 ADD IMPJMOD
 C MHP 06/02
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
-      COMMON/OVRTRN/TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       SAVE
       LBURS = .FALSE.
 C DETERMINE THE NUMBER OF DIFFERENT ELEMENTS AND ISOTOPES BEING TRACKED
