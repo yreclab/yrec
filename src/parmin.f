@@ -520,7 +520,14 @@ C     3,4=MAGG ET AL. 2021 (MET,PHOT) A&A 661,140
      * 0.468195D0,0.416592D0,0.415631D0,0.413545D0/
 C      ATIME(13) was orginally = 1.5.
 C JVS 04/14
-      DATA CMIXL/1.4D0/
+C 10/15/26 MHP via Claude
+C code changed to remove DATA CMIXL/1.4D0/.  PARMIN's own CMIXL is a local
+C that nothing reads -- ifort reports it as unused -- and it has been dead
+C since CMIXL was dropped from the output-only DERIVED namelist on
+C 10/13/26.  The mixing length the code actually uses is the scalar
+C main.f:382 takes from the per-run vector as CMIXL = CMIXLA(NK), so a
+C default here could never reach the run; keeping one would only suggest
+C otherwise.  An illegal CMIXLA is now trapped below instead.
 C       DATA DPENV,LNSTDMX,LOVSTC,ALPHAC,LOVSTE,ALPHAE, LOVSTM, ALPHAM
 C      */1.0D0,.FALSE.,.FALSE., 0.0D0, .FALSE.,0.0D0, .FALSE., 0.0/
 C JVS 07/13
@@ -1245,6 +1252,53 @@ C below is functional, not echo, and is preserved unchanged.
       WRITE(ISHORT,NML=PHYSICS)
       WRITE(ISHORT,NML=CONTROL)
       WRITE(ISHORT,NML=DERIVED)
+C 10/15/26 MHP via Claude
+C code changed to trap an illegal convective mixing length before the run
+C starts.  CMIXLA is the per-run vector the mixing length is taken from --
+C main.f:382 sets CMIXL = CMIXLA(NK) for each kind card -- and nothing
+C validated it anywhere.  It has no default, so an entry the namelist
+C never sets is zero, and a zero or negative mixing length is unphysical:
+C the run fails further in, where the cause is no longer apparent.
+C
+C Only the entries that will actually be used are checked.  Under solar
+C calibration just CMIXLA(1) comes from the namelist: SETCAL sets
+C NUMRUN = 48 and fills entries 2..48 from CMIXLA(1), so checking the
+C whole vector here would report entries the user never supplied.  The
+C bound is MIN(NUMRUN,50) because CMIXLA is dimensioned 50 while NUMRUN
+C is read from the namelist and is not itself range-checked.
+C
+C Placed after the namelist echo, unlike the LSEMIC/overshoot trap above,
+C so that the .short file carries the inputs that caused the stop as well
+C as the diagnosis.
+      IF(LCALS)THEN
+         NCMXCK = 1
+      ELSE
+         NCMXCK = MIN(NUMRUN,50)
+      ENDIF
+      LCMXBAD = .FALSE.
+      DO I = 1,NCMXCK
+         IF(CMIXLA(I).LE.0.0D0)THEN
+            LCMXBAD = .TRUE.
+            WRITE(ISHORT,8801)I,CMIXLA(I)
+            WRITE(*,8801)I,CMIXLA(I)
+         ENDIF
+      END DO
+ 8801 FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'ILLEGAL MIXING LENGTH:',
+     * ' CMIXLA(',I2,') =',1PE12.4,' - MUST BE POSITIVE')
+      IF(LCMXBAD)THEN
+         IF(LCALS)THEN
+            WRITE(ISHORT,8802)
+            WRITE(*,8802)
+         ELSE
+            WRITE(ISHORT,8803)NCMXCK
+            WRITE(*,8803)NCMXCK
+         ENDIF
+         STOP
+      ENDIF
+ 8802 FORMAT('SOLAR CALIBRATION IS ON, SO ONLY CMIXLA(1) IS READ FROM',
+     * ' THE NAMELIST'/'RUN STOPPED')
+ 8803 FORMAT('CMIXLA MUST BE SET FOR EACH OF THE',I3,' KIND CARDS'/
+     * 'RUN STOPPED')
       IF(KTTAU .EQ. 0) THEN
            WRITE(ISHORT, 197)
       ELSE IF (KTTAU .EQ. 1) THEN
