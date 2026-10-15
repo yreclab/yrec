@@ -47,7 +47,12 @@ C associated max number of GL's is nGL.
       CHARACTER*35 inrec
       CHARACTER*256 inrec2
       DIMENSION TEFFs(NTA)
-      LOGICAL*4 LALTPTau100
+C 10/14/26 MHP via Claude
+C code changed to drop the redundant LOGICAL*4 LALTPTau100 declaration.
+C LALTPTau100 is a COMMON/NMLPAR/ member, and explicitly typing a COMMON
+C member is legal while doing the same to a USE-associated name is
+C rejected, so it has to go before NMLPAR becomes a module.  Removing it
+C changes nothing: IMPLICIT LOGICAL*4(L) already gives that type.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

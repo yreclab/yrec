@@ -87,7 +87,12 @@ C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
-       LOGICAL*4 LALTPTau100
+C 10/14/26 MHP via Claude
+C code changed to drop the redundant LOGICAL*4 LALTPTau100 declaration.
+C LALTPTau100 is a COMMON/NMLPAR/ member, and explicitly typing a COMMON
+C member is legal while doing the same to a USE-associated name is
+C rejected, so it has to go before NMLPAR becomes a module.  Removing it
+C changes nothing: IMPLICIT LOGICAL*4(L) already gives that type.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

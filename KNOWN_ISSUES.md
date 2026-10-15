@@ -1333,25 +1333,52 @@ them live -- but every caller is itself unreachable.
 
 ### Why this is worth doing before the rest of the conversion
 
-Three of the fifteen -- `intpt.f`, `rabu.f` and `wcz.f` -- declare
-`COMMON/NMLPAR/`, and `wcz.f` also declares `COMMON/NMLBYPASS/`. Those
-are the two blocks still to convert, and `NMLPAR` spans 104 files, so
-removing the dead ones first takes three files off the largest remaining
-stage.
+One of the fifteen, `wcz.f`, declares `COMMON/NMLPAR/`, so removing it
+takes `NMLPAR` from 104 declaration sites to 103 before the largest
+remaining stage runs.
+
+A first pass claimed three of them declared `NMLPAR` and that `wcz.f`
+also declared `NMLBYPASS`. That was wrong, from a grep that matched
+`COMMON/NMLPAR/` anywhere in the file including inside comments -- and
+these files carry conversion-history comments naming the block.
+Column-aware matching gives one real declaration, in `wcz.f` alone, and
+none of `NMLBYPASS`. This is the third time in this work that matching a
+block name without honouring the column rules produced a confident wrong
+answer; it is why `shadow_census.py` and the conversion tool both parse
+statements rather than grep lines.
 
 It is also already costing work: `putyrec7.f`, `intpol.f` and `wcz.f`
 received module conversions earlier today, so dead code is being
 carefully migrated for no benefit.
 
-### Triage needed
+### Triage, settled 2026-10-14
 
-Not all fifteen are necessarily disposable. `putyrec7.f` writes the YREC7
-format whose reader is still live, so it may be wanted even though
-nothing calls it, in the way `COMMON/MASSCHG2/` was retained with the
-experimental mass-loss code (issue 12). The rest look like straight
-leftovers of the OPAL 2001 EOS, the Kurucz opacities and the old table
-interpolation packages.
+MHP's ruling: **keep `putyrec7.f`, remove the other fourteen.**
 
-Each deletion is verifiable the same way `quad.f` was: no call site, no
-`EXTERNAL`, no undefined reference to the symbol in any object, and a
-clean build plus byte-identical outputs afterwards.
+**`putyrec7.f` is a deliberate exception.** It writes the YREC7 model
+format whose reader, `getyrec7.f`, is still live, so it may have legacy
+use even though nothing in the tree calls it. It stays unreachable on
+purpose, in the way `COMMON/MASSCHG2/` was retained with the experimental
+mass-loss code (issue 12). Anyone running a dead-code check will see it
+reported; that is expected, and this entry is the reason. It references
+only `log10`, so it carries no other dead code with it.
+
+The fourteen removed: `findex.f`, `gmass.f`, `gmass01.f`, `intpol.f`,
+`intpt.f`, `lir.f`, `quadeos01.f`, `quint.f`, `rabu.f`, `splinnr.f`,
+`splnr.f`, `wcz.f`, `ysplin.f`, `zero.f`.
+
+Checked before removal, because an unreachable routine can still be
+*referenced* by another unreachable one and a dangling reference breaks
+the link even though neither runs: across all 215 objects the only
+references to any of the fourteen were `intpol.o` to `ysplin_` and
+`intpt.o` to `lir_`. Both sides of each pair are in the set, so removing
+them together leaves nothing dangling. `putyrec7.o` references none of
+them.
+
+`boole.f`'s comment credited "numerical recipes SPLINE (renamed
+splinnr)"; it actually calls `SPLINJ` and `SPLINT`, and the comment was
+corrected in the same change.
+
+This also removes the last single-precision declarations in the tree, so
+issue 23's exception for declared `REAL*4` no longer applies: every
+floating variable is now `REAL*8` and a literal sweep can be uniform.
