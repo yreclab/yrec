@@ -34,7 +34,6 @@ C cannot be added here as a normal argument; it is relayed instead via
 C COMMON/QENVMIX/, set by ENVINT immediately before every code path that
 C may reach QENV (direct calls and the BSSTEP/MMID callback alike).
 
-      PARAMETER(JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

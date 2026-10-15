@@ -60,7 +60,6 @@ C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
 
       PARAMETER (JSON=5000)
-      PARAMETER (NTS=63, NPS=76)
       IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 C DBGLAOL

@@ -32,7 +32,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 
-      PARAMETER(NTA=250,NGA=25)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)

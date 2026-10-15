@@ -1468,8 +1468,24 @@ floating variable is now `REAL*8` and a literal sweep can be uniform.
 
 ## 25. The module conversion orphaned 94 `PARAMETER` declarations
 
-**Status:** open. Found 2026-10-15. Residue of the conversion itself, not
-pre-existing debt.
+**Status:** RESOLVED 2026-10-15. All 94 removed: 67 statements deleted
+outright, 5 rebuilt where live entries remained, across 38 files, for a
+net 67 lines. Build clean, 19 targeted cases byte-identical.
+
+Two notes from doing it. The detector originally excluded *all*
+`PARAMETER` statements when looking for uses, which would have wrongly
+orphaned a parameter used only to compute another -- `sneut.f` does that
+throughout, with `fac1 = 5.0d0*pi/3.0d0` and `tfac1` built from `cv`,
+`ca`, `cvp`, `cap` and `xnufam`. It now counts occurrences across every
+statement and requires exactly one, the name's own declaration. The list
+came out at 94 either way, so no false positive was present, but the
+check no longer depends on that.
+
+The column-132 guard also refused `main.f` for a 159-character line,
+which turned out to be a comment -- the only line past 132 in the tree,
+and one the compiler ignores. The guard now looks at code lines only.
+
+The original finding follows.
 
 Of the integer `PARAMETER` declarations in the non-module sources, **225
 are still used and 94 are now declared and never referenced.** The arrays

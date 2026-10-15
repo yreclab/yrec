@@ -12,7 +12,7 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
 
-      PARAMETER (NTS=63, NPS=76)
+      PARAMETER (NTS=63)
       IMPLICIT REAL*8(A-H,O-Z)
       IMPLICIT LOGICAL*4(L)
 

@@ -18,11 +18,7 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       IMPLICIT LOGICAL*4(L)
       IMPLICIT INTEGER*4(I,J,K,M,N)
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
-      PARAMETER(NT=57,NG=11)
 C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
-      PARAMETER(NTA=54,NGA=5)
-      PARAMETER (NTS=63, NPS=76)
-      PARAMETER (JSON=5000)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

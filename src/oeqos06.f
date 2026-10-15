@@ -41,9 +41,6 @@ C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
 
       parameter (mx=5,mv=10,nr=169,nt=197)
       Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
-      PARAMETER ( IVARX = 25 )
-      PARAMETER (CNVS = 0.434294481D0 )
-      PARAMETER (ZERO = 0.0D0)
 
 C       DIMENSION ATOMWT(4)
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration

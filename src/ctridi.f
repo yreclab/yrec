@@ -4,7 +4,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
       USE TRIDI_MOD
 
-      PARAMETER (JSON=5000)
       IMPLICIT REAL*8 (A-H,O-Z)
       SAVE
 

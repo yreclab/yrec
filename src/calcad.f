@@ -67,7 +67,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
       PARAMETER (JSON=5000)
-      PARAMETER (NTS=63, NPS=76)
 C 10/9/26 MHP via Claude
 C code changed to add mx,mv,nr,nt (matching every other file that
 C declares an OPAL 2006 EOS common block), needed below for
