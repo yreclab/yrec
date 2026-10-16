@@ -1624,3 +1624,79 @@ deliberately per-routine. Centralising it would be actively wrong.
 Issue 25 first. Deleting the 94 orphans removes 12 of `JSON`'s 120
 declarations before any of them has to be converted, and it is pure
 subtraction, so it is the cheaper and safer half.
+
+---
+
+## 27. Inter-module dependencies: scope the work, then do it after stage 5
+
+**Status:** open, added 2026-10-16 at MHP's request. He asked for this as
+a task after stage 5, or at minimum an item to scope the degree of change
+required.
+
+### What is missing
+
+`Makefile` orders modules against ordinary objects:
+
+```make
+$(OBJS): $(MODOBJS)
+```
+
+That guarantees every module compiles before any object that `USE`s one,
+which is sufficient *only while no module imports another*. It does not
+order the modules among themselves. The moment one module `USE`s another,
+the build depends on `MODOBJS` happening to be in a workable order, which
+the `wildcard` expansion does not promise -- it is alphabetical. Stage 0
+item 3 recorded this and deferred it for exactly this reason.
+
+### Why it is not yet a problem
+
+No module imports another today. That is not an accident: the 36 block
+modules dimensioned on `JSON` each declare their own `PRIVATE` copy
+rather than importing `DIMENSIONS_MOD`, which is what kept issue 26's
+importer work clear of this. `dimensions_mod.o` compiles at position 10
+and the first ordinary object at 85, so the current rule covers it.
+
+### What would trigger it
+
+- Removing the 36 duplicate `PRIVATE JSON` copies in favour of
+  `USE DIMENSIONS_MOD` (the open half of issue 26).
+- Any module that needs a type, parameter or interface from another.
+- Stage 5 may create pressure for this: moving to `IMPLICIT NONE` with
+  explicit declarations tends to surface shared derived types and
+  parameters that naturally live in one module and are used by others.
+
+### Scoping questions to answer before committing to an approach
+
+1. **How many edges would there actually be?** Today zero. After issue
+   26's second half it would be 36 modules depending on one. That single
+   case is trivially orderable by hand, so measure whether a generated
+   solution is warranted at all or whether a one-line explicit
+   prerequisite suffices:
+   `$(filter-out dimensions_mod.o,$(MODOBJS)): dimensions_mod.o`
+2. **Which tool?** `makedepf90` is the conventional answer but is a new
+   build dependency for every developer and may not be packaged on the
+   target systems. A short script generating a `.d` fragment from `USE`
+   statements is maybe 40 lines and has no dependency, and the parsing it
+   needs -- joined continuations, inline comments, column rules -- is
+   already implemented in `shadow_census.py`.
+3. **Does it need to handle cycles?** Fortran forbids circular `USE`, so
+   a topological sort either succeeds or reveals a real error worth
+   reporting.
+4. **How is it kept honest?** A generated dependency file that is stale
+   is worse than none. Either regenerate on every build, which costs a
+   parse of 280 files, or make it a checked-in artifact with a test that
+   fails when it disagrees with the sources. The second fits this
+   project's habits better, given the test suite already guards other
+   invariants.
+5. **Does `make -j` still work?** It does today, verified in stage 0
+   against the `$(OBJS): $(MODOBJS)` rule. Any replacement must be
+   re-verified the same way, since an ordering bug shows up only
+   intermittently under parallel builds and is easy to mistake for
+   something else.
+
+### Recommended sequencing
+
+Scope it now, in this entry; implement after stage 5. Doing it earlier
+builds machinery with no edges to exercise it, and stage 5 is the change
+most likely to determine what the dependency graph actually needs to look
+like.
