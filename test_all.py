@@ -19,7 +19,7 @@ import configparser as cfp
 config = cfp.ConfigParser()
 config.read("pytest.ini")
 yrec_exe = os.path.abspath( config['paths']['yrec'] )
-tests = [x for x in config['paths']['tests'].split('\n') if len(x) > 0 ]
+test_defs = [x for x in config['paths']['tests'].split('\n') if len(x) > 0 ]
 float_frac_tol = float(config['tolerances']['float_frac_tol'])
 int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
@@ -195,12 +195,91 @@ def color_indicator(line, indices):
     return out
 
 
-test_cases = collect_tests(tests)
+def order_batch(batch, order_val):
+    '''Impose an order requirement on a batch of test cases'''
+    return [
+        pytest.param(
+            *(item if isinstance(item, tuple) else (item,)),
+            marks=pytest.mark.order(order_val)
+        )
+        for item in batch
+    ]
+
+def mark_batch(batch, order_val):
+    return [
+        pytest.param(*case, marks=pytest.mark.order(order_val))
+        for case in batch
+    ]
 
 
+def batch_tests(tests):
+    '''Iterate over all test cases and find dependencies between
+    CONTROL (nml1) namelist files. Return the list of all cases
+    that depend upon other cases in provided set.
+    Batch all provided tests into 'early' and 'late'
+    so that all tests whose outputs are dependencies of other
+    tests run first.
+    Sorts test cases into a maximum of two tiers, early and late.
+    '''
+    batches = []
+    # extract the FFIRST field from every test case, keep associated with the case
+    # iterate over list of tests and compare each with list of ffirsts
+    # if an ffirst appears in the test list, move that test to an earlier list
+
+    # Iterate over the next list and repeat, splitting off matches into a new list
+    # Repeat until there are no more tests to examine
+    # List of tuples
+    #   test (3-list of test fields)
+    #   FFRIST from the NML1 of the test case
+    tcases = []
+    for i, test in enumerate(tests):
+        nmlfile = os.path.join(test[0], test[1])
+        with open(nmlfile, 'r') as nml:
+            for line in nml:
+                line = line.strip()
+                if len(line) == 0 or line[0] == '!':
+                    continue
+                if 'FFIRST' in line:
+                    ffirst = re.search('(".*")', line).groups()[0].replace('"', '')
+                    tcases.append((test, ffirst))
+
+    batches = []
+    early = []  # Test which are a dependency of another in the set
+    late = []   # A test which depends upon another in the set
+    indep = []  # Tests which may be independenty scheduled
+    for tcase in tcases:
+        dep_found = False
+        stub = tcase[0][1].rsplit('.')[0]
+        # Check if stub appears in any test cases
+        print(f"searching for  {stub} ", end='')
+        for srchcase in tcases:
+            #print('.', end='')
+            if srchcase[0] not in early and stub in srchcase[1]:
+                early.append(tcase[0])
+                print('   Found. This test is a dependency of another')
+                dep_found = True
+                break
+        print()
+        if not dep_found:
+            late.append(tcase[0])
+
+    # Assign ordering to batches
+    early = mark_batch(early, 1)
+    late = mark_batch(late, 2)
+    batches.append(early)
+    batches.append(late)
+
+    return batches
 
 
-@pytest.mark.parametrize("tdir,nml1,nml2", test_cases)
+test_cases = collect_tests(test_defs)
+batches = batch_tests(test_cases)
+test_cases_ordered = []
+for batch in batches:
+    test_cases_ordered = test_cases_ordered + batch
+
+
+@pytest.mark.parametrize("tdir,nml1,nml2", test_cases_ordered)
 def test_yrec(tdir, nml1, nml2):
     '''Process a test case definition consisting of
        (test directory, NML1 file, NML2 file)
@@ -228,7 +307,6 @@ def test_yrec(tdir, nml1, nml2):
     for line in out.split('\n'):
         if "OUTPUT placed in" in line:
             outdir = str(pathlib.Path(line.split(':')[1].strip()))
-    print(f'{outdir=}')
 
     # Ensure outdir is an absolute path
     outdir = os.path.abspath(os.path.join(tdir, outdir))
