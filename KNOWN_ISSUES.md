@@ -1375,9 +1375,12 @@ well-documented change rather than a quiet sweep.
 
 ## 24. Fifteen unreachable routines, mostly left by the physics removals
 
-**Status:** open, awaiting MHP's triage. Found on 2026-10-14 in answer to
-his question of whether the earlier physics removals left dead routines
-behind. They did.
+**Status:** RESOLVED 2026-10-15. MHP triaged it the same day: keep
+`putyrec7.f`, remove the other fourteen. Done in `da1887a` -- 1001 lines
+of unreachable code, with `putyrec7.f` retained deliberately and recorded
+below so a future dead-code check reporting it is not mistaken for an
+oversight. Found on 2026-10-14 in answer to his question of whether the
+earlier physics removals left dead routines behind. They did.
 
 `dead_code.py` answers this from the linker's symbol table rather than by
 grepping for `CALL`, which misses function references, `EXTERNAL`
