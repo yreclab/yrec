@@ -1754,3 +1754,117 @@ the tolerance, not the literals, the thing to examine.
 Doing it in that order matters. Fixing the literals first would change
 branch decisions under a tolerance nobody has reviewed, and the effect
 would be indistinguishable from the rest of issue 23 in the same diff.
+
+---
+
+## 29. No procedure has an explicit interface, so argument errors are not checked
+
+**Status:** open, added 2026-10-16 at MHP's request. A zero-cost partial
+measure is available immediately; the full fix belongs after stage 5.
+
+### The gap
+
+Every procedure in YREC is an F77 external subprogram, so no call site
+has an explicit interface and **the compiler cannot check argument count,
+type, rank or shape at any of them**. `ifort -warn all` reports this as
+537 instances of
+
+```
+warning #8889: Explicit interface or EXTERNAL declaration is required.
+```
+
+across **202 distinct procedures**. The heaviest are `OSPLIN` (37 call
+sites), `EXPAND_VALUE` (23), `KSPLINT` and `KSPLINE` (20 each), `INTERP`
+(15), `SOLID` and `EQSTAT` (13 each).
+
+This is not hypothetical. It is exactly the gap that let
+`CALL MDOT(BL,...)` pass 24 arguments to a 23-argument subroutine
+undetected until it was found by hand in October 2026. Nothing in the
+build would have objected.
+
+### A measure available today at no cost
+
+`Makefile` passes **`-nogen-interfaces`** to both the ifort and ifx
+branches, which explicitly switches off the check that would catch this.
+Removing it and compiling twice -- once to generate interface modules,
+once to check calls against them -- finds real problems with no source
+change at all:
+
+- **0 argument-count mismatches.** The code is currently clean of the
+  MDOT class, which is worth knowing.
+- **8 argument-shape mismatches**, all pre-existing:
+
+| site | actual | dummy |
+|---|---|---|
+| `calcad.f:225` | `BJ`, `FPLJ`, `FTLJ`, declared `(1)` | `ENVINT`'s `B`, `FPL`, `FTL` |
+| `calcad.f:340`, `:355` | `RCZ`, `ANS`, declared `(1)` | |
+| `starin.f:991` | `ENVR(JSON)`, the whole array | `GETTAU`'s scalar `RBCZ` |
+
+Each is the old F77 sequence-association idiom: declare `X(1)` and let
+the callee treat it as longer, or pass an array where a scalar is
+expected and have the callee use its first element. These work with
+contiguous storage and are not conforming. They are worth a reading
+rather than an automatic fix -- the question in each case is whether the
+callee ever writes past the first element.
+
+**Recommended now:** drop `-nogen-interfaces`, keep the two-pass check as
+something that can be run deliberately, and review those 8. That buys
+most of the detection value before any restructuring.
+
+### The two full solutions
+
+**Interface blocks.** Declare each procedure's signature in an
+`INTERFACE` block, gathered in a module that callers `USE`. The
+definitions stay exactly where they are.
+
+- Nothing is restructured; the 190 single-procedure files keep their
+  shape.
+- It can be adopted one procedure at a time, worst-first.
+- Changing a procedure's *body* does not recompile its callers.
+- **The signature is duplicated, and that is the problem.** An interface
+  block is a second, independent statement of the truth. Edit the
+  subroutine and forget the block and the compiler now believes the stale
+  one -- the same silent mismatch as today, but with the compiler
+  confidently agreeing. For 202 procedures that is a large hand-kept
+  artifact, and it would need its own guard test to stay honest.
+
+**Module procedures.** Move each procedure inside a module
+(`MODULE X_MOD / CONTAINS / SUBROUTINE X ... / END MODULE`) and have
+callers `USE` it.
+
+- **The interface cannot drift, because it is the definition.** Nothing
+  to duplicate, nothing to maintain, no guard needed.
+- Every call is checked automatically, and `PUBLIC`/`PRIVATE` becomes
+  available.
+- It restructures all 197 source files holding procedures.
+- It creates a web of inter-module dependencies, which makes issue 27 a
+  prerequisite at full scale rather than the 36-modules-to-one case it is
+  today.
+- Changing a procedure's interface recompiles its users. That is correct
+  but slower.
+
+### Complications either approach must handle
+
+- **One alternate return.** `subroutine esac06 (xh,t6,r,iorder,irad,*)`,
+  called as `CALL ESAC06(...,*999)` from `calcad.f` and `oeqos06.f`.
+  Declarable in an interface body and legal in a module procedure;
+  obsolescent in both.
+- **Four dummy procedure arguments.** `DERIV` in `bsstep.f` and
+  `mmid.f`, `QATM` and `QENV` in `envint.f`, `sort_shell` in
+  `alfilein.f`. Checking calls *through* a dummy procedure needs an
+  interface for the dummy itself, not just for the actual, so these need
+  an interface block or a `PROCEDURE()` declaration either way. Note that
+  `QATM`/`QENV` are the callbacks constrained by issue 7.
+- **Seven multi-procedure files**, against 190 holding one.
+
+### Recommendation
+
+Module procedures, because the duplication inherent in interface blocks
+defeats the purpose of the exercise. But sequenced: after stage 5, whose
+explicit declarations both approaches need anyway, and after issue 27,
+which module procedures would otherwise force at full scale. Use
+interface blocks only for the four dummy procedure arguments, where
+nothing else will do.
+
+Meanwhile drop `-nogen-interfaces`, since it costs nothing and restores
+the only check that currently exists.
