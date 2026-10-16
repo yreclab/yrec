@@ -1237,7 +1237,8 @@ with an existing local. Run with no arguments for the full census.
 **Status:** APPLIED and rebaselined 2026-10-16. 413 literals given a `D`
 exponent, plus 5 replacements of a near-2/3 constant by the exact `CC23`
 / `CC13`. 4 literals held back as issue 28. The measured effect is below;
-one case regressed and is held back as issue 34. Originally flagged by
+**887 of 894 references installed**, with two cases held back as issues
+34 and 36. Originally flagged by
 MHP on 2026-10-14: the code is designed so that
 floating point is `REAL*8` throughout, so a literal written without `D0`
 is far more likely an accident than an intention, and should be treated
@@ -1442,8 +1443,13 @@ point of structural divergence. `claude_work/measure_shift.py` and
 All pre-existing, none caused by the literal fix: issues 30 (the harness
 silently passes `NaN`), 31 (`GAM1` is `NaN` in the Yale EOS path), 32
 (the references are not under version control), 33 (crash-terminated
-cases), 34 (`ZAHB_m1p0feh+0p0_TAHB`) and 35 (three cases read a start
-model a later case overwrites).
+cases), 34 (`ZAHB_m1p0feh+0p0_TAHB`), 35 (three cases read a start model
+a later case overwrites) and 36 (`Test_m9p0feh+0p0GS98_yaleeos_TAHB`
+aborts in `TPGRAD`).
+
+Seven of the 894 reference files are therefore left at their pre-fix
+values: three for issue 34, three for issue 36, and one empty `.store`
+for issue 33.
 
 ---
 
@@ -2222,10 +2228,20 @@ The first pass of the issue 23 rebaseline installed references for all
 would therefore read a different start model and not reproduce the
 reference just installed.
 
-Fixed by re-running those three cases against the now-current post-fix
-start models and reinstalling only their references. That is stable: the
-producers are deterministic, so once a `.last` reaches its post-fix
-value it stays there, and the consumers reproduce.
+Re-running those three cases against the now-current post-fix start
+models and reinstalling their references fixed two of them: a second
+re-run confirmed `..._base_HeIgnite` and `..._base_TAHB` both pass, and
+the producers rewrote their `.last` files byte-identically, so the fixed
+point holds as expected. The third, `..._yaleeos_TAHB`, aborts on the new
+start model and is issue 36.
+
+Note also that the harness asserts `proc.returncode == 0` **before** it
+globs the outputs, so a case that aborts fails without any comparison --
+and the partial outputs it left behind are still sitting in the shared
+output directory. Reinstalling references from such a run installs the
+output of a crash. That happened here for `..._yaleeos_TAHB` and was
+reverted from the backup. A rebaseline must check the run's exit status,
+not only the age of its output files.
 
 **Note for any future rebaseline:** a single suite run is not sufficient.
 Either run the suite twice and rebaseline from the second pass, or
@@ -2233,3 +2249,76 @@ re-run these three cases afterwards as was done here. Prefer, when
 someone has the time, pointing these four cases at `{YREC_OUTPUT}` like
 the other 294 and committing the start models they need as fixed inputs,
 so the suite stops mutating its own inputs.
+
+
+## 36. `Test_m9p0feh+0p0GS98_yaleeos_TAHB` aborts in `TPGRAD` on the new start model
+
+**Status:** open, found 2026-10-16 verifying the issue 23 rebaseline.
+**Needs MHP's judgement before this case is rebaselined.** Its references
+are restored to the pre-fix versions, checksums verified against the
+backup manifest.
+
+With the post-fix start model (issue 35) this case terminates abnormally
+at model **4422** of a reference 4646 -- about 95% of the way -- with exit
+status 144, i.e. `STOP 912` from `tpgrad.f:146`:
+
+```
+***WARNING***
+TPGRAD TRIED TO TAKE SQUARE ROOT OF NEGATIVE NUMBER - ASSUMED ADIABATIC CONVECTION
+ DELDEL          NaN QDT    1.302E+01 DISC.          NaN
+```
+
+The warning never fires in a run from the pre-fix start model -- zero
+occurrences across the full 298-case pass -- and fires in both runs from
+the post-fix one.
+
+### The literal fix is not the cause
+
+`tpgrad.f` is one of the 15 files issue 23 touched, which looks damning,
+but the single changed line is
+
+```fortran
+      IF(A3.GT.1.0D+3) V = A3**(-CC13)
+```
+
+at line **153**, and the abort is at line **146**, inside the `ELSE` of
+`IF(TEST.GT.0.0D0)`. On the failing path the changed line is never
+reached. The arithmetic the fix altered plays no part.
+
+### What actually happens
+
+`DELDEL` arrives as `NaN`, so `TEST = DELDEL*G*(-QDT)/PRESHT` is `NaN`,
+and `IF(TEST.GT.0.0D0)` is false for `NaN` -- the same property of `NaN`
+comparisons behind issue 30. Control falls into the diagnostic branch.
+The real question is upstream: what makes `DELDEL` `NaN` in a 9 Msun
+Yale-EOS model at that point. Note `DELDEL` is recomputed just above for
+spotted models (`IF(SPOTF .NE. 0.00)`), which is worth checking first.
+
+### A separate defect in that branch
+
+The branch does not do what it says. Its comment and message read
+
+```fortran
+C ODD CONVERGENCE PROBLEM; WRITE DIAGNOSTIC AND CONTINUE.
+         WRITE(*,201)DELDEL,QDT,TEST
+ 201     FORMAT('***WARNING***'/'TPGRAD TRIED TO TAKE SQUARE ROOT',
+     *          ' OF NEGATIVE NUMBER - ASSUMED ADIABATIC CONVECTION'/
+```
+
+and it then does the opposite:
+
+```fortran
+          STOP 912
+C         GOTO 15
+      ENDIF
+```
+
+The commented-out `GOTO 15` is the continue path the comment describes.
+So a hard stop, evidently left in during debugging, sits where the code
+announces it will assume adiabatic convection and carry on. Whatever is
+decided about the `NaN`, this branch should either continue as documented
+or say plainly that it aborts. As it stands the diagnostic misdescribes
+the behaviour, which cost real time here.
+
+Worth checking whether other suite cases are one perturbation away from
+the same stop.
