@@ -32,7 +32,7 @@ C rationale). AEOS06 (above) is left untouched.
       common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
      .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
      .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
-      data sigmacc/1.8914785e-3/
+      data sigmacc/1.8914785D-3/
 c--------------------------------------------------------------------
 
       save

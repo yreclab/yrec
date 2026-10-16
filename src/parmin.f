@@ -1058,7 +1058,7 @@ C MHP 8/17 CORRECT DEFAULT FOR A = 2, NOT 0
                PMMD = 0.0
                LBSCALE = .FALSE.
             ELSEIF(AWIND.EQ.'V13')THEN
-               PMMM = 0.22
+               PMMM = 0.22D0
                PMMA = 2.0
                PMMB = 1.0
                PMMC = 0.0
@@ -1078,7 +1078,7 @@ C G Somers 11/17, ADDED PMMD TO SWTICH OFF IN K97 FORM.
             EXPR  = 2.0D0*PMMM*PMMD
             EXCEN = PMMM*PMMD
 C INITIALIZE CONSTANT FACTOR FOR CENTRIFUGAL TERM
-            C_2 = 0.0506
+            C_2 = 0.0506D0
 C SET THE CONSTANT FACTOR
             CONSTFACTOR = FK*PMMJD/PMMSOLW**EXW
 C IF RELEVANT RESET THE SATURATION THRESHOLD IN

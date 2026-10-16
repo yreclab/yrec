@@ -31,7 +31,7 @@ C done here; see KNOWN_ISSUES.md issue 23.
       IMPLICIT NONE
       SAVE
 
-      REAL*8 :: XENV0 = 0.7
-      REAL*8 :: ZENV0 = 0.02
+      REAL*8 :: XENV0 = 0.7D0
+      REAL*8 :: ZENV0 = 0.02D0
 
       END MODULE LABEL_MOD

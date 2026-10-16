@@ -171,8 +171,9 @@ C done here; see KNOWN_ISSUES.md issue 23.
       INTEGER*4 :: NMODLS(50) = 0
       LOGICAL*4 :: LFIRST(50) = .TRUE.
       INTEGER*4 :: NUMRUN = 1
-      REAL*8    :: SSTANDARD(17) = (/0.9828, 1.0485, 0.9815, 0.9241, 1.3818, 1.0542, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0108,
-     *  0.7819, 0.2875/)
+      REAL*8    :: SSTANDARD(17) = (/0.9828D0, 1.0485D0, 0.9815D0, 0.9241D0, 1.3818D0, 1.0542D0, 1.0D0, 1.0D0, 1.0D0, 1.0D0, 1.0D0,
+     *  1.0D0, 1.0D0, 1.0D0, 1.0108D0,
+     *  0.7819D0, 0.2875D0/)
       REAL*8    :: ATIME(14) = (/1.0D-3, 2.0D-2, 5.0D-1, 2.0D-2, 3.0D-1, 1.5D-3, 1.0D-1, 2.0D-2, 4.0D-2, 2.0D-2, 2.0D-2, 0.25D0,
      *  1.5D0, 0.25D0/)
       REAL*8    :: TCUT(5) = (/6.5D0, 6.5D0, 6.82D0, 7.7D0, 7.5D0/)
@@ -223,7 +224,7 @@ C done here; see KNOWN_ISSUES.md issue 23.
       LOGICAL*4 :: LISOTOPE
       REAL*8    :: FRAC_C = 0.172148D0
       REAL*8    :: FRAC_N = 0.050426D0
-      REAL*8    :: FRAC_O = 0.468195
+      REAL*8    :: FRAC_O = 0.468195D0
       REAL*8    :: R12_13 = 88.27D0
       REAL*8    :: R16_18 = 2693.0D0
       REAL*8    :: XH2_INI = 2.781D-5
@@ -244,7 +245,7 @@ C done here; see KNOWN_ISSUES.md issue 23.
       LOGICAL*4 :: LNEWTCZ = .TRUE.
       LOGICAL*4 :: LCALCENV = .TRUE.
       REAL*8    :: PMMSOLP = 4.9304D0
-      REAL*8    :: PMMSOLW = 2.836E-6
+      REAL*8    :: PMMSOLW = 2.836D-6
       REAL*8    :: PMMSOLTAU = 9.4805D5
       LOGICAL*4 :: LMWIND = .FALSE.
       LOGICAL*4 :: LROSSBY = .TRUE.

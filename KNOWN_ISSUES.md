@@ -1234,8 +1234,11 @@ with an existing local. Run with no arguments for the full census.
 
 ## 23. Floating literals missing a `D` exponent lose precision
 
-**Status:** open, to be fixed as its own stage **after** the F90 module
-conversion. Flagged by MHP on 2026-10-14: the code is designed so that
+**Status:** APPLIED and rebaselined 2026-10-16. 413 literals given a `D`
+exponent, plus 5 replacements of a near-2/3 constant by the exact `CC23`
+/ `CC13`. 4 literals held back as issue 28. The measured effect is below;
+one case regressed and is held back as issue 34. Originally flagged by
+MHP on 2026-10-14: the code is designed so that
 floating point is `REAL*8` throughout, so a literal written without `D0`
 is far more likely an accident than an intention, and should be treated
 as a defect rather than preserved.
@@ -1370,6 +1373,77 @@ one. The fix makes the constants match their written values, so present
 behaviour is defensibly wrong, but it is the behaviour every existing
 published YREC model was computed with. That argues for one deliberate,
 well-documented change rather than a quiet sweep.
+
+### Measured effect, 2026-10-16
+
+The prediction above held: the shifts start at roundoff and amplify
+through nonlinear evolution. Measured over all 298 cases, 894 output
+files, against the pre-fix references (preserved as a verified 204 MB
+tarball under `reference_baseline_pre_issue23/`, 903 files, manifest
+checksums confirmed against the unpacked copy).
+
+**How far individual values moved** -- pooled over every comparable
+value, which is the honest statistic. A *per-file maximum* is set by
+whichever diagnostic in that file is most singular and says nothing about
+the run; see the caution below.
+
+| | |
+|---|---|
+| numeric values compared | 54,264,456 |
+| exactly unchanged | 20,868,371 (38.5%) |
+| 90th percentile relative change | 3.6e-07 |
+| 99th percentile | 8.3e-04 |
+| 99.9th percentile | 4.8e-02 |
+| past the 2% tolerance | 55,752 (0.103%) |
+| ...of those, with \|ref\| < 1e-20 | 10,065 |
+
+**How far the runs got** -- the measurement that matters for
+crash-terminated cases (issue 33):
+
+| | |
+|---|---|
+| final model number identical | 284 of 298 (95.3%) |
+| final age within 0.1% | 289 of 298 |
+| final age shifted by more than 0.5% | 6 |
+
+The six are concentrated on the horizontal branch -- 4 of 33 ZAHB-to-TAHB
+cases, against 1 of 13 red giant, 1 of 78 pre-MS, and **0 of 191** across
+to-ZAMS, to-TAMS, solar and the rest. MHP, 2026-10-16: these cases are
+known to be numerically touchy, and are being forwarded to other
+developers to check. Only one changed whether it meets its own stopping
+criterion -- issue 34.
+
+### Caution: do not quote per-file maxima
+
+The per-file worst relative change reaches 1e24 and above. Every such
+entry is one of two harmless classes, and quoting them as the size of the
+change is wrong:
+
+- **Trace values.** `2.9e-66 -> 2.9e-41` in `Test_m0400_feh0_noGS_ZAMS`
+  is a ratio of 1e25 and an absolute change of 3e-41.
+- **Singular diagnostics.** `TauCZ_s` in
+  `Test_m1p0feh+0p0GS98_base_HeIgnite` goes 2.2e5 -> 2.1e18 s, a 1/x
+  quantity that diverges as the surface convection zone thins at helium
+  ignition, while the columns either side of it agree to six digits.
+
+Separately, **both the harness and any ad-hoc comparison align output to
+reference by line position**, so a run that takes one extra model
+iteration mismatches every line after the divergence no matter how small
+the perturbation. Of the 894 files, 600 keep the same structure end to
+end and 294 diverge mid-file (median: only 21% of the file comparable).
+A first attempt at this measurement that ignored that reported `inf` and
+"100% of files changed"; both were artifacts of the misalignment. Any
+future rebaseline measurement must separate the aligned region from the
+point of structural divergence. `claude_work/measure_shift.py` and
+`claude_work/measure_extent.py` do this.
+
+### Defects this rebaseline surfaced
+
+All pre-existing, none caused by the literal fix: issues 30 (the harness
+silently passes `NaN`), 31 (`GAM1` is `NaN` in the Yale EOS path), 32
+(the references are not under version control), 33 (crash-terminated
+cases), 34 (`ZAHB_m1p0feh+0p0_TAHB`) and 35 (three cases read a start
+model a later case overwrites).
 
 ---
 
@@ -1868,3 +1942,294 @@ nothing else will do.
 
 Meanwhile drop `-nogen-interfaces`, since it costs nothing and restores
 the only check that currently exists.
+
+## 30. The harness silently passes `NaN`, and a `NaN` reference accepts anything
+
+**Status:** open, found 2026-10-16 while measuring the issue 23 rebaseline.
+Not caused by issue 23 -- it is pre-existing, and it is the reason issue
+31 went unnoticed.
+
+`filevals_differ` compares a value by
+
+```python
+diff = abs(out_vals[i] - val)
+if abs(diff/val) > float_tol:
+```
+
+If either side is `NaN`, `diff` is `NaN`, and **every comparison against
+`NaN` is false**, so `NaN > float_tol` does not fire. Two consequences:
+
+- An output that has gone `NaN` where the reference is finite **passes**.
+  A run that produced garbage is indistinguishable from a run that
+  reproduced the reference exactly.
+- Where the *reference* holds `NaN`, that position accepts **any** output
+  value whatsoever, finite or not, forever.
+
+The same applies to `Inf`. The integer branch is unaffected.
+
+This is the worst possible failure direction for a regression harness: it
+is silent, and it is silent precisely on the outputs that most need to
+fail. 298 cases have been passing with 228 `NaN` values among them.
+
+**Fix:** reject non-finite values explicitly, before the tolerance test,
+on both sides -- `math.isfinite` on each numeric token, a difference if
+either side fails. Do this as its own change, and expect it to turn issue
+31 into a failing case, which is the correct outcome; it should not be
+folded into a rebaseline, or the `NaN` is simply re-recorded as the new
+reference.
+
+**Interaction with the issue 23 rebaseline:** the rebaseline preserves
+the status quo here rather than worsening it. The `NaN` values are
+identical in the old reference and the new output (`nan -> nan` at every
+one of the 228), so the new references record exactly what the old ones
+already did. No new `NaN` was introduced and none was concealed.
+
+
+## 31. `GAM1` is `NaN` over a band of shells in the Yale EOS path
+
+**Status:** open, found 2026-10-16. Pre-existing, and **unrelated to the
+issue 23 literal fix** -- the values are bit-identical before and after.
+
+In `testsuite/Test_m0p3feh+0p0GS98_yaleeos_ZAMS` (0.3 Msun, ZAMS, Yale
+EOS), the `.store` output carries `GAM1 = NaN` on **228 of its 1202
+shell records**. It is the only case in the suite that produces a
+non-finite value anywhere.
+
+The affected records are a contiguous band, shells **471-611**, in models
+99 and 295. On those lines the whole EOS-derived group is degenerate, not
+just `GAM1`:
+
+| column | value on the affected shells |
+|---|---|
+| `DEL` | `0.0000E+00` |
+| `DELAD` | `0.0000E+00` |
+| `V_CONV` | `0.0000E+00` |
+| `GAM1` | `NaN` |
+| `HII`, `HEII`, `HEIII` | `0.00000` |
+| `BETA` | `1.00000` |
+
+`DELAD = 0` and zero ionization fractions with `BETA = 1` are not
+physical for interior shells; they look like an unset or zeroed EOS
+return, with `GAM1` then falling out of a `0/0`. So the thing to chase is
+not `GAM1`'s own arithmetic but why the Yale EOS returns an empty result
+over that band -- most likely the shells fall outside its table coverage
+and the out-of-range path leaves the output structure untouched instead
+of failing.
+
+The 9.0 Msun Yale EOS case (`Test_m9p0feh+0p0GS98_yaleeos_TAHB`) is
+clean, so this is not the whole EOS path, only part of its domain.
+
+Depends on issue 30: until the harness rejects non-finite values, this
+case will keep passing and any fix here cannot be verified by the suite.
+
+
+## 32. The test references are not under version control
+
+**Status:** open, found 2026-10-16 while preparing the issue 23 rebaseline.
+Process issue rather than a code defect, but it governs how every future
+rebaseline can be reviewed.
+
+The 903 reference files under `testsuite/standard/` and
+`examples/*/standard/` are **untracked**, and not by an ignore rule --
+`.gitignore` says nothing about them, they were simply never added. They
+total **494 MB**, which is presumably why.
+
+The consequence is that the artifact defining "correct" for all 298 cases
+exists only in one working directory:
+
+- A rebaseline leaves **no diff to review**. The only record that the
+  references moved, by how much, and why, is the prose in a commit
+  message and in this file.
+- There is no way to check out the code at an earlier commit together
+  with the references that matched it, so an old revision cannot be
+  re-validated.
+- A lost or overwritten reference tree cannot be recovered from the
+  repository. For this rebaseline the previous tree is preserved as a
+  204 MB tarball under `claude_work/`, with checksums verified against a
+  test restore -- but that is an ad-hoc safeguard, not a repeatable one.
+
+**Options, in rough order of cost:** store the references with Git LFS;
+keep them in a separate repository pinned by commit; or stop storing full
+outputs and commit a reduced digest per case (selected columns at
+selected models, or a checksum per output) with the full outputs
+regenerated on demand. The last is the smallest in bytes but the largest
+change to the harness.
+
+Not resolved here, and not a prerequisite for the issue 23 rebaseline --
+recorded so that the absence of a reviewable diff for that rebaseline is
+a known condition rather than a surprise.
+
+
+
+## 33. Crash-terminated cases: the run extent *is* the measurement
+
+**Status:** documented 2026-10-16, not a defect. Recorded because the
+first reading of it was wrong, and because it governs how a rebaseline
+must be judged.
+
+For low-mass stars in this suite, **helium ignition is by definition an
+event that crashes the code** (MHP, 2026-10-16). A case such as
+`testsuite/Test_m1p0feh+0p0GS98_base_HeIgnite` is not expected to reach
+its nominal `NMODLS(1) = 20000`; the information it carries is **how far
+the run gets before the crash**. Its reference is a record of that
+extent, and the case passing means the extent has not moved.
+
+Observable signature, so this is not mistaken for a regression again:
+
+- The run stops at model 9399 of 20000 with the solution diverging --
+  the last iterations show `DEL-L/L` of 7e2 against a 3e-4 tolerance and
+  corrections of order unity.
+- No `STOP` or non-convergence record appears in the 350,000 lines of
+  `.short`. If the program announces the termination it does so on
+  stdout, which the harness captures and discards unless the case fails.
+- It writes **no `.store`**, despite `LSTORE`, `LSTMOD`, `LSTPCH`,
+  `LSTATM`, `LSTENV`, `LSTPHYS` and `LSTROT` all being `.TRUE.` -- the
+  crash precedes any store write. The `.store` in the shared output
+  directory is a zero-byte relic dated 2026-09-28 whose mtime does not
+  move when the case runs.
+
+**Do not "fix" this by failing cases with empty outputs.** An output that
+a crash-terminated case never reaches is correctly absent, and such a
+check would fail this case for behaving as intended.
+
+### What this means for a rebaseline
+
+Because the extent is the measurement, the number to check before
+replacing any reference is **how far each run got**, not only how far
+individual values moved. For the issue 23 rebaseline, measured over the
+289 cases with a `.track` pair:
+
+| | |
+|---|---|
+| final model number identical | 284 of 298 (95.3%) |
+| final age within 0.1% | 289 of 298 |
+| final age shorter by more than 0.5% | 5 |
+| final age longer by more than 0.5% | 1 |
+
+`Test_m1p0feh+0p0GS98_base_HeIgnite` is among the unchanged: it crashes
+at model 9399 before and after, so its information content is preserved
+exactly.
+
+Of the five that shorten, four are small and keep their stopping
+criterion: `Test_3Msolar_..._RGp2diffrotI0` (-1.7% in age),
+`ZAHB_m1p6feh+0p0_diffcal_TAHB` (-1.5%, and already failing to reach
+TAHB in the old reference -- `Y_cen` 4.98e-04 then, 5.00e-04 now, both
+above the 1e-4 threshold), `ZAHB_m1p7feh+0p0_diffcal_TAHB` (-1.2%, still
+reaching TAHB at `Y_cen` 7.2e-05), and `m0300gs98z060000_Dbl` (-1.1%).
+Fewer models at the same endpoint means larger timesteps, not lost
+evolution. The fifth is issue 34.
+
+The one that lengthens is `ZAHB_m1p9feh+0p0_diffcal_TAHB`, model 2130 ->
+2801 (+31%) and age +7.4%. Like `m1p6`, it fails the 1e-4 TAHB threshold
+on both sides (`Y_cen` 3.87e-04 then, 4.06e-04 now), so it is in the
+same already-not-terminating class; it now gets further before stopping.
+These two are worth a separate look at some point -- a ZAHB-to-TAHB case
+that never reaches TAHB is not testing what its name says -- but neither
+is a change introduced here.
+
+
+## 34. `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB
+
+**Status:** open, found 2026-10-16. **Needs MHP's judgement before this
+case is rebaselined.** It is the one case where the issue 23 literal fix
+changed whether the run accomplishes what it is for.
+
+`examples/run_from_zahb_to_tahb/ZAHB_m1p0feh+0p0_TAHB.nml1` sets
+
+```
+ NMODLS(3)   = 1000000
+ END_YCEN(3) = 0.0001      ! stop at TAHB
+```
+
+| | old reference | after the literal fix |
+|---|---|---|
+| final model | 2455 | **1474** (-40%) |
+| final age | 0.247383 Gyr | **0.214214 Gyr** (-13.4%) |
+| final `Y_cen` | 9.51e-05 | **3.33e-04** |
+
+The old run stopped because it reached TAHB: `Y_cen` fell below the 1e-4
+threshold. The new run ends with `Y_cen` still at 3.3e-04, more than
+three times the threshold, at model 1474 out of a million. **It satisfies
+neither stopping condition** -- it terminates early with helium left in
+the core, 0.033 Gyr of core-helium burning short of the endpoint.
+
+Note this is *not* the crash-by-design class of issue 33. A ZAHB-to-TAHB
+run is meant to complete, and this one did complete before.
+
+### What is and is not known
+
+The perturbation that caused it is tiny. Issue 23 gave 413 literals a `D`
+exponent; the resulting changes are at the 1e-7 level across the suite
+(90th percentile relative change 3.6e-07), and 281 of 289 cases end
+within 0.1% of the same age (284 of 298 end at the identical model
+number). So the likely reading is that this case sits
+on a convergence cliff and any perturbation of that size moves it, rather
+than that the more accurate constants are themselves wrong. That is a
+hypothesis, not a finding.
+
+It is worth knowing which, because the two have opposite implications: a
+fragile case should be made robust (or its fragility recorded), whereas a
+systematic failure in core-helium burning triggered by corrected nuclear
+data would matter well beyond this case.
+
+**Cheap discriminating test:** rerun this case against the pre-fix binary
+with a slightly perturbed timestep control. If an unrelated perturbation
+of comparable size also truncates the run, the case is fragile and issue
+23 merely tripped it. The six sibling ZAHB cases at other masses, which
+all still reach TAHB, are evidence for fragility rather than a systematic
+effect.
+
+**Handling in the rebaseline:** this case's three reference files are
+**held back**. Installing them would replace a reference that reaches
+TAHB with one that stops in mid-helium-burning, and the suite would then
+certify the shorter run as correct. The other 297 cases are rebaselined.
+
+
+## 35. Three cases read a start model that a later case overwrites
+
+**Status:** open, found 2026-10-16 while committing the issue 23
+rebaseline. Pre-existing. Handled for this rebaseline; the underlying
+ordering hazard is not fixed.
+
+Of the 298 cases, **294 write their `FLAST` into `{YREC_OUTPUT}`** and
+only **4 write into `{YREC_START}`**, where 189 cases look for their
+`FFIRST` start models. For three of those four, the case that *reads* the
+file runs **before** the case that *writes* it:
+
+| start model | written by | read by | order |
+|---|---|---|---|
+| `Test_m1p0feh+0p0GS98_base_TAMS.last` | `..._base_TAMS` (#22) | `..._base_HeIgnite` (#21) | consumer first |
+| `Test_m9p0feh+0p0GS98_base_TAMS.last` | `..._base_TAMS` (#36) | `..._base_TAHB` (#35) | consumer first |
+| `Test_m9p0feh+0p0GS98_yaleeos_TAMS.last` | `..._yaleeos_TAMS` (#38) | `..._yaleeos_TAHB` (#37) | consumer first |
+| `tams/Test_m3p0feh+0p0GS98_std25_TAMS.last` | `..._std25_TAMS` (#33) | `..._std25_ZAHB` (#34) | producer first, fine |
+
+So each of those three consumers starts from a model left behind by the
+**previous** run of the suite -- which, across a change of physics or
+compiler, means the previous *binary*. The dependency is invisible: both
+cases pass, and nothing in the output records which generation of start
+model was used.
+
+These three `.last` files are tracked in git, so the coupling also shows
+up as three modified files in `git status` after every full run, which is
+how it was noticed.
+
+### Why it mattered here
+
+The first pass of the issue 23 rebaseline installed references for all
+298 cases from one suite run. For these three, that run had read a
+**pre-fix** start model (the producer had not yet re-run), while the
+`.last` files left on disk afterwards were post-fix. The next full run
+would therefore read a different start model and not reproduce the
+reference just installed.
+
+Fixed by re-running those three cases against the now-current post-fix
+start models and reinstalling only their references. That is stable: the
+producers are deterministic, so once a `.last` reaches its post-fix
+value it stays there, and the consumers reproduce.
+
+**Note for any future rebaseline:** a single suite run is not sufficient.
+Either run the suite twice and rebaseline from the second pass, or
+re-run these three cases afterwards as was done here. Prefer, when
+someone has the time, pointing these four cases at `{YREC_OUTPUT}` like
+the other 294 and committing the start models they need as fixed inputs,
+so the suite stops mutating its own inputs.

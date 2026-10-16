@@ -22,7 +22,7 @@ C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
-      DATA C21/5.240358E-8/
+      DATA C21/5.240358D-8/
       SAVE
 C T9P13 IS THE TEMPERATURE IN UNITS OF 10^9 DEGREES K TO THE PLUS 1/3
 C  POWER.  MINUS IS DENOTED BY M.  HERE T9 IS THE TEMPERATURE IN UNITS

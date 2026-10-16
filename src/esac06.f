@@ -215,7 +215,7 @@ C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
             dimension frac(7)
-      data aprop/83.14511/
+      data aprop/83.14511D0/
       data ID/"OPALEOS/ESAC06:"/
       data (xa(i),i=1,mx)/0.0,0.2,0.4,0.6,0.8/
       data (index(i),i=1,10)/1,2,3,4,5,6,7,8,9,10/

@@ -111,8 +111,8 @@ C done here; see KNOWN_ISSUES.md issue 23.
       REAL*8    :: PMMC = 2.0
       REAL*8    :: PMMD = 0.0
       REAL*8    :: PMMM = 0.5
-      REAL*8    :: PMMJD = 1.32E30
-      REAL*8    :: PMMMD = 1.27E12
+      REAL*8    :: PMMJD = 1.32D30
+      REAL*8    :: PMMMD = 1.27D12
       REAL*8    :: FO = 1.0D0
 
       END MODULE NMLBYPASS_MOD
