@@ -1700,3 +1700,54 @@ Scope it now, in this entry; implement after stage 5. Doing it earlier
 builds machinery with no edges to exercise it, and stage 5 is the change
 most likely to determine what the dependency graph actually needs to look
 like.
+
+---
+
+## 28. The OPAL06 EOS table-grid tolerance is a relic, and will trigger
+
+**Status:** open, flagged by MHP on 2026-10-16 while issue 23 was being
+applied. Held back deliberately from that change.
+
+`esac06.f` declares the hydrogen-abundance coordinates of the OPAL 2006
+EOS tables:
+
+```fortran
+      data (xa(i),i=1,mx)/0.0,0.2,0.4,0.6,0.8/
+```
+
+and tests membership against them with a fixed tolerance:
+
+```fortran
+      if(xh .le. xa(imd)+1.D-7) then
+      if((xh .le. xa(2)+1.D-7) .or. (xh .ge. xa(mx-2)-1.D-7)) mf2=mh
+```
+
+These four literals are the **only lossy ones left in the tree** after
+issue 23. They were excluded from it because `0.2`, `0.4`, `0.6` and
+`0.8` are table *coordinates* rather than physical constants, and the
+precision error on them is about 1.5e-8 against a comparison tolerance
+of 1.0e-7 -- the same order of magnitude. Giving them `D0` could
+therefore flip a table-lookup branch rather than merely shifting a value
+in its last digits.
+
+**MHP's assessment:** a tolerance of this kind is a relic of older
+compilers, where round-off could be severe enough to need that much
+slack. The problem is that 1.0e-7 is also large enough to be crossed by
+ordinary composition changes during evolution, so the branch it guards
+will trigger on real physics rather than only on round-off. That makes
+the tolerance, not the literals, the thing to examine.
+
+### What to decide
+
+1. Is the intended grid exactly 0.2, 0.4, 0.6, 0.8, or whatever the
+   OPAL 2006 table files actually tabulate? This is a question about the
+   data, not the code.
+2. Should the tolerance scale with the grid spacing, or be tightened to
+   something near the double-precision round-off it was meant to absorb?
+3. Once the tolerance is settled, the four literals follow: with a
+   tolerance well clear of 1e-8 they can safely take `D0` like the other
+   413.
+
+Doing it in that order matters. Fixing the literals first would change
+branch decisions under a tolerance nobody has reviewed, and the effect
+would be indistinguishable from the rest of issue 23 in the same diff.
