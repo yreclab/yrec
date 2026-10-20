@@ -2314,11 +2314,15 @@ C         GOTO 15
 ```
 
 The commented-out `GOTO 15` is the continue path the comment describes.
-So a hard stop, evidently left in during debugging, sits where the code
-announces it will assume adiabatic convection and carry on. Whatever is
-decided about the `NaN`, this branch should either continue as documented
-or say plainly that it aborts. As it stands the diagnostic misdescribes
-the behaviour, which cost real time here.
+So a hard stop, evidently left in during debugging, sat where the code
+announced it would assume adiabatic convection and carry on.
+
+**Resolved 2026-10-20 by MHP's ruling: the stop is correct.** A square
+root of a negative number here is a pathological failure in the cubic
+solver and should end the run. The comment now reads `PATHOLOGICAL
+FAILURE IN THE CUBIC SOLVER.` and the message ends `- RUN ENDED`; the
+`STOP 912` stays. This changes only the diagnostic text, so no
+validation run was needed.
 
 Worth checking whether other suite cases are one perturbation away from
 the same stop.
