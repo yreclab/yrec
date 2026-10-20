@@ -42,8 +42,7 @@ PREFIX ?= /usr/local/bin
 # list, because a module must be compiled before anything that USEs it. The
 # wildcard above yields alphabetical order, which is not that order, and the
 # failure is immediate: "Fatal Error: Can't open module file 'x_mod.mod' for
-# reading". MODOBJS is empty until the first module lands, which makes this
-# a no-op for the current source tree.
+# reading".
 MODOBJS := $(patsubst %.f,%.o,$(wildcard *_mod.f))
 
 # Everything else. filter-out keeps the module objects from appearing twice.

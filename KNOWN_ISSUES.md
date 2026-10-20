@@ -27,9 +27,9 @@ Status as of 2026-10-20.
 | 14 | Name divergences before the module conversion | **resolved** 2026-10-14 |
 | 15 | `LENVG` dead namelist variable | step 1 of 2 done; code removal awaits the other developers |
 | 16 | All cases share one output directory | open |
-| 17 | `read_track_table` zeroes columns it cannot parse | open |
+| 17 | `read_track_table` zeroes columns it cannot parse | **resolved** 2026-10-20 |
 | 18 | Reference standards not tracked in git | superseded by 32 |
-| 19 | `getopac.f` unused label 100 | open, cosmetic |
+| 19 | `getopac.f` unused label 100 | **resolved** 2026-10-20 |
 | 20 | Repository housekeeping | open |
 | 21 | CZ-base scalars borrowing the envelope prefix | **resolved** 2026-10-15 |
 | 22 | Names a future `USE` would capture | silent category **closed** 2026-10-20 (stage 5) |
@@ -993,7 +993,28 @@ Per-case output directories would fix both.
 
 ## 17. `read_track_table` silently zeroes columns it cannot parse
 
-**Status:** open.
+**Status: RESOLVED 2026-10-20.** The cause was worse than the entry below
+supposed. `read_track_table` sliced each row at hard-coded character
+positions, and those positions had drifted from the `.track` format:
+`Step`, `Shls` and `Age_gyr` occupy 34 characters, but the next column
+was taken from character 33. Every column after the third was cut one
+character off, failed to parse, and was zeroed whole -- 71 of 83 columns
+in a typical track. This was not about values below 1e-99.
+
+Now the reader takes its column names from the file's own header line
+and splits each row on whitespace, as `read_store_file` already did.
+Every row of all 301 reference tracks (131,780 rows) splits into exactly
+as many fields as the header names. A new `fortran_float` reads the
+`1.234-100` form Fortran writes for three-digit exponents. A row with the
+wrong field count, or a value that still cannot be read, now raises
+`ValueError` naming the file, line and column. The `.store` and `.last`
+readers use the same converter, so they no longer zero a whole column
+either. On a `.store` with tiny values, 4 columns that used to be zeroed
+now keep values down to 2.8e-321. The `.last` reads are unchanged.
+
+One visible change for callers: the column the old list called
+`' H2_sur'`, with a stray leading space, is now `'H2_sur'`, as the file's
+header spells it.
 
 `wrappers/modelgrid_tools/alternate_tools/read_output_files.py` catches
 parse failures and substitutes zero (`except: track[k] = 0`, and similar
@@ -1030,7 +1051,10 @@ warning, because a case with no reference always passes.
 
 ## 19. `getopac.f`: unused statement label 100
 
-**Status:** open, cosmetic.
+**Status: RESOLVED 2026-10-20.** The `100 CONTINUE` is removed, which
+takes the gfortran warning count from 20 to 19. With the original line
+numbering restored, the object is byte-identical, so the code is
+unchanged.
 
 `getopac.f:95` (it was line 114 when this was written) defines label 100
 with nothing branching to it, giving the warning

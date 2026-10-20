@@ -92,7 +92,8 @@ C code changed to remove the Alexander 1995 opacity tables
             STOP
          END IF
       ENDIF
-  100 CONTINUE
+C 10/20/26 MHP via Claude
+C code changed to drop an unused "100 CONTINUE"; nothing branched to it.
 
 C     GET INTERIOR OPACITY IF NEEDED
 
