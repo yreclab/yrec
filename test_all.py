@@ -7,6 +7,7 @@
 #     pytest-xdist
 
 import os, sys
+import math
 import shutil
 from glob import glob
 import pathlib
@@ -225,6 +226,16 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
                 except (IndexError, TypeError) as ex:
                     difference = True
                     break
+
+                # NaN and Inf compare false against any tolerance, so without
+                # this a non-finite output would pass against a finite
+                # reference, and a non-finite reference would accept any
+                # output. Either side being non-finite is a difference, even
+                # when both are NaN.  See KNOWN_ISSUES.md issue 30.
+                if not (math.isfinite(val) and math.isfinite(out_vals[i])):
+                    locs.append(i)
+                    difference = True
+                    continue
 
                 # Check against fractional floating point tolerance
                 if type(val) == float:

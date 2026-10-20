@@ -39,9 +39,11 @@ a measurement to be reviewed, not a copy operation.
 - **The harness checks the exit status before it compares anything.** A
   case that aborts fails with "Program terminated abnormally", but the
   partial outputs it wrote are still in `$YREC_OUTPUT` (issue 35).
-- **`NaN` and `Inf` always compare as equal** (issue 30). A `NaN` output
-  passes against a finite reference, and a `NaN` in a reference accepts
-  any output.
+- **A `NaN` or `Inf` anywhere is a difference** (issue 30, fixed
+  2026-10-20). That includes `NaN` against `NaN`, so a case whose output
+  carries a non-finite value fails until its cause is fixed. Do not
+  rebaseline to make such a case pass. Before 2026-10-20, non-finite
+  values always compared equal.
 - The references are **not under version control** (issue 32). A
   rebaseline leaves no diff to review, and an overwritten reference can
   only be recovered from a backup you made.
@@ -138,9 +140,10 @@ it. For example, a `..._TAHB` case must end with central helium below
 its `END_YCEN`. A case that now stops short has changed what it tests
 (issue 34). It is not a small numerical shift.
 
-**`NaN` and `Inf`.** Count the non-finite values in each output and in
-its reference. The counts should not change. The harness will not
-report a change (issue 30), so you have to check this yourself.
+**`NaN` and `Inf`.** The harness now fails any case with a non-finite
+value (issue 30), so such a case already shows as failing in pass 2.
+Treat it as a defect to investigate, not as a change to install. The one
+known case is `Test_m0p3feh+0p0GS98_yaleeos_ZAMS` (issue 31).
 
 **Value changes.** Report the distribution of fractional changes across
 all compared values. Use medians and percentiles over the whole suite.

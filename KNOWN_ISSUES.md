@@ -40,8 +40,8 @@ Status as of 2026-10-20.
 | 27 | Inter-module dependencies | **resolved** 2026-10-20 |
 | 28 | OPAL06 EOS table-grid tolerance | open |
 | 29 | No explicit interfaces | open; unblocked now that stage 5 is done |
-| 30 | Harness passes `NaN` silently | open |
-| 31 | `GAM1` is `NaN` in the Yale EOS path | open |
+| 30 | Harness passes `NaN` silently | **resolved** 2026-10-20 |
+| 31 | `GAM1` is `NaN` in the Yale EOS path | open; its case now fails, by design (issue 30) |
 | 32 | Test references not under version control | open; MHP to decide |
 | 33 | Crash-terminated cases: run extent is the measurement | documented; not a defect |
 | 34 | `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB | open; needs MHP's judgement |
@@ -2109,9 +2109,22 @@ the only check that currently exists.
 
 ## 30. The harness silently passes `NaN`, and a `NaN` reference accepts anything
 
-**Status:** open, found 2026-10-16 while measuring the issue 23 rebaseline.
-Not caused by issue 23 -- it is pre-existing, and it is the reason issue
-31 went unnoticed.
+**Status: RESOLVED 2026-10-20**, as its own change, per the fix below.
+`filevals_differ` now treats a non-finite value on either side as a
+difference before the tolerance test, `NaN` against `NaN` included.
+
+Checked by comparing every reference file against itself: exactly one
+now fails, `Test_m0p3feh+0p0GS98_yaleeos_ZAMS.store`, the issue 31 file
+and the only one with non-finite values. Run through pytest, that case
+now fails on exactly its 228 `NaN` lines, and its `.short` and `.track`
+still pass. Synthetic checks confirm the cases that should still pass,
+finite values within tolerance and equal text, do pass. Expect a full
+suite run to show this case failing until issue 31 is fixed; that is the
+intended outcome. `REBASELINE_PROTOCOL.md` is updated to match.
+
+The original entry follows, found 2026-10-16 while measuring the issue 23
+rebaseline. Not caused by issue 23 -- it is pre-existing, and it is the
+reason issue 31 went unnoticed.
 
 `filevals_differ` compares a value by
 
@@ -2153,6 +2166,9 @@ already did. No new `NaN` was introduced and none was concealed.
 
 **Status:** open, found 2026-10-16. Pre-existing, and **unrelated to the
 issue 23 literal fix** -- the values are bit-identical before and after.
+**Since 2026-10-20 its case fails the suite**, because the harness now
+rejects `NaN` (issue 30). That failure is intended, and stays until the
+`NaN` is fixed. Do not rebaseline it away.
 
 In `testsuite/Test_m0p3feh+0p0GS98_yaleeos_ZAMS` (0.3 Msun, ZAMS, Yale
 EOS), the `.store` output carries `GAM1 = NaN` on **228 of its 1202
