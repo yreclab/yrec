@@ -18,9 +18,17 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,ALPHA,B,C,COD1,COD1Z,COD2,COD2Z,DR,DT,DX,DXMAX,ECOD1,
+     *       ECOD1_H,ECOD2_H,EM,EM_H,EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,
+     *       EX_ORIG,EX_P,EX_PRIME,EZ_ORIG,EZ_P,FAC,HCOMP,HD,HQPR,HR,
+     *       HRU,HS1,HT,HTU,QCOD1X,QCOD1Z,QCOD2X,QCOD2Z,STOT,ZZ1,ZZ2
+      INTEGER I,IBEGIN,IEND,IMAX,ITER,M,NPT
+      LOGICAL*4 LALLCZ,LC,LDOLI
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
 C COD1Z..QCOD2Z were COMMON/GRAVSZ/; grsett.f now owns them and passes
 C them to SETUP_GRSETT, which fills them, and MODEL_TO_EQUAL, which reads.

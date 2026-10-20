@@ -4,8 +4,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C POLINT
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE POLINT(XA,YA,N,X,Y,DY)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 C,D,DEN,DIF,DIFT,DY,HO,HP,W,X,XA,Y,YA
+      INTEGER I,J,N,NS
 C MHP 10/02 dimensions changed for consistency with fpft
       DIMENSION XA(20),YA(20),C(20),D(20)
       SAVE

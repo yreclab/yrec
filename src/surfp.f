@@ -11,11 +11,16 @@ C code changed to convert COMMON/ATMOS2/ into ATMOS2_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DUM,FX,GL,PP,PTAB,QG,QGG,QS,QT,TEFFL,Y0,YG,YT
+      INTEGER J,JJ,K,KK,KKK,N,NG,NT
+      LOGICAL*4 LPRT
 
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
       PARAMETER(NT=57,NG=11)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C      CHARACTER*256 FATM
 
 C MHP 8/25 Removed file names from common block

@@ -9,6 +9,17 @@ C       subroutine esac06 (xh,ztab,t6,r,iorder,irad,*)  ! KC 2025-05-31
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 APROP,DFS,DFSR,DFSX,DIXR,EGROUND,EOS,EPL,ESACT,ESK,ESK2,
+     *       FRAC,FRACZ,GMASS06,H,P0,Q,QUADEOS06,R,RHO,RI,SLR,SLT,SUM1,
+     *       SUM2,SUM23,SUM33,T6,T6A,T6LIST,TMASS,XA,XH,XX,XXH,XXI,XZ,Z,
+     *       ZZ
+      INTEGER I,IHI,ILO,IMD,INDEX,IORDER,IP,IPU,IQ,IQU,IR,IRAD,IRI,IS,
+     *       IT,IV,IW,K1,K2,K3,K4,L1,L2,L3,L4,MF,MF2,MG,MH,MI,MIDX,MS,
+     *       MV,MX,NR,NRA,NT,NTA
 
 c..... The purpose of this subroutine is to interpolate
 c      the equation of state and its derivatives in X, T6, density
@@ -58,7 +69,6 @@ c            If you, for example, only want to return gamma1: set iorder=1
 c            and set: data (index(i),i=1,10)/8,2,3,4,5,6,7,1,9,10/
 c
 c
-      IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
 c      integer w
       parameter (mx=5,mv=10,nr=169,nt=197)
@@ -522,7 +532,14 @@ C already hold their values when this runs.  The file on IOPALE is opened
 C by parmin.f; READCOEOS06 only reads it.
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       subroutine seteos06
-      IMPLICIT REAL*8 (A-H,O-Z)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DFS,DFSR,DFSX,EOS,EPL,ESACT,ESK,ESK2,H,Q,RHO,T6A,T6LIST,XA,
+     *       XX,XXH,XZ,ZZ
+      INTEGER I,INDEX,IP,IQ,IRI,J,K1,K2,K3,K4,L1,L2,L3,L4,MF,MIDX,MV,MX,
+     *       NR,NRA,NT,NTA
       parameter (mx=5,mv=10,nr=169,nt=197)
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)

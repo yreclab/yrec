@@ -23,13 +23,21 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,B,BETA,BETA1,BETA14,D,DELA,DL,DYDX,EMU,ETA,FPL,FTL,
+     *       FXION,G,GL,HRA,O,OL,P,PL,QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,
+     *       QDTP,QDTT,QOD,QOT,RL,RMU,T,TAU,TEFFL,TL,TTAUL0,TTAUL1,X,X0,
+     *       Y,YY,Z
+      INTEGER KATM,KSAHA
+      LOGICAL*4 LATMO,LDERIV,LOCOND,LSAVE
 C QATM CALCULATES THE DERIVATIVE D(P)/D(TAU), USING THE EDDINGTON
 C APPROXIMATION FOR A T-TAU RELATION.
 C IT ALSO RETURNS TL,O, AND FXION FOR OUTPUT PURPOSES
 C   Q(TAU) = 0.6666667
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude

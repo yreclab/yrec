@@ -14,8 +14,15 @@ C code changed to convert COMMON/GRAVEZ/ into GRAVEZ_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD1,COD1Z,COD2,COD2Z,DELR,DR,DR1,DR2,DRMIN,DRTOT,ECOD1,
+     *       ECOD1_H,ECOD2_H,EM,EM_H,EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,
+     *       FAC1,FAC2,FACDERIV,FACINTERP,FX,GRIDRAD,HCOMP,HRU,HS1,
+     *       QCOD1X,QCOD1Z,QCOD2X,QCOD2Z,TABLER
+      INTEGER I,IBEGIN,IEND,IU,J,JMIN,K,K0,M,NPT
 C 10/13/26 MHP via Claude
 C formerly COMMON/GRAVSZ/, now dummy arguments.
       DIMENSION COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)

@@ -31,10 +31,13 @@ C code changed to convert COMMON/ALATM01/ into ALATM01_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,J,J1,J2
+      LOGICAL*4 LBADTABLE
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
       LOGICAL*4 LALTPTau100
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously

@@ -8,6 +8,9 @@ C----------------------------------------
 #endif
 
       SUBROUTINE SETVERSION(YRECVER,GITHASH)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE.
+      IMPLICIT NONE
       CHARACTER*10 YRECVER
       ! Short git commit hash + indicator if working tree was not clean
       CHARACTER*20 GITHASH

@@ -35,9 +35,16 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ACC,DELJ,DELJI,DJ,DT,ETA2,HD,HI,HJM,HJMP,HJMSAV,HR,HS,HS2,
+     *       HV,OMEGA,QIW,R0,TOLER0,WSAV
+      INTEGER I,IBEG,IBOT,ID,IDM,IEND,II,IJMAX,IMAX,IMAXI,IMIN,IREDO,IT,
+     *       ITOP,J,M
+      LOGICAL*4 LCZ,LOK,LOKAD,LREDO
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

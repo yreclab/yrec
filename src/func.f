@@ -9,9 +9,14 @@ C PARAMETER(JSON=5000) here.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AINT,CONST,CS,G,HS,P2,Q,QPHIR,QPHITH,QR0R,QR0T,R,R0,R2,S,
+     *       SS,W2,X
+      INTEGER I
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

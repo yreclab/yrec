@@ -11,10 +11,17 @@ C code changed to convert COMMON/COMP/ into COMP_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BE,CBOLTZ,CMH,CMHE,D,DE,DEI,DENX,DENY,DENZ,DL,DLN,DMIX,FP,
+     *       FPD,FT,FTD,GA,HENUM,HENUME,HNUM,HNUME,P,PGAS,PL,PRAD,QAP,
+     *       QAT,QCP0,QCPP,QCPT,QDP0,QDT0,QDTP,QDTT,QPDD,QPT0,QR,QSMIXT,
+     *       QST0,QUT,S0,SX,SY,T,TL,TLN,TNUM,TOTE,X,XD,Y,YD,YM1,Z
+      INTEGER I,II,J,JJ,K,NTS
 
       PARAMETER (NTS=63)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,

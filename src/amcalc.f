@@ -12,10 +12,13 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BL,RL,RLUM,RMASS,RPHOT,RRAD,RTAU,RTOT,SMASS,STRUCTFACTOR,
+     *       TEFFL
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
 
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,

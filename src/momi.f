@@ -11,9 +11,14 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,CON,ETA2,ETA2X,H0,HI,HIM,HR,HS,HS2,OMEGA,QIW,QIWM,QR0R,
+     *       R0,R03,R0P,R0R,RAD,RPHI3,RPHIP
+      INTEGER I,JEND,JSTART
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/11/26 MHP via Claude
 C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
 C positionally in all 17 files sharing this block but never read or

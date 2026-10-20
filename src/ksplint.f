@@ -1,5 +1,10 @@
 C$$$$$$
       SUBROUTINE KSPLINT(XA,YA,Y2A,X,Y)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER K,KHI,KLO,NM
       PARAMETER(NM=4)
       REAL*8 XA(NM),YA(NM),Y2A(NM),X,Y,H,A,B
       SAVE

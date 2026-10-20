@@ -15,9 +15,14 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALPHA,DR2VM,DR2VP,DRHOR2,DUDR,FTEST,FX,HD,HRU,HV,OMEGA,
+     *       RHOR,V,VFC,VM,VP,WM
+      INTEGER I,IMAX,IMIN
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
 C VFC is now a dummy argument, formerly COMMON/VARFC/.
       DIMENSION VFC(JSON)

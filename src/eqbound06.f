@@ -3,8 +3,14 @@ C OPAL 2006 EOS TABLE.
 
 C       SUBROUTINE EQBOUND06(T,DL,DL0,FAC,LTAB,LRAMP)  ! KC 2025-05-31
       SUBROUTINE EQBOUND06(T,DL,FAC,LTAB,LRAMP)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 D,DFS,DFSR,DFSX,DL,DRAMPF,EOS,ESACT,ESK,ESK2,FAC,H,Q,RHO,T,
+     *       T6,T6A,T6LIST,TRAMPF,XA,XXH,XZ,ZZ
+      INTEGER INDEX,IRI,MF,MIDX,MV,MX,NR,NRA,NT,NTA
+      LOGICAL*4 LRAMP,LTAB
       Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,k,l
       parameter (mx=5,mv=10,nr=169,nt=197)
       common/aeos06/  xz(mx,mv,nt,nr),

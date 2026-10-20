@@ -27,9 +27,17 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DDAGE,DELTS,DT,DTMAX,FM,HCOMP,HD,HF1,HF2,HP,HQPR,HR,HR1,
+     *       HR10,HR11,HR12,HR13,HR2,HR3,HR4,HR5,HR6,HR7,HR8,HR9,HS,HS1,
+     *       HS2,HSTOT,HT,STOT,TEMP,TSCALE
+      INTEGER I,IBEGIN,IEND,II,J,JMAX,K,M,MRZONE,MXZONE,NRZONE,NS,NSPEC,
+     *       NSTEP,NZONE
+      LOGICAL*4 LC,LCZ
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

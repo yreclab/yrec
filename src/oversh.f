@@ -20,13 +20,18 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 HCOMP,HD,HP,HR,HS,HT,PSCALD,PSCALU,R,RCZ,ROS
+      INTEGER I,ID,J,JEDGE,M,MXZON0,MXZONE,NZONE
+      LOGICAL*4 LFLAGD,LFLAGU
 
 C  THIS SR COMPUTES THE LOCAL PRESSURE SCALE HEIGHT AT BOTH EDGES OF A
 C  GIVEN CONVECTIVE REGION AND LOCATES THE BOUNDARIES OF OVERSHOOT
 C  REGIONS BASED ON THE USER-SPECIFIED EXTENT.
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously

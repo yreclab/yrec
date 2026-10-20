@@ -42,8 +42,17 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT REAL*8(A-H,O-Z)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ABEG0,AMAX0,AMIN0,ATEFFL,B,BL,CMIXL,DAGE,DIVP,DIVR,DR,DUM1,
+     *       DUM2,DUM3,DUM4,EBEG0,EMAX0,EMIN0,FM,FP,FPL,FR,FS,FSI,FT,
+     *       FTL,GL,HCOMP,HD,HL,HP,HR,HS,HS1,HSTOT,HT,PELPF,PLIM,QDR1,
+     *       QDR2,QPR1,QPR2,QQDR,QQPR,QSMASS,RL,RMID,RSURFL,SV,TEFFL,
+     *       TEMPR,X,XMSOL,XX1,XX2,XX3,XX4,XX5,XXX,Z
+      INTEGER I,ID,IDM,IDUM,IXX,J,JENV,KATM,KENV,KSAHA,M,MODEL
+      LOGICAL*4 LPRT,LPULPT,LSBC0
 
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously

@@ -304,8 +304,13 @@ relying on directory order in `pytest.ini`.
 
 ## 6. `IMPLICIT` statements are inconsistent between scoping units
 
-**Status:** open. Audited 2026-10-12 and currently harmless, but it is a
-trap worth closing before the F90 module conversion.
+**Status: RESOLVED 2026-10-20 by stage 5** (`F90_CONVERSION_PLAN.md`).
+Every scoping unit is now `IMPLICIT NONE` with explicit declarations, so
+no `IMPLICIT` typing statement remains and the inconsistency below no
+longer exists. Every type was preserved exactly. No unit turned out to
+need a 4-byte `REAL`, and the 30 `L`-prefixed names in units without
+`LOGICAL*4(L)` are integers and stay `INTEGER`. The text below is the
+original audit.
 
 The house convention is three statements:
 
@@ -1120,8 +1125,23 @@ profile array and a scalar sampled from it.
 
 ## 22. Names a future `USE` would capture
 
-**Status:** open as a standing hazard, not a defect. Measured on
-2026-10-14 and re-measurable at any time with `shadow_census.py`.
+**Status:** the silent category is **closed by stage 5, 2026-10-20**.
+Every scoping unit is now `IMPLICIT NONE`, so a local cannot be
+implicitly typed. A `USE` that brings in a name already declared locally
+is a compile error. All 45 names listed under "The silent 45" below are
+now declared locals, so capturing any of them would fail loudly. What
+remains is a compile-time inconvenience, not a hazard.
+
+`shadow_census.py` still reports 38 "IMPLICIT-local" pairs. All 38 are
+parser false positives, not real implicit locals; the compiler now
+guarantees there are none:
+
+- 36 are `JSON` in `*_mod.f` files, where it is declared with F90 `::`
+  syntax that the census does not parse.
+- `tpgrad.f` `CAPPA` occurs only inside a `FORMAT` string.
+- `calcad.f` `TAUCZ` occurs only in a comment.
+
+The original text follows, measured on 2026-10-14.
 
 The module conversion uses a **blanket `USE`**, decided in
 `F90_CONVERSION_PLAN.md` stage 1. That is safe for the conversion itself

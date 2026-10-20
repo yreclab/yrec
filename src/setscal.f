@@ -20,8 +20,13 @@ C USE imports exactly the names the COMMON declaration made global here,
 C so it cannot change meaning.  See runloop_mod.f for the block history
 C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALRI
+      INTEGER I,J
+      LOGICAL*4 LPASSR,LSTAR
 C 10/13/26 MHP via Claude
 C code changed to replace COMMON/CALSTAR/ with explicit arguments.
 C setscal.f initializes ALRI, LSTAR and LPASSR, chkscal.f reads and

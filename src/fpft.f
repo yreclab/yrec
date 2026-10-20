@@ -10,9 +10,15 @@ C code changed to convert COMMON/QUADD/ into QUADD_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AINT,AINT0,AINT1,AINTP,AINTT,B,CG,DINT,EPS,ETA2,ETA22,
+     *       ETA22P,F0,FACT,FP,FT,G0,GINV,GINV0,GM,H,HD,HG,HR,HS,OMEGA,
+     *       Q,QP,R0,R03,R0P,RHO,RHOP,RPHI,RPHI3,SM,SPHI,W2,W2P,XA,YA
+      INTEGER I,J,J1,JMAX,K,KM,M,N1
 
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT REAL*8(A-H,O-Z)
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration

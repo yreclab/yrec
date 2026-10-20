@@ -20,9 +20,17 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AH,AP,AT,ATOMWT,COD1,COD1Z,COD2,COD2Z,CRSUN_BAH,CSECYR_BAH,
+     *       DT,FAC,FAC2,HCOMP,HD,HQPR,HR,HRU,HS1,HT,HTU,QACX,QAPX,QATX,
+     *       QCOD1X,QCOD1Z,QCOD2X,QCOD2Z,RHO,STOT,T,TAC,TAP,TAT,TCL,X,
+     *       X2,X3,XFRAC,XZ,Z,ZSPEC,ZZ
+      INTEGER I,IBEGIN,IEND,II,JJ,M,NSPEC
+      LOGICAL*4 LALLCZ,LC
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
 C formerly COMMON/GRAVSZ/, now dummy arguments.
       DIMENSION COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)

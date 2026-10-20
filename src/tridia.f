@@ -8,8 +8,13 @@ C PARAMETER(JSON=5000) here.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
       USE TRIDI_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BET,DJ,EI,FJ,SUMDJ,U0
+      INTEGER I,J,N
 
-      IMPLICIT REAL*8 (A-H,O-Z)
 C       DIMENSION EI(JSON),EJ(JSON),DJ(JSON),U0(JSON)  ! KC 2025-05-31
       DIMENSION EI(JSON),DJ(JSON),U0(JSON)
       SAVE

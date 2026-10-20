@@ -70,14 +70,23 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMUJ,ATEFFL,BET14J,BETAIJ,BETAJ,BL,CHRH,CHT,CMIXL,CVJ,DAGE,
+     *       DELAJ,EMUJ,EOS,ESACT,ETAJ,FP,FPLJ,FT,FTLJ,FXIONJ,H,HCOMP,
+     *       HD,HP,HR,HSTOT,HT,Q,QAPJ,QATJ,QCPJ,QCPPJ,QCPTJ,QDPJ,QDTJ,
+     *       QDTPJ,QDTTJ,RCZ,RCZL,RMUJ,STD,STDL,STP,STPL,STT,STTL,STX,
+     *       STZ,TEFFL,XXH,ZZ
+      INTEGER INDEX,IORDER,IRAD,IRI,JENV,KHI,KLO,M,MV,MX,NR,NRA,NT,NTA
+      LOGICAL*4 LATMOJ,LCALCJ,LDERIJ
 C 10/9/26 MHP via Claude
 C code changed to add mx,mv,nr,nt (matching every other file that
 C declares an OPAL 2006 EOS common block), needed below for
 C COMMON/EOS06MISC/'s array dimensions; this file previously only
 C needed COMMON/EEOS06/, which it hardcoded as eos(10) instead.
       PARAMETER (mx=5,mv=10,nr=169,nt=197)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
       REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)

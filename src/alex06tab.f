@@ -9,8 +9,12 @@ C code changed to convert COMMON/ALOT06/ into ALOT06_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/ALOT06ALL/ into ALOT06ALL_MOD.
       USE ALOT06ALL_MOD
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 X,XMAX,ZMAX
+      INTEGER I,IZ,J,K,KK,KK2,KK3,KK4,NUMD,NUMT,NUMX,NUMZ
       PARAMETER (NUMX=9)
       PARAMETER (NUMZ=16)
       PARAMETER (NUMT=85)

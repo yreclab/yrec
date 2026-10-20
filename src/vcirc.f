@@ -45,9 +45,18 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMUMI,CC,CLTOT,DDEL,DDTEST,DDTEST2,DELL,DLNJMDR,DLNJMDR0,
+     *       DLNWDR,DLNWDR0,DR,DT,DV,FACI,FCC,FM,FX,FX2,FXX,FXX2,GMID,
+     *       HP,HR,HRU,HV,OMEGA,PHI2,PHIS2,PHISTD,Q0,Q1,Q2,QMU,QP,QQ,
+     *       QQQ,QW,QWLNR,QWR,QWRMAX,QWRMX,QWRMX2,RMID,THDIFMI,TKHS,V2,
+     *       VEST,VGSFT,VISCMI,VMU2,VMUP,WM,WMID,WMIN
+      INTEGER I,I0,I1,IMAX,IMIN,IT,M
+      LOGICAL*4 LCZ,LDO
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude
 C FACI is now a dummy argument, formerly COMMON/INTFAC/.
       DIMENSION FACI(4,JSON)

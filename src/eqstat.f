@@ -19,6 +19,17 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,BETA,BETA14,BETAI,D,D1,DELA,DELA1,DELA2,DL,DL1,DPL,
+     *       DPL2,DTL,DTL2,EMU,ETA,FXION,P,PL,PLO,PPL,QAP,QAP1,QAPX,QAT,
+     *       QAT1,QATX,QCP,QCP1,QCP2,QCPP,QCPP1,QCPPX,QCPT,QCPT1,QCPTX,
+     *       QDP,QDP1,QDP2,QDT,QDT1,QDT2,QDTP,QDTP1,QDTPX,QDTT,QDTT1,
+     *       QDTTX,RMU,T,TL,TLO,TTL,X,Z
+      INTEGER KSAHA,KSAHAX,KSSAHAX
+      LOGICAL*4 LATMO,LATMOX,LDERIV,LDERIV2
 c
 c  Input Arguments: TL, PL, X, Z, LDERIV, LATMO
 c
@@ -28,8 +39,6 @@ c
 c  Update (Input and Output) Arguments: KSAHA
 c
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C       DIMENSION ATOMWT(4),FXION(3),ATOMW2(12)  ! FX(12)  ! KC 2025-05-31

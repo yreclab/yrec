@@ -12,9 +12,14 @@ C code changed to convert COMMON/QUADRU/ into QUADRU_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BET,C4PIG,DR,DRHO,DRHOW2,DRI,DRMI,DRPL,DW2,FAC,FMI,FPL,FX,
+     *       HD,HG,HRU,OMEGA,RPLU
+      INTEGER I,J,M
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

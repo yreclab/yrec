@@ -9,8 +9,13 @@ C code changed to convert COMMON/ALOT06/ into ALOT06_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DIFX,DIFZ,DL,O,OL,QOD,QOT,R,RR,TL,X,Z
+      INTEGER I,II,NUMD,NUMT
+      LOGICAL*4 LINEAR
       PARAMETER (NUMT=85)
       PARAMETER (NUMD=19)
 C 9/25/26 MHP via Claude

@@ -8,11 +8,19 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALOGNE,ALOGR,AMU_M,DFS,DFSR,DFSX,DUM,EOS,EPL,ESACT,ESK,
+     *       ESK2,FRAC,H,Q,RHO,RHOGR,T6A,T6LIST,TMASS,XA,XIN,XX,XXH,XZ,
+     *       ZZ
+      INTEGER I,ICYCUSE,INDEX,IP,IQ,IRI,ITIMECO,IV,J,JCS,K,K1,K2,K3,K4,
+     *       L,L1,L2,L3,L4,MF,MIDX,MV,MX,NR,NRA,NT,NTA,NUMTOT
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      IMPLICIT REAL*8 (A-H,O-Z)
       real*8 moles
       LOGICAL*4 lopale06,LNumDeriv
 C MHP 8/25 Remove unused variables

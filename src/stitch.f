@@ -34,9 +34,16 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,ABEG0,AMAX0,AMIN0,ATEFFL,B,BL,CG,CMIXL,DUMA,EBEG0,EMAX0,
+     *       EMIN0,ETA2,FM,FP,FPL,FT,FTL,GL,HCOMP,HD,HI,HJM,HL,HP,HR,HS,
+     *       HS1,HSTOT,HT,OMEGA,PLIM,R0,RAD,RL,RPOLEQ,SG,TEFFL,VTOT,X,Z
+      INTEGER I,IDUM,IXX,J,K,KATM,KENV,KSAHA,M,MODEL
+      LOGICAL*4 LC,LPRT,LPULPT,LSBC0
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 ENVS1(JSON)
 C 10/11/26 MHP via Claude

@@ -16,9 +16,13 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 XX,XXT,Z,ZZ
+      INTEGER I,IX,IZ,J,N,NFMT,NMAX,NN,NUMD,NUMX,NUMXZ,NUMZ
 c MHP 7/98 MODIFIED TO READ IN ALL METAL ABUNDACES FOR OPACITY TABLES.
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       PARAMETER (NUMD=19)
       PARAMETER (NUMX=10)
       PARAMETER (NUMZ=13)

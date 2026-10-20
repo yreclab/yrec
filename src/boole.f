@@ -26,8 +26,11 @@ C    *4.6,5.5,6.4,7.3/
 
 
       SUBROUTINE BOOLE(X,Y,N,NN,S)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 S,SCALEX,SCALEY,X,XD,XI,Y,YD,YI
       PARAMETER(SCALEX=1D-11)
       PARAMETER(SCALEY=1e7)
       REAL*8 H(1),D2X(N)

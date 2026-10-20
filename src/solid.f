@@ -15,9 +15,15 @@ C code changed to convert COMMON/DISK/ into DISK_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CZI,CZJ,CZJNEW,CZQIW,DELJ,DELW,ETA2,HD,HI,HJM,HR,HS,HS2,
+     *       OMEGA,QIW,R0,WGUESS,WSUM
+      INTEGER ICOUNT,J,JEND,JSTART,M
+      LOGICAL*4 LOCK
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING

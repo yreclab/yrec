@@ -7,8 +7,11 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 XENV
 C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude

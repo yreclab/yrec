@@ -94,10 +94,14 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DY,GL,P100L1,P100L2,PL1,PL2,T100L1,T100L2,TEFFL
+      INTEGER I,I1,IGL,ITEFFL,J,J1,J2,J3,N
+      LOGICAL*4 LALFAIL,LBADPOINT,LPRT
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
 C 10/14/26 MHP via Claude
 C code changed to drop the redundant LOGICAL*4 LALTPTau100 declaration.
 C LALTPTau100 is a COMMON/NMLPAR/ member, and explicitly typing a COMMON

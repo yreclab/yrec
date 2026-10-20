@@ -19,6 +19,21 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,AMUI,AMUO,ATOMW2,ATOMWT,BETA,BETA14,BETA14O,BETAI,
+     *       BETAIO,BETAO,D,D1,D10O,DELA,DELA0,DELA1,DELA2,DELAO,DFX1,
+     *       DFX12,DFX4,DL,DL0,DL1,DOO,DPL,DPL2,DTL,DTL2,DXX,DYY,EMU,
+     *       EMUO,ETA,FAC,FMUENV,FX,FXION,P,PL,PPL,QAP,QAP0,QAP1,QAT,
+     *       QAT0,QAT1,QCP,QCP0,QCP1,QCP2,QCPO,QCPP,QCPP0,QCPP1,QCPT,
+     *       QCPT0,QCPT1,QDP,QDP0,QDP1,QDP2,QDPO,QDT,QDT0,QDT1,QDT2,
+     *       QDTO,QDTP,QDTP0,QDTP1,QDTT,QDTT0,QDTT1,R1A,RAA,RAT,RMU,
+     *       RMUO,SCALES,SCALET,T,TL,TTL,WT0,WTS,WTS2,X,Z,Z0
+      INTEGER I,KSAHA,NZP1
+      LOGICAL*4 LATMO,LCALC,LCALC1,LCALC2,LDERIV,LONLYS,LRAMP,LSAHA,
+     *       LSCVD,LTAB
 c
 c  Input Arguments: TL, PL, X, Z, LDERIV, LATMO
 c
@@ -28,8 +43,6 @@ c
 c  Update (Input and Output) Arguments: KSAHA
 c
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C KC 2025-05-30 addressed warning messages from Makefile.legacy
 C       SAVE
 C 9/25/26 MHP via Claude

@@ -15,8 +15,14 @@ C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DELRATE,DT,DXH2,DXH2A,DXH2O,FSTEP,HCOMP,HS2,R0,RATE,RATE0,
+     *       RATE1,SUMM,SUMR0,SUMR1,TSTEP,X,X2NEW,XH2,XH2N,XH2NA,
+     *       XH2NACC,XH2NO,XH2TEST,XHE3,XHE3N,XN
+      INTEGER I,IBEGIN,IEND,ISTEP,M
 C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/12/26 MHP via Claude

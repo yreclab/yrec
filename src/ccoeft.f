@@ -7,9 +7,13 @@ C PARAMETER(JSON=5000) here.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
       USE TRIDI_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD,DR,DT,ECOMP,EM,FACT,FACT0
+      INTEGER I,NTOT
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration

@@ -9,10 +9,20 @@ C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BETA,BETM1,D,DDX,DDY,DDZ,DELA,DENX,DENXL,DENY,DENYL,DENZ,
+     *       DENZL,DL,FP,FPD,FT,FTD,FXION,P,PGAS,PP,PRAD,QCP,QCP0,QDP,
+     *       QDP0,QDPX,QDPY,QDPZ,QDT,QDT0,QDTX,QDTY,QDTZ,QPT,QPT0,QR,
+     *       QSMT,QST0,QSTX,QSTY,QUT,QUTZ,QUTZL,S0,SM,SX,SXL,SY,SYL,T,
+     *       TEMP,TL,UR,X,XHEP,XHEPP,XHP,XTF_H1,XTF_H2,XTF_HE,XTF_HEP,
+     *       XTF_HEPP,XTF_HE_E,XTF_HP,XTF_H_E,Y,Z
+      INTEGER I,II,J,JJ,JJJ,K,NTS
+      LOGICAL*4 LCALC
 
       PARAMETER (NTS=63)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

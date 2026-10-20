@@ -25,9 +25,13 @@ C USE imports exactly the names the COMMON declaration made global here,
 C so it cannot change meaning.  See runloop_mod.f for the block history
 C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CMIXL,SMASS
+      INTEGER NK
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C MHP 8/25 Removed character file names from common block
 C MHP 10/02 added proper dimensions for flaol2, fopal2
 C      CHARACTER*256 FISO,FLAOL2, FOPAL2

@@ -13,7 +13,15 @@ C PARAMETER(JSON=5000) here.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      IMPLICIT REAL*8 (A-H,O-Z)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DIV,HHA,HHB,HL,HMAX,HP,HR,HS,HT,PIVOT,PIVOTB,Q,QL,QL0,QLP,
+     *       QLP0,QLT,QLT0,QP,QP0,QPP,QPP0,QPR,QPR0,QR,QR0,QRP,QRP0,QRR,
+     *       QRR0,QRT,QRT0,QT,QT0,QTL,QTL0,QTP,QTP0,QTR,QTR0,QTT,QTT0,
+     *       SD05
+      INTEGER I,J
       DIMENSION Q(4,4),HHA(4,2,JSON),HHB(4,JSON),HL(JSON),HMAX(4),
      1HP(JSON),HR(JSON),HS(JSON),HT(JSON)
 C 9/25/26 MHP via Claude

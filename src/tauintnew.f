@@ -13,8 +13,15 @@ C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CVEL,DD1,DD2,DEL1,DEL2,DELR,ENVRCL,FX,HD,HG,HP,HR,HS1,
+     *       HSBOT,HSTOP,PSCA,PSCA1,PSCA2,RBCZ,RTCZ,RTEST,RTEST1,RTEST2,
+     *       SVEL,VALTEST,XDEL,XRAD,YPSC,YRAD,YSPL,YVEL
+      INTEGER I,IBEG,IJMAX,IMAX,ITOP,J,JCORE,JMAX,K,KK,M,MINT
+      LOGICAL*4 LALLCZ,LCZ,LCZSUR,LRADZONE
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
 C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration

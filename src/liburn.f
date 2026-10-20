@@ -43,8 +43,18 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BBE9,BBE90,BLI6,BLI60,BLI7,BLI70,CZBE9,CZLI6,CZLI7,DBE9,
+     *       DDJ,DDJM1,DELTS,DLI6,DLI7,DMASS,DR,DT,FBE9,FBE90,FBE9A,
+     *       FBE9ADD,FLI6,FLI60,FLI6A,FLI6ADD,FLI7,FLI70,FLI7A,FLI7ADD,
+     *       FM,FM0,FRAC,FRAD,FX,HCOMP,HR,HS1,HS2,HS2SAV,HSAV,HSBEG,
+     *       HSEND,HT,R,RATBE9,RATLI6,RATLI7,RBASE,ROS,TBE9,TLI6,TLI7,
+     *       XEST,YERR,YEST,YEXT,YTOL
+      INTEGER I,J,JENV,JENV0,JNENV,JNENV0,K,K2,M,MAXJ,MINJ,NSTEPE
+      LOGICAL*4 LDOACC,LDONE
 
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
@@ -515,6 +525,9 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C KC 2025-05-31 SAFEDIVEXP
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SAFEDIVEXP(NUMERATOR, EXPONENT)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE.
+      IMPLICIT NONE
       REAL*8 NUMERATOR, EXPONENT
 
       IF (EXPONENT .LT. 709.7827D0) THEN

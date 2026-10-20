@@ -19,9 +19,12 @@ C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 XENV
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C     MHP 8/25 Added pass-through file names
       CHARACTER*256 FALEX06,FLIV95,
      * FPUREZ

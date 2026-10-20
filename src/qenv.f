@@ -26,6 +26,16 @@ C code changed to convert COMMON/COMP/ into COMP_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,B,BETA,BETA1,BETA14,D,DEL,DELA,DELR,DL,DYDX,EMU,ETA,
+     *       FPL,FTL,FXION,GL,O,OL,P,PL,QACP,QACR,QACT,QAP,QAT,QCP,QCPP,
+     *       QCPT,QDP,QDT,QDTP,QDTT,QOD,QOT,RL,RMU,SL,T,TEFFL,TL,VEL,X,
+     *       X0,Y,Z
+      INTEGER KENV,KSAHA
+      LOGICAL*4 LATMO,LCONV,LDERIV,LOCOND,LSAVE
 C 9/24/26 MHP via Claude
 C QENV's argument list must stay fixed: it is invoked polymorphically as
 C the DERIV callback by MMID/BSSTEP (see EXTERNAL QENV in envint.f),
@@ -34,8 +44,6 @@ C cannot be added here as a normal argument; it is relayed instead via
 C COMMON/QENVMIX/, set by ENVINT immediately before every code path that
 C may reach QENV (direct calls and the BSSTEP/MMID callback alike).
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
       DIMENSION Y(3),DYDX(3),FXION(3)
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration

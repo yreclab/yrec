@@ -30,9 +30,14 @@ C code changed to convert COMMON/LLOT95E/ into LLOT95E_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/LLOT95/ into LLOT95_MOD.
       USE LLOT95_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,B,C,DL,O,OL,QOD,QOT,RR,TL,X,Z,ZZ
+      INTEGER I,IDD,ITT,IXX,J,JXX,K,NUMD,NUMT,NUMX,NUMZ
+      LOGICAL*4 LCHK,LSHIFT
 C 7/98 MHP DRIVER ROUTINE FOR OPACITY GIVEN RHO,T, X, AND Z.
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       PARAMETER (NUMT=70)
       PARAMETER (NUMD=19)
       PARAMETER (NUMX=10)

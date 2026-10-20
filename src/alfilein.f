@@ -39,6 +39,13 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALPHA,FEH,GL,P100L,PL,T100,TEFF,TEFFS
+      INTEGER I,I1,IRECNO,J,J1,NGA,NHDR,NTA
+      LOGICAL*4 LATMTPTAU100
 C
 C Parameters NTA and NGA are respectively the maximum expected numbers
 C of Teff's and GL's we expect to encounter, even in future tables
@@ -46,9 +53,6 @@ C The maximum nuber of Teff's in the current table is nTeff, and the
 C associated max number of GL's is nGL.
 
       PARAMETER(NTA=250,NGA=25)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
       CHARACTER*256 FALLARD
       CHARACTER*35 inrec
       CHARACTER*256 inrec2
@@ -367,8 +371,11 @@ C ************* End of ALFilein *************************
 C Numerical Recipes Shell sort
 
       SUBROUTINE sort_shell(nn,A)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,V
       DIMENSION A(nn)
       INTEGER*4 nn,n,inc,i,j
 C Sorts an array A(1:nn) into ascending numerical order by Shell's method (diminishing

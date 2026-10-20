@@ -8,12 +8,20 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DFS,DFSR,DFSX,DIX,DIX2,EOS,EPL,ESACT,ESACT2,ESACTQ,ESACTQ2,
+     *       ESK,ESK2,H,Q,QUADEOS06,RHO,SLR,SLT,T6A,T6LIST,XA,XX,XXH,XZ,
+     *       ZZ
+      INTEGER INDEX,IP,IQ,IRI,IS,IU,IW,K1,K2,K3,K4,KX,L1,L2,L3,L4,MF,
+     *       MIDX,MV,MX,NR,NRA,NT,NTA
 
 c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in
 c     T6 and rho
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      IMPLICIT REAL*8 (A-H,O-Z)
       common/eeeos06/ epl(mx,nt,nr),xx(mx)
       common/aeos06/  xz(mx,mv,nt,nr),
      . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)

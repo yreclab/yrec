@@ -9,9 +9,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
       USE INTPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 B,DYDX,DYSAV,EPS,ERR,ERRMAX,FPL,FTL,GL,GROW,H,HDID,HNEXT,
+     *       HTRY,ONE,RL,SHRINK,TEFFL,X,X0,XEST,XSAV,Y,YERR,YSAV,YSCAL,
+     *       YSEQ,Z
+      INTEGER I,J,KOUNT,KSAHA,NSEQ,NV
+      LOGICAL*4 LATMO,LDERIV,LOCOND,LSAVE
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       PARAMETER (ONE=1.0D0,SHRINK=0.95D0,GROW=1.2D0)
       DIMENSION Y(3),DYDX(3),YSCAL(3),YERR(3),YSAV(3),DYSAV(3),
      *          YSEQ(3),NSEQ(11),ERR(3)

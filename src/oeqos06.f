@@ -35,9 +35,15 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,BETA,BETA14,BETAI,D,D10,DELA,EMU,EOS,ESACT,H,P,P10,P12,
+     *       Q,QCP,QDP,QDT,R,RHOOFP06,RMU,RMU2,T,T10,T6,X,XC,XXH,Z,ZTAB,
+     *       ZZ
+      INTEGER INDEX,IORDER,IRAD,IRI,MV,MX,NR,NRA,NT,NTA
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
       parameter (mx=5,mv=10,nr=169,nt=197)
       Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq

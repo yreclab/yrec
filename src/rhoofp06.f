@@ -6,9 +6,17 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 C       function rhoofp06(x,ztab,t6,p,irad)  ! KC 2025-05-31
       function rhoofp06(x,t6,p,irad)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DFS,DFSR,DFSX,EOS,ESACT,ESK,ESK2,H,P,P1,P2,P3,PMAX,PMIN,
+     *       PNR,PR,Q,RAT,RHO,RHOG1,RHOG2,RHOG3,RHOOFP06,SIGMACC,T6,T6A,
+     *       T6LIST,X,XA,XXH,XZ,ZZ
+      INTEGER ICOUNT,IHI,ILO,IMD,INDEX,IP,IQ,IRAD,IRI,K1,K2,K3,K4,KLO,
+     *       L1,L2,L3,L4,MF,MIDX,MLO,MV,MX,NR,NRA,NT,NTA
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      IMPLICIT REAL*8 (A-H,O-Z)
 C 10/13/26 MHP via Claude
 C code changed to remove COMMON/LREADCO/; the table is now read once by
 C SETEOS06 from SETUPS, so this routine no longer needs the first-time

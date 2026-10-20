@@ -14,8 +14,15 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CVEAVG,CVEL,CZWIDE,DD1,DD2,DEL1,DEL2,DENOM,ENVR,ENVRL,FX,
+     *       HD,HG,HP,HR,HS1,HS2,HSBOT,HSTOP,PS1,PS2,PSCA,RTESTL,SVEL,
+     *       TOL,UMER
+      INTEGER I,ICZTOP,J,K,M
+      LOGICAL*4 LALLCZ,LCZ,LCZEX,LCZSUR,LFLAG,LTWOCZ
       INTEGER*4 IMAX
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
 C (no member referenced here; residue of the obsolete-option removals).

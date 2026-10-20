@@ -13,9 +13,14 @@ C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DR,DT,ECOD,EI,EJ,EW,FACT,FACT0,FACTA,WIND1,WIND2
+      INTEGER I,NTOT
+      LOGICAL*4 LFIX
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C MHP 7/93
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the

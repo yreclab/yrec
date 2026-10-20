@@ -6,6 +6,18 @@
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      implicit none
+      real*8 akap,ar,at,az,ck,ckt0,ckt0z0,ckt0z1,ckt1,ckt1z0,ckt1z1,
+     *       cktm,cktmz0,cktmz1,cktp,cktpz0,cktpz1,dr2kt0,dr2kt0z0,
+     *       dr2kt0z1,dr2kt1,dr2kt1z0,dr2kt1z1,dr2ktm,dr2ktmz0,dr2ktmz1,
+     *       dr2ktp,dr2ktpz0,dr2ktpz1,drk,drkt0,drkt0z0,drkt0z1,drkt1,
+     *       drkt1z0,drkt1z1,drktm,drktmz0,drktmz1,drktp,drktpz0,
+     *       drktpz1,drt2k,drtk,dt2k,dtk,rlg,tlg,xr,xt,xz0,xz1,z,zion,
+     *       zlg
+      integer ip,ir,irm,irp,it,itm,itp,iz,krun,maxr,maxt,maxz
 * Input: Zion - ion charge, TLG - lg(T[K]), RLG - lg(rho[g/cc])
 * Output: CK - Log_{10} thermal conductivity (kappa) [CGS units]
 *         DRK - d log kappa / d log rho
@@ -27,7 +39,6 @@ C      CURRENT DIRECTORY
 C     Please address any questions/comments to Alexander Potekhin:
 C     e-mail: palex@astro.ioffe.rssi.ru
 
-      implicit double precision (A-H), double precision (O-Z)
       save
       parameter (MAXT=19,MAXR=64,MAXZ=15)
 !!! NB: These parameters must be consistent with the table "condall.d"!!!
@@ -162,13 +173,19 @@ C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
 
       subroutine CINTERP3(ZM,Z0,Z1,ZP,Z,N0,MXNV,VM,V0,V1,VP,
      &   VF,DF,D2,XH)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      implicit none
+      real*8 c2,c3,d2,df,h,hm,hp,v0,v01,v1,v11,vf,vm,vp,x,xh,z,z0,z1,zm,
+     *       zp
+      integer mxnv,n0
 * Given 4 values of Z and 4 values of V, find VF corresponding to 5th Z
 *                                                       Version 23.05.99
 *   Output: VF - interpolated value of function
 *           DF - interpolated derivative
 *           D2 - interpolated second derivative
 *           XH - fraction of the path from N0 to N0+1
-      implicit double precision (A-H), double precision (O-Z)
       if (N0.le.0.or.N0.ge.MXNV) stop'CINTERP: N0 out of range'
       X=Z-Z0
       H=Z1-Z0   ! basic interval
@@ -206,6 +223,12 @@ C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
       end
 
       subroutine HUNT(XX,N,X,JLO)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      implicit none
+      real*8 x,xx
+      integer inc,jhi,jlo,jm,n
 *   W.H.Press, B.P.Flannery, S.A.Teukolsky, W.T.Vetterling
 *   Numerical Receipes(Cambridge Univ., 1986)
 *     Given an array XX of length N, and given a value X,
@@ -213,7 +236,6 @@ C      if (IT.eq.0.or.IT.eq.MAXT) stop'CONINTER: T out of range'
 *     XX must be monotonic, either increasing or decreasing.
 *     JLO=0 or JLO=N is returned to indicate that X is out of range.
 *     JLO on input is taken as the initial guess for JLO on output.
-      implicit double precision (A-H), double precision (O-Z)
       dimension XX(*)
       logical ASCND
       ASCND=XX(N).gt.XX(1) ! true if ascending order, false otherwise

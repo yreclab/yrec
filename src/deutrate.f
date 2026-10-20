@@ -12,8 +12,13 @@ C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 C21,DL,RDEUT,RDEUT2,RDEUTMAX,RHO,T9,T9M1,T9M13,T9M23,T9P13,
+     *       T9P23,TFACDEUT,TL,X,Z
+      INTEGER I,ITLVL
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/

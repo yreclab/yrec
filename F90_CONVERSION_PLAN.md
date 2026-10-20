@@ -443,6 +443,44 @@ arguments.
 
 ## Stage 5 -- `IMPLICIT NONE`
 
+**Status: done on 2026-10-20. Every scoping unit is `IMPLICIT NONE`, and
+no `IMPLICIT` typing statement remains in the code.**
+
+193 files were converted mechanically. In each scoping unit the
+`IMPLICIT` statements were replaced by `IMPLICIT NONE`, placed after the
+unit header and its `USE` lines, followed by a type statement for every
+name gfortran then reported as untyped. Each name was given exactly the
+type its unit's old rules gave it, or the default rules where the unit
+had none. The placement matters: some units had `PARAMETER` statements
+ahead of their `IMPLICIT`, which F77 allows, so the declarations have to
+come first. The script is `claude_work/stage5/stage5.py`.
+
+- **7,205** names were declared across **200** scoping units in those
+  193 files, 3 of them by hand (below). `ifx -warn all` went
+  from 7,186 `#6717` warnings ("no explicit type") to **0**. The
+  `#8889` count (missing `EXTERNAL`, issue 29) went from 537 to 531.
+- **One file needed a hand edit:** `qatm.f`. gfortran does not name a
+  statement function or its dummy argument as untyped, so `TTAUL0`,
+  `TTAUL1` and `YY` were added by hand.
+- **No unit needed a 4-byte `REAL`.** The trap from issue 6 never fired:
+  the units lacking `REAL*8` rules had nothing left to type implicitly.
+- **30 integers starting with L.** Some units lacked `LOGICAL*4(L)`, and
+  their `L`-names were typed `INTEGER`, faithfully: `L1`-`L4` in the
+  OPAL06 EOS routines, `LCN`/`LCN1` in `meval.f` and `search.f`, `LAST`,
+  and `L` in `thdiff.f` and `readcoeos06.f`. They are loop indices and
+  table pointers, so `INTEGER` is also the right type.
+
+**Validation: the compiled code is unchanged.** With gfortran `-O3`, 200
+of 281 objects were byte-identical as built. The other 81 differed only
+in the source line numbers gfortran embeds in I/O and runtime-error
+calls. Rebuilt with cpp line markers that restore the original
+numbering, **all 281 objects are byte-identical** to the pre-stage-5
+build. The gfortran warning set is identical (20 before and after).
+`ifx` builds the tree with no errors. No suite run is needed for this
+stage: it cannot change any result, by construction and by measurement.
+
+### The original plan text
+
 Only now, with roughly 10,153 names left at a median of 34 per file.
 
 Per file: compile with `ifort -warn all` (or `ifx`), take the `#6717`

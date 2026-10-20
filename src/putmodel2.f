@@ -16,13 +16,21 @@ C PARAMETER(JSON=5000) here.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BL,CCCMAX,CFENV,CMIXL,DAGE,DDAGE,FTRI,HCOMP,HD,HL,HP,HR,HS,
+     *       HSTOT,HT,OMEGA,PDISK,PS,RS,SMASS,TDISK,TEFFL,TLUMX,TRIL,
+     *       TRIT,TS,WMAX
+      INTEGER I,I0,ISHORT,IWRITE,J,JCORE,JENV,M,MODEL
+      LOGICAL*4 LC,LDIFY,LDIFZ,LDISK,LEXCOM,LINSTB,LJDOT0,LOVSTC,LOVSTE,
+     *       LOVSTM,LPUREZ,LROT,LSEMIC
 C First three lines above are YREC7 inputs
 C Last two lines are MODEL2 add-ons
 
 C  Write output model in MODEL2 format
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
       CHARACTER*6 EOS
 c     CHARACTER*4 ATM, LOK, HIK, COMPMIX

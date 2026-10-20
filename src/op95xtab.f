@@ -13,10 +13,14 @@ C code changed to convert COMMON/LLOT95E/ into LLOT95E_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/LLOT95/ into LLOT95_MOD.
       USE LLOT95_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,B,X
+      INTEGER I,I1,I2,I3,I4,IDX,J,K,NUMD,NUMT,NUMX
 c MHP 7/98 COMPUTE OPACITY TABLE AT FIXED X FROM THE OP95 TABLE AT
 C THE MODEL Z
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       PARAMETER (NUMT=70)
       PARAMETER (NUMD=19)
       PARAMETER (NUMX=10)

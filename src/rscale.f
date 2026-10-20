@@ -28,9 +28,16 @@ C USE imports exactly the names the COMMON declaration made global here,
 C so it cannot change meaning.  See runloop_mod.f for the block history
 C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CHKENV,CORNEW,COROLD,DCOR,DELZ,DENV,ENVNEW,ENVOLD,ENVOLD2,
+     *       ENVTOTAL,FS,HCOMP,HL,HS,HSTOT,HSTOT1,SFACTOR,SHIFT,SHLNEW,
+     *       SHLOLD,SHLP,SLOPE,SMASS,TEMP,XFACT,ZFACT,ZP
+      INTEGER I,I1,ICOMP,J,JCORE,JENV,JXBEG,JXEND,JXMID,M,NK
+      LOGICAL*4 LC,LSHELL
 C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C      CHARACTER*256 FLAOL2, FOPAL2
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously

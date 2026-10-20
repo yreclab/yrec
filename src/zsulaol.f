@@ -10,9 +10,13 @@ C code changed to convert COMMON/ZSLAOL/ into ZSLAOL_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/ZLAOL/ into ZLAOL_MOD.
       USE ZLAOL_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 TDOR,TOP,TR
+      INTEGER IR,IT,NUMS
 C DBG 4/94 Modified to do ZRAMP stuff.
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       DIMENSION TOP(104),TR(104),TDOR(104)
 C DBG 12/95 ARRAYS FOR PURE Z TABLE
       SAVE

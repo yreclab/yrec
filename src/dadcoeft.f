@@ -22,9 +22,21 @@ C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AA,B,C,CORR,D,DCMIX,DELJ,DELJ0,DJ,DR,DT,DT0,DW,DW2,DWI,
+     *       DWI2,DWIT,DWMAX,DWW,ECOD2,EI,EQWRST,ETHVN,ETHVP,EW,EWIT,
+     *       EWIT2,EWPREV,EWST,EWT,FACT,FACT0,FACTA,FGEOMIX,FX,FX1,FXX,
+     *       QCHIRC,QCHIRE,QQWCC,QWR,QWR2,QWRI,QWRINIT,QWRP,REQ,SUMDJ,
+     *       SUMDJ2,SUMDT,SUMJ,SUMJ2,TINY,V0,V1,V1E,V2,V3,VESN,VTHN,
+     *       VTHP,VTOT,VTOT2,W2M,WIND1,WIND2,WIND20,WM,WM0,WMI,WMINIT,
+     *       WMM,WMP,WN,WP,WSAT
+      INTEGER I,II,IWI,IWIT,IWMAX,IWW,J,K,NCUT,NM,NMAX,NN,NNN,NNNN,
+     *       NSTEP,NTOT
+      LOGICAL*4 LFIX,LOKAD
       PARAMETER (NMAX=8000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C MHP 3/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
 C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
 C (no member referenced here; residue of the obsolete-option removals).

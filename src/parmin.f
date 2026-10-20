@@ -52,10 +52,14 @@ C USE imports exactly the names the COMMON declaration made global here,
 C so it cannot change meaning.  See runloop_mod.f for the block history
 C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALFA,FK,RSCLCM,RSCLM,RSCLX,RSCLZ,SUM_FRAC,WMAX_SUN
+      INTEGER KINDRN,NCMXCK,NKIND
+      LOGICAL*4 LCMXBAD
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
 C JNT 6/2014 ADD NTC AND NGC FOR KURUCZ/CASTELLI SURFACE PRESSURES
 C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
@@ -1455,6 +1459,11 @@ C      1         '   RESCALE & EVOLVE THE PREVIOUS RUN''S LAST MODEL.')
 C Replace any defined "{YREC_XXX}" placeholder string in the passed
 C variable with the value of the corresponding environment variable.
       SUBROUTINE EXPAND_VALUE(NML_VAR)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,NUM_ENVVARS
       PARAMETER (NUM_ENVVARS=3) ! Number of possible env. vars.
       CHARACTER*256 NML_VAR
       CHARACTER*256 TEMP

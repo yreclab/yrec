@@ -18,9 +18,17 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,ALPHA,B,C,DR,DT,DX,DXMAX,ECOD1,ECOD1_H,ECOD2,ECOD2_H,ED,
+     *       EDELR,EDELR_H,EDEN,EDEN_H,EDXDR,EDXDR_H,ED_H,ED_ORIG,
+     *       ED_ORIG_H,ED_P,ED_PRIME,EHQPR,EHQPR_H,EM,EM_H,EQCOD2X_H,ER,
+     *       ER_H,ESPEC,ESPEC_H,ETEM,ETEM_H,FAC,STOT,THEA,THEZ
+      INTEGER I,IMAX,ITER,J,NPT,NPT2
+      LOGICAL*4 LDOLI
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

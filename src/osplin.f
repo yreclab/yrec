@@ -14,6 +14,9 @@ C 10/15/26 MHP via Claude
 C code changed to take JSON from DIMENSIONS_MOD instead of declaring
 C PARAMETER(JSON=5000) here.
       USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE.
+      IMPLICIT NONE
       REAL*8 XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON),
      *       M(JSON),EPS
       INTEGER N,K,ERR

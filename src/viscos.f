@@ -17,9 +17,15 @@ C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,C,COMPN,COMSUM,CON,ELECN,FACTOR,HCOMP,HD,HT,O,RHO,SUM,
+     *       T,T2,VISC2,VISCR,VISCR2,VISCX,VISCY,VISMO2,VISMOL,WEIGHT,Z,
+     *       ZF
+      INTEGER I,IM,J,M
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
       DIMENSION HCOMP(15,JSON),HD(JSON),HT(JSON),VISCX(11),WEIGHT(11),
 C      *     Z(11),COMPN(11),VISCY(11),LC(JSON)  ! KC 2025-05-31

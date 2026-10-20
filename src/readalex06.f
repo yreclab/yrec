@@ -28,8 +28,12 @@ C code changed to convert COMMON/ALOT06ALL/ into ALOT06ALL_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 XTEST
+      INTEGER I,II,J,JJ,K,KK,NUMD,NUMT,NUMX,NUMZ
       PARAMETER (NUMX=9)
       PARAMETER (NUMZ=16)
       PARAMETER (NUMT=85)

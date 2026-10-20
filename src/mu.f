@@ -10,9 +10,12 @@ C code changed to convert COMMON/COMP/ into COMP_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,ATOMWT,BETA,D,DFX1,DFX12,DFX4,EE,EMU,P,RMU,T,X,Z
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
       DIMENSION ATOMWT(4)
 C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration

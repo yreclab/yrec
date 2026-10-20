@@ -3,8 +3,13 @@ C $$$$$$
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
       USE TRIDI_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BET
+      INTEGER J,N
 
-      IMPLICIT REAL*8 (A-H,O-Z)
       SAVE
 
 C  SOLVES A TRIDIAGONAL MATRIX SYSTEM FOR THE FRACTIONAL ABUNDANCE

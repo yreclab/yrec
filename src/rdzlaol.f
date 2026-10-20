@@ -10,11 +10,14 @@ C code changed to convert COMMON/ZLAOL/ into ZLAOL_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,II,IR,IT,N
 C MHP 10/02 vector v not used
 C      SUBROUTINE RDZLAOL(V)
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       REAL*8 DUMMY(104)
       CHARACTER*256 FPUREZ
 

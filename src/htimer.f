@@ -23,9 +23,16 @@ C USE imports exactly the names the COMMON declaration made global here,
 C so it cannot change meaning.  See runloop_mod.f for the block history
 C and for why the module declares the types the implicit rules supplied.
       USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DAGE,DDAGE,DELTS,DELTSH,DELTSW,DELTSY,DWMAX,EDELT,EG,HCOMP,
+     *       HD,HF1,HF2,HL,HP,HR,HR1,HR10,HR11,HR12,HR13,HR2,HR3,HR4,
+     *       HR5,HR6,HR7,HR8,HR9,HS1,HS2,HT,HYDLUM,OMEGA,PDELT,TEFFL,
+     *       TLEFT,TLUMX
+      INTEGER JCORE,JXBEG,JXMID,M,NK
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON

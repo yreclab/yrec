@@ -19,8 +19,13 @@ C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BL,DAGE,POA1,POL1,POLEN,POT1,TEFFL,TM1,TM2,TM3,TMP1,TMP2,
+     *       TMP3
+      INTEGER IOCCOL,MODELN,NK
 
       CHARACTER*256 COUT,CTEMP
 C Removed variables not used in the routine

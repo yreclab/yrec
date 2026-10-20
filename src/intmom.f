@@ -3,8 +3,13 @@ C $$$$$$
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
       USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,C,ETA2X,H1,HIM,QIWM,QR0R,R0R,SUM,SUM2
+      INTEGER J
 
-      IMPLICIT REAL*8(A-H,O-Z)
       DIMENSION C(5)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,

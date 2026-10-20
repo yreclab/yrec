@@ -6,9 +6,13 @@ C 10/15/26 MHP via Claude
 C code changed to take JSON from DIMENSIONS_MOD instead of declaring
 C PARAMETER(JSON=5000) here.
       USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AINT,B,DX,G,G0G,G2,GINVG,HS,Q,R0,S,S2,SPHIG,W,W2,X,XM,XR
+      INTEGER I,J
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
 C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION R0(JSON),HS(JSON)
