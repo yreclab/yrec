@@ -27,11 +27,13 @@ C same thing.  Rewriting a literal such as 0.9828 as 0.9828D0
 C would change its stored value, so that is deliberately not
 C done here; see KNOWN_ISSUES.md issue 23.
       MODULE ACDPTH_MOD
+C 10/20/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C a PRIVATE copy here.
+      USE DIMENSIONS_MOD
 
       IMPLICIT NONE
       SAVE
-
-      INTEGER*4, PARAMETER, PRIVATE :: JSON = 5000
 
       REAL*8    :: TAUCZN
       REAL*8    :: DELADJ(JSON)

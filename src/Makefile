@@ -161,10 +161,13 @@ static: $(NAME)
 # too. This rule carries no recipe, so the built-in %.o: %.f rule still
 # supplies one.
 #
-# It does not order the modules among themselves. That is fine while no
-# module USEs another; when one does, generate the dependencies instead
-# (makedepf90, or a short script) rather than hand-maintaining an order.
+# It does not order the modules among themselves, so each module-to-module
+# USE needs its own rule below. Today there is one: the 36 block modules
+# dimensioned on JSON import it from DIMENSIONS_MOD. If more edges appear,
+# generate the dependencies instead (makedepf90, or a short script) rather
+# than hand-maintaining a list. See KNOWN_ISSUES.md issue 27.
 $(OBJS): $(MODOBJS)
+$(filter-out dimensions_mod.o,$(MODOBJS)): dimensions_mod.o
 
 $(NAME): $(MODOBJS) $(OBJS)
 	$(FC) $(LDFLAGS) -o $(NAME) $(MODOBJS) $(OBJS)

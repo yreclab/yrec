@@ -1639,7 +1639,14 @@ now holds `JSON = 5000` as the single public definition and 108 files take
 it by `USE`; no code-level `PARAMETER(JSON=...)` remains outside the
 modules. Build clean, 19 targeted cases byte-identical.
 
-**Still open, deliberately:** the 36 `PRIVATE` copies inside the block
+**The block-module half is RESOLVED 2026-10-20.** The 36 block modules
+dimensioned on `JSON` now `USE DIMENSIONS_MOD` in place of their own
+`PRIVATE` copies, so `JSON` is defined once in the whole code. The
+Makefile orders them after `dimensions_mod.o` (issue 27). The table
+dimensions stay `PRIVATE` in their 12 modules, as ruled below. The
+paragraph that follows is the earlier reasoning, kept for the record.
+
+**Previously open, deliberately:** the 36 `PRIVATE` copies inside the block
 modules. They cannot clash with `DIMENSIONS_MOD` because `PRIVATE` is not
 exported, so leaving them costs only duplication. Removing them means a
 module importing another module, which needs generated inter-module
@@ -1732,9 +1739,35 @@ subtraction, so it is the cheaper and safer half.
 
 ## 27. Inter-module dependencies: scope the work, then do it after stage 5
 
-**Status:** open, added 2026-10-16 at MHP's request. He asked for this as
-a task after stage 5, or at minimum an item to scope the degree of change
-required.
+**Status: RESOLVED 2026-10-20**, by the one-line rule the scoping below
+anticipated. Issue 26's block-module half created the first edges, 36
+modules depending on `DIMENSIONS_MOD`, and the Makefile now carries
+
+```make
+$(filter-out dimensions_mod.o,$(MODOBJS)): dimensions_mod.o
+```
+
+beside `$(OBJS): $(MODOBJS)`. Answers to the scoping questions, as
+measured:
+
+1. **Edges:** 36, all into one module. A dependency generator is not
+   warranted. Build one if a second kind of edge appears, as the Makefile
+   comment says.
+2. **Tool:** none needed.
+3. **Cycles:** not possible with one target.
+4. **Kept honest:** a missing rule fails loudly. Seven `JSON` modules sort
+   alphabetically ahead of `dimensions_mod.f` (`acdpth`, `atmstruct`,
+   `burn`, `deuter`, `difad`, `difad2`, `difad3`), so a serial build
+   without the rule stops with "Can't open module file".
+5. **`make -j`:** verified with five clean `make -j 16` builds, all
+   successful. A serial build now compiles `dimensions_mod.f` first.
+
+Validation: 280 of 281 objects are byte-identical to the build before the
+change. The exception is `version.o`, which carries the git hash.
+
+The original scoping follows, added 2026-10-16 at MHP's request. He asked
+for this as a task after stage 5, or at minimum an item to scope the
+degree of change required.
 
 ### What is missing
 

@@ -28,10 +28,13 @@ C Per-routine scratch bounds are excluded for the same reason: NMAX is
 C 15, 42, 100 and 8000 in five different routines, sizing local
 C workspace.
 C
-C PUBLIC, unlike the PRIVATE copies the block modules carry, since
-C exporting it is the entire point.  A file gaining USE DIMENSIONS_MOD
-C must drop its own PARAMETER(JSON=5000): keeping both is a conflict
-C error, and that clash is why the block modules made theirs PRIVATE.
+C PUBLIC, since exporting it is the entire point.  A file gaining
+C USE DIMENSIONS_MOD must drop its own PARAMETER(JSON=5000): keeping
+C both is a conflict error.
+C 10/20/26 MHP via Claude
+C code changed to note that the 36 block modules dimensioned on JSON
+C now USE this module too, in place of their own PRIVATE copies, so
+C every module that needs JSON is compiled after this one (Makefile).
       MODULE DIMENSIONS_MOD
 
       IMPLICIT NONE
