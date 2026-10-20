@@ -1,7 +1,53 @@
-# Known issues (open)
+# Known issues
 
 Deferred items with enough context to be picked up cold. Each entry records
 what was observed, where in the code it lives, and what decision was taken.
+Resolved entries are kept, marked as such, because their reasoning is still
+the record of why the code is the way it is.
+
+## Index
+
+Status as of 2026-10-20.
+
+| # | issue | status |
+|---|---|---|
+| 1 | `SECULR` `LCODM` override not gated on solid-body rotation | open; MHP reviewing |
+| 2 | One case unchanged although both `LCODM` gates are open | open, unexplained |
+| 3 | `dadcoeft.f` has no test coverage | open; needs a `LROT`+`LDIFAD` case |
+| 4 | m9p0 TAMS cases did not reproduce their start model | **resolved** 2026-10-16 (`9568ab4`); final check in the 2026-10-20 run |
+| 5 | Five cases read a file a later example case writes | open |
+| 6 | Inconsistent `IMPLICIT` statements | **resolved** 2026-10-20 (stage 5) |
+| 7 | QENV/QATM callback data cannot become arguments | standing constraint |
+| 8 | `LREADCO`: read the EOS table earlier | **resolved** 2026-10-13 |
+| 9 | `PREVCZ` information flow | open; MHP to investigate |
+| 10 | Table and index blocks excluded from consolidation | standing rule |
+| 11 | Classification of the per-shell working blocks | blocks are modules; explicit-argument work not started |
+| 12 | `MASSCHG2` set aside with the experimental mass-loss code | set aside by MHP |
+| 13 | Write-only members kept as potential output | retained by MHP |
+| 14 | Name divergences before the module conversion | **resolved** 2026-10-14 |
+| 15 | `LENVG` dead namelist variable | step 1 of 2 done; code removal awaits the other developers |
+| 16 | All cases share one output directory | open |
+| 17 | `read_track_table` zeroes columns it cannot parse | open |
+| 18 | Reference standards not tracked in git | superseded by 32 |
+| 19 | `getopac.f` unused label 100 | open, cosmetic |
+| 20 | Repository housekeeping | open |
+| 21 | CZ-base scalars borrowing the envelope prefix | **resolved** 2026-10-15 |
+| 22 | Names a future `USE` would capture | silent category **closed** 2026-10-20 (stage 5) |
+| 23 | Floating literals missing a `D` exponent | **applied** 2026-10-16; full-pass check in the 2026-10-20 run |
+| 24 | Fifteen unreachable routines | **resolved** 2026-10-15 |
+| 25 | 94 orphaned `PARAMETER` declarations | **resolved** 2026-10-15 |
+| 26 | Centralise `JSON`, not the table dimensions | **resolved** 2026-10-15 (importers) and 2026-10-20 (block modules) |
+| 27 | Inter-module dependencies | **resolved** 2026-10-20 |
+| 28 | OPAL06 EOS table-grid tolerance | open |
+| 29 | No explicit interfaces | open; unblocked now that stage 5 is done |
+| 30 | Harness passes `NaN` silently | open |
+| 31 | `GAM1` is `NaN` in the Yale EOS path | open |
+| 32 | Test references not under version control | open; MHP to decide |
+| 33 | Crash-terminated cases: run extent is the measurement | documented; not a defect |
+| 34 | `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB | open; needs MHP's judgement |
+| 35 | Cases read a start model a later case overwrites | open; install-time checks now in `rebaseline.py` |
+| 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
+| 37 | Three OPAL06 EOS `COMMON` blocks were never converted | open, found 2026-10-20 |
 
 ## Status of the original tasks
 
@@ -25,6 +71,11 @@ Issues 1 to 13 below are what those tasks surfaced and did not resolve;
 issues 14 to 20 were added when closing them out. The next body of work,
 F90 modules and `IMPLICIT NONE`, is planned separately in
 `F90_CONVERSION_PLAN.md`.
+
+*F90 modules and `IMPLICIT NONE`* -- stages 0 to 5 are **done** as of
+2026-10-20. Every scoping unit is `IMPLICIT NONE`, and 83 blocks are
+modules. Three OPAL06 EOS blocks were missed by the conversion and are
+still `COMMON` (issue 37). Issues 21 to 37 were added during this work.
 
 ---
 
@@ -177,7 +228,15 @@ untested. A case with both flags set is the only way to cover it.
 
 ## 4. The m9p0 TAMS cases do not reproduce their committed start model
 
-**Status:** open.
+**Status: RESOLVED 2026-10-16 in `9568ab4`**, pending one last check.
+The issue 23 rebaseline carried out the fix below: it committed the
+regenerated `base` and `yaleeos` TAMS start models together with
+references regenerated from them. A re-run confirmed that the `base`
+producer rewrites its `.last` byte-identically and that `..._base_TAHB`
+passes. The `yaleeos` TAHB consumer now aborts on its new start model,
+which is issue 36, not this. Step 3, a full run that leaves
+`startmodels/` clean, is being checked by the 2026-10-20 full run. The
+ordering hazard behind this entry is still open, as issue 35.
 
 **Read this first:** chaining cases is intentional. `startmodels/` is a
 library of 690 committed start models, and the `examples/run_from_*_to_*`
@@ -565,7 +624,12 @@ category rather than simply dropped from the lists.
 
 ## 11. Classification of the per-shell working blocks
 
-**Status:** classification agreed 2026-10-13; no code changes yet.
+**Status:** classification agreed 2026-10-13. Since then every block
+below has become a module (stages 3 and 4, 2026-10-15), and
+`COMMON/ENVCZ/` was deleted as recommended. Modules kept the blanket
+`USE` model, so the work in group (c), passing intermediate quantities
+explicitly as arguments, has **not started**. The classification still
+stands as the guide for that work.
 
 The remaining candidates are dominated by `JSON`-dimensioned per-shell
 arrays. MHP's split, with the evidence behind each group.
@@ -945,7 +1009,11 @@ return a sentinel the caller must handle.
 
 ## 18. Reference standards are not tracked in git
 
-**Status:** open, for MHP to decide.
+**Status:** superseded by issue 32, which measures the same problem in
+more detail and lists the options. The auto-copy hazard described here
+is now documented in `REBASELINE_PROTOCOL.md`, where "a missing reference
+is created silently, and the case passes" is the second harness
+behaviour listed. The harness itself still does not warn.
 
 `git ls-files` returns nothing for `testsuite/standard` or
 `examples/*/standard`: all 903 reference files, about 493 MB, exist only on
@@ -964,9 +1032,10 @@ warning, because a case with no reference always passes.
 
 **Status:** open, cosmetic.
 
-`getopac.f:114` defines label 100 with nothing branching to it, giving the
-build's one remaining warning:
-`Label 100 at (1) defined but not used`. Pre-existing, and almost
+`getopac.f:95` (it was line 114 when this was written) defines label 100
+with nothing branching to it, giving the warning
+`Label 100 at (1) defined but not used`. It is one of the 20 warnings the
+gfortran build gives as of 2026-10-20, not the only one. Pre-existing, and almost
 certainly another remnant of the removed opacity schemes. Worth clearing so
 that the build is warning-free and a new warning stands out.
 
@@ -976,15 +1045,18 @@ that the build is warning-free and a new warning stands out.
 
 **Status:** open.
 
+Rechecked 2026-10-20; the first three items are unchanged.
+
 - A stash is still unpopped: `stash@{0}: On development: pre-existing stray
   local edits, unrelated to this session, found blocking rebase`. It should
   be inspected and dropped or applied.
 - `origin/doc_update` was reviewed and merged except for `spot_evol`, which
   MHP excluded as new code. The stale remote branch can be deleted.
-- `main` is ahead 2 and behind 14 relative to `origin/main`, which wants
-  sorting out separately from `development`.
-- A full suite run leaves the two m9p0 `.last` fixtures modified every time;
-  see issue 4.
+- `main` is ahead 2 and behind 19 relative to `origin/main` (behind 14
+  when first recorded), which wants sorting out separately from
+  `development`.
+- ~~A full suite run leaves the two m9p0 `.last` fixtures modified every
+  time.~~ Resolved with issue 4; the 2026-10-20 full run is the check.
 
 ---
 
@@ -1257,8 +1329,11 @@ with an existing local. Run with no arguments for the full census.
 **Status:** APPLIED and rebaselined 2026-10-16. 413 literals given a `D`
 exponent, plus 5 replacements of a near-2/3 constant by the exact `CC23`
 / `CC13`. 4 literals held back as issue 28. The measured effect is below;
-**887 of 894 references installed**, with two cases held back as issues
-34 and 36. Originally flagged by
+**887 of 894 references installed** at first, with two cases held back
+as issues 34 and 36. Issue 36's three were installed on 2026-10-20 at
+MHP's direction, making it 890; only issue 34's case is still held back,
+plus the one empty `.store` (issue 33). The first full pass against these
+references is the 2026-10-20 run. Originally flagged by
 MHP on 2026-10-14: the code is designed so that
 floating point is `REAL*8` throughout, so a literal written without `D0`
 is far more likely an accident than an intention, and should be treated
@@ -1894,6 +1969,9 @@ would be indistinguishable from the rest of issue 23 in the same diff.
 
 **Status:** open, added 2026-10-16 at MHP's request. A zero-cost partial
 measure is available immediately; the full fix belongs after stage 5.
+**Stage 5 finished on 2026-10-20, so the full fix is now unblocked.**
+After stage 5, `ifx` reports 531 `#8889` warnings, down from the 537
+quoted below. The partial measure has not been applied.
 
 ### The gap
 
@@ -2086,7 +2164,9 @@ case will keep passing and any fix here cannot be verified by the suite.
 
 **Status:** open, found 2026-10-16 while preparing the issue 23 rebaseline.
 Process issue rather than a code defect, but it governs how every future
-rebaseline can be reviewed.
+rebaseline can be reviewed. Issue 18 recorded the same problem earlier and
+is superseded by this entry. Until it is decided, `REBASELINE_PROTOCOL.md`
+step 3 requires a checksummed, test-restored backup before any rebaseline.
 
 The 903 reference files under `testsuite/standard/` and
 `examples/*/standard/` are **untracked**, and not by an ignore rule --
@@ -2248,7 +2328,11 @@ certify the shorter run as correct. The other 297 cases are rebaselined.
 
 **Status:** open, found 2026-10-16 while committing the issue 23
 rebaseline. Pre-existing. Handled for this rebaseline; the underlying
-ordering hazard is not fixed.
+ordering hazard is not fixed. Since 2026-10-20 the rebaseline procedure
+guards against it. `REBASELINE_PROTOCOL.md` requires two full passes and
+a check that `startmodels/` has settled. `rebaseline.py` refuses to
+install from any case that did not exit cleanly, which is the exit-status
+check called for below.
 
 Of the 298 cases, **294 write their `FLAST` into `{YREC_OUTPUT}`** and
 only **4 write into `{YREC_START}`**, where 189 cases look for their
@@ -2307,6 +2391,8 @@ so the suite stops mutating its own inputs.
 ## 36. `Test_m9p0feh+0p0GS98_yaleeos_TAHB` aborts in `TPGRAD` on the new start model
 
 **Status:** open, found 2026-10-16 verifying the issue 23 rebaseline.
+The misleading diagnostic in the abort branch is fixed (`5a32817`; see
+the end of this entry). The cause of the `NaN` is not.
 **Rebaselined 2026-10-20 at MHP's direction:** the references are now the
 post-fix run that aborts at model 4422 (copied from the 2026-10-16 16:54
 verify run, md5 checked). The pre-fix references remain in
@@ -2419,3 +2505,41 @@ validation run was needed.
 
 Worth checking whether other suite cases are one perturbation away from
 the same stop.
+
+
+## 37. Three OPAL06 EOS `COMMON` blocks were never converted
+
+**Status:** open, found 2026-10-20 while updating this file.
+
+`F90_CONVERSION_PLAN.md` records stages 3 and 4 as leaving "no `COMMON`
+blocks". That is not quite right. Three blocks of the OPAL 2006 equation
+of state are still `COMMON`, with 19 declarations across 8 files:
+
+| block | declarations | files | members |
+|---|---|---|---|
+| `EOS06MISC` | 9 | `calcad.f`, `eqbound06.f`, `esac06.f` (2), `oeqos06.f`, `radsub06.f`, `readcoeos06.f`, `rhoofp06.f`, `t6rinteos06.f` | `esact, eos(mv), q(4), h(4), xxh, l1-l4, k1-k4, ip, iq, zz(mx), iri(10), index(10), nta(nr), nra(nt)` |
+| `AEOS06` | 6 | `eqbound06.f`, `esac06.f` (2), `readcoeos06.f`, `rhoofp06.f`, `t6rinteos06.f` | `xz(mx,mv,nt,nr), t6list(nr,nt), rho(nr), t6a(nt), esk(nt,nr), esk2(nt,nr), dfsx(mx), dfs(nt), dfsr(nr), midx, mf, xa(mx)` |
+| `EEEOS06` | 4 | `esac06.f` (2), `readcoeos06.f`, `t6rinteos06.f` | `epl(mx,nt,nr), xx(mx)` |
+
+The numbers bear this out. The original-tasks summary says 153 blocks
+became 86, and 83 became modules, so exactly 3 were left. These three are
+listed under the OPAL 2006 EOS family in issue 10 and in the plan's
+stage 3 and 4 text, so they were meant to be converted. They are the only
+blocks written in lower case (`common/aeos06/`), which is the likely
+reason the conversion's census missed them.
+
+**They are a clean candidate for conversion.** Each block is declared
+with identical text in every file that holds it, so the blanket-`USE`
+reasoning of stages 3 and 4 applies unchanged. The member types also
+agree everywhere. `l1`-`l4` in `EOS06MISC` start with L, but every
+declaring file types them as integers: `calcad.f`, the one file with an
+`LOGICAL*4(L)` rule, declares them `Integer*4` explicitly, and stage 5
+typed them `INTEGER` in the others. They are table data in the issue 10
+sense, so they keep the per-module `PRIVATE` dimension parameters
+(`mx`, `mv`, `nr`, `nt`), and `DIMENSIONS_MOD` stays out of it.
+
+Their presence is harmless today, and `IMPLICIT NONE` already holds in
+every unit that declares them. Converting them would make the plan's
+claim true, and would close the last route by which a layout mismatch
+could slip in silently.
+

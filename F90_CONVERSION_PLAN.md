@@ -357,6 +357,13 @@ member, and the two prefix declarations that would have broken it are gone.
 **Status: done on 2026-10-15. There are no `COMMON` blocks left in the
 code.**
 
+**Correction, 2026-10-20:** three blocks were missed, the OPAL06 EOS
+`AEOS06`, `EEEOS06` and `EOS06MISC`. Their 19 declarations in 8 files are
+written in lower case, which is the likely reason the census missed them.
+83 + 3 = 86, matching the block count the stage started from. See
+`KNOWN_ISSUES.md` issue 37. The "zero `COMMON` declarations" below should
+read 19.
+
 All 77 remaining blocks are modules: 70 that carried no `DATA` and 7 that
 did. The tree now holds 83 modules, 893 module variables and 624 `USE`
 statements, and zero `COMMON` declarations.
