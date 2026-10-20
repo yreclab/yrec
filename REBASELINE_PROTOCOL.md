@@ -158,9 +158,17 @@ behaviour as correct.
 
 ## 7. Install the new references
 
-Copy `$YREC_OUTPUT/<case>.{short,store,track}` to
+Use `rebaseline.py`, at the repository root:
+
+```sh
+python rebaseline.py pass2.log --hold CASE --hold CASE   # dry run
+python rebaseline.py pass2.log --hold CASE --hold CASE --apply
+```
+
+It copies `$YREC_OUTPUT/<case>.{short,store,track}` to
 `<test dir>/standard/` for each case that is not held back. Before
-copying, check that:
+copying anything, it checks the points below. If any check fails, it
+refuses to install anything at all:
 
 - **the case exited with status 0 in pass 2.** Don't rely on file
   timestamps alone: a case that aborts still leaves fresh partial
@@ -174,7 +182,9 @@ copying, check that:
   with no new output means the case no longer writes that file. Find out
   why before going on.
 
-Stop if any check fails.
+The tool takes each case's exit status from the pass 2 log, so that log
+must come from `pytest -v` and must have run to completion. It does none
+of the review in step 5.
 
 Do not get new references by deleting the old ones and letting the
 harness create them. That works only for cases that exit cleanly, gives
