@@ -2254,9 +2254,16 @@ so the suite stops mutating its own inputs.
 ## 36. `Test_m9p0feh+0p0GS98_yaleeos_TAHB` aborts in `TPGRAD` on the new start model
 
 **Status:** open, found 2026-10-16 verifying the issue 23 rebaseline.
-**Needs MHP's judgement before this case is rebaselined.** Its references
-are restored to the pre-fix versions, checksums verified against the
-backup manifest.
+**Rebaselined 2026-10-20 at MHP's direction:** the references are now the
+post-fix run that aborts at model 4422 (copied from the 2026-10-16 16:54
+verify run, md5 checked). The pre-fix references remain in
+`reference_baseline_pre_issue23/`. The cause of the `NaN` is still open.
+
+**The case still fails the harness.** `test_all.py` asserts a zero exit
+status before it compares outputs, and `STOP 912` exits with status 144,
+so this case fails as "Program terminated abnormally" whatever its
+references hold. Until the harness can accept an expected abort, a full
+suite pass will show this one failure.
 
 With the post-fix start model (issue 35) this case terminates abnormally
 at model **4422** of a reference 4646 -- about 95% of the way -- with exit
@@ -2271,6 +2278,39 @@ TPGRAD TRIED TO TAKE SQUARE ROOT OF NEGATIVE NUMBER - ASSUMED ADIABATIC CONVECTI
 The warning never fires in a run from the pre-fix start model -- zero
 occurrences across the full 298-case pass -- and fires in both runs from
 the post-fix one.
+
+### How far the run gets
+
+Measured 2026-10-20 from the two `.track` files. The series is
+`..._yaleeos_TAMS` (deuterium birthline to TAMS, unchanged by issue 23;
+ends at model 828, 29.85 Myr, `X_cen` 7.8e-5) followed by this case,
+which should run to `END_YCEN` = 1e-4.
+
+| | reference (pre-fix start model) | current (post-fix start model) |
+|---|---|---|
+| end | model 4646, normal stop | model 4422, `STOP 912` in `TPGRAD` |
+| age at end | 33.494 Myr | 33.315 Myr |
+| `Y_cen` at end | 1.4e-5 (TAHB reached) | 0.0727 |
+| log Teff, log L at end | 3.576, 4.178 (red supergiant) | 3.784, 4.220 (still moving redward) |
+| fraction of core He burning | all | 95% of its duration, 93% of the helium |
+
+The run tracks the reference closely right up to the abort, so this is
+an abrupt failure, not a drift:
+
+| `Y_cen` | reference: model, age, log Teff | current: model, age, log Teff |
+|---|---|---|
+| 0.9 | 1893, 30.653 Myr, 3.576 | 1897, 30.652 Myr, 3.576 |
+| 0.5 | 3521, 32.403 Myr, 3.977 | 3555, 32.433 Myr, 3.975 |
+| 0.1 | 4347, 33.231 Myr, 3.845 | 4374, 33.257 Myr, 3.840 |
+| 0.0727 | 4396, 33.289 Myr, 3.789 | 4422, 33.315 Myr, 3.784 (abort) |
+
+The current run trails by about 26 models and 0.03 Myr, with Teff and L
+agreeing to a few thousandths in the log. `DELDEL` goes `NaN` during the
+redward crossing late in core helium burning, a region the reference
+passed through cleanly. That points to a fragile region that a small
+change in the start model happens to hit, rather than to a gross physics
+error. Next step: find the first shell where `DELDEL` is `NaN` in model
+4422, starting with the spot recomputation noted below.
 
 ### The literal fix is not the cause
 
