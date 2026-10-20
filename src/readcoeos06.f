@@ -9,14 +9,17 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/AEOS06/, COMMON/EOS06MISC/, COMMON/EEEOS06/ into
+C AEOS06_MOD, EOS06MISC_MOD, EEEOS06_MOD.
+      USE AEOS06_MOD
+      USE EEEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 ALOGNE,ALOGR,AMU_M,DFS,DFSR,DFSX,DUM,EOS,EPL,ESACT,ESK,
-     *       ESK2,FRAC,H,Q,RHO,RHOGR,T6A,T6LIST,TMASS,XA,XIN,XX,XXH,XZ,
-     *       ZZ
-      INTEGER I,ICYCUSE,INDEX,IP,IQ,IRI,ITIMECO,IV,J,JCS,K,K1,K2,K3,K4,
-     *       L,L1,L2,L3,L4,MF,MIDX,MV,MX,NR,NRA,NT,NTA,NUMTOT
+      REAL*8 ALOGNE,ALOGR,AMU_M,DUM,FRAC,RHOGR,TMASS,XIN
+      INTEGER I,ICYCUSE,ITIMECO,IV,J,JCS,K,L,MV,MX,NR,NT,NUMTOT
 
 c..... The purpose of this subroutine is to read the OPAL 2006 EOS data tables
 
@@ -27,9 +30,6 @@ C MHP 8/25 Remove unused variables
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state
       character*1 blank
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
 C 10/9/26 MHP via Claude
 C code changed to rename AEOS06's M member to MIDX throughout: M is
 C such a universally-used name elsewhere in this codebase (e.g. shell
@@ -42,10 +42,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale). AEOS06 and EEEOS06 are left untouched.
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
-      common/eeeos06/ epl(mx,nt,nr),xx(mx)
 C Amu_M and alogNe were incorrectly dimensoned Amu_M(mx,nr) and alogNe(mx,nr).
 C the required dimensions are Amu_M(nr,nt) alogNe(nr,nt), which is much larger.
 C Something was being overwritten.         llp 8/19/08

@@ -6,14 +6,17 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       subroutine radsub06 (irad,t6,density,moles,tmass)
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EOS06MISC/ into
+C EOS06MISC_MOD.
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 APROP,CHIR,CHITT,CVTT,DEDRHO,DENSITY,EOS,ER,ESACT,ET,GAM1T,
-     *       GAM1T_NORAD,GAM2PT,GAM2PT_NORAD,GAM3PT,GAM3PT_NORAD,H,PR,
-     *       PT,Q,RAT,SIGMACC,SR,ST,T6,TMASS,XXH,ZZ
-      INTEGER INDEX,IP,IQ,IRAD,IRI,K1,K2,K3,K4,L1,L2,L3,L4,MV,MX,NR,NRA,
-     *       NT,NTA
+      REAL*8 APROP,CHIR,CHITT,CVTT,DEDRHO,DENSITY,ER,ET,GAM1T,
+     *       GAM1T_NORAD,GAM2PT,GAM2PT_NORAD,GAM3PT,GAM3PT_NORAD,PR,PT,
+     *       RAT,SIGMACC,SR,ST,T6,TMASS
+      INTEGER IRAD,MV,MX,NR,NT
 
       parameter (mx=5,mv=10,nr=169,nt=197)
 C       real*8 moles,k,molenak,Na  ! KC 2025-05-31
@@ -24,9 +27,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale).
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c       data Na/6.0221367D+23/, k/1.380658D-16/, unitf/0.9648530D0/,
 c      x unitfold/0.965296D0/, c/2.9979245D10/, sigma/5.67051D-5/

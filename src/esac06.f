@@ -10,16 +10,19 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EEEOS06/, COMMON/AEOS06/, COMMON/EOS06MISC/ into
+C EEEOS06_MOD, AEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EEEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 APROP,DFS,DFSR,DFSX,DIXR,EGROUND,EOS,EPL,ESACT,ESK,ESK2,
-     *       FRAC,FRACZ,GMASS06,H,P0,Q,QUADEOS06,R,RHO,RI,SLR,SLT,SUM1,
-     *       SUM2,SUM23,SUM33,T6,T6A,T6LIST,TMASS,XA,XH,XX,XXH,XXI,XZ,Z,
-     *       ZZ
-      INTEGER I,IHI,ILO,IMD,INDEX,IORDER,IP,IPU,IQ,IQU,IR,IRAD,IRI,IS,
-     *       IT,IV,IW,K1,K2,K3,K4,L1,L2,L3,L4,MF,MF2,MG,MH,MI,MIDX,MS,
-     *       MV,MX,NR,NRA,NT,NTA
+      REAL*8 APROP,DIXR,EGROUND,FRAC,FRACZ,GMASS06,P0,QUADEOS06,R,RI,
+     *       SLR,SLT,SUM1,SUM2,SUM23,SUM33,T6,TMASS,XH,XXI,Z
+      INTEGER I,IHI,ILO,IMD,IORDER,IPU,IQU,IR,IRAD,IS,IT,IV,IW,MF2,MG,
+     *       MH,MI,MS,MV,MX,NR,NT
 
 c..... The purpose of this subroutine is to interpolate
 c      the equation of state and its derivatives in X, T6, density
@@ -91,16 +94,12 @@ C The table read and the one-time index setup now happen in SETEOS06,
 C called from SETUPS under IF(lopale06) with the other table reads.
 
 
-      common/eeeos06/ epl(mx,nt,nr),xx(mx)
 
 c***************************************************************************
 c    common eeeos06 definitions
 c      xx is an auxilliary array containing the same values of x as array xa.
 c***************************************************************************
 
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
 C 10/9/26 MHP via Claude
 C code changed to rename AEOS06's M member to MIDX throughout: M is
 C such a universally-used name elsewhere in this codebase (e.g. shell
@@ -206,9 +205,6 @@ C (<2KB combined) and no member name collides with any dummy argument
 C in any file that declares this block (checked codebase-wide), unlike
 C COMMON/AEOS06/ and COMMON/EEEOS06/ (both left untouched -- AEOS06 is
 C ~14MB and collides with calcad.f's own M argument; EEEOS06 is ~1.3MB).
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 c***************************************************************************
 c    common eeos06 definitions:
@@ -227,18 +223,6 @@ C COMMON/IOUNITS/
             dimension frac(7)
       data aprop/83.14511D0/
       data ID/"OPALEOS/ESAC06:"/
-      data (xa(i),i=1,mx)/0.0,0.2,0.4,0.6,0.8/
-      data (index(i),i=1,10)/1,2,3,4,5,6,7,8,9,10/
-      data (nta(i),i=1,nr)/87*197,7*191,190,2*189,185,179,170,2*149,
-     x  133,125,123,122,120,115,113,107,102,2*80,72,68,66,64,62,56,54,
-     x  52,51,2*50,49,47,2*45,43,42,28*40,39,37,36,35,34,32,31,30,
-     x  29,27,26/
-      data (nra(i),i=1,nt)/ 26*169, 168, 2*167, 166, 165, 164,
-     x   2*163, 162, 161, 160, 2*159, 158, 2*130, 129, 2*128,
-     x   2*126, 2*125, 124, 122, 121, 2*120, 2*119, 6*118, 2*117,
-     x   2*116, 2*115, 4*114, 8*113, 22*111, 5*110, 6*109, 2*108,
-     x   5*107, 2*106, 105, 2*104, 8*103, 16*102, 21*100, 9* 99,
-     x   6* 98, 4* 97, 95, 94, 6* 87/
 
       save
 
@@ -533,21 +517,17 @@ C by parmin.f; READCOEOS06 only reads it.
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       subroutine seteos06
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/AEOS06/, COMMON/EEEOS06/, COMMON/EOS06MISC/ into
+C AEOS06_MOD, EEEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EEEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 DFS,DFSR,DFSX,EOS,EPL,ESACT,ESK,ESK2,H,Q,RHO,T6A,T6LIST,XA,
-     *       XX,XXH,XZ,ZZ
-      INTEGER I,INDEX,IP,IQ,IRI,J,K1,K2,K3,K4,L1,L2,L3,L4,MF,MIDX,MV,MX,
-     *       NR,NRA,NT,NTA
+      INTEGER I,J,MV,MX,NR,NT
       parameter (mx=5,mv=10,nr=169,nt=197)
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
-      common/eeeos06/ epl(mx,nt,nr),xx(mx)
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
       save
       do i=1,10
         do j=1,10

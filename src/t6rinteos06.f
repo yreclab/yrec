@@ -9,23 +9,22 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EEEOS06/, COMMON/AEOS06/, COMMON/EOS06MISC/ into
+C EEEOS06_MOD, AEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EEEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 DFS,DFSR,DFSX,DIX,DIX2,EOS,EPL,ESACT,ESACT2,ESACTQ,ESACTQ2,
-     *       ESK,ESK2,H,Q,QUADEOS06,RHO,SLR,SLT,T6A,T6LIST,XA,XX,XXH,XZ,
-     *       ZZ
-      INTEGER INDEX,IP,IQ,IRI,IS,IU,IW,K1,K2,K3,K4,KX,L1,L2,L3,L4,MF,
-     *       MIDX,MV,MX,NR,NRA,NT,NTA
+      REAL*8 DIX,DIX2,ESACT2,ESACTQ,ESACTQ2,QUADEOS06,SLR,SLT
+      INTEGER IS,IU,IW,KX,MV,MX,NR,NT
 
 c     The purpose of this OPAL 2006 EOS subroutine is to interpolate in
 c     T6 and rho
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      common/eeeos06/ epl(mx,nt,nr),xx(mx)
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
 C 10/9/26 MHP via Claude
 C code changed to rename AEOS06's M member to MIDX: M is such a
 C universally-used name elsewhere in this codebase (e.g. shell count
@@ -37,9 +36,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale). AEOS06 and EEEOS06 are left untouched.
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,

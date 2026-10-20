@@ -361,8 +361,9 @@ code.**
 `AEOS06`, `EEEOS06` and `EOS06MISC`. Their 19 declarations in 8 files are
 written in lower case, which is the likely reason the census missed them.
 83 + 3 = 86, matching the block count the stage started from. See
-`KNOWN_ISSUES.md` issue 37. The "zero `COMMON` declarations" below should
-read 19.
+`KNOWN_ISSUES.md` issue 37. The "zero `COMMON` declarations" below
+should have read 19. Those three were converted on 2026-10-20, so the
+claim is now true: the tree holds 86 modules and no `COMMON` statement.
 
 All 77 remaining blocks are modules: 70 that carried no `DATA` and 7 that
 did. The tree now holds 83 modules, 893 module variables and 624 `USE`

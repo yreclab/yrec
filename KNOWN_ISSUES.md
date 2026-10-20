@@ -14,7 +14,7 @@ Status as of 2026-10-20.
 | 1 | `SECULR` `LCODM` override not gated on solid-body rotation | open; MHP reviewing |
 | 2 | One case unchanged although both `LCODM` gates are open | open, unexplained |
 | 3 | `dadcoeft.f` has no test coverage | open; needs a `LROT`+`LDIFAD` case |
-| 4 | m9p0 TAMS cases did not reproduce their start model | **resolved** 2026-10-16 (`9568ab4`); final check in the 2026-10-20 run |
+| 4 | m9p0 TAMS cases did not reproduce their start model | **resolved** 2026-10-16 (`9568ab4`); confirmed 2026-10-20 |
 | 5 | Five cases read a file a later example case writes | open |
 | 6 | Inconsistent `IMPLICIT` statements | **resolved** 2026-10-20 (stage 5) |
 | 7 | QENV/QATM callback data cannot become arguments | standing constraint |
@@ -33,7 +33,7 @@ Status as of 2026-10-20.
 | 20 | Repository housekeeping | open |
 | 21 | CZ-base scalars borrowing the envelope prefix | **resolved** 2026-10-15 |
 | 22 | Names a future `USE` would capture | silent category **closed** 2026-10-20 (stage 5) |
-| 23 | Floating literals missing a `D` exponent | **applied** 2026-10-16; full-pass check in the 2026-10-20 run |
+| 23 | Floating literals missing a `D` exponent | **applied** 2026-10-16; confirmed by the 2026-10-20 full pass |
 | 24 | Fifteen unreachable routines | **resolved** 2026-10-15 |
 | 25 | 94 orphaned `PARAMETER` declarations | **resolved** 2026-10-15 |
 | 26 | Centralise `JSON`, not the table dimensions | **resolved** 2026-10-15 (importers) and 2026-10-20 (block modules) |
@@ -47,7 +47,7 @@ Status as of 2026-10-20.
 | 34 | `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB | open; needs MHP's judgement |
 | 35 | Cases read a start model a later case overwrites | open; install-time checks now in `rebaseline.py` |
 | 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
-| 37 | Three OPAL06 EOS `COMMON` blocks were never converted | open, found 2026-10-20 |
+| 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
 
 ## Status of the original tasks
 
@@ -228,7 +228,8 @@ untested. A case with both flags set is the only way to cover it.
 
 ## 4. The m9p0 TAMS cases do not reproduce their committed start model
 
-**Status: RESOLVED 2026-10-16 in `9568ab4`**, pending one last check.
+**Status: RESOLVED 2026-10-16 in `9568ab4`, confirmed 2026-10-20.** The
+2026-10-20 full run left `startmodels/` with no tracked changes.
 The issue 23 rebaseline carried out the fix below: it committed the
 regenerated `base` and `yaleeos` TAMS start models together with
 references regenerated from them. A re-run confirmed that the `base`
@@ -1357,7 +1358,9 @@ exponent, plus 5 replacements of a near-2/3 constant by the exact `CC23`
 as issues 34 and 36. Issue 36's three were installed on 2026-10-20 at
 MHP's direction, making it 890; only issue 34's case is still held back,
 plus the one empty `.store` (issue 33). The first full pass against these
-references is the 2026-10-20 run. Originally flagged by
+references is the 2026-10-20 run: 296 of 298 passed, and the two
+failures are the expected ones (issue 34's case on its held-back
+references, and issue 36's abort). `startmodels/` was left clean. Originally flagged by
 MHP on 2026-10-14: the code is designed so that
 floating point is `REAL*8` throughout, so a literal written without `D0`
 is far more likely an accident than an intention, and should be treated
@@ -2533,7 +2536,27 @@ the same stop.
 
 ## 37. Three OPAL06 EOS `COMMON` blocks were never converted
 
-**Status:** open, found 2026-10-20 while updating this file.
+**Status: RESOLVED 2026-10-20.** The three blocks are now
+`AEOS06_MOD`, `EEEOS06_MOD` and `EOS06MISC_MOD`, and the code contains
+no `COMMON` statement at all. The conversion followed the stage 3 and 4
+pattern: a blanket `USE` in each of the 9 scoping units that declared a
+block, each member's type statement removed from those units, and the
+dimension parameters `PRIVATE` in each module. The four `DATA`
+initializers in `esac06.f` (`xa`, `index`, `nta`, `nra`) moved into the
+modules with their value lists copied verbatim. Their implied-DO lists
+each covered the whole array, so they became whole-array `DATA`.
+
+Validation: the object-identity check does not apply here, since module
+variables get different symbol names from `COMMON` storage. Instead,
+six cases using the OPAL06 EOS were run with the converted binary in a
+separate output directory: `m0p3` base and spot25 ZAMS, `m1p0` spot25
+ZAMS, `m0p7` GN93 TAHB, `m0p3` base TAMS and `m1p0` dif TAMS. All six
+exit cleanly. Every `.store` and `.track` is byte-identical to its
+reference, and every `.short` is identical once the echoed output path
+and its blank padding are normalised. A clean `make -j 16` build
+succeeds, with the same 19 warnings as before.
+
+The original entry follows.
 
 `F90_CONVERSION_PLAN.md` records stages 3 and 4 as leaving "no `COMMON`
 blocks". That is not quite right. Three blocks of the OPAL 2006 equation

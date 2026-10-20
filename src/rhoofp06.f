@@ -7,23 +7,23 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C       function rhoofp06(x,ztab,t6,p,irad)  ! KC 2025-05-31
       function rhoofp06(x,t6,p,irad)
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/AEOS06/, COMMON/EOS06MISC/ into
+C AEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 DFS,DFSR,DFSX,EOS,ESACT,ESK,ESK2,H,P,P1,P2,P3,PMAX,PMIN,
-     *       PNR,PR,Q,RAT,RHO,RHOG1,RHOG2,RHOG3,RHOOFP06,SIGMACC,T6,T6A,
-     *       T6LIST,X,XA,XXH,XZ,ZZ
-      INTEGER ICOUNT,IHI,ILO,IMD,INDEX,IP,IQ,IRAD,IRI,K1,K2,K3,K4,KLO,
-     *       L1,L2,L3,L4,MF,MIDX,MLO,MV,MX,NR,NRA,NT,NTA
+      REAL*8 P,P1,P2,P3,PMAX,PMIN,PNR,PR,RAT,RHOG1,RHOG2,RHOG3,RHOOFP06,
+     *       SIGMACC,T6,X
+      INTEGER ICOUNT,IHI,ILO,IMD,IRAD,KLO,MLO,MV,MX,NR,NT
 
       parameter (mx=5,mv=10,nr=169,nt=197)
 C 10/13/26 MHP via Claude
 C code changed to remove COMMON/LREADCO/; the table is now read once by
 C SETEOS06 from SETUPS, so this routine no longer needs the first-time
 C switch or the fabricated ESAC06 call that used to force the read.
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
 C 10/9/26 MHP via Claude
 C code changed to rename AEOS06's M member to MIDX: M is such a
 C universally-used name elsewhere in this codebase (e.g. shell count
@@ -37,9 +37,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale). AEOS06 (above) is left untouched.
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
       data sigmacc/1.8914785D-3/
 c--------------------------------------------------------------------
 

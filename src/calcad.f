@@ -71,15 +71,18 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EOS06MISC/ into
+C EOS06MISC_MOD.
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
       REAL*8 AMUJ,ATEFFL,BET14J,BETAIJ,BETAJ,BL,CHRH,CHT,CMIXL,CVJ,DAGE,
-     *       DELAJ,EMUJ,EOS,ESACT,ETAJ,FP,FPLJ,FT,FTLJ,FXIONJ,H,HCOMP,
-     *       HD,HP,HR,HSTOT,HT,Q,QAPJ,QATJ,QCPJ,QCPPJ,QCPTJ,QDPJ,QDTJ,
-     *       QDTPJ,QDTTJ,RCZ,RCZL,RMUJ,STD,STDL,STP,STPL,STT,STTL,STX,
-     *       STZ,TEFFL,XXH,ZZ
-      INTEGER INDEX,IORDER,IRAD,IRI,JENV,KHI,KLO,M,MV,MX,NR,NRA,NT,NTA
+     *       DELAJ,EMUJ,ETAJ,FP,FPLJ,FT,FTLJ,FXIONJ,HCOMP,HD,HP,HR,
+     *       HSTOT,HT,QAPJ,QATJ,QCPJ,QCPPJ,QCPTJ,QDPJ,QDTJ,QDTPJ,QDTTJ,
+     *       RCZ,RCZL,RMUJ,STD,STDL,STP,STPL,STT,STTL,STX,STZ,TEFFL
+      INTEGER IORDER,IRAD,JENV,KHI,KLO,M,MV,MX,NR,NT
       LOGICAL*4 LATMOJ,LCALCJ,LDERIJ
 C 10/9/26 MHP via Claude
 C code changed to add mx,mv,nr,nt (matching every other file that
@@ -87,7 +90,6 @@ C declares an OPAL 2006 EOS common block), needed below for
 C COMMON/EOS06MISC/'s array dimensions; this file previously only
 C needed COMMON/EEOS06/, which it hardcoded as eos(10) instead.
       PARAMETER (mx=5,mv=10,nr=169,nt=197)
-      Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
       REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
@@ -147,9 +149,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale).
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 C 10/11/26 MHP via Claude
 C code changed to remove an incorrect COMMON /LLOT95/ declaration from
 C this file. Every other file declares it as

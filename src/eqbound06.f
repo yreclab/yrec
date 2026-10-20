@@ -4,18 +4,19 @@ C OPAL 2006 EOS TABLE.
 C       SUBROUTINE EQBOUND06(T,DL,DL0,FAC,LTAB,LRAMP)  ! KC 2025-05-31
       SUBROUTINE EQBOUND06(T,DL,FAC,LTAB,LRAMP)
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/AEOS06/, COMMON/EOS06MISC/ into
+C AEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 D,DFS,DFSR,DFSX,DL,DRAMPF,EOS,ESACT,ESK,ESK2,FAC,H,Q,RHO,T,
-     *       T6,T6A,T6LIST,TRAMPF,XA,XXH,XZ,ZZ
-      INTEGER INDEX,IRI,MF,MIDX,MV,MX,NR,NRA,NT,NTA
+      REAL*8 D,DL,DRAMPF,FAC,T,T6,TRAMPF
+      INTEGER MV,MX,NR,NT
       LOGICAL*4 LRAMP,LTAB
-      Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,k,l
+      Integer*4 k,l
       parameter (mx=5,mv=10,nr=169,nt=197)
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),midx,mf,xa(mx)
 C 10/9/26 MHP via Claude
 C code changed to rename AEOS06's M member to MIDX: M is such a
 C universally-used name elsewhere in this codebase (e.g. shell count
@@ -29,9 +30,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale). AEOS06 (above) is left untouched.
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
       SAVE
       T6 = T*1.0D-6

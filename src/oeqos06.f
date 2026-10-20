@@ -36,17 +36,19 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
       USE IOUNITS_MOD
 C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EOS06MISC/ into
+C EOS06MISC_MOD.
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 AMU,BETA,BETA14,BETAI,D,D10,DELA,EMU,EOS,ESACT,H,P,P10,P12,
-     *       Q,QCP,QDP,QDT,R,RHOOFP06,RMU,RMU2,T,T10,T6,X,XC,XXH,Z,ZTAB,
-     *       ZZ
-      INTEGER INDEX,IORDER,IRAD,IRI,MV,MX,NR,NRA,NT,NTA
+      REAL*8 AMU,BETA,BETA14,BETAI,D,D10,DELA,EMU,P,P10,P12,QCP,QDP,QDT,
+     *       R,RHOOFP06,RMU,RMU2,T,T10,T6,X,XC,Z,ZTAB
+      INTEGER IORDER,IRAD,MV,MX,NR,NT
 
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      Integer*4 l1,l2,l3,l4,k1,k2,k3,k4,ip,iq
 
 C       DIMENSION ATOMWT(4)
 C 10/13/26 MHP via Claude: removed the unused COMMON/COMP/ declaration
@@ -69,9 +71,6 @@ C 10/9/26 MHP via Claude
 C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
 C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
 C rationale).
-      common/eos06misc/esact,eos(mv),q(4),h(4),xxh,
-     .     l1,l2,l3,l4,k1,k2,k3,k4,ip,iq,
-     .     zz(mx),iri(10),index(10),nta(nr),nra(nt)
 
 C      DATA NZP1/12/
 C      DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
