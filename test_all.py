@@ -19,7 +19,7 @@ import configparser as cfp
 config = cfp.ConfigParser()
 config.read("pytest.ini")
 yrec_exe = os.path.abspath( config['paths']['yrec'] )
-test_defs = [x for x in config['paths']['tests'].split('\n') if len(x) > 0 ]
+test_reqs = [x for x in config['paths']['tests'].split('\n') if len(x) > 0 ]
 float_frac_tol = float(config['tolerances']['float_frac_tol'])
 int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
@@ -39,30 +39,58 @@ class colors:
     UNDERLINE = '\033[4m'
     ENDC = '\033[0m'
 
-def collect_tests(testreqs):
+
+class Tcase:
+    '''Definition of a test case, including the FFIRST dependency'''
+    def __init__(self, subdir, control, physics):
+        self.subdir = subdir     # location relative to yrec project root
+        self.control = control
+        self.physics = physics
+        self.name = self.control.rsplit('/')[-1].rsplit('.')[0]
+        self.dep = self.extract_dep()   # stub of FFIRST model dependency
+
+    def extract_dep(self):
+        nmlfile = os.path.join(self.subdir, self.control)
+        with open(nmlfile, 'r') as nml:
+            for line in nml:
+                line = line.strip()
+                if len(line) == 0 or line[0] == '!':
+                    continue
+                if 'FFIRST' in line:
+                    ffirst = re.search('(".*")', line).groups()[0].replace('"', '')
+                    ffirst_stub = line.rsplit('/')[-1].rsplit('.')[0]
+                    return ffirst_stub
+
+
+def collect_tcases(testreqs):
     '''Traverse testing directories and define a test for each applicable pair
     of YREC .nml1, .nml2 input files.'''
     tcases = []
     for testreq in testreqs:
+        print(f"{testreq=}")
         if "," in testreq:
             tcomps = testreq.split(',')
             tcomps = [x.strip() for x in tcomps]
             if len(tcomps) != 3:
                 raise ValueError("Individual test case has incorrect number of components")
-            tcases.append(tcomps)
+            tcase = Tcase(tcomps[0], tcomps[1], tcomps[2])
+            tcases.append(tcase)
         else:
             curdir = os.getcwd()
-            os.chdir(testreq)
             shortdir = os.path.basename(testreq)
-            for nml1 in sorted(glob(f'*.nml1')):
-                tbase = nml1.replace(".nml1", "")
-                test_nml2 = f"{tbase}.nml2"
+            for nml1 in sorted(glob(f'{testreq}/*.nml1')):
+                nml1 = os.path.abspath(nml1)
+                dirname = os.path.dirname(nml1)
+                name = nml1.replace(".nml1", "")
+                nml1_base = os.path.basename(nml1)
+                test_nml2 = os.path.join(dirname, f"{name}.nml2")
+                test_nml2_base = os.path.basename(test_nml2)
                 if os.path.exists(test_nml2):
-                    tcases.append([testreq, nml1, test_nml2])
+                    tcase = Tcase(testreq, nml1_base, test_nml2_base)
                 else:
                     dir_nml2 = f"{shortdir}.nml2"
-                    tcases.append([testreq, nml1, dir_nml2])
-            os.chdir(curdir)
+                    tcase = Tcase(testreq, nml1_base, dir_nml2)
+                tcases.append(tcase)
     return tcases
 
 
@@ -195,90 +223,82 @@ def color_indicator(line, indices):
     return out
 
 
-def order_batch(batch, order_val):
-    '''Impose an order requirement on a batch of test cases'''
-    return [
-        pytest.param(
-            *(item if isinstance(item, tuple) else (item,)),
-            marks=pytest.mark.order(order_val)
-        )
-        for item in batch
-    ]
-
 def mark_batch(batch, order_val):
+    '''Apply a pytest mark to a list of test case parameter tuples which
+    assigns an execution order to the batch relative to other batches with an
+    excution order assigned.
+
+    I.e., if a batch is assigned an order value of 2, all tests in that batch
+    will only begin running after all tests in a batch with order value 1 have
+    completed.
+    '''
     return [
         pytest.param(*case, marks=pytest.mark.order(order_val))
         for case in batch
     ]
 
 
-def batch_tests(tests):
-    '''Iterate over all test cases and find dependencies between
-    CONTROL (nml1) namelist files. Return the list of all cases
-    that depend upon other cases in provided set.
-    Batch all provided tests into 'early' and 'late'
-    so that all tests whose outputs are dependencies of other
-    tests run first.
-    Sorts test cases into a maximum of two tiers, early and late.
+def batch_tests(tcases):
+    '''Iterate over all test cases
+    Place each test case that is the dependency of another in the set
+       in the early batch.
+    Place all tests that have one of the early tests as a dependency
+       in the late batch.
+    All other cases go in the independent batch
     '''
-    batches = []
-    # extract the FFIRST field from every test case, keep associated with the case
-    # iterate over list of tests and compare each with list of ffirsts
-    # if an ffirst appears in the test list, move that test to an earlier list
+    # Compose list of all test names for dep comparison
+    tnames = [x.name for x in tcases]
+    early = []
+    late = []
+    indep = []
+    case_params = []
 
-    # Iterate over the next list and repeat, splitting off matches into a new list
-    # Repeat until there are no more tests to examine
-    # List of tuples
-    #   test (3-list of test fields)
-    #   FFRIST from the NML1 of the test case
-    tcases = []
-    for i, test in enumerate(tests):
-        nmlfile = os.path.join(test[0], test[1])
-        with open(nmlfile, 'r') as nml:
-            for line in nml:
-                line = line.strip()
-                if len(line) == 0 or line[0] == '!':
-                    continue
-                if 'FFIRST' in line:
-                    ffirst = re.search('(".*")', line).groups()[0].replace('"', '')
-                    tcases.append((test, ffirst))
+    # Sort all test cases in to three classes based on dependencies
+    # early - referenced by another test case
+    # late - references another test case
+    # indep - independent tests that don't depend on others in the requested set
+    for case in tcases:
+        if case.dep in tnames:
+            # Put test with dep as name in early
+            all_depcases = [x for x in tcases if x.name == case.dep]
+            # Deduplicate
+            for depcase in all_depcases:
+                if depcase not in (early + late + indep) :
+                    early.append(depcase)
+            # Put originating case in late, since it depends on the one in early.
+            late.append(case)
+        else:
+            if case not in (early + late + indep):
+                indep.append(case)
 
-    batches = []
-    early = []  # Test which are a dependency of another in the set
-    late = []   # A test which depends upon another in the set
-    indep = []  # Tests which may be independenty scheduled
-    for tcase in tcases:
-        dep_found = False
-        stub = tcase[0][1].rsplit('.')[0]
-        # Check if stub appears in any test cases
-        print(f"searching for  {stub} ", end='')
-        for srchcase in tcases:
-            #print('.', end='')
-            if srchcase[0] not in early and stub in srchcase[1]:
-                early.append(tcase[0])
-                print('   Found. This test is a dependency of another')
-                dep_found = True
-                break
-        print()
-        if not dep_found:
-            late.append(tcase[0])
+    # Format in lists of tuples for use by test_yrec function
+    early_params = []
+    for case in early:
+        early_params.append((case.subdir, case.control, case.physics))
+    early_params = mark_batch(early_params, 1)
+    case_params.extend(early_params)
 
-    # Assign ordering to batches
-    early = mark_batch(early, 1)
-    late = mark_batch(late, 2)
-    batches.append(early)
-    batches.append(late)
+    late_params = []
+    for case in late:
+        late_params.append((case.subdir, case.control, case.physics))
+    late_params = mark_batch(late_params, 2)
+    case_params.extend(late_params)
 
-    return batches
+    indep_params = []
+    for case in indep:
+        indep_params.append((case.subdir, case.control, case.physics))
+    case_params.extend(indep_params)
+
+    return case_params
 
 
-test_cases = collect_tests(test_defs)
-batches = batch_tests(test_cases)
-test_cases_ordered = []
-for batch in batches:
-    test_cases_ordered = test_cases_ordered + batch
+
+# Perform test collection and execute tests
+tcases = collect_tcases(test_reqs)
+test_cases_ordered = batch_tests(tcases)
 
 
+# Main test execution function called automatically by pytest.
 @pytest.mark.parametrize("tdir,nml1,nml2", test_cases_ordered)
 def test_yrec(tdir, nml1, nml2):
     '''Process a test case definition consisting of
@@ -343,4 +363,3 @@ def test_yrec(tdir, nml1, nml2):
         if filevals_differ(ref, out, float_frac_tol, int_abs_tol):
             outputs_identical = False
     assert outputs_identical, "Output differs from reference standard"
-
