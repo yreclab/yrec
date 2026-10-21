@@ -10,8 +10,12 @@ C      YI: returned interpolated values of Y
 C
 C       Data need to be evenly gridded for the integration formula to work.
 C      Data that are not already so are interpolated onto an even grid
-C      using spline interpolation (numerical recipes SPLINE (renamed splinnr)
-C      and SPLINT)
+C      using spline interpolation (SPLINJ for the second derivatives and
+C      SPLINT to evaluate).
+C 10/14/26 MHP via Claude
+C comment corrected: it credited "numerical recipes SPLINE (renamed
+C splinnr)", but this routine calls SPLINJ and SPLINT.  splinnr was never
+C reachable and has been deleted; see KNOWN_ISSUES.md issue 24.
 C*************************************************************
 C      PARAMETER(NN = 17)
 C      PARAMETER(N = 16)
@@ -22,9 +26,12 @@ C    *4.6,5.5,6.4,7.3/
 
 
       SUBROUTINE BOOLE(X,Y,N,NN,S)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      PARAMETER(SCALEX=1e-11)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 S,SCALEX,SCALEY,X,XD,XI,Y,YD,YI
+      PARAMETER(SCALEX=1D-11)
       PARAMETER(SCALEY=1e7)
       REAL*8 H(1),D2X(N)
       DIMENSION X(N), Y(N),XI(NN), YI(NN), S(1), XD(N), YD(N)

@@ -1,8 +1,15 @@
 C$$$$$$
       SUBROUTINE SPLINC(X,Y,Y2,N)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      PARAMETER (JSON=5000)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 P,QN,SIG,UN
+      INTEGER I,K,N
       REAL*8 X(JSON),Y(JSON),Y2(JSON),U(JSON)
       SAVE
 C NATURAL SPLINE

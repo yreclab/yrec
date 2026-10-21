@@ -1,41 +1,70 @@
 C $$$$$$
 C       SUBROUTINE CODIFF(DELTS,HRU,HV,IMIN,IMAX,LC,LCZ,M,RMID,COD,COD2)  ! KC 2025-05-31
-      SUBROUTINE CODIFF(HRU,M,RMID,COD,COD2)
+      SUBROUTINE CODIFF(HRU,M,RMID,COD,COD2,VFC)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD,COD2,CON1,CON2,FADV,FADV0,HRU,RMID,VFC
+      INTEGER I,M
 
 C 2/91 SUBROUTINE ALTERED TO ALLOW DIFFERENT FC'S FOR DIFFERENT
 C      MECHANISMS (COMMON BLOCK VMULT2)
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C VFC is now a dummy argument, formerly COMMON/VARFC/.
+      DIMENSION VFC(JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *     EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *     QDTMI(JSON),RM(JSON),TM(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/INTVAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       ! old version: COMMON/INTVR2/AMUM(JSON),THDIFM(JSON),VISCM(JSON),WM(JSON)
       !COMMON/INTVR2/AMUMI(JSON),THDIFMI(JSON),VISCMI(JSON),WM(JSON)
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
-      COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
-      COMMON/ADVEC/FADV(JSON),FADV0(JSON)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
+C 10/13/26 MHP via Claude: removed the unused COMMON/MDPHY/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/ADVEC/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION FADV(JSON),FADV0(JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VARFC/ with an explicit argument: seculr.f
+C clears VFC, GETFC fills it and CODIFF reads it, all inside seculr.f's
+C call tree, so seculr.f now owns the storage.
 C MHP 9/93
-      COMMON/NOTRAN/LNOJ
 C       DIMENSION HRU(JSON),HV(JSON),COD(JSON),LC(JSON),LCZ(JSON),  ! KC 2025-05-31
       DIMENSION HRU(JSON),COD(JSON),RMID(JSON),COD2(JSON)
 C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MAG/LCODM,CODM
-      COMMON/MAG/CODM,LCODM
       SAVE
 
 C  THIS SR DETERMINES THE RUN OF CHARACTERISTIC VELOCITY LENGTH

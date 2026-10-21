@@ -11,14 +11,109 @@ C*******
 C the array size, i.e. max # of shells is specified in the
 C parameter statement.  it defines JSON.  to change the array
 C size do a global change on "JSON=2000" or whatever.
-      PARAMETER (JSON=5000)
-      PARAMETER (NUMTT=70)
-      PARAMETER (NUMD=19)
-      PARAMETER (NUMX=10)
-      PARAMETER (NUMZ=13)
-      PARAMETER (NUMXZ=126)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENT/ into CENT_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENV/ into CENV_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CTOL/ into CTOL_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENTROP/ into ENTROP_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PREVCZ/ into PREVCZ_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SOUND/ into SOUND_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OP95INTERP/ into OP95INTERP_MOD.
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+      USE OP95INTERP_MOD
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+      USE SOUND_MOD
+      USE PREVCZ_MOD
+      USE OVRTRN_MOD
+      USE OLDMOD_MOD
+      USE LIOV_MOD
+      USE FLUXES_MOD
+      USE ENTROP_MOD
+      USE DISK_MOD
+      USE DEUTER_MOD
+      USE CTOL_MOD
+      USE CENV_MOD
+      USE CENT_MOD
+      USE NMLPAR_MOD
+      USE CONSTANTS_MOD
+      USE IOUNITS_MOD
+      USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AGUESS,ALRI,BE7M,BE7MASSFRACTION,BL,CFENV,CMIXL,DAGE,DCEN,
+     *       DDAGE,DELTS,DELTS0,DELTSH,DL,DLDA,DLDX,DP,DR,DRDA,DRDX,DS1,
+     *       DS2,DS3,DT,DWMAX,E3AL,EALPCA,ECN,ENU,EPP1,EPP2,EPP3,ESTORE,
+     *       ETA2,FACAGE,FLUXI0,FM,FP,FR,FT,FTRI,GL,HCOMP,HCOMPP0,HD,
+     *       HF1,HF2,HG,HHA,HHB,HHC,HI,HJM,HJM0,HKEROT,HKEROTO,HL,HMAX,
+     *       HP,HPP,HR,HR1,HR10,HR11,HR12,HR13,HR2,HR3,HR4,HR5,HR6,HR7,
+     *       HR8,HR9,HS,HS1,HS2,HSRF,HSTOT,HT,HTT,OMEGA,PCEN,PDP,PDT,
+     *       PEP,PET,POA1,POL1,POLEN,POT1,PS,QDP,QDT,QIW,R0,RHOE,RLL,RS,
+     *       SENVOLD,SJTOT,SKEROT,SMASS,SOLZX,SUM1,T6,TCEN,TEFFI,TEFFL,
+     *       TL,TLUMX,TRIL,TRIT,TS,V,VEL,X,XC12,XC13,XGUESS,XH2,XHE3,
+     *       XMSOL,XN14,XN15,XO16,XO17,XO18,Y,YINI,Z,ZINI,ZTOX
+      INTEGER I,ICONV,II,IKUT,ISTORE,ITDONE,ITLVL,ITROT,IU,IWRITE,J,
+     *       JCORE,JENV,JENV0,JENV1,JXBEG,JXEND,JXMID,K,KTTAUSV,M,MODEL,
+     *       MODELN,MRZONE,MXZON0,MXZONE,NHMAX,NITER,NK,NRZONE,NSPEC,
+     *       NZONE,NZONE0
+      LOGICAL*4 LAGE,LARGE,LATMO,LC,LCZ,LDERIV,LFINI,LIMIX,LJDOT,LMIX,
+     *       LNEW,LNEWFIT,LNUTAB,LOCOND,LPASSR,LPRT0,LPTIMESV,LPUNCH,
+     *       LRESET,LSAVPU,LSBC,LSHELL,LSOL,LSTAR
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSTAR/ with explicit arguments.
+C setscal.f initializes ALRI, LSTAR and LPASSR, chkscal.f reads and
+C updates ALRI and sets the two flags, and main.f reads the flags; main.f
+C calls both routines, so it now owns all three.  ALRI is read as well as
+C written inside chkscal.f and is carried across calls there, which
+C main.f's blanket SAVE preserves exactly as the block did.
+C 10/13/26 MHP via Claude
+C COMPMIX was COMMON/I2O/ and XMSOL was COMMON/PULSE/; main.f now owns
+C both and threads them to the output routines.
+      CHARACTER*4 COMPMIX
+C 10/13/26 MHP via Claude
+C YRECVER and GITHASH were COMMON/VERSION/; main.f now owns them and
+C passes them to SETVERSION, which sets them, and to PARMIN, which
+C prints the banner.
+      CHARACTER*10 YRECVER
+      CHARACTER*20 GITHASH
 C DBGLAOL - to save space make tables single precision
 C MHP 8/25 Removed unused variables and added pass-through variables
 C 9/22/26 MHP via Claude
@@ -40,10 +135,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude
@@ -61,76 +152,77 @@ C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
-      COMMON/TRACK/ITRVER
-      COMMON/LABEL/XENV0,ZENV0
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
-      COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
-      COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1       NUMRUN
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 11/91 COMMON BLOCKS ADDED FOR PRESSURE SCALE HEIGHT CALC. FOR LIBURN
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 05/02 ADDED OPTION TO ITERATE BETWEEN ROTATION AND
 C STRUCTURE CALCULATIONS - SET ITDIF1 GREATER THAN 1
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
-      COMMON/LIOV/PSCAL0,PSCAL1
-      COMMON/PREVCZ/RBASE0,BLI6OLD,BLI7OLD,BBE9OLD,JENVOS
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to make CMIXL a plain local variable set from the
 C user-input CMIXLA(NK) vector and passed as an explicit argument to
 C every routine that needs it, instead of broadcasting it via common
 C block, to reduce implicit global state ahead of the F90 module
 C conversion
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),NITER1,
-     1 NITER2,NITER3
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
 C 7/91 ENTROPY TERM COMMON BLOCK ADDED.
-      COMMON/ENTROP/HTT0(JSON),HPP0(JSON),HLL0(JSON),HRR0(JSON)
 C 7/91 FLAG TO TOGGLE BETWEEN NEW/OLD RATES ADDED.
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
 C MHP 9/94
-      COMMON/ROTPRT/LPRT0
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/ROTPRT/ with an explicit argument: main.f
+C sets LPRT0 and getw.f is its only reader.
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/PULSE/ with an explicit argument.  main.f
+C snapshots XMSOL=SMASS and wrtmod.f is the only reader; it is a snapshot,
+C not the running SMASS, so it cannot be replaced by the mass already in
+C scope there.
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/25 Removed character file names from common block
 C 9/25/26 MHP via Claude
 C code changed to remove the LISO isochrone-output option
-      COMMON/CHRONE/LRWSH
 C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
 C a set of runs.
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     * SENV0A(50)
 C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *     IOLAOL2, NK, LZRAMP
+C 10/9/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/ entirely from this file: NK was
+C its only member ever referenced here (as this file's own run-index
+C loop variable, DO 200 NK = 1, NUMRUN below), and is now passed
+C explicitly to PDIST and WRTHEAD instead of relying on them reading
+C it back out of the common block. RSCLZC/RSCLZM1/RSCLZM2/IOLAOL2/
+C LZRAMP (ZRAMP's other members) were never used in this file.
 C DBG 4/26/94 Tired of not have access to current age of model so...
-      COMMON/THEAGE/DAGE
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/THEAGE/.  DAGE, the stellar age, is a local
+C here and was already passed explicitly to every other routine using it
+C (STARIN, HTIMER, WRTOUT, PUTSTORE, CHKSCAL, MASSLOSS, CALCAD and the
+C model readers and writers); PDIST was the last reader taking it via
+C COMMON.
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
      *HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),LC(JSON),
      *HCOMP(15,JSON),HS1(JSON),HS2(JSON),HHC(JSON),
@@ -149,67 +241,94 @@ C DBG PULSE OUT 7/92
 C variables used to contral output of pulsation models.  model
 C output after has traveled pomax in HR diagram
 C LPOUT and POMAX added to control common block, rest in physics
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
 C MHP 1/93 add common blocks for automatic calibration of solar models.
-      COMMON/CALSUN/DLDX,DRDX,DLDA,DRDA,BLP,RLP,DX,DA,LSOL
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSUN/ with explicit arguments to
+C CHKCAL and SETCAL.  Only these five of the nine members are read here;
+C BLP, RLP, DX and DA stay inside chkcal.f.  They are given explicit
+C initial values because CALL SETCAL sits inside IF(LCALS) and so may
+C never run, while the test at IF(LCALS .AND. LSNU .AND. LSOL) below can
+C still evaluate LSOL -- Fortran does not promise .AND. short-circuits.
+C COMMON storage supplied that zero implicitly; a local would not.
+      DATA DLDX,DRDX,DLDA,DRDA,LSOL/4*0.0D0,.FALSE./
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
-      COMMON/CALS2/TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLZX,CALSOLAGE
 C      COMMON/CALS2/TOLL,TOLR,LCALS
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C DBG 12/94 added calibrate stellar model
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
-     1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
-     2      LSTAR, LTEFF, LPASSR,LCALST
+C 10/12/26 MHP via Claude
+C code changed to drop BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/; they are written and read only in chkscal.f and are
+C now locals there.  This file never referenced them.
 C MHP 7/96 common block added for sound speed
-      COMMON/SOUND/GAM1(JSON),LSOUND
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
+C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
 C MHP 3/96 central T,P,RHO added
-      COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
-      COMMON /LLOT95A/TGR(NUMTT),XXG(NUMX),R0GR(NUMD),ZZG(NUMZ),
-     *                CAPPA2(NUMXZ,NUMTT,NUMD),NUMXM(NUMZ),NZ(NUMZ)
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95A/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C as above for the model Z.
-      COMMON /LLOT95/CAPPA(NUMX,NUMTT,NUMD),ZTAB
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C as above for desired surface value of X.
-      COMMON /LLOT95E/CAPPAE(NUMTT,NUMD),XTAB
-C indices for interpolation in Z,X,T, and R
-      COMMON/OP95INDX/JZ,JX(4,4),JT,JD(4)
-C interpolation factors for Z,X,T, and R, as well as derivative
-C factors for T and RHO.
-      COMMON/OP95FACT/BZ(4),BX(4,4),BT(4),BTT(4),BD(4,4),BDD(4,4)
+C 10/13/26 MHP via Claude: removed the unused COMMON/LLOT95E/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C indices for interpolation in Z,X,T, and R; interpolation factors
+C for Z,X,T, and R (and derivative factors for T and RHO).
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/OP95INDX/ and COMMON/OP95FACT/ into
+C COMMON/OP95INTERP/ (see getopal95.f for the full rationale). This
+C file declares only the JZ..BDD prefix, not the full block (which
+C also has COMMON/OP95EXT/'s RL,RLL,RLH,LEXTL,LEXTH,LEXH appended) --
+C this file already has its own, unrelated RLL (log-luminosity
+C calibration variable, used with CHKCAL/ISNU below) that would
+C collide with OP95EXT's RLL if the full block were declared here.
+C Declaring a prefix is legal Fortran and matches exactly what this
+C file already had (no new members gained).
+C 10/13/26 MHP via Claude
+C code changed to rename COMMON/OP95INTERP/'s RL and RLL to RHO_T63L and
+C RHO_T63LL.  RL is log(rho/T6**3), set here as RL = DL - 3*(TL-6); the
+C old names clash with RL and RLL as used for radius throughout the rest
+C of the code, which is why main.f declared only a 10-member prefix of
+C this block to avoid importing them.  With the clash gone main.f can
+C declare the full block, which a USE statement will require once this
+C becomes a module.
 C MHP 05/02 ADDED FOR ITERATION BETWEEN ROTATION AND STRUCTURE CALCULATION
-      COMMON/ORIGSTART/HJM0(JSON),HCOMPP0(15,JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/ORIGSTART/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION HJM0(JSON),HCOMPP0(15,JSON)
 C MHP 05/02 DEUTERIUM BURNING RATE ADDED
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
 C***MHP 1/04 inserted for test
 C      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
 C*** end test
 C LLP 8/07 Make LPTIME available for calibration
-      COMMON/CT3/LPTIME
 C MHP 2/04 ADDED FOR NEUTRINO FLUX TABLE
-      COMMON/BE7/BE7MASSFRACTION
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/BE7/; BE7MASSFRACTION now comes back from
+C ENGEB as an argument and is stored into BE7M(I) just below.
 C JVS 02/11
 C KC 2025-05-30 reordered common block elements
 C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
       INTEGER NAO
       DATA NAO/1/
 C 10/11 He3+He3 luminosity info
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/GRAB/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-      COMMON/ENVCZ/ENVRCZ,RINT
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
+C envint.f and read nowhere, and RINT was never referenced at all.  Its
+C only reader was the commented-out JVS block deleted from wrtout.f
+C earlier in this work, so the block died with it.
 C JVS 04/14 Common block for additional timestep governors
-      COMMON/GOVS/LTRIST
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C     MHP 10/24 NEW VARIABLES FOR STOP CONDITIONS ON CENTRAL ABUNDANCE
 C       REAL*8 XCEN(2,15),DTPREV
 C       LOGICAL*4 L_LASTSTEP
@@ -227,7 +346,7 @@ C code changed to remove the Monte Carlo option
 C*******
 C START
 C*******
-      CALL SETVERSION()
+      CALL SETVERSION(YRECVER,GITHASH)
 
       IOWR = 9
 C LPUNCH is TRUE once first model is calculated
@@ -235,7 +354,7 @@ C LPUNCH is TRUE once first model is calculated
 C read in user parameters
       CALL PARMIN(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
-     * FSCVHE,FSCVZ)
+     * FSCVHE,FSCVZ,YRECVER,GITHASH)
 C set up constants and read in tabular data
 C MHP 8/25 directly pass file names instead of using common blocks
       CALL SETUPS(FALEX06,FALLARD,FATM,FFERMI,
@@ -255,7 +374,7 @@ C MHP 1/93 add option to automatically calibrate solar model.
 C MHP 3/96 added counter for # of iterations per converged model and
 C starting estimate of ALPHA and X
       IF(LCALS)THEN
-         CALL SETCAL(FACAGE)
+         CALL SETCAL(FACAGE,LSOL)
          ICONV = 1
          XGUESS = RESCAL(2,1)
          AGUESS = CMIXLA(1)
@@ -267,7 +386,7 @@ C starting estimate of ALPHA and X
 C DBG 12/94 add option to automatically calculate a stellar model
 C of specified Teff and L
       IF (LCALST) THEN
-         CALL SETSCAL
+         CALL SETSCAL(ALRI,LSTAR,LPASSR)
       ENDIF
 
 C**********
@@ -294,7 +413,7 @@ C        CALL STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,  ! KC 2025-05
 C      *    HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2025-05-31
      *    HSTOT,HT,IKUT,ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,
      *    NK,OMEGA,PS,QDP,QDT,QIW,R0,RS,SJTOT,SKEROT,SMASS,TEFFL,
-     *    TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL)
+     *    TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL,COMPMIX)
 
       IF((OMEGA(1) .EQ. 0) .AND. (LROT)) THEN
 
@@ -379,7 +498,7 @@ C      *TL,PDT,PDP,X,Y,Z,XHE3,XC12,XC13,XN14,XN15,XO16,XO17,
 C      *XO18,XH2,XLI6,XLI7,XBE9,I,HR1,HR2,HR3,HR4,HR5,HR6,HR7,  ! KC 2025-05-31
      *TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
      *XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
-     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+     *HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MASSFRACTION,EALPCA,ENU)
 C BE7 MASS FRACTION.
          BE7M(I) = BE7MASSFRACTION
 C CONVERT FROM ERG/GM/S TO ERG/S FOR EACH SHELL BY MULTIPLYING
@@ -427,7 +546,7 @@ C MHP 08/02 STORE STARTING CZ PROPERTIES
          JCZ = JENV
          TAUCZ = 0.0D0
 C write out headers of the appropriate output files
-      CALL WRTHEAD(SMASS,CMIXL)
+      CALL WRTHEAD(SMASS,CMIXL,NK)
 C DBG PULSE OUT 7/92
 C initialize variables for calculating when to dump pulse output
          POL1 = BL
@@ -442,7 +561,7 @@ C or it will crash - so copy initial model to unit ILAST
              IWRITE = ILAST
              CALL WRTLST(IWRITE,HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,
      *         PS,TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,
-     *         SMASS,TEFFL,BL,HSTOT,DAGE,DDAGE,OMEGA,CMIXL)
+     *         SMASS,TEFFL,BL,HSTOT,DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
           ENDIF
        ENDIF
 
@@ -544,8 +663,8 @@ C        print*,'MAIN LSOUND = ',LSOUND
 CFD end
             IF (LPOUT) THEN
 C MHP 8/25 changed to add file names as declared variables 
-             CALL PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,FPATM,
-     *       FPENV,FPMOD)
+             CALL PDIST(POL1,POT1,POA1,POLEN,BL,TEFFL,MODELN,NK,FPATM,
+     *       FPENV,FPMOD,DAGE)
           ENDIF
 
 C STARIN called here for timestep cutting
@@ -556,7 +675,7 @@ C              CALL STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,  ! KC 2
 C      *          HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2025-05-31
      *          HSTOT,HT,IKUT,ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,
      *          NK,OMEGA,PS,QDP,QDT,QIW,R0,RS,SJTOT,SKEROT,SMASS,TEFFL,
-     *          TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL)
+     *          TLUMX,TRIL,TRIT,TS,VEL,HG,V,CMIXL,COMPMIX)
              IF((OMEGA(1) .EQ. 0) .AND. (LROT)) THEN
 18               FORMAT('LROT set to TRUE, but OMEGA(1) = 0. Stopping.',
      *                  ' Initialize rotation rates or set LROT to',
@@ -854,7 +973,7 @@ C JENV0 ADDED TO SR CALL.
                CALL GETW(BL,DELTS,DWMAX,FP,FT,HCOMP,HD,HJM,HL,HP,HR,
 C      *              HS,HS1,HS2,HSTOT,HT,LC,LJDOT,M,MODEL,SJTOT,SMASS,  ! KC 2025-05-31
      *              HS,HS1,HS2,HSTOT,HT,LC,LJDOT,M,SMASS,
-     *              TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0,CMIXL)
+     *              TEFFL,ETA2,HG,HI,OMEGA,QIW,R0,JENV0,CMIXL,LPRT0)
 C CALCULATE FP AND FT GIVEN OMEGA FOR THE NEW POINT DISTRIBUTION
                CALL FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
             ENDIF
@@ -925,7 +1044,7 @@ C WRTOUT IS THE OUTPUT DRIVER ROUTINE
      *        DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,
      *        JENV,TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,
 C      *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,NK)  ! KC 2025-05-31
-     *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL)
+     *        LPUNCH,FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL,XMSOL,COMPMIX)
 
 C MHP 10/24 GENERALIZED STOP CONDITIONS
 C     IF EVOLVING TO A GIVEN AGE AND AGE IS REACHED, KIND CARD IS DONE
@@ -965,7 +1084,7 @@ C TEST IF MODEL IS NEAR DESIRED Teff AND L. IF NOT RESCALE AND TRY AGAIN.
              IF(MODELN.EQ.1) THEN
                 TEFFI = 10.0D0**TEFFL
              ELSE
-                CALL CHKSCAL(BL, TEFFL, DAGE, NK)
+                CALL CHKSCAL(BL, TEFFL, DAGE, NK,ALRI,LSTAR,LPASSR)
                 IF(LPASSR) GOTO 200
              END IF
           ENDIF
@@ -979,7 +1098,7 @@ C STORE LAST MODEL IN ISTOR IF LSTORE, LSTPCH, AND LPUNCH ARE .TRUE.
   110    IF(LSTORE.AND.LSTPCH.AND.LPUNCH) THEN
           CALL PUTSTORE(HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,TS,RS,
      *           CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *           DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL)
+     *           DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL,XMSOL,COMPMIX)
             LPUNCH = .FALSE.
        ENDIF
 C 110  CONTINUE
@@ -994,7 +1113,8 @@ C JVS Turn off calcad - speeds things up
                RLL = 0.5D0*(BL+CLSUNL-C4PIL-CSIGL-4.0D0*TEFFL)-CRSUNL
 C MHP 06/13 Add solar Z/X to observables
                SOLZX = HCOMP(3,M)/HCOMP(1,M)
-               CALL CHKCAL(BL,RLL,NK,SOLZX)
+               CALL CHKCAL(BL,RLL,NK,SOLZX,DLDX,DRDX,DLDA,DRDA,
+     *                     LSOL)
 C               CALL CHKCAL(BL,RLL,NK)
                lptime = lptimesv  ! Restore LPTIME to original value for next cycle
                kttau  = kttausv    ! Restore KTTAU to original value for next cycle
@@ -1068,7 +1188,7 @@ C INITIAL ALPHA,Y,Z,ALPHA; FINAL R, L
          WRITE(ISNU,1521)CMIXLA(NK),YINI,ZINI,BL,RLL
  1521    FORMAT(F7.4,2F8.5,1P2E10.3)
 C CZ DEPTH (R,M), SURFACE Y, Z, Z/X (ADD T CZ BASE, RHO CZ BASE)
-         WRITE(ISNU,1522)ENVR,ENVLM,HCOMP(2,M),HCOMP(3,M),ZTOX
+         WRITE(ISNU,1522)CZsurf_R,CZsurf_M,HCOMP(2,M),HCOMP(3,M),ZTOX
  1522    FORMAT(F8.5,F9.6,2F8.5,F9.6)
 C ENERGY GENERATION FRACTIONS PP I,II,III,CNO,EGRAV
          WRITE(ISNU,1523)(TLUMX(J),J=1,4),TLUMX(7)

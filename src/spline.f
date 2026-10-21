@@ -1,5 +1,10 @@
       FUNCTION SPLINE(XVALS,Z1,Z2,XTABS,YTABS,XTABS1,YTABS1,
      *                Y1,Y2,E2,W2,V2,NCASE)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER NCASE
 C
 C                                 SHAPE PRESERVING QUDRATIC SPLINES
 C                                   BY D.F.MCALLISTER & J.A.ROULIER

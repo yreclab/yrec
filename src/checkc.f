@@ -1,33 +1,58 @@
 C $$$$$$
       SUBROUTINE CHECKC(HCOMP,IT,LPRT,M,DT,IREDO,LOK,LREDO)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP2/ into COMP2_MOD.
+      USE COMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU2,ATOMWT,CMINCHK,DCOMP,DELC,DFX1,DFX2,DFX3,DFX4,DT,EMU2,
+     *       HCOMP,TEMP
+      INTEGER I,ICMAX,IREDO,IT,J,JCMAX,JEND,M
+      LOGICAL*4 LOK,LPRT,LREDO
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/COMP2/YENV,Y3ENV
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
-      COMMON/FLAG/LEXCOM
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C      COMMON/MDPHY/HAMU(JSON),CP(JSON),DELM(JSON),DELAM(JSON),
 C     *     DELRM(JSON),SESUM(JSON),OM(JSON),SQDT(JSON),
 C     *     THDIF(JSON),SVEL(JSON),VISC(JSON),EPSM(JSON)
 C JvS 09/25 UPDATED NAMES IN COMMON BLOCK FOR CONSISTENCY ACROSS ALL SUBROUTINES   
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)     
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
       DIMENSION HCOMP(15,JSON),ATOMWT(4)
       DATA ATOMWT/1.007825D0,4.002603D0,12.0D0,3.01603D0/
       SAVE
@@ -114,10 +139,10 @@ C  FIND MAXIMUM FRACTIONAL CHANGE IN COMPOSITION AND PRINT IT OUT.
          JCMAX = 0
          DO 40 J = 1,JEND
             IF(J.EQ.3)GOTO 40
-C CMIN IS USED TO GUARD AGAINST DIVISION BY ZERO.
-            CMIN = MAX(1.0D-6*HCOMP(J,M),1.0D-20)
+C CMINCHK IS USED TO GUARD AGAINST DIVISION BY ZERO.
+            CMINCHK = MAX(1.0D-6*HCOMP(J,M),1.0D-20)
             DO 30 I = 1,M
-               IF(HCOMPP(J,I).LT.CMIN)GOTO 30
+               IF(HCOMPP(J,I).LT.CMINCHK)GOTO 30
                DCOMP = (HCOMP(J,I)-HCOMPP(J,I))/HCOMPP(J,I)
                IF(ABS(DCOMP).GT.ABS(DELC)) THEN
                   DELC = DCOMP

@@ -5,8 +5,14 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       function gmass06(x,z,amoles,eground,fracz,frac)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMAS,AMOLES,ANUM,ANUME,EGROUND,EION,FRAC,FRACZ,GMASS06,X,
+     *       XC,XC2,XH,XHE,XN,XN2,XNE,XNE2,XO,XO2,XTOT,Z
+      INTEGER I
 
-      IMPLICIT REAL*8 (A-H,O-Z)
       dimension anum(6),frac(7), amas(7),eion(7)
       data (eion(i),i=1,6)/-3394.873554D0,-1974.86545D0,-1433.92718D0,
      x  -993.326315D0,-76.1959403D0,-15.29409D0/

@@ -6,15 +6,16 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE TRAPZD(B1,B2,S,N,RHO,RHOP,SM,SMP,W2,W2P,ETA22,
 C      *ETA22P,Q,QP,I)  ! KC 2025-05-31
      *ETA22P,Q,QP)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 B1,B2,DEL,DETA2,DM,DR,DRHO,DW2,ETA22,ETA22P,ETA22T,Q,Q0,QP,
+     *       R0,R03,R03T,RHO,RHOP,RHOT,S,SM,SMP,SMT,SUM,TNM,W2,W2P,W2T,Y
+      INTEGER IT,J,N
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-C 9/25/26 MHP via Claude
-C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
-C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       SAVE
       R0 = B2
       R03 = R0**3

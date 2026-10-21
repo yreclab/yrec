@@ -3,38 +3,71 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C CHKSCAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-      SUBROUTINE CHKSCAL(BL, TEFFL, DAGE, NK)
+      SUBROUTINE CHKSCAL(BL, TEFFL, DAGE, NK,ALRI,LSTAR,LPASSR)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AGEI,AGER,ALR,ALRI,BL,BLI,BLR,BLRP,DADR,DAGE,DLDR,DXDL,
+     *       TEFF,TEFFL,X,XP
+      INTEGER NK
+      LOGICAL*4 LPASSR,LSTAR
 C     ONLY CALLED FOR EVEN NK, ASSUMES RESCALING ON ODD NK AND EVOLVING
 C     ON EVEN NK
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/CALSTAR/ with explicit arguments.
+C setscal.f initializes ALRI, LSTAR and LPASSR, chkscal.f reads and
+C updates ALRI and sets the two flags, and main.f reads the flags; main.f
+C calls both routines, so it now owns all three.  ALRI is read as well as
+C written inside chkscal.f and is carried across calls there, which
+C main.f's blanket SAVE preserves exactly as the block did.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON /CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1        NUMRUN
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
-C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     1 SENV0A(50)
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
-     1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
-     2      LSTAR, LTEFF, LPASSR,LCALST
+C 10/12/26 MHP via Claude
+C code changed to demote BLI, AGER, BLR, BLRP and AGEI from
+C COMMON/CALSTAR/ to locals of this routine.  All five are written and
+C read only here -- BLI/AGEI at the interpolation setup, BLR/AGER/BLRP in
+C the radius-matching iteration below -- while main.f, parmin.f and
+C setscal.f merely carried them positionally.  The blanket SAVE below
+C keeps their values across calls exactly as COMMON storage did, which
+C BLRP relies on, being set on one call and read on the next.  Only
+C ALRI, LSTAR and LPASSR are genuinely shared; setscal.f initializes
+C those three.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
       SAVE
 C     LSTAR     T - have got a star at Teff and L
 C     LPASSR    T - on run have just passed Teff

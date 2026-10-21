@@ -6,18 +6,79 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE ENVINT(B,FPL,FTL,GL,HSTOT,IE,LPRT,LSBC,PLIM,RL,TEFFL,
      *                  X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,RS,TS,
      *                  LPULPT,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QENVMIX/ into QENVMIX_MOD.
+      USE QENVMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE2/ into PULSE2_MOD.
+      USE PULSE2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
+      USE PULSE1_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVPRT/ into ENVPRT_MOD.
+      USE ENVPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMSTRUCT/ into ATMSTRUCT_MOD.
+      USE ATMSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS/ into ATMOS_MOD.
+      USE ATMOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
+      USE INTPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,ATMDX,B,BETA,BETA14,BETAI,CHDELD,CHDELJ,CHRH,CHT,CMIXL,
+     *       CV,D,DD1,DD2,DE,DEL,DELA,DELR,DELTR,DL,DN,DP,DR,DUM1,DYDX,
+     *       EG,EMU,ENVCZL,EPS,ERR,ERRSUM,ESTORE,ETA,FPL,FTL,FX,FXION,
+     *       GAM1,GL,H,HDID,HMAX,HMIN,HNEXT,HRA,HSTOT,O,OL,ON,OP,P,
+     *       PELPF,PL,PLIM,PS,QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,QDTP,QDTT,
+     *       QESUM,QOD,QOT,RL,RMU,RS,RSURF,SDIF,SEST,SGL,SL,SRAD,STOLER,
+     *       T,TAUCZENV,TAUN,TAUP,TEFFL,TENV,TINY,TL,TS,WT0,X,X0,XLIM,
+     *       XSTART,XYZ,Y,YSCAL,YSTART,Z
+      INTEGER I,I1,I2,IE,ISTORE,J,JENV,K,KATM,KENV,KSAHA,MAXSTP,NBAD,
+     *       NOK,NSTEP,NV
+      LOGICAL*4 LALFAIL,LATMO,LDERIV,LDUM,LLSTORE,LOCOND,LPRT,LPULPT,
+     *       LSBC,LSURCZ,LTEST
 
-      PARAMETER(JSON=5000)
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES OF KURUCZ.
-      PARAMETER(NT=57,NG=11)
 C JNT 06/14 ADDED NTC/NGC FOR KTTAU=5
-      PARAMETER(NTC=76,NGC=11)
 C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE TABLES
-      PARAMETER(NTA=54,NGA=5)
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
       REAL*8 ENVS1(JSON),ENVS2(JSON),ENVG(JSON),EDEL1(JSON),
      * EDEL2(JSON)
 C 9/25/26 MHP via Claude
@@ -26,10 +87,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude
@@ -44,75 +101,77 @@ C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
-      COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DBG PULSE: CONSTANTS NEEDED FOR DEL AND DELA CALCULATION
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/FLAG/LEXCOM
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/.  TENV is simply 0.5*(TENV0+TENV1)
+C and parmin.f was computing it there purely to share it with this, its
+C only reader.  Both TENV0 and TENV1 are members of the consolidated
+C namelist block declared here, so TENV is derived locally below
+C instead, which removes the block without touching any signature.
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
-      COMMON/PULSE1/PQDP(JSON),PQED(JSON),PQET(JSON),
-     *   PQOD(JSON), PQOT(JSON), PQCP(JSON), PRMU(JSON),
-     *   PQDT(JSON),PEMU(JSON),LPUMOD
-      COMMON/PULSE2/QQDP,QQED,QQET,QQOD,QQOT,QDEL,
-     *      QDELA, QQCP, QRMU, QTL, QPL, QDL, QO, QOL,
-     *      QT, QP, QQDT, QEMU, QD, QFS
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
-C MHP 8/25 Removed file names from common block
-C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JNT 6/14 ADD FOR KURUCZ/CASTELLI 2004 ATMOSPHERES
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2C/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 6/97 ADDED ALLARD MODEL ATMOSPHERES
 C      COMMON/ATMOS3/ATMZA,ATMPLA(NTA,NGA),
 C     *ATMTLA(NTA),ATMGLA(NGA),FALLARD,IOATMA
-      COMMON/ALATM03/ALATM_FeH,ALATM_Alpha,LALTPTau100
 C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ALATM04/: its four members DUMMY1..DUMMY4
+C are placeholders that no file references in executable code.  Removing
+C it also retires the hazard behind the earlier alfilein.f fix, where a
+C mis-indented EXTERNAL was absorbed into this declaration and renamed
+C DUMMY4.
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *             VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
 C MHP 07/02 STORE CONTENTS OF ENVELOPE INTEGRATION INTO A
 C SET OF VECTORS, WHICH ARE FLIPPED AND CONVERTED INTO AN ASCENDING
 C SERIES AFTER THE INTEGRATION IS DONE.
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV  
 C JvS SAVE ATMOSPHERE STRUCTURE TO MAKE PROFILE OUTPUT EASIER
-      COMMON/ATMSTRUCT/ATMOP(JSON),ATMOT(JSON),ATMOD(JSON),
-     *     ATMOR(JSON),ADELS(3,JSON),ABETAS(JSON),
-     *     AGAM1(JSON),AQDT(JSON),AFXIONS(3,JSON),
-     *     ATMOO(JSON),ATMOCP(JSON),NUMATM
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-      COMMON/ENVCZ/ENVRCZ,RINT
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
+C envint.f and read nowhere, and RINT was never referenced at all.  Its
+C only reader was the commented-out JVS block deleted from wrtout.f
+C earlier in this work, so the block died with it.
 
 C MHP 08/02 ADDED VECTOR FOR STORING THE OVERTURN TIMESCALE OF THE
 C SURFACE CONVECTION ZONE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION FXION(3),PS(3),RS(3),TS(3),ESTORE(4)
       DIMENSION Y(3),DYDX(3),YSCAL(3),YSTART(3),ERRSUM(3),ERR(3)
 
@@ -122,17 +181,13 @@ C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 
-C G Somers 11/14, ADD I/O COMMON BLOCK
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 
 C MHP 1/01 CHANGED END OF FILE INDICATOR IN ATMOSPHERE/ENVELOPE FILES TO
 C VECTOR FROM SCALAR
@@ -144,7 +199,6 @@ C polymorphically as the DERIV callback by MMID/BSSTEP with a fixed
 C argument list -- see EXTERNAL QENV below). Relay CMIXL to it via a
 C small dedicated common block instead, kept current on every entry to
 C ENVINT so it is correct however QENV ends up being reached.
-      COMMON/QENVMIX/CMIXLQ
       SAVE
 
       CMIXLQ = CMIXL
@@ -204,10 +258,6 @@ C We have Allard atmosphere boundary conditions
     2 CONTINUE
 C Start gray atmosphere bounary conditions
 C GUESS THE TEMPERATURE FOR AN OPTICAL DEPTH NEAR ZERO.
-      IDT = 15
-      DO 5 JJ = 1,4
-       IDD(JJ) = 5
-    5 CONTINUE
       ERRSUM(1) = 0.0D0
       IF(KTTAU .EQ. 0) THEN
             TL = TEFFL - 0.031235D0 + 0.25D0*DLOG10(CC23)
@@ -353,7 +403,7 @@ c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
             CV = QQCP - EXP(CLN*(AP-AD-AT))*CHT**2/CHRH
             GAM1 = CHRH*QQCP/CV
           IF(.NOT.LSTCH)THEN  
-            WRITE(ISTOR,20)TAU,AP,AT,AD,AO,(AFXION(I),I=1,3),
+            WRITE(ISTOR,20)TAUL,AP,AT,AD,AO,(AFXION(I),I=1,3),
      *               KSAHA,KATM,GAM1,QQDP,QQDT,BETA,QQCP,CV
           ENDIF
 C JvS: SAVE STRUCTURE TO COMMON BLOCK
@@ -383,7 +433,7 @@ C JVS 02/11 - Added LCLCD option to IF statement
           QFS = 1.0D0
           ON = QO
           DN = DEXP(CLN*QDL)
-          TAUN = DEXP(CLN*TAU)
+          TAUN = DEXP(CLN*TAUL)
 C SEE J.P. COX PRINC. OF STELL. STRUC. P590
           DELTR =  (TAUN - TAUP)/(((DN*ON)+(DP*OP))/2)
           PELPF = CGAS * QT * QD * QEMU
@@ -746,6 +796,9 @@ C            WRITE(*,*)TAUCZENV/CSECYR
           ENDIF
           GOTO 300
        ELSE IF(.NOT.LLSTORE) THEN
+C 10/13/26 MHP via Claude
+C TENV was COMMON/CTLIM/, set by parmin.f; derived here instead.
+          TENV = 0.5D0*(TENV0 + TENV1)
           IF(Y(2).GE.TENV .AND. LSBC) THEN
              LLSTORE = .TRUE.
              ISTORE = IE
@@ -881,7 +934,9 @@ C G Somers END
             FX = DD2/(DD2-DD1)
 
             ENVCZL = ENVR(JENV-1)+FX*(ENVR(JENV)-ENVR(JENV-1))-CRSUNL
-            ENVRCZ = EXP(CLN*ENVCZL)
+C 10/13/26 MHP via Claude
+C the ENVRCZ assignment is removed with COMMON/ENVCZ/; nothing read it.
+C ENVCZL above is still used below.
 
             DO I=1,NUMENV
                   ENVS1(I) = DEXP(CLN*(ENVS(I)+HSTOT))

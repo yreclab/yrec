@@ -6,48 +6,72 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 11/91 HR ADDED TO CALL.
 C       SUBROUTINE LIBURN2(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JNENV,JNENV0,M)  ! KC 2025-05-31
       SUBROUTINE LIBURN2(DELTS,HCOMP,HR,HS1,HS2,HT,JNENV,JNENV0,M)
-      PARAMETER(JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PREVCZ/ into PREVCZ_MOD.
+      USE PREVCZ_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDRAT/ into OLDRAT_MOD.
+      USE OLDRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWRAT/ into NEWRAT_MOD.
+      USE NEWRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+      USE LIOV_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BBE9,BBE90,BLI6,BLI60,BLI7,BLI70,CZBE9,CZLI6,CZLI7,DBE9,
+     *       DDJ,DDJM1,DELTS,DLI6,DLI7,DMASS,DR,FBE9,FBE90,FLI6,FLI60,
+     *       FLI7,FLI70,FM,FM0,FRAD,FX,HCOMP,HR,HS1,HS2,HS2SAV,HSBEG,
+     *       HSEND,HT,R,RATBE9,RATLI6,RATLI7,RBASE,ROS,TBE9,TLI6,TLI7
+      INTEGER I,J,JENV,JENV0,JNENV,JNENV0,M,MAXJ,MINJ
 
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C MHP 10/91 COMMON BLOCK ADDED FOR OVERSHOOT.
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 11/91 COMMON BLOCK ADDED FOR OVERSHOOT.
-      COMMON/LIOV/PSCAL0,PSCAL1
-C MHP 11/91 COMMON BLOCKS ADDED FOR LITHIUM BURNING IN ROTATING
-C MODELS WITH LINSTB=T.
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
 C 11/91 COMMON BLOCK ADDED FOR THE EXACT LOCATION OF THE BASE OF THE
 C SURFACE CZ AND THE INTEGRATED BURNING RATES THROUGHOUT IT. USED TO
 C REMEMBER THE PREVIOUS "END OF TIMESTEP VALUES" FOR THE NEW
 C "BEGINNING OF TIMESTEP VALUES".
-      COMMON/PREVCZ/RBASE0,BLI6OLD,BLI7OLD,BBE9OLD,JENVOS
 C       DIMENSION HCOMP(15,JSON),HD(JSON),HS2(JSON),HT(JSON),HS1(JSON)  ! KC 2025-05-31
       DIMENSION HCOMP(15,JSON),HS2(JSON),HT(JSON),HS1(JSON)
       DIMENSION RATLI6(JSON),RATLI7(JSON),RATBE9(JSON)

@@ -15,15 +15,51 @@ C 9/24/26 MHP via Claude
 C code changed to remove the Alexander 1995 opacity tables
       SUBROUTINE SETUPS(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPUREZ,FSCVH,FSCVHE,FSCVZ)
-      PARAMETER (JSON=5000)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCVEOS/ into SCVEOS_MOD.
+      USE SCVEOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FAC/ into FAC_MOD.
+      USE FAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCR/ into CCR_MOD.
+      USE CCR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS2C/ into ATMOS2C_MOD.
+      USE ATMOS2C_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS2/ into ATMOS2_MOD.
+      USE ATMOS2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMOS/ into ATMOS_MOD.
+      USE ATMOS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CBOLTZ,CC,CMELEC,CPLNCK,ELEC,HMASS,HRA
+      INTEGER I,J,K,K1,K2,NCARDS,NG,NGC,NT,NTC,NTS
+      LOGICAL*4 LCATCH
 C JNT 06/14 ADD NTC FOR KURUCZ/CASTELLI 2004 ATM
       PARAMETER (NT=57,NG=11)
       PARAMETER (NTC=76,NGC=11)
-      PARAMETER (NTS=63, NPS=76)
+      PARAMETER (NTS=63)
 C MHP 8/97 ADDED NTA AND NGA FOR ALLARD ATMOSPHERE
-      PARAMETER(NTA=54,NGA=5)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C DBGLAOL
 
       INTEGER DUM2, DUM4
@@ -41,10 +77,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)
@@ -59,38 +91,39 @@ C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
 C MHP 8/25 Removed file names from common block
 C JMH 8/18/91
 C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
 C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
 C JNT 06/14
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
 C MHP 8/92 COMMON BLOCK ADDED FOR LOWER EDGE OF TABLE IN LOG G.
-      COMMON/FAC/IMIN(NT),IMINMAX(NT),JP,KP(4),IMIN2(NTC),IMINMAX2(NTC)
 C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+C 10/9/26 MHP via Claude
+C code changed to rename this slot IDT -> IDTSCV: parmin.f and
+C starin.f also declare COMMON/OPTAB/'s own, unrelated IDT, so this
+C slot was called IDTT there as a workaround. Renamed to IDTSCV
+C everywhere COMMON/SCVEOS/ is declared for one consistent name.
 C MHP 8/25 Removed file names from common block
 
       SAVE
@@ -323,6 +356,14 @@ C          should break when trying to find surface P.
 C END JNT 6/14
       ENDIF
 
+C 10/13/26 MHP via Claude
+C code changed to read the OPAL 2006 EOS table here, with the other table
+C reads, instead of lazily on the first call to ESAC06.  The gate matches
+C the OPEN of IOPALE in parmin.f.  This and the SCV read below are
+C independent; a run may use both.
+      IF(lopale06)THEN
+         CALL SETEOS06
+      ENDIF
 C MHP 5/97 ADDED OPTION FOR NEW SCV EQUATION OF STATE TABLES.
       IF(LSCV)THEN
          OPEN(UNIT=ISCVH,FILE=FSCVH,STATUS='OLD')

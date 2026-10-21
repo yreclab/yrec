@@ -9,30 +9,69 @@ C   llp  06/15/2009
       SUBROUTINE MASSLOSS(BL,DAGE,DELTS,HCOMP,HD,HJM,HP,HR,HS,
      *                    HS1,HS2,HSTOT,HT,JENV,LNEW,M,OMEGA,SMASS,
      *                    TEFFL,SENVOLD,LNEWFIT)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
+      USE MASSCHG2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ATMPRT/ into ATMPRT_MOD.
+      USE ATMPRT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AGETOT,AMU,BETA,BETA14,BETAI,BL,D,DAGE,DELA,DELACC,DELTS,
+     *       DL,DMDT,DMDT2,EACC,EACC0,EMU,ETA,ETH,ETHACC,ETHACCBAR,
+     *       ETHAV,FACC,FXION,GL,GSURF,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,
+     *       HSTOT,HT,OMEGA,P,PL,QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,QDTP,
+     *       QDTT,R,RL,RMU,RTOT,SACC2,SENVOLD,SLOCAL,SMASS,STOT,SUMDM,
+     *       SUMETH,T,TEFFL,TL,X,Z
+      INTEGER J,JENV,KSAHA,M
+      LOGICAL*4 LALFAIL,LATMO,LDERIV,LDOMDOT,LNEW,LNEWFIT,LPRT
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HS(JSON),
      *          HS1(JSON),HS2(JSON),HT(JSON),HJM(JSON),
      *          OMEGA(JSON),HR(JSON),FXION(3)
-      COMMON/ATMPRT/TAU,AP,AT,AD,AO,AFXION(3)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C 9/24/26 MHP via Claude
-C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
-C passed as an explicit argument where actually used
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
-      COMMON/MASSCHG2/SACC,SCEN,SMASS0,DLOGT,DLOGP
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/11/26 MHP via Claude
+C code changed to fix the member ORDER of COMMON/MASSCHG2/: this file
+C had DLOGT,DLOGP while mdot.f (which writes them) and coefft.f (which
+C reads them) both declare DLOGP,DLOGT -- i.e. the two were
+C transposed here, so DLOGT in this file aliased mdot.f's DLOGP and
+C vice versa. Harmless so far only because this file uses neither
+C (nor SMASS0); it uses only SACC and SCEN, which are at the same
+C positions in both orderings, so this correction is behavior-neutral.
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C MHP 5/02 EFFICIENCY FACTOR FOR THE THERMAL ENERGY CONTENT
 C OF ACCRETED MATTER.
       DATA FACC/1.0D0/
@@ -178,7 +217,17 @@ C            SCEN = SACC2 - SACC
          ENDIF
       ENDIF
 C CALL MASS LOSS OR ACCRETION ROUTINE
-      IF(LDOMDOT)CALL MDOT(BL,DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,
+C 10/13/26 MHP via Claude
+C BUG FIX: this call passed BL as a 24th actual argument to MDOT, which
+C declares only 23 dummies -- BL landed in DELTS, DELTS in HCOMP and so
+C on, every argument shifted by one, with SENVOLD having no dummy at all.
+C MDOT's body never references BL, so it was pruned from the dummy list
+C (as other routines were in the KC 2025-05-31 pass) without this call
+C site being updated.  Dropping BL realigns all 23.  F77 does no
+C cross-file interface checking, so nothing flagged it; it has never
+C misfired only because every namelist sets LMDOT = .FALSE., which makes
+C MASSLOSS return before reaching this line.
+      IF(LDOMDOT)CALL MDOT(DELTS,HCOMP,HD,HJM,HP,HR,HS,HS1,HS2,
      *          HSTOT,HT,JENV,LNEW,M,OMEGA,RMU,RTOT,SMASS,DMDT,
      *          EACC,ETHAV,SUMDM,SENVOLD)
  9999 CONTINUE

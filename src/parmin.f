@@ -15,19 +15,54 @@ C 9/24/26 MHP via Claude
 C code changed to remove the Alexander 1995 opacity tables
       SUBROUTINE PARMIN(FALEX06,FALLARD,FATM,FFERMI,
      * FLIV95,FPATM,FPENV,FPMOD,FPUREZ,FSCVH,
-     * FSCVHE,FSCVZ)
+     * FSCVHE,FSCVZ,YRECVER,GITHASH)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
+      USE NEWOPAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCOUT/ into CCOUT_MOD.
+      USE CCOUT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
+      USE NMLBYPASS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
+      USE INTPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ALFA,FK,RSCLCM,RSCLM,RSCLX,RSCLZ,SUM_FRAC,WMAX_SUN
+      INTEGER KINDRN,NCMXCK,NKIND
+      LOGICAL*4 LCMXBAD
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT INTEGER*4(I,J,K,M,N)
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
-      PARAMETER(NT=57,NG=11)
 C JNT 6/2014 ADD NTC AND NGC FOR KURUCZ/CASTELLI SURFACE PRESSURES
-      PARAMETER(NTC=76,NGC=11)
 C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
-      PARAMETER(NTA=54,NGA=5)
-      PARAMETER (NTS=63, NPS=76)
-      PARAMETER (JSON=5000)
 
       CHARACTER*10 YRECVER
       CHARACTER*20 GITHASH
@@ -65,19 +100,31 @@ C       CHARACTER*256 FCLCD, YREC1, YREC2, FACAT, FJLAST,FJVS, FJENT, FJDEL
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations
-      INTEGER ICLCD, MRK, IJLAST
-C JVS END
-      COMMON/VNEWCB/VNEW(12)
+C 10/14/26 MHP via Claude
+C code changed to drop ICLCD and IJLAST from this declaration.  Both are
+C IOUNITS members, and redundantly typing a COMMON member is legal while
+C doing the same to a USE-associated name is rejected:
+C "Symbol 'iclcd' conflicts with symbol from module 'iounits_mod'".
+C IOUNITS_MOD supplies both types.  MRK is a genuine local and stays.
+      INTEGER MRK
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ,ISOUND
 C 9/25/26 MHP via Claude
 C code changed to add ISOUND (Csound.dat unit) to COMMON/IOUNITS/
 C 9/24/26 MHP via Claude
@@ -95,135 +142,95 @@ C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
 C 9/24/26 MHP via Claude
 C code changed to remove the Monte Carlo option
-      COMMON/DESC/DESCRIP
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
-      COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
-      COMMON /CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1     NUMRUN
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/12/26 MHP via Claude
+C code changed to drop COMMON/DESC/, which was declared in parmin.f alone.
+C DESCRIP is now simply a local, kept by the blanket SAVE, and remains a
+C CONTROL namelist variable.  Character data does not belong in a COMMON
+C block.
+C 10/11/26 MHP via Claude
+C code changed to remove LSCRIB from COMMON/CCOUT/: it was declared
+C positionally in all 17 files sharing this block but never read or
+C written in executable code anywhere, and no namelist file sets it.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CENV/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/CT2/DTWIND
-      COMMON/CT3/LPTIME
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
-     1     NITER1,NITER2,NITER3
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/; TENV is now derived in envint.f,
+C its only reader, from TENV0 and TENV1.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 7/91 LSEMIC (SEMI-CONVECTION) ADDED TO COMMON BLOCK.
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
-      COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
-      COMMON/LABEL/XENV0,ZENV0
+C 10/13/26 MHP via Claude: removed the unused COMMON/DPMIX/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
 C ISOTOPIC RATIOS(C,N,O) AND D/HE3/LI/BE/B ABUNDANCES.
 C THESE CONTROLS ONLY ALTER THE MIXTURE IN THE STARTING MODEL AND ONLY
 C IF THE MODEL IS CHEMICALLY UNEVOLVED. POSTPROCESSING TOOLS SHOULD BE USED FOR THE
 C CORE HE BURNING PHASE.
-      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL
 c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
-      COMMON/NEWMX/ISETMIX,ISETISO,LMIXTURE,LISOTOPE,FRAC_C,FRAC_N,
-     * FRAC_O,R12_13,R14_15,R16_17,R16_18,ZXMIX,
-     * XH2_INI,XHE3_INI,XLI6_INI,XLI7_INI,XBE9_INI,XB10_INI,XB11_INI
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
-      COMMON/VMULT/FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/90 DIFFERENT FC FOR DIFFERENT MECHANISMS INTRODUCED.
 C ALSO OPTION FOR SMOOTHING VELOCITIES FOR LENGTH SCALE CALCULATIONS.
-      COMMON/VMULT2/FESC,FSSC,FGSFC,IES,IGSF,IMU
 C MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.
-      COMMON/GRAVST/GRTOL,ILAMBDA,NITER_GS,LDIFY
 C MHP 5/90 ADD COMMON BLOCK FOR NEW TREATMENT OF
 C ENTROPY TERM(LNEWS),AND THE CALCULATION
 C OF SOLAR NEUTRINOS(LSNU).ALSO ALLOWS A FOURTH LEVEL OF ITERATION(NITER4).
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
 C MHP 7/91 ADDED COMMON BLOCK FOR NUMERICAL PARAMETERS IN KEMCOM.
-      COMMON/BURTOL/CMIN,ABSTOL,RELTOL,KEMMAX
 C YCK >>> OPAL95
       CHARACTER*256 FLIV95
 C MHP 8/25 Removed character file names from common block
 C <<< YCK
 C MHP 6/90 ADDITIONAL COMMON BLOCK FOR SETTLING.
-      COMMON/GRAVS2/DT_GS,XMIN,YMIN,LTHOULFIT
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
 C GES 6/15 NEW COMMON BLOCK FOR LIGHT DIFFUSION AND NEW DIFF ROUTINE.
-      COMMON/GRAVS4/LNEWDIF,LDIFLI
 C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C DBG PULSE OUT 7/92
 C VARIABLES USED TO CONTROL OUTPUT OF PULSATION MODELS.  MODEL
 C OUTPUT AFTER HAS TRAVELED POMAX IN HR DIAGRAM
 C LPOUT AND POMAX ADDED TO CONTROL COMMON BLOCK, REST IN PHYSICS
-      COMMON /PO/POA,POB,POC,POMAX,LPOUT
-      COMMON/TRACK/ITRVER
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
-      COMMON/CORE/LCORE,MCORE,FCORE
-C DBGLAOL
-C MHP 8/25 Removed character file names from common block
-C DBG 11/11/91 ADDED TO NAMELIST
-      COMMON/CHRONE/LRWSH
-C DBG 1/92 let XENV0, ZENV0, and CMIXL be arrays so can change during
-C a set of runs.
-      COMMON /NEWXYM/XENV0A(50),ZENV0A(50),CMIXLA(50),LSENV0A(50),
-     * SENV0A(50)
-C MHP 8/25 Removed file names from common block
-C JMH 8/18/91
-C      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),
-C     *              ATMGL(NG),ATMZ,IOATM,FATM
-      COMMON/ATMOS2/ATMPL(NT,NG),ATMTL(NT),ATMGL(NG),ATMZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JMH
 C JNT 6/14 SAME AS ATMOS2 BUT FOR KURUCZ/CASTELLI2004 ATMOSPHERES
-      COMMON/ATMOS2C/ATMPLC(NTC,NGC),ATMTLC(NTC),
-     *              ATMGLC(NGC)
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS2C/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/06 GN --- New neutrino loss common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/NULOSS/LNULOS1,DSNUDT,DSNUDD
-      COMMON/NULOSS/DSNUDT,DSNUDD,LNULOS1
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/NULOSS/: engeb.f assigns DSNUDT and
+C DSNUDD and nothing reads them, in engeb.f or anywhere else, so they are
+C now plain locals there.  parmin.f declared the block without using it.
 C MHP 1/93 ADD OPTION TO AUTOMATICALLY CALIBRATE SOLAR MODEL.
 C      COMMON/CALS2/TOLL,TOLR,LCALS
 C MHP 6/13 ADD OPTION TO CALIBRATE SOLAR Z/X, SOLAR Z/X, SOLAR AGE
-      COMMON/CALS2/TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLZX,CALSOLAGE
 C DBG 7/92 ADDED DEBYE HUCKEL PARAMETERS TO NAMELIST, ETADH0, ETADH1
 
-C MHP 8/25 Removed character file names from common block
-C DBG 4/94 ADDED PARAMETERS TO CONTROL RAMP Z IN CORE
-C 9/24/26 MHP via Claude
-C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *             IOLAOL2, NK,
-     *             LZRAMP
-C IF LZRAMP=T THEN RESCALE Z IN CORE FROM RSCLZC VALUE TO ZENV VALUE
-C WHERE CHANGE IS LINEAR. Z MEETS ZENV AT RSCLZM.
-C DBG 12/94 ADDED CALIBRATE STELLAR MODEL
-      COMMON/CALSTAR/XLS, XLSTOL,  STEFF, SR,
-     1      BLI, ALRI, AGER, BLR, BLRP, AGEI,
-     2      LSTAR, LTEFF, LPASSR,LCALST
+C 10/13/26 MHP via Claude: removed the unused COMMON/CALSTAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C OPAL eos
       CHARACTER*256 FcondOpacP,FOPALE06
 C MHP 8/25 Remove file names from common blocks
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state
-      COMMON/OPALEOS/lopale06,lNumDeriv
 C OPACITY COMMON BLOCKS - modified 3/09
 C 9/23/26 MHP via Claude
 C code changed to remove the OPAL92 opacity tables
@@ -238,62 +245,35 @@ C code changed to remove dead opacity-table Z-value inputs
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
       CHARACTER*256 FALEX06
-C 2006 version added 3/09
-C MHP 8/25 Removed character file names from common block
-C 9/24/26 MHP via Claude
-C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
-C never read or written anywhere)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
-      COMMON/NOTRAN/LNOJ
-C 8/96 MHP NEW COMMON BLOCK FOR NUCLEAR REACTION RATES.
-C      COMMON/CROSS/SSTANDARD(17)
-C MHP 9/14 EXTENDED TO PERMIT USER RESCALING OF DERIVATES OF REACTION
-C RATES AND THE BRANCHING RATION FOR N15
-      COMMON/CROSS/SSTANDARD(17),QS0E(8),QQS0EE(8),FO16,FC12,LNEWNUC
-      COMMON/NEWCROSS/S0_1_1,S0_3_3,S0_3_4,S0_1_12,S0_1_13,S0_1_14,
-     *  S0_1_16,S0_PEP,S0_1_BE7E,S0_1_BE7P,S0_HEP,S0_1_15_C12ALP,
-     *  S0_1_15_O16,S0P_1_1,S0P_3_3,S0P_3_4,S0P_1_12,S0P_1_13,S0P_1_14,
-     *  S0P_1_16,S0PP_1_12,S0PP_1_13,S0PP_1_16,S0P_1_BE7P,S0PP_1_BE7P
-C 10/14 MHP NEW PARAMETERS - REPLACING DTDIF,DTWIND, HPTTOL & ATIME VECTORS
-C KC 2025-05-30 reordered common block elements
-C       COMMON/NEWPARAM/FLAG_DX,FLAG_DW,FLAG_DZ,LSTRUCT_TIME,
-      COMMON/NEWPARAM/FLAG_DX,FLAG_DW,FLAG_DZ,
-     * TIME_CORE_MIN,TIME_DL,TIME_DP,TIME_DR,TIME_DT,TIME_DW_GLOBAL,
-     * TIME_DW_MIX,TIME_DX_CORE_FRAC,TIME_DX_CORE_TOT,TIME_DX_SHELL,
-     * TIME_DX_TOTAL,TIME_DY_CORE_FRAC,TIME_DY_CORE_TOT,TIME_DY_SHELL,
-     * TIME_DY_TOTAL,TOL_CZBASE_FINE_WIDTH,TOL_DL_MAX,TOL_DM_MAX,
-     * TOL_DM_MIN,TOL_DP_CORE_MAX,TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,
-C      * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LNEWVARS
-     * TOL_DX_MAX,TOL_DZ_MAX,TIME_MAX_DT_FRAC,LSTRUCT_TIME,LNEWVARS
-C 9/24/26 MHP via Claude
-C code changed to remove the Monte Carlo option
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
-C MHP 8/25 Removed file names from common block
-C      COMMON/SCV2/FSCVH,FSCVHE,FSCVZ,ISCVH,ISCVHE,ISCVZ
-C LLP 9/08 New ALATM03 COMMON to share info with Allard atmosphere routines
-      COMMON/ALATM03/ALATM_FeH,ALATM_Alpha,LALTPTau100
-C MHP 8/25 Removed character file names from common block
-      COMMON /ALATM04/ DUMMY1,DUMMY2,DUMMY3,DUMMY4
-C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
-C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
-      COMMON/WEAK/WEAKSCREENING
+C 10/13/26 MHP via Claude: removed the unused COMMON/CROSS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
+C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in
+C remap.f and in starin.f.
+C
+C These are namelist variables that exist only to set other quantities,
+C or that are reserved for future development; none is read by the wider
+C code.  Keeping them in their own block keeps them OUT of the single
+C consolidated namelist block being built, so that block holds only
+C variables the physics routines actually consume.  starin.f declares it
+C although it uses none of them yet, so the isotope and cross-section
+C machinery there can reach them without reopening this layout.
+C
+C Member order is NEWPARAM, then NEWCROSS, then XSECT, and the three
+C declarations are generated from one list so all files agree.
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/DISK/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 3/99 ADDED FLAG TO TREAT THE ENTIRE STAR AS 'CONVECTIVE'
 C FOR ANGULAR MOMENTUM PURPOSES.
 C JNT 2025/09/04 ADD IMPJMOD TO SOLID
 C FROM JNT 05/15 add IMPJMOD (impose J model) which controls angular momentum 
 C     coupling (0=no effect, 1=solid body rotation, 2= solid body core decoupled from surface cz
 C     decoupled from surface cz, 3=solid body core coupled to surface cz)
-      COMMON/SBROT/LSOLID,IMPJMOD
 C MHP 10/01 ADDED COMMON BLOCK FOR MASS LOSS/ACCRETION
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
 C mhp 8/10 added option to scale mass loss rate by rotation; requires rotating model
 C MHP 2/12 MOVED INTO PMM TORQUE MODEL, RETAINED MDOT SWITCH
 C KC 2025-05-30 reordered common block elements
@@ -301,45 +281,54 @@ C      COMMON/MASSCHG3/LSOLWIND,DMSUN,DMWSUN,DMWMAX
 C      COMMON/MASSCHG3/DMSUN,DMWSUN,DMWMAX,LSOLWIND
 CFD 10/09 ADDED COMMON BLOCK FOR EXTRA MIXING. IT MIMIC SOME MIXING BY AFFECTING
 C        THE SETTLING COEFFICIENT DIRECTLY (in setup_grsett.f)
-      COMMON/CMIXING/CSTMIXING, CSTDIFFMIX
 C JVS 02/11 Acoustic depth calc common block
 C KC 2025-05-30 reordered common block elements
 C       COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 C JVS END
 C JVS 04/14 Common block for additional timestep governors
-      COMMON/GOVS/LTRIST
 C MHP 02/12 NEW PARAMETERIZATION OF ANGULAR MOMENTUM AND MASS LOSS
 C FROM MAGNETIZED SOLAR-LIKE WINDS
       CHARACTER*3 AWIND
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
 C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU	
-      COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
-     *         LMWIND,LROSSBY,LBSCALE,AWIND
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C AWIND is referenced in executable code only here, where it selects the
+C wind law ('K97'/'V13') below; the other four files declaring this block
+C never used it.  AWIND stays a PHYSICS namelist variable and is now a
+C local, kept across calls by the blanket SAVE.  Being last, its removal
+C moves no other member.
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/13/26 MHP via Claude
+C code changed to retire COMMON/CWIND/.  Its namelist members moved to the
+C consolidated block earlier, leaving two.  C_2 is a constant, set once in
+C parmin.f, so it is now the last member of COMMON/CONSTANTS/ -- appended
+C there rather than inserted, and added to every declaration so the block
+C keeps one size; parmin.f DATA-initializes CLSUN and CRSUN, so a short
+C declaration anywhere would be the OP95INTERP hazard again.  It may
+C eventually become a namelist variable.  STRUCTFACTOR, the loss-law
+C prefactor, is computed by AMCALC and read by its own two callers,
+C mwind.f and mcowind.f, so it is now an AMCALC output argument.
 C CREATE A NEW COMMON BLOCK FOR OVERTURN TIMESCALE THINGS (PPHOT,TAUCZ,LNEWTCZ)
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/OVRTRN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT
 C KC 2025-05-30 reordered common block elements
 C       COMMON/MAG/LCODM,CODM
-      COMMON/MAG/CODM,LCODM
 C
 C G Somers 6/14 ALLOW VARIABLE LI/BE DESTRUCTION CROSS SECTIONS
-      COMMON/XSECT/XSLI6,XSLI7,XSBE91,XSBE92,XSBE93,
-     *LXLI6,LXLI7,LXBE91,LXBE92,LXBE93
-      COMMON/BURNSCS/SLI6,SLI7,SBE91,SBE92,SBE93
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
 C G Somers END
-      COMMON/VERSION/YRECVER, GITHASH
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/VERSION/ with explicit arguments.  These
+C are CHARACTER, which does not belong in a COMMON block; SETVERSION sets
+C them and parmin.f is the only reader, so main.f now holds them and
+C passes them to both.
       SAVE
 C
 C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
@@ -355,7 +344,7 @@ C SPLIT NAMELIST INTO TWO: CONTROL and PHYSICS
      *   IPVER, ITRVER,
      *   KINDRN,
      *   LDEBUG, LCORR, LMILNE, LTRACK, LSTORE, LFIRST,
-     *   LSTPCH, LSCRIB, LSTCH,
+     *   LSTPCH, LSTCH,
 C G Somers 11/14
      *   LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,
 C G Somers END
@@ -423,10 +412,14 @@ C 10/8/26 MHP via Claude
 C code changed to remove LPMM: confirmed unused (not in any COMMON
 C block, no conditional anywhere in the code references it, and its
 C own DATA default was already commented out), so it had zero effect
-C on any run. The PMMA/PMMB/PMMC/PMMD/PMMM/PMMJD/PMMMD/PMMWMAX
+C on any run. The PMMA/PMMB/PMMC/PMMD/PMMM/PMMJD/PMMMD
 C parameters below remain live, used under the LMWIND option.
+C 10/11/26 MHP via Claude
+C code changed to remove PMMWMAX: like LPMM, it was in no COMMON
+C block, had no DATA default, and was referenced nowhere in the code,
+C so setting it had no effect. No namelist file sets it.
      *   LSOLWIND,LMWIND,LROSSBY,LBSCALE,
-     *   AWIND,PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMWMAX,
+     *   AWIND,PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,
 C MHP 8/17 ADDED WMAX_SUN
      *   PMMSOLP,PMMSOLW,PMMSOLTAU,LCODM,CODM,WMAX_SUN,
 C G Somers 6/14
@@ -463,7 +456,17 @@ C (e.g. CMD, FCLCD, ICLCD, MRK, LAST_SLASH_IDX).
      *   LDIFY, LDIFZ, LTHOUL, LTHOULFIT, LNEW0, LNEWDIF, ILAMBDA,
      *   SLI6, SLI7, SBE91, SBE92, SBE93, FRAC_C, FRAC_N, FRAC_O,
      *   ZXMIX, SUM_FRAC, LISOTOPE, LMIXTURE, INEWCP,
-     *   LREL, CMIXL, KTTAU0, LTTAU
+C 10/13/26 MHP via Claude
+C code changed to drop CMIXL from the output-only DERIVED namelist.  The
+C mixing length actually used is the scalar CMIXL that main.f reads out of
+C the per-run vector CMIXLA at CMIXL = CMIXLA(NK), then passes on as an
+C explicit argument.  PARMIN is called once, before the run loop, so it
+C has no NK and cannot know that value: its own CMIXL never leaves this
+C routine and keeps its DATA default, so the echo reported 1.4 no matter
+C what the namelist asked for -- 1.4 against an actual 1.797279, for
+C instance.  CMIXLA is echoed with the CONTROL namelist, with the real
+C per-run values, so nothing is lost by removing this line.
+     *   LREL, KTTAU0, LTTAU
 C
 C DBG DATA CARDS FOR THE RUN PARAMETERS
 C 9/24/26 MHP via Claude
@@ -471,46 +474,21 @@ C code changed to remove the Monte Carlo option
 c Changed slightly 3He-3He on 9/25/97 to take account of the S'.
 c  Previously (6/16/97) used S at Gamow Peak. Agrees with Workshop paper.
 c
-      DATA WEAKSCREENING/0.03D0/
-      DATA SSTANDARD/0.9828,1.0485,0.9815,0.9241,1.3818,1.0542,1.0,
-     $ 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0108,0.7819,0.2875/
 C MHP 7/93 VARIABLE FC OPTION
 C MHP 9/94 COMBINED DIFFUSION/ADVECTION OPTION
-      DATA LVFC,LDIFAD/.FALSE.,.FALSE./
 C MHP 9/93
-      DATA LNOJ/.FALSE./
-      DATA TDISK,PDISK,LDISK/0.0D0,7.2722D-6,.FALSE./
-      DATA LSENV0A, SENV0A /50*.FALSE.,50*1.26D-4/
-      DATA XENV0, ZENV0/0.7,0.02/
-      DATA LDEBUG, LCORR, NPOINT, LMILNE, LTRACK, LSTORE,
-     1 LSTPCH
-     2  /.FALSE., .TRUE., 1, .FALSE., .TRUE., .FALSE.,.FALSE./
-      DATA LSCRIB/.TRUE./
-      DATA LSTCH/.FALSE./
-      DATA LENVG, ATMSTP, ENVSTP/.FALSE.,0.5,0.5/
-      DATA NPRTMOD, NPRTPT/1,1/
-      DATA NUMRUN, KINDRN, LFIRST, NMODLS
-     1     /1,50*1,50*.TRUE.,50*0/
+      DATA KINDRN/50*1/
 C MHP 10/24 ADDED NEW DEFAULTS FOR END CONDITIONS ON CENTRAL D,X,Y
-      DATA ENDAGE, SETDT, RSCLM, RSCLX, RSCLZ, RSCLCM
-     1     /50*0.0,50*0.0,50*0.0,50*0.0,50*0.0,50*0.0/
-      DATA END_DCEN,END_XCEN, END_YCEN
-     1     /50*0.0,50*0.0,50*0.0/
+      DATA RSCLM, RSCLX, RSCLZ, RSCLCM/50*0.0, 50*0.0, 50*0.0, 50*0.0/
       DATA AID/'HE3','C12','C13','N14','N15','O16','O17','O18','H2 ',
      *'LI6','LI7','BE9'/
-      DATA OPTOL,ZSI/1.0D-8,0.0D0/
-      DATA TCUT,TSCUT,TENV0,TENV1,TGCUT/
-     *     6.5D0,6.5D0,6.82D0,7.7D0,7.5D0,6.0D0,3.0D0,9.0D0,6.9D0/
-      DATA ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX/3.0D-4,1.0D-10,1.0D-1,
-     *     1.0D-1,5.0D-1/
-      DATA ENVERR,ENVBEG,ENVMIN,ENVMAX/3.0D-4,1.0D-1,1.0D-1,5.0D-1/
-      DATA STOLR0,IMAX,NUSE/1.0D-3,11,7/
-      DATA DTDIF,DJOK,ITDIF1,ITDIF2/1.0D-2,1.0D-4,1,1/
-      DATA HTOLER/6.0D-5,4.5D-5,3.0D-5,9.0D-5,3.0D-5,9.0D-1,5.0D-1,
-     *     5.0D-1,2.0D0,2.5D-6/
-      DATA HPTTOL/1.0D-8,8.0D-2,5.0D-2,5.0D-2,1.0D0,1.0D0,0.0D0,5.0D-2,
-     *            2.0D-2,5.0D-2,5.0D-2,1.0D-1/
-      DATA LNEWCP,ANEWCP,XNEWCP/.FALSE.,'   ',1.3D1/
+C 10/14/26 MHP via Claude
+C code changed to move DATA STOLR0,IMAX,NUSE/1.0D-3,11,7/ into
+C INTPAR_MOD as initializers.  DATA on a USE-associated name is rejected,
+C so the defaults had to move with the block.  Same effect: all three are
+C PHYSICS namelist variables, and the module initializer is applied once
+C at load time, before PARMIN runs and before the namelist read.
+      DATA ANEWCP/'   '/
 C 10/8/26 MHP via Claude
 C code changed to add a blank default for ATMP: it had no DATA
 C statement anywhere, so its storage was zero-initialized to NUL
@@ -527,15 +505,9 @@ C AMIX AND AISO ARE STRINGS IDENTIFYING EITHER A PRESET MIXTURE OR A CUSTOM ONE 
 C SUPPORTED AMIX AT PRESENT ARE 'GS98','AAG21',M22M','M22P'. SUPPORTED AISO IS 'L21'.
 C FOR A CUSTOM MIXTURE YOU CAN ENTER INDIVIDUAL VALUES.
 C TO BE ADDED - AMIX FROM ATOMIC OPACITY TABLES (INEWMIX=2) AND OTHER MIXTURES/ISOTOPES
-      DATA ISETISO,ISETMIX,AMIX,AISO/0,0,'GS98','L21'/
+      DATA AMIX, AISO/'GS98', 'L21'/
 C     L21 DEFAULT ISOTOPE DATA LODDERS ET AL. 2021 SSRV 217,44
-      DATA R12_13,R14_15,R16_17,R16_18,XH2_INI,XHE3_INI,XLI6_INI,
-     *     XLI7_INI,XBE9_INI,XB10_INI,XB11_INI/88.27D0,411.9D0,471.4D0,
-     *     2693.0D0,2.781D-5,3.461D-5,7.187D-10,1.025D-8,1.595D-10,
-     *     1.002D-9,4.405D-9/
 C     GS98 DEFAULT CNO FRACTIONS OF METALS GREVESSE&sAUVAL 1998 SSRV 85,161
-      DATA ZXMIX,FRAC_C,FRAC_N,FRAC_O/0.02292D0,0.172148D0,0.050426D0,
-     *     0.468195/
 C MHP 10/24 DATA FOR CNO FRACTIONS AND Z/X OF DIFFERNT SOLAR MIXTURES.
 C     AMIXT IS THE LIST OF IDS,EACH OF WHICH HAS A ZX AND CNO FRACS
 C     ENTRY 1 =GS98(IN PARMIN),2=ASPLUND ET AL. 2021 A&A 653,141
@@ -545,58 +517,36 @@ C     3,4=MAGG ET AL. 2021 (MET,PHOT) A&A 661,140
      * 0.172148D0,0.184156D0,0.19239D0,0.191425D0,
      * 0.050426D0,0.050344D0,0.059012D0,0.058716D0,
      * 0.468195D0,0.416592D0,0.415631D0,0.413545D0/
-      DATA ACFPFT,ITFP1,ITFP2/1.0D-36,5,20/
-      DATA TRIDT,TRIDL/1.0D-2,8.0D-2/
-      DATA NITER1,NITER2,NITER3,FCORR0,FCORRI/2,20,2,0.8D0,0.1D0/
-      DATA ATIME/1.0D-3,2.0D-2,5.0D-1,2.0D-2,3.0D-1,1.5D-3,1.0D-1,
-     *           2.0D-2,4.0D-2,2.0D-2,2.0D-2,0.25D0,1.5D0,0.25D0/
 C      ATIME(13) was orginally = 1.5.
-      DATA DTWIND /1.0D1/
-      DATA LPTIME/.TRUE./
 C JVS 04/14
-      DATA LTRIST/.FALSE./
-      DATA LKUTHE,CMIXL/.FALSE.,1.4D0/
+C 10/15/26 MHP via Claude
+C code changed to remove DATA CMIXL/1.4D0/.  PARMIN's own CMIXL is a local
+C that nothing reads -- ifort reports it as unused -- and it has been dead
+C since CMIXL was dropped from the output-only DERIVED namelist on
+C 10/13/26.  The mixing length the code actually uses is the scalar
+C main.f:382 takes from the per-run vector as CMIXL = CMIXLA(NK), so a
+C default here could never reach the run; keeping one would only suggest
+C otherwise.  An illegal CMIXLA is now trapped below instead.
 C       DATA DPENV,LNSTDMX,LOVSTC,ALPHAC,LOVSTE,ALPHAE, LOVSTM, ALPHAM
 C      */1.0D0,.FALSE.,.FALSE., 0.0D0, .FALSE.,0.0D0, .FALSE., 0.0/
-      DATA DPENV,LOVSTC,ALPHAC,LOVSTE,ALPHAE, LOVSTM, ALPHAM
-     */1.0D0,.FALSE., 0.0D0, .FALSE.,0.0D0, .FALSE., 0.0/
-      DATA LADOV/.FALSE./
 C JVS 07/13
-       DATA LOVMAX,BETAC/.FALSE.,0.15D0/
 C END JVS
-      DATA LNEW0,LEXCOM/.FALSE.,.FALSE./
-      DATA LROT,WALPCZ,LINSTB,LWNEW,WNEW/.FALSE.,0.0D0,.FALSE.,
-     *     .FALSE.,0.0D0/
-      DATA LJDOT0,ALFA,FK/.TRUE.,1.5D0,1.0D0/
-      DATA FW,FC,FO,FES,FGSF,FMU,FSS,RCRIT/1.0D0,1.0D0,
-     *     1.0D0,1.0D0,1.0D0,1.0D0,1.0D0,1.0D3/
+      DATA ALFA, FK/1.5D0, 1.0D0/
 C MHP 8/17 INITIALIZED WMAX_SUN
-      DATA WMAX,WMAX_SUN/3.0D-4,1000.0/
+      DATA WMAX_SUN/1000.0/
 C DBG PULSE DATA CARD FOR PULSATION
-      DATA LPULSE/.FALSE./
-      DATA IPVER/1/
-      DATA ITRVER/1/
-      DATA KTTAU/0/
-      DATA CLSUN,CRSUN/3.8515D33,6.9598D10/
+C 10/14/26 MHP via Claude
+C code changed to move DATA CLSUN,CRSUN/3.8515D33,6.9598D10/ into
+C CONSTANTS_MOD as initializers, since DATA on a USE-associated name is
+C rejected.  Same effect: both are PHYSICS namelist variables, and the
+C module initializer is applied at load time, before this routine runs
+C and before the namelist read.  CLSUNL and CRSUNL are derived from them
+C later, in setups.f.
 C DBG If LCORE is TRUE then calculate shells interior to start up
 C     model's inner most shell.
-      DATA LCORE,MCORE,FCORE/.FALSE.,0,1.0/
 C MHP 5/90 NEW DATA STATEMENTS FOR NEW PARAMETERS
-      DATA GRTOL,ILAMBDA,NITER_GS,LDIFY/1.0D-8,1,10,
-     *     .FALSE./
-      DATA NITER4,LNEWS,LSNU/0,.FALSE.,.FALSE./
-      DATA DT_GS,XMIN,YMIN,LTHOULFIT/0.1D0,1.0D-3,1.0D-3,.FALSE./
-      DATA LTHOUL,LDIFZ,FGRZ,FGRY/.FALSE.,.FALSE.,1.0D0,1.0D0/
-      DATA LNEWDIF,LDIFLI/.FALSE.,.FALSE./
-      DATA CMIN,ABSTOL,RELTOL,KEMMAX/1.0D-20,1.0D-5,1.0D-4,50/
-      DATA ETADH0, ETADH1, LDH/-1.0D0, 1.0D0, .FALSE./
-      DATA FESC,FSSC,FGSFC/1.0D0,1.0D0,1.0D0/
-      DATA IES,IGSF,IMU/1,1,1/
-      DATA LSEMIC/.FALSE./
 C DBGLAOL
-      DATA TOLLAOL,LLAOL,LPUREZ/10.0,.FALSE.,.FALSE./
 C DBG 11/11/91
-      DATA LRWSH/.FALSE./
 C 9/25/26 MHP via Claude
 C code changed to add a default for FSOUND matching the previous
 C hardcoded Csound.dat behavior; overridable via the CONTROL namelist
@@ -621,24 +571,15 @@ C every current test's namelist, so are not at risk in practice.
       DATA FMILNE,FMODPT,FOPALE06,FSCOMP/4*' '/
       DATA FSHORT,FSNU,FSTCH,FSTOR,FTRACK,FcondOpacP/6*' '/
 C 3/92 DBG
-      DATA LNULOS1/.FALSE./
 C DBG PULSE OUT 7/92
-      DATA POMAX,POA,POB,POC,LPOUT/0.1D0,1.0D0,10.0D0,0.0D0,.FALSE./
 C MHP 06/13 ADDED FLAG TO CALIBRATE TO SOLAR Z/X, SOLAR Z/X, SOLAR AGE
-      DATA TOLL,TOLR,TOLZ,LCALS,LCALSOLZX,CALSOLAGE,CALSOLZX/1.0D-5,
-     *     1.0D-4,1.0D-3,.FALSE.,.FALSE.,4.57D9,0.02292D0/
 C      DATA TOLL,TOLR,LCALS/1.0D-5,1.0D-4,.FALSE./
 C DBG 4/94 ZRAMP STUFF
-      DATA RSCLZC, RSCLZM1, RSCLZM2, LZRAMP/50*-1.0D0, 50*-1.0D0,
-     *       50*-1.0D0, .FALSE./
 C DBG 12/94 CALIBRATED STELLAR MODEL STUFF
-      DATA LCALST, LTEFF/.FALSE., .FALSE./
 C LLP >>> OPAL 2006 EOS, Potekhin Conductive Opacities,
 C         Use Numerical Derivitives switches
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state
-      DATA LcondOpacP,LOPALE06,LNumDeriv
-     x     /.FALSE.,.FALSE.,.FALSE./
 C MHP 8/25 Removed hard coded defaults
 C     Alex low T opacity
 C      DATA OPECALEX/'OPACALEXANDER.X00',
@@ -660,31 +601,15 @@ C  STARIN EXCEPT WHEN LLAOL=T (TO MAINTAIN BACKWARD COMPATIBILITY.
 C            Na          Al          Mg          Fe
 C            Si          C           H           O
 C            N           Ar          Ne          He
-      DATA VNEW/0.001999D0, 0.003238D0, 0.037573D0, 0.071794D0,
-     +          0.040520D0, 0.173285D0, 0.000000D0, 0.482273D0,
-     +          0.053152D0, 0.005379D0, 0.098668D0, 0.000000D0/
 C MHP 5/97 OPTION FOR SAUMON, CHABRIER, AND VAN HORN EOS ADDED
-      DATA LSCV/.FALSE./
 C MHP 3/99 OPTION FOR SB ROTATION ENFORCED IN THE ENTIRE STAR AT
 C ALL TIMES
 C JNT 09/2025 FOR 05/15 IMPJMOD default set to 0
-      DATA LSOLID, IMPJMOD/.FALSE.,0/ !JNT 09/2025
-      DATA DMDT0,FCZDMDT,FTOTDMDT,COMPACC,CREIM,LREIMER,LMDOT
-     *     /-1.0D-14,
-     *     0.1D0,1.0D-2,0.71668d0,0.265721d0,0.01757d0,2.9d-5,
-     *     3.013d-3,3.385d-5,9.346d-4,0.0d0,8.462d-3,0.0d0,
-     *     1.696d-5,0.0d0,2.0d-9,2.0d-9,3.0d-11,-4.0D-13,
-     *     .FALSE.,.FALSE./
 C mhp 8/10 added scaled solar wind mass loss option
 C      DATA LSOLWIND,DMSUN,DMWSUN,DMWMAX/.FALSE.,-2.0D-14,2.863E-6,9.054E-5/
-      DATA LSOLWIND/.FALSE./
 C 3/09 Alexander 2006 opacity table options and opacity ramp options
-      DATA TMOLMIN,TMOLMAX,LALEX06/4.0D0,4.1D0,.FALSE./
 CFD 10/09 Mimic mixing options - acting on setling and differential settling
-      DATA CSTMIXING, CSTDIFFMIX/1.0,1.0/
 C JVS 02/11 Initialize acoustic depth common block values appropriately
-      DATA AGEOUT/0.5D0, 1.0D0, 5.0D0, 10.0D0, 20.0D0/
-      DATA LCLCD, LJLAST, LJWRT, LACOUT/.FALSE.,.FALSE., .FALSE.,.FALSE./
 C JVS end
 C MHP 02/12 NEW PARAMETERIZATION OF ANGULAR MOMENTUM AND MASS LOSS
 C FROM MAGNETIZED SOLAR-LIKE WINDS
@@ -695,13 +620,9 @@ C     *     2.836E-5,4.9304D0,2.836E-6,1.065E6/
 C G Somers 6/16 NEW PARAMETERIZATION OF ANGULAR MOMENTUM AND MASS LOSS FROM
 C SOLAR WINDS. FOLLOW MATT ET AL (2012) FORMULATION, BUT DEFAULT TO KAWALER
 C TYPE LAW.
-      DATA LMWIND,LROSSBY,LBSCALE/.FALSE.,.TRUE.,.FALSE./
 C MHP 8/17 CHANGED DEFAULT FOR PMMA TO 2 FROM 0
-      DATA AWIND,PMMA,PMMB,PMMC,PMMD,PMMM/'K97',2.0,1.0,2.0,0.0,0.5/
-      DATA PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU/1.32E30,1.27E12,
-     *     4.9304D0,2.836E-6,9.4805D5/
+      DATA AWIND/'K97'/
 C MHP 02/12 PERMIT CONSTANT DIFFUSION COEFFICIENT
-      DATA LCODM,CODM/.FALSE.,2.5D4/
 C
 C G Somers 06/14 ALLOW NEW LI DESTRUCTION CROSS SECTIONS
 C           NEW VALUES SHOULD BE IN UNITS OF keV b.
@@ -711,50 +632,17 @@ C           DEFAULT BE9(P,G)B10 (BE91) = 1.1 keV b INFERRED FROM FOWLER 1988
 C               THEY DON'T SHOW THIS REACTION, SO THIS IS APPROXIMATE.
 C           DEFAULT BE9(P,D)2HE4 (BE92) = 15,000 keV b FROM FOWLER ET AL. 1967
 C           DEFAULT BE9(P,A)LI6 (BE93) = 15,000 keV b FROM FOWLER ET AL. 1967
-      DATA XSLI6, XSLI7, XSBE91, XSBE92, XSBE93
-     *     /5.5D3, 5.2D1, 1.1D0, 1.5D4, 1.5D4/
-      DATA LXLI6, LXLI7, LXBE91, LXBE92, LXBE93,
-     *     SLI6, SLI7, SBE91, SBE92, SBE93
-     *     /.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.,
-     *     1.0D0, 1.0D0, 1.0D0, 1.0D0, 1.0D0/
-      DATA SPOTF, SPOTX, LSDEPTH/0.00, 1.00, .FALSE./
 C G Somers END
 C MHP 8/14 DEFAULT CROSS-SECTIONS ARE TAKEN FROM THE SOLAR FUSION II PAPER
 C REFERENCE ADELBERGER ET AL. 2011. UNITS ARE KeV b
-      DATA S0_1_1,S0_3_3,S0_3_4,S0_1_12,S0_1_13/
-     *     4.01D-22,5.21D3,5.6D-1,1.34D0,7.6D0/
-      DATA S0_1_14,S0_1_16,S0_PEP,S0_1_BE7E/
-     *     1.66D0,1.06D1,3.5734D-6,1.7709D-10/
 C NOTE: PEP IS THE PROPORTIONALITY CONSTANT RELATIVE TO PP
 C NOTE: BE7+E- IS THE PROPORTIONALITY CONSTANT IN THE LINEAR TERM
 C THE CODE USES T9, NOT T6, SO ANY EXPRESSION IN TERMS OF T/10^6 K
 C NEEDS TO BE DIVIDED BY 1000^0.5 (FOR BOTH PEP AND BE7+E-)
-      DATA S0_1_BE7P,S0_HEP,S0_1_15_C12ALP,S0_1_15_O16/
-     *     0.0208D0,8.6D-20,7.3D4,3.6D1/
 C REFERENCE FIRST DERRIVATIVES OF CROSS-SECTIONS (ADELBERGER ET AL. 2011)
 C UNITS ARE b
-      DATA S0P_1_1,S0P_3_3,S0P_3_4,S0P_1_12/
-     *     4.49D-24,-4.9D0,-3.6D-4,2.6D-3/
-      DATA S0P_1_13,S0P_1_14,S0P_1_16,S0P_1_BE7P/
-     *     -7.83D-3,-3.3D-3,-5.4D-2,-3.12D-5/
 C REFERENCE SECOND DERIVATIVES OF CROSS SECTIONS (ADELBERGER ET AL. 2011)
-      DATA S0PP_1_12,S0PP_1_13,S0PP_1_16,S0PP_1_BE7P/
-     *     8.3D-5,7.29D-4,0.0D0,-2.288D-7/
-      DATA LNEWNUC /.FALSE./
-      DATA TIME_CORE_MIN,TIME_DL,TIME_DP,TIME_DR,TIME_DT,TIME_DW_GLOBAL,
-     *     TIME_DW_MIX,TIME_DX_CORE_FRAC,TIME_DX_CORE_TOT,TIME_DX_SHELL,
-     *     TIME_DX_TOTAL,TIME_DY_CORE_FRAC,TIME_DY_CORE_TOT,
-     *     TIME_DY_SHELL,TIME_DY_TOTAL,TIME_MAX_DT_FRAC,LNEWVARS/
-     *     1.0D-3,2.0D-2,4.0D-2,2.0D-2,2.0D-2,8.0D-2,
-     *     8.0D-2,0.5D0,2.0D-2,0.1D0,
-     *     1.5D-3,0.5D0,2.0D-2,0.1D0,1.5D-3,1.5D0,.FALSE./
-      DATA FLAG_DX,FLAG_DW,FLAG_DZ,LSTRUCT_TIME,TOL_CZBASE_FINE_WIDTH,
-     *     TOL_DL_MAX,TOL_DM_MAX,TOL_DM_MIN,TOL_DP_CORE_MAX,
-     *     TOL_DP_CZBASE_MAX,TOL_DP_ENV_MAX,TOL_DX_MAX,TOL_DZ_MAX/
-     *     0.05D0,0.10D0,0.05D0,.FALSE.,0.0D0,
-     *     0.02D0,0.08D0,1.0D-8,0.05D0,0.05D0,0.05D0,1.0D0,1.0D0/
 C DEFAULT TO YES FOR NEW TAUCZ CALCULATION
-      DATA LNEWTCZ,LCALCENV /.TRUE.,.TRUE./
 C
 C THIS SUBROUTINE READS ALL USER DEFINED QUANTITIES FROM THE
 C FILES yrec8.nml1 and yrec8.nml2
@@ -1103,7 +991,9 @@ C code changed to remove the LISO isochrone-output option
      *       ' LINSTB ',L1,' LJDOT ',L1,' WIND IND.',F6.3,' FK',
      *       1PE8.2/1X,' FV',0PF5.2,' FC',F5.2,' COUPLING'
      *       ,F6.3, ' F MU',F5.2,' RCRIT',F9.1)
-      TENV = 0.5D0*(TENV0 + TENV1)
+C 10/13/26 MHP via Claude
+C code changed to remove the TENV derivation: it existed only to populate
+C COMMON/CTLIM/ for envint.f, which now derives it itself.
       IF(LROT) THEN
          LNEW0 = .TRUE.
          IF(WALPCZ.LT.-2.0D0) WALPCZ = -2.0D0
@@ -1172,7 +1062,7 @@ C MHP 8/17 CORRECT DEFAULT FOR A = 2, NOT 0
                PMMD = 0.0
                LBSCALE = .FALSE.
             ELSEIF(AWIND.EQ.'V13')THEN
-               PMMM = 0.22
+               PMMM = 0.22D0
                PMMA = 2.0
                PMMB = 1.0
                PMMC = 0.0
@@ -1192,7 +1082,7 @@ C G Somers 11/17, ADDED PMMD TO SWTICH OFF IN K97 FORM.
             EXPR  = 2.0D0*PMMM*PMMD
             EXCEN = PMMM*PMMD
 C INITIALIZE CONSTANT FACTOR FOR CENTRIFUGAL TERM
-            C_2 = 0.0506
+            C_2 = 0.0506D0
 C SET THE CONSTANT FACTOR
             CONSTFACTOR = FK*PMMJD/PMMSOLW**EXW
 C IF RELEVANT RESET THE SATURATION THRESHOLD IN
@@ -1361,6 +1251,53 @@ C below is functional, not echo, and is preserved unchanged.
       WRITE(ISHORT,NML=PHYSICS)
       WRITE(ISHORT,NML=CONTROL)
       WRITE(ISHORT,NML=DERIVED)
+C 10/15/26 MHP via Claude
+C code changed to trap an illegal convective mixing length before the run
+C starts.  CMIXLA is the per-run vector the mixing length is taken from --
+C main.f:382 sets CMIXL = CMIXLA(NK) for each kind card -- and nothing
+C validated it anywhere.  It has no default, so an entry the namelist
+C never sets is zero, and a zero or negative mixing length is unphysical:
+C the run fails further in, where the cause is no longer apparent.
+C
+C Only the entries that will actually be used are checked.  Under solar
+C calibration just CMIXLA(1) comes from the namelist: SETCAL sets
+C NUMRUN = 48 and fills entries 2..48 from CMIXLA(1), so checking the
+C whole vector here would report entries the user never supplied.  The
+C bound is MIN(NUMRUN,50) because CMIXLA is dimensioned 50 while NUMRUN
+C is read from the namelist and is not itself range-checked.
+C
+C Placed after the namelist echo, unlike the LSEMIC/overshoot trap above,
+C so that the .short file carries the inputs that caused the stop as well
+C as the diagnosis.
+      IF(LCALS)THEN
+         NCMXCK = 1
+      ELSE
+         NCMXCK = MIN(NUMRUN,50)
+      ENDIF
+      LCMXBAD = .FALSE.
+      DO I = 1,NCMXCK
+         IF(CMIXLA(I).LE.0.0D0)THEN
+            LCMXBAD = .TRUE.
+            WRITE(ISHORT,8801)I,CMIXLA(I)
+            WRITE(*,8801)I,CMIXLA(I)
+         ENDIF
+      END DO
+ 8801 FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'ILLEGAL MIXING LENGTH:',
+     * ' CMIXLA(',I2,') =',1PE12.4,' - MUST BE POSITIVE')
+      IF(LCMXBAD)THEN
+         IF(LCALS)THEN
+            WRITE(ISHORT,8802)
+            WRITE(*,8802)
+         ELSE
+            WRITE(ISHORT,8803)NCMXCK
+            WRITE(*,8803)NCMXCK
+         ENDIF
+         STOP
+      ENDIF
+ 8802 FORMAT('SOLAR CALIBRATION IS ON, SO ONLY CMIXLA(1) IS READ FROM',
+     * ' THE NAMELIST'/'RUN STOPPED')
+ 8803 FORMAT('CMIXLA MUST BE SET FOR EACH OF THE',I3,' KIND CARDS'/
+     * 'RUN STOPPED')
       IF(KTTAU .EQ. 0) THEN
            WRITE(ISHORT, 197)
       ELSE IF (KTTAU .EQ. 1) THEN
@@ -1522,6 +1459,11 @@ C      1         '   RESCALE & EVOLVE THE PREVIOUS RUN''S LAST MODEL.')
 C Replace any defined "{YREC_XXX}" placeholder string in the passed
 C variable with the value of the corresponding environment variable.
       SUBROUTINE EXPAND_VALUE(NML_VAR)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,NUM_ENVVARS
       PARAMETER (NUM_ENVVARS=3) ! Number of possible env. vars.
       CHARACTER*256 NML_VAR
       CHARACTER*256 TEMP
