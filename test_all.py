@@ -238,6 +238,47 @@ def mark_batch(batch, order_val):
     ]
 
 
+def mark_xdist_batch(batch):
+    '''Apply a pytest xdist mark to a list of test case parameter tuples which
+    assigns an execution order to the batch relative to other batches with an
+    excution order assigned.
+    Within an xdist group, the order is enforced, so dependencies must appear
+    before the tests they support.
+    '''
+    return [
+        pytest.param(*case, marks=pytest.mark.xdist_group("DEP_CHAIN"))
+        for case in batch
+    ]
+
+def dep_in_startmodels(dep):
+    '''Return True if dep appears anywhere in startmodels
+    False otherwise
+    '''
+    startd = os.environ['YREC_START']
+    spath = pathlib.Path(startd)
+    if len(list(spath.rglob(f"{dep}*"))) == 0:
+        return False
+    else:
+        return True
+
+def idx_of_case_w_name(tcases, case):
+    '''Return the index in the list of cases
+    of the case that has the given dependency.
+    '''
+    for case in tcases:
+        if case.dep == dep:
+            return tcases.index(case)
+
+
+def idx_of_case_w_dep(tcases, dep):
+    '''Return the index in the list of cases
+    of the case that has the given dependency.
+    '''
+    for case in tcases:
+        if case.dep == dep:
+            return tcases.index(case)
+
+
 def batch_tests(tcases):
     '''Iterate over all test cases
     Place each test case that is the dependency of another in the set
@@ -245,51 +286,81 @@ def batch_tests(tcases):
     Place all tests that have one of the early tests as a dependency
        in the late batch.
     All other cases go in the independent batch
+
+    Some tests have already been run and their outputs exist in STARTMODELS
+        These can run whenever
+    Tests that appear as a dependency and do NOT appear in STARTMODELS
+        must run first
+    Tests that have a dependency on another test must run last
+
     '''
+
+    # Goal:  place each complete dependency chain into it's own list
+    # Each of those lists will be marked to run in order on a given worker.
+
     # Compose list of all test names for dep comparison
     tnames = [x.name for x in tcases]
-    early = []
-    late = []
-    indep = []
-    case_params = []
+    print(f"total tests = {len(tcases)}")
 
-    # Sort all test cases in to three classes based on dependencies
-    # early - referenced by another test case
-    # late - references another test case
-    # indep - independent tests that don't depend on others in the requested set
+    # List of test dependencies that appear in the above list
+    depnames = [x.dep for x in tcases if x.dep in tnames]
+
+    # If a case dep does not already exist, it needs to be built.
+    # Find it in the list and examine its dep.
+    #   If its dep doesn't need to be built, build the case, otherwise
+    #     move down the line to find the next dep and test it.
+    # Walk dep graph for each test case
+    early = []
     for case in tcases:
-        if case.dep in tnames:
-            # Put test with dep as name in early
-            all_depcases = [x for x in tcases if x.name == case.dep]
-            # Deduplicate
-            for depcase in all_depcases:
-                if depcase not in (early + late + indep) :
-                    early.append(depcase)
-            # Put originating case in late, since it depends on the one in early.
+        if not dep_in_startmodels(case.dep):
+            print(case.name, "   ", case.dep)
+            # Case's dep not in startmodels, must build dep before this case
+            # Get dep
+            for dc in tcases:
+                if dc.name == case.dep and dc not in early:
+                    early.append(dc)
+
+    # Compose list of cases that depend upon early cases. Put in late
+    late = []
+    early_names = [x.name for x in early]
+    for case in tcases:
+        if case.dep in early_names:
             late.append(case)
-        else:
-            if case not in (early + late + indep):
-                indep.append(case)
+
+    # All tests that don't have an order dependence can be independently
+    # scheduled
+    indep = []
+    for case in tcases:
+        if case not in (early + late):
+            indep.append(case)
 
     # Format in lists of tuples for use by test_yrec function
+    case_params = []
     early_params = []
     for case in early:
         early_params.append((case.subdir, case.control, case.physics))
-    early_params = mark_batch(early_params, 1)
-    case_params.extend(early_params)
+    #early_params = mark_batch(early_params, 1)
+    #case_params.extend(early_params)
 
     late_params = []
     for case in late:
         late_params.append((case.subdir, case.control, case.physics))
-    late_params = mark_batch(late_params, 2)
-    case_params.extend(late_params)
+    #late_params = mark_batch(late_params, 2)
+    #case_params.extend(late_params)
+
+    case_params = (early_params + late_params)
+    # Make this batch execute in its interal order on a single worker.
+    case_params = mark_xdist_batch(case_params)
 
     indep_params = []
     for case in indep:
         indep_params.append((case.subdir, case.control, case.physics))
     case_params.extend(indep_params)
 
+    # Compose list of test cases that depend upon no other tests and are
+    # themselves not a dep
     return case_params
+
 
 
 
@@ -300,7 +371,7 @@ test_cases_ordered = batch_tests(tcases)
 
 # Main test execution function called automatically by pytest.
 @pytest.mark.parametrize("tdir,nml1,nml2", test_cases_ordered)
-def test_yrec(tdir, nml1, nml2):
+def test_yrec(tdir, nml1, nml2, request):   # 'request' is pytest built-in fixture request
     '''Process a test case definition consisting of
        (test directory, NML1 file, NML2 file)
     by running YREC executable within the given test directory
@@ -340,10 +411,7 @@ def test_yrec(tdir, nml1, nml2):
     # reference standard location and return.
     tbase = nml1.replace(".nml1", "")
     all_outputs = glob(f"{outdir}/{tbase}.*")
-    print(f"output file base = {outdir}/{tbase}")
-    print(f"{all_outputs=}")
     outputs = [f for f in all_outputs if re.search(r'(\.short|\.store|\.track)', f)]
-    print(f"{outputs=}")
 
     # Fail on missing outputs
     assert len(outputs) > 0, "Missing output(s)"
@@ -363,3 +431,14 @@ def test_yrec(tdir, nml1, nml2):
         if filevals_differ(ref, out, float_frac_tol, int_abs_tol):
             outputs_identical = False
     assert outputs_identical, "Output differs from reference standard"
+
+    # For tests that are part of an ordered dependency set,
+    # copy the last model output into the YREC_START directory
+    # to make it available to dependent tests.
+    if "xdist_group" in request.keywords:
+        for outfile in all_outputs:
+            print(outfile)
+            if '.last' in outfile:
+                print('Copying output file to YREC_START for use by later tests.')
+                shutil.copy(outfile, os.environ['YREC_START'])
+                break
