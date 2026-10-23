@@ -9,6 +9,7 @@
 import os, sys
 import shutil
 from glob import glob
+from itertools import chain
 import pathlib
 import re
 import numbers
@@ -238,7 +239,7 @@ def mark_batch(batch, order_val):
     ]
 
 
-def mark_xdist_batch(batch):
+def mark_xdist_batch(batch, idx):
     '''Apply a pytest xdist mark to a list of test case parameter tuples which
     assigns an execution order to the batch relative to other batches with an
     excution order assigned.
@@ -246,7 +247,7 @@ def mark_xdist_batch(batch):
     before the tests they support.
     '''
     return [
-        pytest.param(*case, marks=pytest.mark.xdist_group("DEP_CHAIN"))
+        pytest.param(*case, marks=pytest.mark.xdist_group(f"DEP_CHAIN_{idx}"))
         for case in batch
     ]
 
@@ -277,6 +278,10 @@ def idx_of_case_w_dep(tcases, dep):
     for case in tcases:
         if case.dep == dep:
             return tcases.index(case)
+
+
+def flatten(xss):
+    return [x for xs in xss for x in xs]
 
 
 def batch_tests(tcases):
@@ -310,55 +315,56 @@ def batch_tests(tcases):
     #   If its dep doesn't need to be built, build the case, otherwise
     #     move down the line to find the next dep and test it.
     # Walk dep graph for each test case
-    early = []
+    chains = []
     for case in tcases:
-        if not dep_in_startmodels(case.dep):
-            print(case.name, "   ", case.dep)
-            # Case's dep not in startmodels, must build dep before this case
-            # Get dep
-            for dc in tcases:
+        early = []
+        if not dep_in_startmodels(case.dep) and case not in flatten(chains):
+            print(f"DEPENDENCY: {case.dep}")
+            for dc in tcases:   # Get the dependency
                 if dc.name == case.dep and dc not in early:
-                    early.append(dc)
+                    early.append(dc)  # dep(s) first
+                    break
+            for dc in tcases:   # Collect all tests that require the dependency
+                if dc.dep == case.dep and dc not in early:
+                    print(f"    Test that needs it: {dc.name}")
+                    early.append(dc)   # append cases that need the dep
+            chains.append(early)
 
-    # Compose list of cases that depend upon early cases. Put in late
-    late = []
-    early_names = [x.name for x in early]
-    for case in tcases:
-        if case.dep in early_names:
-            late.append(case)
+    # If a test name matches something already in startmodels,
+    # it needs to run before anything that depends on it
+
+
+    print("\ndep chains:")
+    for i, chain in enumerate(chains):
+        print(f"      Chain {i}")
+        for name in [x.name for x in chain]:
+            print(name)
 
     # All tests that don't have an order dependence can be independently
     # scheduled
     indep = []
     for case in tcases:
-        if case not in (early + late):
+        #if case not in (early + late):
+        if case not in flatten(chains):
             indep.append(case)
 
     # Format in lists of tuples for use by test_yrec function
     case_params = []
     early_params = []
-    for case in early:
-        early_params.append((case.subdir, case.control, case.physics))
-    #early_params = mark_batch(early_params, 1)
-    #case_params.extend(early_params)
+    for i, chain in enumerate(chains):
+        for case in chain:
+            ptup = (case.subdir, case.control, case.physics)
+            # Make this batch execute in its interal order on a single worker.
+            cparams = pytest.param(*ptup, marks=pytest.mark.xdist_group(f"DEP_CHAIN_{i}"))
+            early_params.append(cparams)
 
-    late_params = []
-    for case in late:
-        late_params.append((case.subdir, case.control, case.physics))
-    #late_params = mark_batch(late_params, 2)
-    #case_params.extend(late_params)
-
-    case_params = (early_params + late_params)
-    # Make this batch execute in its interal order on a single worker.
-    case_params = mark_xdist_batch(case_params)
+    case_params = early_params
 
     indep_params = []
     for case in indep:
         indep_params.append((case.subdir, case.control, case.physics))
     case_params.extend(indep_params)
 
-    # Compose list of test cases that depend upon no other tests and are
-    # themselves not a dep
     return case_params
 
 
