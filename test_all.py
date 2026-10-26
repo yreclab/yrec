@@ -322,14 +322,14 @@ def batch_tests(tcases):
     depsets = []
     for case in tcases:
         depset = []
-        if not name_in_startmodels(case.dep) and case not in flatten(depsets):
+        if case.dep in tnames:
             print(f"DEPENDENCY: {case.dep}")
             for dc in tcases:   # Get the dependency
-                if dc.name == case.dep and dc not in depset:
+                if dc.name == case.dep and dc not in flatten(depsets):
                     depset.append(dc)  # dep(s) first
                     break
             for dc in tcases:   # Collect all tests that require the dependency
-                if dc.dep == case.dep and dc not in depset:
+                if dc.dep == case.dep and dc not in flatten(depsets):
                     print(f"    Test that needs it: {dc.name}")
                     depset.append(dc)   # append cases that need the dep
             depsets.append(depset)
@@ -337,6 +337,8 @@ def batch_tests(tcases):
         ## If a test name matches something already in startmodels,
         ## it needs to run before anything that depends on it
 
+    # Remove empty sets
+    depsets = [x for x in depsets if len(x) > 0]
 
     print("\ndep sets:")
     for i, depset in enumerate(depsets):
