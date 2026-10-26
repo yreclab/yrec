@@ -9,7 +9,6 @@
 import os, sys
 import shutil
 from glob import glob
-from itertools import chain
 import pathlib
 import re
 import numbers
@@ -26,6 +25,11 @@ int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
 show_output = config.getboolean('options','show_output_upon_failure')
 ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
+
+envkeys = {'YREC_INPUT':'input', 'YREC_START':'startmodels'}
+for key in envkeys.keys():
+    if key not in os.environ:
+        os.environ[key] = os.path.join(os.getcwd(), envkeys[key])
 
 if not os.path.exists(yrec_exe):
     raise FileNotFoundError(f"YREC executable {yrec_exe} not found!")
@@ -224,19 +228,19 @@ def color_indicator(line, indices):
     return out
 
 
-def mark_batch(batch, order_val):
-    '''Apply a pytest mark to a list of test case parameter tuples which
-    assigns an execution order to the batch relative to other batches with an
-    excution order assigned.
-
-    I.e., if a batch is assigned an order value of 2, all tests in that batch
-    will only begin running after all tests in a batch with order value 1 have
-    completed.
-    '''
-    return [
-        pytest.param(*case, marks=pytest.mark.order(order_val))
-        for case in batch
-    ]
+#def mark_batch(batch, order_val):
+#    '''Apply a pytest mark to a list of test case parameter tuples which
+#    assigns an execution order to the batch relative to other batches with an
+#    excution order assigned.
+#
+#    I.e., if a batch is assigned an order value of 2, all tests in that batch
+#    will only begin running after all tests in a batch with order value 1 have
+#    completed.
+#    '''
+#    return [
+#        pytest.param(*case, marks=pytest.mark.order(order_val))
+#        for case in batch
+#    ]
 
 
 def mark_xdist_batch(batch, idx):
@@ -251,33 +255,33 @@ def mark_xdist_batch(batch, idx):
         for case in batch
     ]
 
-def dep_in_startmodels(dep):
-    '''Return True if dep appears anywhere in startmodels
+def name_in_startmodels(name):
+    '''Return True if name appears anywhere in startmodels
     False otherwise
     '''
     startd = os.environ['YREC_START']
     spath = pathlib.Path(startd)
-    if len(list(spath.rglob(f"{dep}*"))) == 0:
+    if len(list(spath.rglob(f"{name}*"))) == 0:
         return False
     else:
         return True
 
-def idx_of_case_w_name(tcases, case):
-    '''Return the index in the list of cases
-    of the case that has the given dependency.
-    '''
-    for case in tcases:
-        if case.dep == dep:
-            return tcases.index(case)
-
-
-def idx_of_case_w_dep(tcases, dep):
-    '''Return the index in the list of cases
-    of the case that has the given dependency.
-    '''
-    for case in tcases:
-        if case.dep == dep:
-            return tcases.index(case)
+#def idx_of_case_w_name(tcases, case):
+#    '''Return the index in the list of cases
+#    of the case that has the given dependency.
+#    '''
+#    for case in tcases:
+#        if case.dep == dep:
+#            return tcases.index(case)
+#
+#
+#def idx_of_case_w_dep(tcases, dep):
+#    '''Return the index in the list of cases
+#    of the case that has the given dependency.
+#    '''
+#    for case in tcases:
+#        if case.dep == dep:
+#            return tcases.index(case)
 
 
 def flatten(xss):
@@ -315,44 +319,48 @@ def batch_tests(tcases):
     #   If its dep doesn't need to be built, build the case, otherwise
     #     move down the line to find the next dep and test it.
     # Walk dep graph for each test case
-    chains = []
+    depsets = []
     for case in tcases:
-        early = []
-        if not dep_in_startmodels(case.dep) and case not in flatten(chains):
+        depset = []
+        if not name_in_startmodels(case.dep) and case not in flatten(depsets):
             print(f"DEPENDENCY: {case.dep}")
             for dc in tcases:   # Get the dependency
-                if dc.name == case.dep and dc not in early:
-                    early.append(dc)  # dep(s) first
+                if dc.name == case.dep and dc not in depset:
+                    depset.append(dc)  # dep(s) first
                     break
             for dc in tcases:   # Collect all tests that require the dependency
-                if dc.dep == case.dep and dc not in early:
+                if dc.dep == case.dep and dc not in depset:
                     print(f"    Test that needs it: {dc.name}")
-                    early.append(dc)   # append cases that need the dep
-            chains.append(early)
+                    depset.append(dc)   # append cases that need the dep
+            depsets.append(depset)
 
-    # If a test name matches something already in startmodels,
-    # it needs to run before anything that depends on it
+        ## If a test name matches something already in startmodels,
+        ## it needs to run before anything that depends on it
 
 
-    print("\ndep chains:")
-    for i, chain in enumerate(chains):
+    print("\ndep sets:")
+    for i, depset in enumerate(depsets):
         print(f"      Chain {i}")
-        for name in [x.name for x in chain]:
+        for name in [x.name for x in depset]:
             print(name)
 
     # All tests that don't have an order dependence can be independently
     # scheduled
     indep = []
+    print("indep cases:")
     for case in tcases:
         #if case not in (early + late):
-        if case not in flatten(chains):
+        if case not in flatten(depsets):
             indep.append(case)
+            if 'base' in case.name or 'base' in case.dep:
+                print("    *********")
+            print(case.name, "    ", case.dep)
 
     # Format in lists of tuples for use by test_yrec function
     case_params = []
     early_params = []
-    for i, chain in enumerate(chains):
-        for case in chain:
+    for i, depset in enumerate(depsets):
+        for case in depset:
             ptup = (case.subdir, case.control, case.physics)
             # Make this batch execute in its interal order on a single worker.
             cparams = pytest.param(*ptup, marks=pytest.mark.xdist_group(f"DEP_CHAIN_{i}"))
