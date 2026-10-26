@@ -1,1 +1,3 @@
-
+Jamie Tayar October 2026
+This folder contains the assignments used in my Fall 2026 Graudate level AST 6215 Stars and the Galaxy Class that were related to or included questions about YREC. 
+Most of this is contained in Project 1 (which I originally designed for MESA and MESA Web, https://zenodo.org/records/8393698), but I added YREC questions to the end of a few of the problem sets as well because it is easier to get started with than MESA. 
