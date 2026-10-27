@@ -7,7 +7,7 @@ the record of why the code is the way it is.
 
 ## Index
 
-Status as of 2026-10-20.
+Status as of 2026-10-27.
 
 | # | issue | status |
 |---|---|---|
@@ -48,6 +48,8 @@ Status as of 2026-10-20.
 | 35 | Cases read a start model a later case overwrites | open; install-time checks now in `rebaseline.py` |
 | 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
 | 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
+| 38 | A bare `STOP` ends a failed run with exit status 0 | open |
+| 39 | High-mass start models too compact to resolve the D birthline | accepted 2026-10-27 |
 
 ## Status of the original tasks
 
@@ -2606,3 +2608,101 @@ every unit that declares them. Converting them would make the plan's
 claim true, and would close the last route by which a layout mismatch
 could slip in silently.
 
+
+---
+
+## 38. A bare `STOP` ends a failed run with exit status 0
+
+**Status:** open, found 2026-10-27.
+
+`GETOPAL95` stops the run when log T leaves the OPAL95 table:
+
+```fortran
+      IF(TL.LT.TGR(1) .OR. TL.GT.TGR(NUMT))THEN
+         WRITE(*,5)TL
+ 5       FORMAT(' LOG T OF',F11.6,'OUT OF OPAL 95 TABLE RANGE')
+         STOP
+      ENDIF
+```
+
+A bare `STOP` exits with status 0, so the harness sees a clean exit.
+Its "Program terminated abnormally" check never fires, and the case
+fails only on "Output differs", which looks the same as an intended
+change. `rebaseline.py` would install its outputs, and an install
+script that copies the `.first` would install a model from partway
+through the run.
+
+It happened on 2026-10-27 in
+`examples/run_from_seed_to_start/m3000gs98z040000_prems`, after the
+deuterium rate fix in `788f2b7`. The run diverged on its second model
+(log T = 11.8), stopped after 1 of its 5 models, and exited 0. Its
+`.first` was installed in `startmodels/start/` before the short run
+was noticed, and the Z = 0.06 deck, which reads it, built on it. Both
+were restored from git.
+
+29 source files contain a bare `STOP`. Some are normal ends of a run;
+the rest are error exits like this one. The fix is to give the error
+exits a nonzero code (`STOP 1`, or a distinct code per site, as
+`TPGRAD`'s `STOP 912` already does), after sorting the 29 into the two
+kinds. Until then, a case that writes fewer models than its reference
+is worth checking by hand, whatever its exit status.
+
+---
+
+## 39. Above about 2.4 Msun the start models are too compact to resolve the deuterium birthline
+
+**Status:** accepted by MHP, 2026-10-27 (option 4 below). Recorded so
+the DBL models for these masses are not mistaken for a resolved
+birthline.
+
+The deuterium rate fix in `788f2b7` (T9**(-2/3), not T9**(+2/3)) raised
+the rate by about 1D4 at 1 MK. The seed, start and DBL libraries were
+regenerated with it on 2026-10-27, in that order.
+
+Below about 2.2 Msun the sequence works. The start models' log Tc stays
+below 6.09, and each DBL run takes 13-87 models to reach the 1% drop in
+central D (`END_DCEN = 2.75D-5`). Compared with the old rate, the
+birthline comes 5-10x earlier, 0.4-0.5 dex brighter and 0.2 dex larger.
+
+Above that, the start models are already hot: log Tc = 6.1-6.5 for
+2.4-18 Msun. With the correct rate, D burns as soon as they evolve:
+
+- 14 cases burn more than 1% of their D in the 5-model seed-to-start
+  step. Their DBL run starts below `END_DCEN`, so `MAIN` disables the
+  stop and the run went to 1000 models, onto the main sequence. Those
+  decks now set `NMODLS(1) = 1`, so the DBL model is the start model plus
+  one step. The cases are 2.8, 3.0, 4.0, 5.0, 6.0, 7.5, 12, 14, 16 and
+  18 Msun at Z = 0.018804; 3 Msun at Z = 0.001, 0.003 and 0.010; and
+  1 Msun at Z = 0.06.
+- Most of the other masses above 2.4 Msun reach the 1% drop within
+  1-16 models.
+
+The radius cannot be raised to fix this. Pre-MS models can only be
+rescaled in mass, not evolved up in radius, and ramping up from a lower
+mass keeps R nearly fixed, so Tc rises roughly as M. A lower mixing
+length during the ramp was tried: from 2.2 to 3.0 Msun at alpha = 1.0,
+log R grew by only 0.004-0.013 dex over alpha = 1.85, and L fell by
+0.23 dex. The ramp itself spans about 4D4 yr and burns more than half
+the D. (alpha = 1.0 did make the ramp more stable: it reached 3.0 Msun,
+where alpha = 1.85 aborted at 2.7.) A zero-timestep rescale cannot work
+for a pre-MS model, which has no nuclear energy source.
+
+Options considered: rescale from a more extended seed (not possible as
+above), turn D burning off during the ramp, new extended seeds, or
+accept the compact start. MHP chose to accept it.
+
+Not regenerated, so still on the old rate:
+
+- `startmodels/start/` at 22.5 and 25 Msun. Both abort in `TPGRAD` during
+  their mass ramp from 18 Msun.
+- 20 Msun. Its regenerated start model made the DBL run abort in
+  `TPGRAD`, so the old start model was restored; its DBL model is new.
+- 3 Msun at Z = 0.04 and 0.06 (issue 38).
+- The 25 Msun DBL model. Its run fails to converge on the first model,
+  from the old start model.
+- `startmodels/dbl_grid/` (132 models). Its generators in
+  `startmodels/sample_cases/` read pre-MS models that are not in the
+  repository.
+
+The experiments are in `ref_backups/2026-10-27_788f2b7/mlt_expt/`, beside
+the repository.

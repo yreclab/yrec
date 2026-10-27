@@ -34,7 +34,7 @@
   
  KINDRN(1) = 1   
  LFIRST(1) = .TRUE.  
- NMODLS(1) = 1000 
+ NMODLS(1) = 1 ! 10/27/26: the start model is already past the 1% D drop (END_DCEN is disabled), so the DBL model is the start model plus one step.
  XENV0A(1) = 0.728858 ! Envelope abundance label
  ZENV0A(1) = 0.010000 ! Envelope abundance label
  CMIXLA(1) = 1.852729
