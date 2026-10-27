@@ -690,9 +690,19 @@ C skip this section if model not to be aged
 C MHP 7/98
 C need to add logic to permit resacling + time evolution for
 C pre-main sequence models
+C 10/27/26 MHP via Claude
+C code changed to let L_ZERODT_PREMS (CONTROL namelist, default F)
+C disable the pre-MS failsafe below, which ages a KINDRN=2 rescale
+C whenever log Tc < 6.6.  With it set, KINDRN=2 is a true zero-timestep
+C rescale for a pre-MS model too.  A static solution then exists only
+C if nuclear burning can carry the luminosity, as deuterium burning
+C does in a model at the deuterium birthline.  The first evolved run
+C after one should fix its timestep with SETDT: HTIMER otherwise takes
+C the stored timestep, which can be far too long (KNOWN_ISSUES.md 39).
             IF(IRESCA(NK).NE.2 .AND. MODEL.GE.0) THEN
                LAGE = .TRUE.
-            ELSE IF(MODEL.GE.0 .AND. HT(1).LT.6.6D0)THEN
+            ELSE IF(.NOT.L_ZERODT_PREMS .AND. MODEL.GE.0 .AND.
+     *              HT(1).LT.6.6D0)THEN
                LAGE = .TRUE.
             ELSE
                LAGE = .FALSE.

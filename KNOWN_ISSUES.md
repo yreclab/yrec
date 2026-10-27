@@ -49,7 +49,7 @@ Status as of 2026-10-27.
 | 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
 | 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
 | 38 | A bare `STOP` ends a failed run with exit status 0 | open |
-| 39 | High-mass start models too compact to resolve the D birthline | accepted 2026-10-27 |
+| 39 | High-mass start models too compact to resolve the D birthline | accepted 2026-10-27; `L_ZERODT_PREMS` added |
 
 ## Status of the original tasks
 
@@ -2706,3 +2706,35 @@ Not regenerated, so still on the old rate:
 
 The experiments are in `ref_backups/2026-10-27_788f2b7/mlt_expt/`, beside
 the repository.
+
+### Zero-timestep rescaling, and the `L_ZERODT_PREMS` toggle (2026-10-27)
+
+A true zero-timestep rescale does work for a model at the birthline,
+where deuterium burning can carry the luminosity. `MAIN` had prevented
+it: a `KINDRN = 2` rescale is aged whenever log Tc < 6.6 (the MHP 7/98
+pre-MS failsafe). The new CONTROL namelist toggle `L_ZERODT_PREMS`
+(default `.FALSE.`) disables that failsafe. With the default, results
+are identical to before; only the namelist echo in `.short` gains a
+line, which `pytest.ini` ignores.
+
+With the toggle set, starting from the 2.2 Msun DBL model:
+
+- A static solution converges at fixed mass. L equals the nuclear
+  luminosity exactly and the gravitational term is 0. It is 0.06 dex
+  smaller in log R and 0.08 dex hotter in log Tc than the evolving DBL
+  model, which still contracts at its 1% D drop.
+- A zero-timestep mass ramp in about 10% steps converges from 2.2 to
+  10 Msun. log R rises smoothly from 1.06 to 1.67 while log Tc stays
+  between 6.18 and 6.31, pinned by the temperature sensitivity of D
+  burning. The deuterium is untouched.
+- A normal DBL run from the 3 Msun static model needs `SETDT`. Without
+  it, `HTIMER` took the stored timestep and the first step was 315 kyr,
+  which burned all the D. With `SETDT(1) = 20` yr, the 1% drop came in
+  22 models (440 yr) at constant L, R and Tc. That gives log R = 1.162
+  and log Tc = 6.204, against 1.141 and 6.235 for the current library
+  model.
+
+These runs are not yet used for the library. Switching method at
+2.4 Msun would leave a seam of about 0.06 dex in log R. Above about
+8 Msun the current start models are larger and cooler than the static
+solution.

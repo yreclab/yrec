@@ -26,6 +26,9 @@ C applied once at load time, before PARMIN runs, which is the
 C same thing.  Rewriting a literal such as 0.9828 as 0.9828D0
 C would change its stored value, so that is deliberately not
 C done here; see KNOWN_ISSUES.md issue 23.
+C 10/27/26 MHP via Claude
+C code changed to add L_ZERODT_PREMS, a CONTROL namelist toggle read
+C in main.f, making 235 members.  See the note there.
       MODULE NMLPAR_MOD
 
       IMPLICIT NONE
@@ -258,6 +261,7 @@ C done here; see KNOWN_ISSUES.md issue 23.
       REAL*8    :: END_DCEN(50) = 0.0
       REAL*8    :: END_XCEN(50) = 0.0
       REAL*8    :: END_YCEN(50) = 0.0
+      LOGICAL*4 :: L_ZERODT_PREMS = .FALSE.
       LOGICAL*4 :: LVFC = .FALSE.
       LOGICAL*4 :: LDIFAD = .FALSE.
       REAL*8    :: FW = 1.0D0
