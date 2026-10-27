@@ -28,10 +28,18 @@ C
 C The other 28 members have no initializer because none had DATA: they
 C are set by executable assignment in parmin.f and setups.f, which needs
 C no change under USE association.
+C 10/27/26 MHP via Claude
+C code changed to add CAVOG, Avogadro's number, defined as the
+C reciprocal of the atomic mass unit 1.6605402D-24 g (the scale ANUC
+C is expressed on in engeb.f).  It replaces the hardcoded 6.023D23 in
+C the deuterium burning rates of engeb.f and deutrate.f.  A PARAMETER,
+C since unlike the members below it is never set at run time.
       MODULE CONSTANTS_MOD
 
       IMPLICIT NONE
       SAVE
+
+      REAL*8, PARAMETER :: CAVOG = 1.0D0/1.6605402D-24
 
       REAL*8 :: CLSUN = 3.8515D33
       REAL*8 :: CLSUNL

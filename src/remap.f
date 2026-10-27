@@ -23,8 +23,10 @@ C explicit declarations.
      *       QS0E_1_14_A98,QS0E_1_16_A98,QS0E_1_1_A98,QS0E_1_BE7P_A98,
      *       QS0E_3_3_A98,QS0E_3_4_A98,S0_1_12_REF,S0_1_13_REF,
      *       S0_1_14_REF,S0_1_15_C12ALP_REF,S0_1_15_O16_REF,S0_1_16_REF,
+     *       S0_1_12_A98,S0_1_13_A98,S0_1_14_A98,S0_1_16_A98,
      *       S0_1_1_A98,S0_1_1_REF,S0_1_BE7E_REF,S0_1_BE7P_A98,
-     *       S0_1_BE7P_REF,S0_3_3_REF,S0_3_4_REF,S0_HEP_REF,S0_PEP_REF
+     *       S0_1_BE7P_REF,S0_3_3_A98,S0_3_3_REF,S0_3_4_A98,S0_3_4_REF,
+     *       S0_HEP_REF,S0_PEP_REF
       INTEGER I
 C PARAMETERS NT AND NG FOR TABULATED SURFACE PRESSURES.
 C PARAMETERS NTA AND NGA FOR TABULATED ALLARD MODEL SURFACE PRESSURES.
@@ -77,9 +79,16 @@ C NEEDS TO BE DIVIDED BY 1000^0.5 (FOR BOTH PEP AND BE7+E-)
 C REFERENCE ADELBERGER ET AL. 1998 CROSS SECTIONS - USED IN HARD-CODED
 C FIRST AND SECOND DERIVATIVE TERMS (EXPRESSED AS S'/S AND S''/S)
 C UNITS ARE KeV b
-C       DATA S0_1_1_A98,S0_3_3_A98,S0_3_4_A98,S0_1_12_A98,S0_1_13_A98/
-C      *     4.00D-22,5.4D3,5.3D-1,1.34D0,7.6D0/  ! KC 2025-05-31
-      DATA S0_1_1_A98/4.00D-22/
+C 10/27/26 MHP via Claude
+C code changed to restore the A98 S0 values for reactions 2-7.  Each
+C QS0E/QQS0EE below is normalized by its own reaction's A98 S'/S0, but
+C reactions 2-7 divided by S0_1_1_A98 instead.  That left QS0E(2-7) and
+C QQS0EE(4,5,7) near 1D-22, so the S' and S'' terms were dropped and
+C the S0P_*/S0PP_* inputs had no effect.  The typo also left these
+C values unreferenced, which is why they had been commented out.
+      DATA S0_1_1_A98,S0_3_3_A98,S0_3_4_A98,S0_1_12_A98,S0_1_13_A98/
+     *     4.00D-22,5.4D3,5.3D-1,1.34D0,7.6D0/
+      DATA S0_1_14_A98,S0_1_16_A98/3.5D0,9.4D0/
 C       DATA S0_1_14_A98,S0_1_16_A98,S0_PEP_A98,S0_1_BE7E_A98/
 C      *     3.5D0,9.4D0,3.5734D-6,1.77088D-10/
 C       DATA S0_1_BE7P_A98,S0_HEP_A98,S0_1_15_C12ALP_A98,S0_1_15_O16_A98/
@@ -159,32 +168,32 @@ C MHP 4/25 FIXED TYPOS AND TRAPPED OUT POTENTIAL DIVIDE BY ZERO ERRORS
             QS0E(1) = 0.0D0
          ENDIF
          IF(S0_3_3.GT.0.0D0)THEN
-            QS0E(2) = (S0P_3_3/S0_3_3)/(QS0E_3_3_A98/S0_1_1_A98)
+            QS0E(2) = (S0P_3_3/S0_3_3)/(QS0E_3_3_A98/S0_3_3_A98)
          ELSE
             QS0E(2) = 0.0D0
          ENDIF
          IF(S0_3_4.GT.0.0D0)THEN
-            QS0E(3) = (S0P_3_4/S0_3_4)/(QS0E_3_4_A98/S0_1_1_A98)
+            QS0E(3) = (S0P_3_4/S0_3_4)/(QS0E_3_4_A98/S0_3_4_A98)
          ELSE
             QS0E(3) = 0.0D0
          ENDIF
          IF(S0_1_12.GT.0.0D0)THEN
-            QS0E(4) = (S0P_1_12/S0_1_12)/(QS0E_1_12_A98/S0_1_1_A98)
+            QS0E(4) = (S0P_1_12/S0_1_12)/(QS0E_1_12_A98/S0_1_12_A98)
          ELSE
             QS0E(4) = 0.0D0
          ENDIF
          IF(S0_1_13.GT.0.0D0)THEN
-            QS0E(5) = (S0P_1_13/S0_1_13)/(QS0E_1_13_A98/S0_1_1_A98)
+            QS0E(5) = (S0P_1_13/S0_1_13)/(QS0E_1_13_A98/S0_1_13_A98)
          ELSE
             QS0E(5) = 0.0D0
          ENDIF
          IF(S0_1_14.GT.0.0D0)THEN
-            QS0E(6) = (S0P_1_14/S0_1_14)/(QS0E_1_14_A98/S0_1_1_A98)
+            QS0E(6) = (S0P_1_14/S0_1_14)/(QS0E_1_14_A98/S0_1_14_A98)
          ELSE
             QS0E(6) = 0.0D0
          ENDIF
          IF(S0_1_16.GT.0.0D0)THEN
-            QS0E(7) = (S0P_1_16/S0_1_16)/(QS0E_1_16_A98/S0_1_1_A98)
+            QS0E(7) = (S0P_1_16/S0_1_16)/(QS0E_1_16_A98/S0_1_16_A98)
          ELSE
             QS0E(7) = 0.0D0
          ENDIF
@@ -199,18 +208,18 @@ C         QQS0EE(1) = (S0PP_1_1/S0_1_1)/(QQS0EE_1_1_A98/S0_1_1_A98) ZEROED OUT I
 C         QQS0EE(2) = (S0PP_3_3/S0_3_3)/(QQS0EE_3_3_A98/S0_3_3_A98) ZEROED OUT IN 2003 VERSION
 C         QQS0EE(3) = (S0PP_3_4/S0_3_4)/(QQS0EE_3_4_A98/S0_3_4_A98) ZEROED OUT IN 2003 VERSION
          IF(S0_1_12.GT.0.0D0)THEN
-            QQS0EE(4) = (S0PP_1_12/S0_1_12)/(QQS0EE_1_12_A98/S0_1_1_A98)
+            QQS0EE(4) = (S0PP_1_12/S0_1_12)/(QQS0EE_1_12_A98/S0_1_12_A98)
          ELSE
             QQS0EE(4)=0.0D0
          ENDIF
          IF(S0_1_13.GT.0.0D0)THEN
-            QQS0EE(5) = (S0PP_1_13/S0_1_13)/(QQS0EE_1_13_A98/S0_1_1_A98)
+            QQS0EE(5) = (S0PP_1_13/S0_1_13)/(QQS0EE_1_13_A98/S0_1_13_A98)
          ELSE
             QQS0EE(5)=0.0D0
          ENDIF
 C         QQS0EE(6) = (S0PP_1_14/S0_1_14)/(QQS0EE_1_14_A98/S0_1_14_A98) ZEROED OUT IN 2003 VERSION
          IF(S0_1_16.GT.0.0D0)THEN
-            QQS0EE(7) = (S0PP_1_16/S0_1_16)/(QQS0EE_1_16_A98/S0_1_1_A98)
+            QQS0EE(7) = (S0PP_1_16/S0_1_16)/(QQS0EE_1_16_A98/S0_1_16_A98)
          ELSE
             QQS0EE(7)=0.0D0
          ENDIF

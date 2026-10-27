@@ -579,15 +579,21 @@ C ENERGY YIELD FOR DEUTERIUM BURNING
         QDEUT = 5.494D0
         ZZ = -3.72D0*T9M13
         TFACDEUT = 1.0D0+0.112D0*T9P13+3.38D0*T9P23+2.65D0*T9
-C FACTOR OF 6.023D23/ REFLECTS AVAGADROS NUMBER DIVIDED BY THE
+C FACTOR OF CAVOG/ANUC(3) REFLECTS AVAGADROS NUMBER DIVIDED BY THE
 C MASS OF THE DEUTERON IN AMU
-        RDEUT = RHO*2.240D3*T9P23*EXP(ZZ)*TFACDEUT*6.023D23/ANUC(3)
+C 10/27/26 MHP via Claude
+C code changed to correct two errors in RDEUT.  The leading power of
+C T9 is now T9M23, not T9P23: the rate goes as T9**(-2/3), which the
+C -2 term in QRTDEUT already assumed.  The 6.023D23 approximation to
+C Avogadro's number is replaced by CAVOG (CONSTANTS_MOD), here and in
+C RDEUTMAX below.
+        RDEUT = RHO*2.240D3*T9M23*EXP(ZZ)*TFACDEUT*CAVOG/ANUC(3)
         TFACDEUT2 = 0.112D0*T9P13+6.76D0*T9P23+7.95D0*T9
         QRTDEUT = CC13*((TFACDEUT2/TFACDEUT) -2.0D0 - ZZ)
 C NOW LIMIT DEUTERIUM BURNING IN A SURFACE CZ TO BE ON A TIME SCALE
 C NO SHORTER THAN THE CONVECTIVE OVERTURN TIMESCALE.
         IF(IU.GE.JCZ .AND. TAUCZ.GT.1.0D0)THEN
-           RDEUTMAX = 6.023D23/ANUC(3)/TAUCZ
+           RDEUTMAX = CAVOG/ANUC(3)/TAUCZ
            RDEUT2 = RDEUT*X
            IF(RDEUT2.GT.RDEUTMAX)THEN
 C JVS 0712 Commented out write command
@@ -752,8 +758,14 @@ C RATE DERIVATIVES
             DRATT(I)=0.
          ELSE
             DRATRO(I)=1.+DSCR(I)
-            DRATT(I)=DSCT(I)-(Q6(I)*T9M13+(2.*T9M23+Q1(I)*T9M13-Q3(I)*
-     *      T9P13-2.*Q4(I)*T9P23-3.*Q5(I)*T9)/R1)/3.+2.*(Q8(I)*T9)**2
+C 10/27/26 MHP via Claude
+C code changed to carry the QS0E and QQS0EE factors into DRATT.  R1
+C above scales the Q3 term by QS0E and the Q4 and Q5 terms by QQS0EE,
+C but the derivative of R1 used the unscaled Q3-Q5, so it disagreed
+C with the rate whenever either factor differed from 1 (LNEWNUC).
+            DRATT(I)=DSCT(I)-(Q6(I)*T9M13+(2.*T9M23+Q1(I)*T9M13-
+     *      QS0E(I)*Q3(I)*T9P13-QQS0EE(I)*(2.*Q4(I)*T9P23+3.*Q5(I)*T9))
+     *      /R1)/3.+2.*(Q8(I)*T9)**2
          ENDIF
    40 CONTINUE
 C ***************************************************************
