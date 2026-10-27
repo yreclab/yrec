@@ -2737,7 +2737,7 @@ With the toggle set, starting from the 2.2 Msun DBL model:
 ### The DBL models above 2.4 Msun now use the zero-timestep ramp (2026-10-27)
 
 28 DBL decks in `examples/run_from_start_to_dbl/` were rebuilt this
-way: 2.6-25 Msun at Z = 0.018804, and 3 Msun at Z = 0.001, 0.003,
+way (29 with 2.4 Msun, below): 2.6-25 Msun at Z = 0.018804, and 3 Msun at Z = 0.001, 0.003,
 0.010, 0.040 and 0.060. Each deck:
 
 1. reads a lower-mass DBL model from the library: 2.2 Msun for solar
@@ -2777,6 +2777,8 @@ Checked to the ZAMS:
   one) abort the same way. It is the limit above 16 Msun noted in
   `startmodels/readme.md`.
 
-There is still a seam at 2.4 Msun, which keeps its evolved DBL model.
-Its log R is 1.134, while the 2.6 Msun ramp model's is 1.115, so R
-falls across that step.
+2.4 Msun was rebuilt the same way afterwards: a 2-step ramp, then 20
+models to the 1% drop. It reaches the ZAMS within 0.002 dex of its
+reference. So the seam is now between 2.2 Msun, which keeps its evolved
+DBL model (log R = 1.118), and 2.4 Msun (1.087). From 2.4 Msun up the
+ramp sequence is smooth (2.6 Msun is at 1.115).
