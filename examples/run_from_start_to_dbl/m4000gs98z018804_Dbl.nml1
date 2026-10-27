@@ -7,7 +7,7 @@
  ISETMIX=0 ! 0 = do not adjust 1 = use specified mixture (AMIX below) 2 = custom mixture (see parmin.f for variables)
 ! AMIX = 'GS98' ! current implemented solar mixtures are GS98,AAG21,M22P and M22M
 ! Option to adjust the D/He3/Li6/Li7/Be9 abundances and the CNO isotope ratios to be consistent with a specified solar reference
- ISETISO = 0! 0 = do not adjust 1 = use specified mixture (AISO below) 2 = custom mixture (see parmin.f for variables)
+ ISETISO = 1 ! 10/27/26: reset D to the initial abundance before the ramp
 ! AISO = 'L21' ! Lodders 2021 is currently the only supported mixture, for a different one use the custom option
 
  LCALS = .FALSE. ! Toggle to auto-calibrate solar Y and alpha to match the solar R and L at the age of the Sun. Does not enforce correct Z/X for mixture.
@@ -17,7 +17,6 @@
   TOLR = 3.0D-5 ! Tolerance target for R in the calibration routines.
  CALSOLAGE = 4.568D9 ! Solar age in the calibration routines. 
   
- NUMRUN = 1 ! Each YREC run can rescale a model, evolve a model, or do both (pre-MS only). This indicates the number of such steps requested.
 
 ! KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
 ! LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
@@ -32,19 +31,144 @@
 ! LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.
 ! SENV0A(1) = -1.0D-5 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
   
- KINDRN(1) = 1   
- LFIRST(1) = .TRUE.  
- NMODLS(1) = 1 ! 10/27/26: the start model is already past the 1% D drop (END_DCEN is disabled), so the DBL model is the start model plus one step.
- XENV0A(1) = 0.708483 ! Envelope abundance label
- ZENV0A(1) = 0.018804 ! Envelope abundance label
- CMIXLA(1) = 1.852729
- END_DCEN(1) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, start)
 ! END_DCEN(1) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, end)
 ! END_XCEN(1) = 0.70 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (ZAMS)
 ! END_XCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
 ! END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
  
  ! The starting and last models include only abundances and structure variables. These options allow snapshots to be generated with more information. 
+ L_ZERODT_PREMS = .TRUE. ! 10/27/26: KINDRN=2 is a true zero-timestep rescale for this pre-MS model (see KNOWN_ISSUES.md issue 39)
+ NUMRUN = 12 ! 11 zero-timestep mass steps from the 2.2 Msun DBL model, then evolve to the 1% D drop
+ KINDRN(1) = 2
+ LFIRST(1) = .TRUE.
+ RSCLM(1) = 2.2978
+ RSCLX(1) = -0.708483
+ RSCLZ(1) = -0.018804
+ RSCLCM(1) = -0.8D0
+ NMODLS(1) = 6
+ XENV0A(1) = 0.708483
+ ZENV0A(1) = 0.018804
+ CMIXLA(1) = 1.852729
+
+ KINDRN(2) = 2
+ LFIRST(2) = .FALSE.
+ RSCLM(2) = 2.4000
+ RSCLX(2) = -0.708483
+ RSCLZ(2) = -0.018804
+ RSCLCM(2) = -0.8D0
+ NMODLS(2) = 6
+ XENV0A(2) = 0.708483
+ ZENV0A(2) = 0.018804
+ CMIXLA(2) = 1.852729
+
+ KINDRN(3) = 2
+ LFIRST(3) = .FALSE.
+ RSCLM(3) = 2.4980
+ RSCLX(3) = -0.708483
+ RSCLZ(3) = -0.018804
+ RSCLCM(3) = -0.8D0
+ NMODLS(3) = 6
+ XENV0A(3) = 0.708483
+ ZENV0A(3) = 0.018804
+ CMIXLA(3) = 1.852729
+
+ KINDRN(4) = 2
+ LFIRST(4) = .FALSE.
+ RSCLM(4) = 2.6000
+ RSCLX(4) = -0.708483
+ RSCLZ(4) = -0.018804
+ RSCLCM(4) = -0.8D0
+ NMODLS(4) = 6
+ XENV0A(4) = 0.708483
+ ZENV0A(4) = 0.018804
+ CMIXLA(4) = 1.852729
+
+ KINDRN(5) = 2
+ LFIRST(5) = .FALSE.
+ RSCLM(5) = 2.8000
+ RSCLX(5) = -0.708483
+ RSCLZ(5) = -0.018804
+ RSCLCM(5) = -0.8D0
+ NMODLS(5) = 6
+ XENV0A(5) = 0.708483
+ ZENV0A(5) = 0.018804
+ CMIXLA(5) = 1.852729
+
+ KINDRN(6) = 2
+ LFIRST(6) = .FALSE.
+ RSCLM(6) = 3.0000
+ RSCLX(6) = -0.708483
+ RSCLZ(6) = -0.018804
+ RSCLCM(6) = -0.8D0
+ NMODLS(6) = 6
+ XENV0A(6) = 0.708483
+ ZENV0A(6) = 0.018804
+ CMIXLA(6) = 1.852729
+
+ KINDRN(7) = 2
+ LFIRST(7) = .FALSE.
+ RSCLM(7) = 3.1582
+ RSCLX(7) = -0.708483
+ RSCLZ(7) = -0.018804
+ RSCLCM(7) = -0.8D0
+ NMODLS(7) = 6
+ XENV0A(7) = 0.708483
+ ZENV0A(7) = 0.018804
+ CMIXLA(7) = 1.852729
+
+ KINDRN(8) = 2
+ LFIRST(8) = .FALSE.
+ RSCLM(8) = 3.3247
+ RSCLX(8) = -0.708483
+ RSCLZ(8) = -0.018804
+ RSCLCM(8) = -0.8D0
+ NMODLS(8) = 6
+ XENV0A(8) = 0.708483
+ ZENV0A(8) = 0.018804
+ CMIXLA(8) = 1.852729
+
+ KINDRN(9) = 2
+ LFIRST(9) = .FALSE.
+ RSCLM(9) = 3.5000
+ RSCLX(9) = -0.708483
+ RSCLZ(9) = -0.018804
+ RSCLCM(9) = -0.8D0
+ NMODLS(9) = 6
+ XENV0A(9) = 0.708483
+ ZENV0A(9) = 0.018804
+ CMIXLA(9) = 1.852729
+
+ KINDRN(10) = 2
+ LFIRST(10) = .FALSE.
+ RSCLM(10) = 3.7417
+ RSCLX(10) = -0.708483
+ RSCLZ(10) = -0.018804
+ RSCLCM(10) = -0.8D0
+ NMODLS(10) = 6
+ XENV0A(10) = 0.708483
+ ZENV0A(10) = 0.018804
+ CMIXLA(10) = 1.852729
+
+ KINDRN(11) = 2
+ LFIRST(11) = .FALSE.
+ RSCLM(11) = 4.0000
+ RSCLX(11) = -0.708483
+ RSCLZ(11) = -0.018804
+ RSCLCM(11) = -0.8D0
+ NMODLS(11) = 6
+ XENV0A(11) = 0.708483
+ ZENV0A(11) = 0.018804
+ CMIXLA(11) = 1.852729
+
+ KINDRN(12) = 1
+ LFIRST(12) = .FALSE.
+ NMODLS(12) = 3000
+ SETDT(12) = 12.99 ! fixed timestep (yr): HTIMER would otherwise reuse the stored one, far too long after a zero-timestep run
+ XENV0A(12) = 0.708483
+ ZENV0A(12) = 0.018804
+ CMIXLA(12) = 1.852729
+ END_DCEN(12) = 2.750e-05 ! Run stops when central D falls 1% (D birthline)
+
  LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
  LSTATM = .FALSE. ! If T, append an atmosphere to the stored model file.
  LSTENV = .FALSE. ! If T, append an envelope to the stored model file. If LSTENV and LSTATM = F, no information is output beyond the fitting point.
@@ -74,7 +198,7 @@
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
 ! FFIRST = "{YREC_INPUT}/models/pms/gs98/p900gs98z0188.nmo" ! Starting model path.
- FFIRST = "{YREC_START}/start/m4000gs98z018804_prems.first" ! The last converged model is stored here.
+ FFIRST = "{YREC_START}/dbl/m2200gs98z018804_Dbl.first" ! The last converged model is stored here.
  FLAST = "{YREC_OUTPUT}/m4000gs98z018804_Dbl.first" ! The last converged model is stored here.
  FMODPT = "{YREC_OUTPUT}/m4000gs98z018804_Dbl.full" ! No longer used.
  FSTOR = "{YREC_OUTPUT}/m4000gs98z018804_Dbl.store" ! Model snapshots during the run are stored here.

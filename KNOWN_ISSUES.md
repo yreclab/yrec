@@ -49,7 +49,7 @@ Status as of 2026-10-27.
 | 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
 | 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
 | 38 | A bare `STOP` ends a failed run with exit status 0 | open |
-| 39 | High-mass start models too compact to resolve the D birthline | accepted 2026-10-27; `L_ZERODT_PREMS` added |
+| 39 | High-mass start models too compact to resolve the D birthline | DBL above 2.4 Msun rebuilt by zero-timestep ramp, 2026-10-27 |
 
 ## Status of the original tasks
 
@@ -2734,7 +2734,49 @@ With the toggle set, starting from the 2.2 Msun DBL model:
   and log Tc = 6.204, against 1.141 and 6.235 for the current library
   model.
 
-These runs are not yet used for the library. Switching method at
-2.4 Msun would leave a seam of about 0.06 dex in log R. Above about
-8 Msun the current start models are larger and cooler than the static
-solution.
+### The DBL models above 2.4 Msun now use the zero-timestep ramp (2026-10-27)
+
+28 DBL decks in `examples/run_from_start_to_dbl/` were rebuilt this
+way: 2.6-25 Msun at Z = 0.018804, and 3 Msun at Z = 0.001, 0.003,
+0.010, 0.040 and 0.060. Each deck:
+
+1. reads a lower-mass DBL model from the library: 2.2 Msun for solar
+   Z, 1 Msun at the same Z for the others. These decks therefore
+   depend on other DBL models already being installed, the same pattern
+   as the chained start decks.
+2. sets `ISETISO = 1`. This resets D to its initial abundance on
+   read-in. The source model is already past its own 1% drop, and
+   without the reset `MAIN` disables the `END_DCEN` stop.
+3. ramps to the target mass with `KINDRN = 2` zero-timestep rescales
+   (`L_ZERODT_PREMS = .TRUE.`), 6 relaxations per step. The steps follow
+   one shared ladder: every library mass from 2.4 Msun up, subdivided so
+   no step is more than 8%. With a separate geometric sequence per deck,
+   7 of the 23 solar ramps failed to converge somewhere between 3.2 and
+   6.4 Msun, at masses other decks passed through cleanly. On the shared
+   ladder all of them converge.
+4. evolves at a fixed `SETDT` (20 yr x (3/M)**1.5, at least 1 yr) until
+   `END_DCEN`, the 1% central-D drop.
+
+All 28 exit cleanly and stop on `END_DCEN` after 7-43 models. There is
+no `NaN` and no failure message. Along the solar sequence the DBL
+models are smooth: log R runs from 1.115 to 2.032 and log Tc from 6.19
+to 6.45, between 2.6 and 25 Msun. The `NMODLS(1) = 1` workaround is gone
+from the decks it was in.
+
+Checked to the ZAMS:
+
+- The 19 `run_from_dbl_to_zams` cases at 2.6-16 Msun all stop on
+  `END_XCEN`. They are within 0.002 dex in L, 0.004 dex in R and
+  0.002 dex in Teff of their references.
+- Temporary ZAMS decks were made for the other 9 models. The 18 Msun
+  model reaches the ZAMS, and so do all five non-solar 3 Msun models
+  (each with `END_XCEN` = X - 0.005).
+- 20, 22.5 and 25 Msun abort in `TPGRAD` during the pre-MS
+  contraction. That is not caused by the new models: the same decks
+  started from the old DBL models (`09c3b9b`, and the `f7c4520` 20 Msun
+  one) abort the same way. It is the limit above 16 Msun noted in
+  `startmodels/readme.md`.
+
+There is still a seam at 2.4 Msun, which keeps its evolved DBL model.
+Its log R is 1.134, while the 2.6 Msun ramp model's is 1.115, so R
+falls across that step.
