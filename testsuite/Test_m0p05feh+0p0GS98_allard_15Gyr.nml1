@@ -92,7 +92,7 @@
  FFERMI = "{YREC_INPUT}/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
 
 ! Starting models
- FFIRST = "{YREC_START}/dbl/m0050gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
+ FFIRST = "{YREC_START}/start/m0050gs98z018804_prems.first" ! 10/28/26: start model, not the DBL model; from the new DBL model this low-mass case failed to converge.
 
 ! Output files 
  FLAST = "{YREC_OUTPUT}/Test_m0p05feh+0p0GS98_allard_15Gyr.last" ! The last converged model is stored here.
