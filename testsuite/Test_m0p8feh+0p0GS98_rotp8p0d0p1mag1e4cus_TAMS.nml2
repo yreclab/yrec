@@ -172,8 +172,8 @@
 ! Rotation initialization options
  LWNEW = .TRUE. ! Toggle if converting a non-rotating model to a rotating one               
  WNEW = 9.0902D-6 ! Uniform angular velocity imposed if LWNEW = .TRUE (rad/s). If star-disk coupling is being used, should be set to the same value as the disk period. Check your units!
- LDISK = .FALSE. ! Toggle if enforcing co-rotation with accretion disk
- TDISK = 1.00D-4 ! Lifetime of disk locking (Gyr) - 1e5yr = 1e-4 Gyr is the D burning BL. 1e-4 to 1e-2 is the recommended range
+ LDISK = .TRUE. ! 10/28/26: was .FALSE., so TDISK had no effect. The DBL start model is larger, so without the lock these stars spin up too fast. Toggle if enforcing co-rotation with accretion disk
+ TDISK = 3.00D-4 ! 10/28/26: 0.3 Myr, was 0.1 Myr. Lifetime of disk locking (Gyr) - 1e5yr = 1e-4 Gyr is the D burning BL. 1e-4 to 1e-2 is the recommended range
  PDISK = 9.0902e-6 ! Rotation period (rad/s) of disk; 8 days (9.0902e-6) is the observed median period in solar-mass disked stars in star forming regions.
 
 ! Angular momentum loss options
