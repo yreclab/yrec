@@ -1,0 +1,13 @@
+Jamie Tayar October 2026
+This folder contains the assignments used in my Fall 2026 Graudate level AST 6215 Stars and the Galaxy Class that were related to or included questions about YREC. 
+Most of this is contained in Project 1 (which I originally designed for MESA and MESA Web, https://zenodo.org/records/8393698), but I added YREC questions to the end
+of a few of the problem sets as well because it is easier to get started with than MESA. 
+
+Project 1 Assignment Description:
+In this assignment, I want you to get some experience with making and looking at stellar models, and trying to connect what is computed in a real stellar evolution 
+code to the more mathematical and theoretical discussions we've been having in class. I have created a jupyter notebookDownload a jupyter notebook to walk you through 
+the project (including some starter code to give you a sense of what the functions look like) but you are not required to use python for this project. If you prefer 
+to use something else (or python but some other framework), you can answer the same questions in the pdf version. Please submit a pdf version of the notebook with 
+the answers filled in (you may need to export as html and save that as a pdf), or the equivalent in whatever framework you decide to use- I do not intend to try to 
+run any of your code during the grading process. In case your own system has challenges, this notebook will also probably run in google colab 
+(https://colab.research.google.com/Links to an external site.). 
