@@ -73,7 +73,7 @@ C explicit declarations.
      *       HCOMP,HD,HG,HI,HJ,HJM,HKEROT,HL,HLC,HP,HR,HS,HS1,HS2,HSEND,
      *       HSTOT,HT,O,OL,OMEGA,P,PDISK0,PL,PLIM,PP,PS,QACP,QACR,QACT,
      *       QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,QDTP,QDTT,QIW,QOD,QOT,R0,
-     *       RAT_C,RAT_N,RAT_O,RHOC,RL,RMU,RS,SENV1,SJTOT,SKEROT,SL,
+     *       RAT_C,RAT_N,RAT_O,RHOC,RL,RMU,RS,SENV1,SENVTOL,SJTOT,SKEROT,SL,
      *       SMASS,SUMJ,SUMKE,SUM_C,SUM_O,T,TDISK0,TEFFL,TEMP,TEST,TL,
      *       TLUMX,TOT_C,TOT_N,TOT_O,TRIL,TRIT,TS,V,VEL,VSUM,WMAX0,X,X0,
      *       X1,X2,Z
@@ -581,7 +581,18 @@ C FOR THIS PURPOSE(BASE OF ATMOSPHERE).
        IF(SENV0.GT.-1.0D-12) SENV0 = -1.D-12
        SENV = HS(M) - HSTOT
        SENV1 = SENV
-       IF(SENV.EQ.SENV0) GOTO 599
+C 10/28/26 MHP via Claude
+C code changed to leave the fitting point alone when the requested one
+C matches the current one to within roundoff, not only when it is exactly
+C equal.  SENV = HS(M) - HSTOT is a difference of two log masses near 33,
+C so it carries roundoff of order 1D-14.  A request such as SENV0 = -1D-4
+C on a model whose SENV is -1.0000000000332D-4 used to pass the exact
+C test, and the shallower-envelope branch below then added a point with
+C FX = 0, a copy of point M; SPLINT stopped on the duplicate abscissa.
+C The tolerance is 100 ulps of HSTOT, about 7D-13, below the 1D-12
+C minimum envelope mass imposed above.
+       SENVTOL = 1.0D2*EPSILON(HSTOT)*ABS(HSTOT)
+       IF(ABS(SENV-SENV0).LE.SENVTOL) GOTO 599
        JEND = 11
        IF(LEXCOM) JEND = 15
        IF(SENV0.LT.SENV) THEN
