@@ -2340,6 +2340,31 @@ expected.
 
 The DBL-to-ZAMS 0.03 Msun case was removed from the suite instead.
 
+### `ZAHB_m1p9feh+0p0_diffcal_TAHB` (added 2026-10-28)
+
+This ZAHB-to-TAHB case has never reached its `END_YCEN` of 1e-4, and it
+stays in the suite as a crash-extent case (MHP, 2026-10-28). Every run
+stops during a core breathing pulse near central He exhaustion, while
+the growing convective core is mixing fresh helium in and Yc is rising.
+
+| 1.9 Msun diffcal run | last model | age | Yc | stop |
+|---|---|---|---|---|
+| old code (reference) | 2801 | 329.5 Myr | 4.1e-4 | core diverged (DEL-L/L 71, negative beta at log T 9.27) |
+| new code, `FCORR0` 0.6 | 2200 | 315.3 Myr | 8.7e-4 | `ILLEGAL COMPOSITION (X,Z) = 0.00 0.98 IN ALEX06` |
+| new code, `FCORR0` 0.3 | 2200 | 315.3 Myr | 8.7e-4 | same |
+
+The two new-code runs agree to five digits up to the stop, so the
+Newton damping that rescued the 1.1, 1.3, 1.7 diffcal and 1.8 Msun
+decks has no effect here. The stop is a bare `STOP` in `ALEX06TAB`
+(exit 0, issue 38): the molecular opacity table, which only applies near
+the surface, was asked for the C/O core composition. How core
+composition reaches the low-temperature opacity path -- most likely a
+trial model that went wrong mid-iteration -- is not yet known; start
+from `GETALEX06` and its callers. A guard there might also help the
+other ZAHB decks that stop at a breathing pulse. The next rebaseline
+will move this case's recorded extent from 329.5 Myr to about 315 Myr;
+that move is expected.
+
 
 ## 34. `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB
 

@@ -2,6 +2,9 @@
 
  DESCRIP(1) = "model5.1 test suite. Core helium burning, no diffusion, no rotation. Diffusion-calibrated. Overshooting."
  DESCRIP(2) = "Gray Atm OPAL06+SCV EOS GS98" ! Second line label for output (optional)
+ ! 10/28/26: crash-extent case. This run is not expected to reach the TAHB; it stops at a core
+ ! breathing pulse near central He exhaustion (Yc ~9e-4), and how far it gets is what the test checks.
+ ! See KNOWN_ISSUES.md issue 33.
  
  ISETMIX=0 ! 0 = do not adjust 1 = use specified mixture (AMIX below) 2 = custom mixture (see parmin.f for variables)
  AMIX = 'GS98'
