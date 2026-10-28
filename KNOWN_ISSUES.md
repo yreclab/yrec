@@ -2342,8 +2342,14 @@ The DBL-to-ZAMS 0.03 Msun case was removed from the suite instead.
 
 ### `ZAHB_m1p9feh+0p0_diffcal_TAHB` (added 2026-10-28)
 
-This ZAHB-to-TAHB case has never reached its `END_YCEN` of 1e-4, and it
-stays in the suite as a crash-extent case (MHP, 2026-10-28). Every run
+**Resolved later on 2026-10-28.** With the diffusion-calibrated starting
+composition restored after the solar recalibration (X 0.708504,
+Z 0.018797, base alpha), this case reaches the TAHB (Yc 9.5e-5 at
+289.6 Myr) with the default `FCORR0` 0.6 and is no longer a crash-extent
+case. The `ALEX06TAB` question below is still open.
+
+Before that, this ZAHB-to-TAHB case had never reached its `END_YCEN` of
+1e-4, and it was kept in the suite as a crash-extent case. Every run
 stops during a core breathing pulse near central He exhaustion, while
 the growing convective core is mixing fresh helium in and Yc is rising.
 
