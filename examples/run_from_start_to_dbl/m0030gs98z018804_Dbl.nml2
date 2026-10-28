@@ -17,9 +17,9 @@
 
 ! Options for gravitational settling and microscopic diffusion
  LNEWDIF = .TRUE. ! Enables the usage of new routines for gravitational settling; recommended that this be set T. Required for light element diffusion.
- LDIFY = .TRUE. ! Compute gravitational settling of helium (t/f)
+ LDIFY = .FALSE. ! 10/28/26: was .TRUE. (He and Li settling without metals); library runs are no-diffusion -- Compute gravitational settling of helium (t/f)
  LDIFZ = .FALSE. ! Compute gravitational settling of metals (t/f) 
- LDIFLI = .TRUE. ! Compute gravitational settling of light species (t/f)
+ LDIFLI = .FALSE. ! 10/28/26 (see LDIFY). -- Compute gravitational settling of light species (t/f)
  FGRY = 1.0D0 ! Factor to muliply diffusion coeffcients for settling of helium (0.75 if rotational mixing not included)
  FGRZ = 1.0D0 ! Factor to multiply diffusion coeffcients for settling of metal (0.75 if rotational mixing not included)
 ! Numerical choices for gravitational settling and thermal diffusion. You should not need to adjust these.
