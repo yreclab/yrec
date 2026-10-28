@@ -30,7 +30,7 @@
  ZENV0A(1) = 0.016492 ! Envelope abundance label
  CMIXLA(1) = 1.707575 ! Rescale to this mixing length (or use for the run).
  LSENV0A(1) = .TRUE. ! If true, adjust outer fitting point mass location.
- SENV0A(1) = -1.0D-7 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
+ SENV0A(1) = -1.0D-4 ! 10/28/26: was -1.0D-7. With the thin fitting point the run went NaN and stopped in TPGRAD on its first models from the new 10 Msun DBL model; -1.0D-4 matches the DBL-to-ZAMS deck. -- Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
   
  KINDRN(2) = 1   
  LFIRST(2) = .FALSE.  

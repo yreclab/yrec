@@ -68,7 +68,7 @@
 
  ! Atmosphere and envelope sinkline option
  ATMSTP = 0.05 ! Maximum step in atmosphere integrator for LENVG
- ENVSTP = 0.05 ! Maximum step in atmosphere integrator for LENVG
+ ENVSTP = 0.025 ! 10/28/26: envelope steps halved. With the coarser steps the envelope integration failed in the blue loop where the He II opacity bump drives beta < 0 (log T ~4.39). -- Maximum step in atmosphere integrator for LENVG
                       
  ! Equation of state flags
  LSCV = .FALSE. ! Use SCV EoS in domain where it is valid and OPAL is not
@@ -136,9 +136,9 @@
  ATMBEG = 0.05 ! Maximum atmosphere integrator step in log tau.
  ATMD0 = 1.0D-10 ! log10 of starting density at tau=0, atmosphere integrator.        
  ENVERR = 1.0D-9 ! Numerical tolerance, envelope integrator.       
- ENVMAX = 0.1 ! Maximum envelope integrator step in log P.
- ENVMIN = 0.05 ! Minimum envelope integrator step in log P.          
- ENVBEG = 0.05 ! Starting envelope integrator step in log P.           
+ ENVMAX = 0.05 ! 10/28/26 (see above). -- Maximum envelope integrator step in log P.
+ ENVMIN = 0.025 ! 10/28/26 (see above). -- Minimum envelope integrator step in log P.
+ ENVBEG = 0.025 ! 10/28/26 (see above). -- Starting envelope integrator step in log P.
  STOLR0 = 1.0D-6 ! Mass content of envelope has to agree with mass at fitting point to this fractional accuracy.        
  IMAX = 11 ! Integrators start with a large step, divide to smaller, and extrapolate to zero. Maximum number of loops to infer integration step size (env + atm)              
  NUSE = 7 ! Number of prior steps used for extrapolation to zero step size (atm+env).               
