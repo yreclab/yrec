@@ -21,7 +21,7 @@
 
  KINDRN(1) = 3 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
  LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
- RSCLM(1) = 3.00 ! If positive, rescale to this mass (Msun)
+ RSCLM(1) = -3.00 ! 10/28/26 (see FFIRST). -- If positive, rescale to this mass (Msun)
  RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
  RSCLX(1) = 0.659430 ! If positive, rescale to this hydrogen.
  RSCLZ(1) = 0.040000 ! If positive, rescale to this metallicity. 
@@ -69,7 +69,7 @@
  LPUREZ = .TRUE. 
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
- FFIRST = "{YREC_START}/seed/p280gs98z01757.ahbl" ! Starting model path.
+ FFIRST = "{YREC_START}/start/m3000gs98z018804_prems.first" ! 10/28/26: start from the solar-Z 3 Msun start model and rescale Z only, as the low-Z 3 Msun decks do. From the 2.8 Msun Z=0.0176 seed the combined mass and Z rescale blew up on model 2 (OUT OF OPAL). -- Starting model path.
  FLAST = "{YREC_OUTPUT}/m3000gs98z040000_prems.first" ! The last converged model is stored here.
  FMODPT = "{YREC_OUTPUT}/m3000gs98z040000_prems.full" ! No longer used.
  FSTOR = "{YREC_OUTPUT}/m3000gs98z040000_prems.store" ! Model snapshots during the run are stored here.
