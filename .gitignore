@@ -9,3 +9,6 @@
 **/.*~
 src/yrec
 **/#*#
+
+# Emacs backup files
+*~
