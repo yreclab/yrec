@@ -83,7 +83,7 @@
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
 ! FFIRST = "{YREC_INPUT}/models/seed/p100gs98z01757.ahbl" ! Starting model path.
- FFIRST = "{YREC_START}/dbl/m0300gs98z018804_Dbl.first" ! Starting model path.
+ FFIRST = "{YREC_START}/start/m0300gs98z018804_prems.first" ! 10/28/26: start model, not the DBL model. From the DBL model the scv and Yale EOS runs failed to converge in D burning; from the start model all 0.3 Msun cases converge.
  FLAST = "{YREC_OUTPUT}/Test_m0300_feh0_noGS_ZAMS.last" ! The last converged model is stored here.
  FMODPT = "{YREC_OUTPUT}/Test_m0300_feh0_noGS_ZAMS.full" ! No longer used.
  FSTOR = "{YREC_OUTPUT}/Test_m0300_feh0_noGS_ZAMS.store" ! Model snapshots during the run are stored here.

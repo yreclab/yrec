@@ -92,7 +92,7 @@
  FFERMI = "{YREC_INPUT}/eos/yale/FERMI.TAB" ! Fermi integral tables for partial degeracy
 
 ! Starting models
- FFIRST = "{YREC_START}/dbl/m0100gs98z018804_Dbl.first" ! Sample starting model - Deuterium birthline
+ FFIRST = "{YREC_START}/start/m0100gs98z018804_prems.first" ! 10/28/26: start model, not the DBL model, as for the 0.3 Msun cases, where it fixed the D-burning convergence failures with the scv and Yale EOS.
 
 ! Output files 
  FLAST = "{YREC_OUTPUT}/Test_m0p1feh+0p0GS98_base_ZAMS.last" ! The last converged model is stored here.
