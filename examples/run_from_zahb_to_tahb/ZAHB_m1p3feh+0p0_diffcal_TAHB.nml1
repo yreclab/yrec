@@ -18,16 +18,16 @@
 
  KINDRN(1) = 2 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, no zero timestep)
  LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
- CMIXLA(1) = 1.707873
- RSCLX(1) = 0.708508
- RSCLZ(1) = 0.018777
+ CMIXLA(1) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
+ RSCLX(1) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.708508
+ RSCLZ(1) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.018777
  NMODLS(1) = 10
 
  KINDRN(2) = 2 ! rescale
  LFIRST(2) = .FALSE.
- CMIXLA(2) = 1.707873
- RSCLX(2) = 0.708508
- RSCLZ(2) = 0.018777
+ CMIXLA(2) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
+ RSCLX(2) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.708508
+ RSCLZ(2) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.018777
  RSCLM(2) = -1 ! If positive, rescale to this mass (Msun)
  RSCLCM(2) = 0.461997 ! If positive, rescale to this core mass (CHeB only)
  NMODLS(2) = 10
@@ -35,9 +35,9 @@
  KINDRN(3) = 1
  LFIRST(3) = .FALSE.
  NMODLS(3) = 1000000
- XENV0A(3) = 0.708508 ! Envelope abundance label
- ZENV0A(3) = 0.018777
- CMIXLA(3) = 1.707873
+ XENV0A(3) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.708508 -- Envelope abundance label
+ ZENV0A(3) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.018777
+ CMIXLA(3) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
  END_YCEN(3) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
 
  LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
@@ -58,7 +58,7 @@
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
  FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.018777 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ ZOPAL951 = 0.01649314  ! 10/28/26: solar calibration (base); was 0.018777 -- Generate a surface mixture table with this Z. Speeds up models without diffusion.
  FLIV95 = "{YREC_INPUT}/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
@@ -75,7 +75,7 @@
  FSNU = "{YREC_OUTPUT}/ZAHB_m1p3feh+0p0_diffcal_TAHB.snu" ! No longer used (formally, output if LSNU = T).
  FSCOMP = "{YREC_OUTPUT}/ZAHB_m1p3feh+0p0_diffcal_TAHB.excomp" ! No longer used (light elements vs. time, now included in track file)
 
- FOPALE06 = "{YREC_INPUT}/eos/opal2006/EOSOPAL06Z0.018776" ! OPAL 2006 EoS table path.
+ FOPALE06 = "{YREC_INPUT}/eos/opal2006/EOSOPAL06Z0.016492" ! 10/28/26: EOS table nearest the calibrated Z; was EOSOPAL06Z0.018776 -- OPAL 2006 EoS table path.
  FcondOpacP = "{YREC_INPUT}/opacity/conductive/potekhin/condall06.d" ! Conductive opacity table path.
  FATM = "{YREC_INPUT}/atmos/kurucz/atmk1990p00.tab" ! Model atmosphere look-up table for Kurucz and Kurucz/Castelli.
  FALLARD = "{YREC_INPUT}/atmos/allard/Nextgen2.all" ! Allard model atmosphere look-up table (solar Z only).

@@ -37,12 +37,12 @@
  LFIRST(1) = .TRUE.
  RSCLM(1) = 0.0535
  RSCLCM(1) = -0.8D0
- RSCLX(1) = 0.719600
- RSCLZ(1) = 0.016492
+ RSCLX(1) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(1) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(1) = 6
- XENV0A(1) = 0.719600
- ZENV0A(1) = 0.016492
- CMIXLA(1) = 1.797279
+ XENV0A(1) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(1) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(1) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(1) = .TRUE.
  SENV0A(1) = -1.0D-4
 
@@ -50,12 +50,12 @@
  LFIRST(2) = .FALSE.
  RSCLM(2) = 0.0572
  RSCLCM(2) = -0.8D0
- RSCLX(2) = 0.719600
- RSCLZ(2) = 0.016492
+ RSCLX(2) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(2) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(2) = 6
- XENV0A(2) = 0.719600
- ZENV0A(2) = 0.016492
- CMIXLA(2) = 1.797279
+ XENV0A(2) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(2) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(2) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(2) = .FALSE.
  SENV0A(2) = -1.0D-4
 
@@ -63,12 +63,12 @@
  LFIRST(3) = .FALSE.
  RSCLM(3) = 0.0612
  RSCLCM(3) = -0.8D0
- RSCLX(3) = 0.719600
- RSCLZ(3) = 0.016492
+ RSCLX(3) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(3) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(3) = 6
- XENV0A(3) = 0.719600
- ZENV0A(3) = 0.016492
- CMIXLA(3) = 1.797279
+ XENV0A(3) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(3) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(3) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(3) = .FALSE.
  SENV0A(3) = -1.0D-4
 
@@ -76,12 +76,12 @@
  LFIRST(4) = .FALSE.
  RSCLM(4) = 0.0654
  RSCLCM(4) = -0.8D0
- RSCLX(4) = 0.719600
- RSCLZ(4) = 0.016492
+ RSCLX(4) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(4) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(4) = 6
- XENV0A(4) = 0.719600
- ZENV0A(4) = 0.016492
- CMIXLA(4) = 1.797279
+ XENV0A(4) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(4) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(4) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(4) = .FALSE.
  SENV0A(4) = -1.0D-4
 
@@ -89,12 +89,12 @@
  LFIRST(5) = .FALSE.
  RSCLM(5) = 0.0699
  RSCLCM(5) = -0.8D0
- RSCLX(5) = 0.719600
- RSCLZ(5) = 0.016492
+ RSCLX(5) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(5) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(5) = 6
- XENV0A(5) = 0.719600
- ZENV0A(5) = 0.016492
- CMIXLA(5) = 1.797279
+ XENV0A(5) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(5) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(5) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(5) = .FALSE.
  SENV0A(5) = -1.0D-4
 
@@ -102,12 +102,12 @@
  LFIRST(6) = .FALSE.
  RSCLM(6) = 0.0748
  RSCLCM(6) = -0.8D0
- RSCLX(6) = 0.719600
- RSCLZ(6) = 0.016492
+ RSCLX(6) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(6) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(6) = 6
- XENV0A(6) = 0.719600
- ZENV0A(6) = 0.016492
- CMIXLA(6) = 1.797279
+ XENV0A(6) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(6) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(6) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(6) = .FALSE.
  SENV0A(6) = -1.0D-4
 
@@ -115,12 +115,12 @@
  LFIRST(7) = .FALSE.
  RSCLM(7) = 0.08
  RSCLCM(7) = -0.8D0
- RSCLX(7) = 0.719600
- RSCLZ(7) = 0.016492
+ RSCLX(7) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ RSCLZ(7) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
  NMODLS(7) = 6
- XENV0A(7) = 0.719600
- ZENV0A(7) = 0.016492
- CMIXLA(7) = 1.797279
+ XENV0A(7) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(7) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(7) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  LSENV0A(7) = .FALSE.
  SENV0A(7) = -1.0D-4
 
@@ -128,16 +128,16 @@
  LFIRST(8) = .FALSE.
  NMODLS(8) = 20
  SETDT(8) = 100.0 ! fixed timestep (yr) after the zero-timestep runs
- XENV0A(8) = 0.719600
- ZENV0A(8) = 0.016492
- CMIXLA(8) = 1.797279
+ XENV0A(8) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(8) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(8) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
 
  KINDRN(9) = 1
  LFIRST(9) = .FALSE.
  NMODLS(9) = 10000
- XENV0A(9) = 0.719600
- ZENV0A(9) = 0.016492
- CMIXLA(9) = 1.797279
+ XENV0A(9) = 0.71962000 ! 10/28/26: solar calibration (allard); was 0.719600
+ ZENV0A(9) = 0.01649300 ! 10/28/26: solar calibration (allard); was 0.016492
+ CMIXLA(9) = 1.79719800 ! 10/28/26: solar calibration (allard); was 1.797279
  ENDAGE(9) = 1.5D10
 
  LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
@@ -165,7 +165,7 @@
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
  FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.016232 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ ZOPAL951 = 0.01649300  ! 10/28/26: solar calibration (allard); was 0.016232 -- Generate a surface mixture table with this Z. Speeds up models without diffusion.
  FLIV95 = "{YREC_INPUT}/opacity/atomic/op05/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
