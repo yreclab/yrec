@@ -35,16 +35,16 @@
  KINDRN(2) = 1   
  LFIRST(2) = .FALSE.  
  NMODLS(2) = 1000 
- XENV0A(1) = 0.708483 ! Envelope abundance label
- ZENV0A(1) = 0.018804 ! Envelope abundance label
+ XENV0A(2) = 0.708483 ! 10/28/26: index was (1), which overwrote run 1 and left run 2 unset -- Envelope abundance label
+ ZENV0A(2) = 0.018804 ! 10/28/26: index was (1), which overwrote run 1 and left run 2 unset -- Envelope abundance label
  CMIXLA(2) = 1.852729
  ENDAGE(2) = 1.0D8 ! Run stops if NMODLS(I) is reached or this age is reached
  
  KINDRN(3) = 1  
  LFIRST(3) = .FALSE.  
  NMODLS(3) = 1000
- XENV0A(1) = 0.708483 ! Envelope abundance label
- ZENV0A(1) = 0.018804 ! Envelope abundance label
+ XENV0A(3) = 0.708483 ! 10/28/26: index was (1), which overwrote run 1 and left run 3 unset -- Envelope abundance label
+ ZENV0A(3) = 0.018804 ! 10/28/26: index was (1), which overwrote run 1 and left run 3 unset -- Envelope abundance label
  CMIXLA(3) = 1.852729
  ENDAGE(3) = 4.568D9 
  
