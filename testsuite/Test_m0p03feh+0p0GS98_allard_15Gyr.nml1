@@ -2,6 +2,8 @@
 
  DESCRIP(1) = "YREC release paper test suite" ! Label for output (optional)  
  DESCRIP(2) = "Brown Dwarf model, 30 Mj, Allard atmosphere" ! Second line label for output (optional)
+ ! 10/28/26: crash-extent case. This run is not expected to reach its 15 Gyr end age; it stops as the
+ ! centre turns degenerate, and how far it gets is what the test checks. See KNOWN_ISSUES.md issue 33.
 
  ! In addition to X,Y,Z YREC stores light elements (D He3 Li6 Li7 Be9) and CNO isotopes (C12 C13 N14 O16 O18) B10 B11 N15 O17 to be added
  ! These options adjust their relative abundances. It is recommended to tie these to preset mixtures used in opacity tables.

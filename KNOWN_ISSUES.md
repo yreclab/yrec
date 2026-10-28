@@ -2311,6 +2311,35 @@ These two are worth a separate look at some point -- a ZAHB-to-TAHB case
 that never reaches TAHB is not testing what its name says -- but neither
 is a change introduced here.
 
+### `Test_m0p03feh+0p0GS98_allard_15Gyr` (added 2026-10-28)
+
+The 0.03 Msun brown dwarf has never reached its 15 Gyr end age in any
+configuration, and it stays in the suite as a crash-extent case (MHP,
+2026-10-28). Every run stops as the centre turns degenerate, after the
+timestep collapses to about 100 yr per model with the luminosity
+corrections jumping between widely separated shells. The run then
+diverges (TPGRAD, exit 144) or leaves the OPAL95 opacity table (bare
+STOP, exit 0, issue 38).
+
+| 0.03 Msun run | stops at | log Tc | log rho_c | eta_c |
+|---|---|---|---|---|
+| old code, this deck (old reference) | 65.6 Myr | 6.09 | 1.96 | 4.14 |
+| old code, DBL-to-ZAMS, tuned nml2 | 37.6 Myr | 6.07 | 1.77 | 3.11 |
+| new code, this deck, HTOLER x10, larger triangle | 10.4 Myr | 5.85 | 1.07 | 1.42 |
+
+With the corrected deuterium rate and the new pre-MS models the centre
+reaches mild degeneracy at a cooler temperature, and the run stops near
+eta_c = 1.1-1.4 instead of 3-4. Starting from the start model instead
+of the DBL model, relaxing HTOLER x10 or x30, halving the timestep, a
+smaller or larger envelope triangle, and a deeper fitting point all stop
+at 8.2-10.4 Myr; none of the convergence ingredients moves it. The cause
+is likely an EOS or opacity boundary that the centre crosses near
+eta_c = 1, not yet identified. The next rebaseline will move this
+case's recorded extent from 65.6 Myr to about 10 Myr; that move is
+expected.
+
+The DBL-to-ZAMS 0.03 Msun case was removed from the suite instead.
+
 
 ## 34. `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB
 
