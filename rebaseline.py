@@ -45,6 +45,10 @@ SUFFIXES = ('.short', '.store', '.track')
 CLEAN_FAILURE = 'Output differs from reference standard'
 
 result_re = re.compile(r'^test_all\.py::test_yrec\[(.+)\] (PASSED|FAILED|ERROR)\b')
+# pytest-xdist (-n N) puts the worker and progress first, then the outcome:
+# "[gw0] [ 12%] PASSED test_all.py::test_yrec[...]"
+xdist_result_re = re.compile(
+    r'^\[gw\d+\] \[\s*\d+%\] (PASSED|FAILED|ERROR) test_all\.py::test_yrec\[(.+)\]\s*$')
 section_re = re.compile(r'^_+ test_yrec\[(.+)\] _+$')
 assertion_re = re.compile(r'^E\s+AssertionError: (.*)$')
 summary_re = re.compile(r'^=+ .*\b(passed|failed)\b.* in [\d.]+s')
@@ -62,6 +66,10 @@ def parse_log(path):
             m = result_re.match(line)
             if m:
                 status[m.group(1)] = m.group(2)
+                continue
+            m = xdist_result_re.match(line)
+            if m:
+                status[m.group(2)] = m.group(1)
                 continue
             m = section_re.match(line)
             if m:

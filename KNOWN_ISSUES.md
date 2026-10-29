@@ -7,7 +7,7 @@ the record of why the code is the way it is.
 
 ## Index
 
-Status as of 2026-10-27.
+Status as of 2026-10-29.
 
 | # | issue | status |
 |---|---|---|
@@ -41,7 +41,7 @@ Status as of 2026-10-27.
 | 28 | OPAL06 EOS table-grid tolerance | open |
 | 29 | No explicit interfaces | open; unblocked now that stage 5 is done |
 | 30 | Harness passes `NaN` silently | **resolved** 2026-10-20 |
-| 31 | `GAM1` is `NaN` in the Yale EOS path | open; its case now fails, by design (issue 30) |
+| 31 | `GAM1` is `NaN` in the Yale EOS path | open; its case now fails, by design (issue 30); held in the 2026-10-29 rebaseline |
 | 32 | Test references not under version control | open; MHP to decide |
 | 33 | Crash-terminated cases: run extent is the measurement | documented; not a defect |
 | 34 | `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB | open; needs MHP's judgement |
@@ -2171,6 +2171,7 @@ issue 23 literal fix** -- the values are bit-identical before and after.
 **Since 2026-10-20 its case fails the suite**, because the harness now
 rejects `NaN` (issue 30). That failure is intended, and stays until the
 `NaN` is fixed. Do not rebaseline it away.
+Held back, with its old references, in the 2026-10-29 rebaseline.
 
 In `testsuite/Test_m0p3feh+0p0GS98_yaleeos_ZAMS` (0.3 Msun, ZAMS, Yale
 EOS), the `.store` output carries `GAM1 = NaN` on **228 of its 1202
