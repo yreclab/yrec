@@ -343,8 +343,13 @@ C            ENTR3 = ENTR2*CLN*HTT(IM)
             HHC(IM) = EGRAV
             TLUMX(7) = TLUMX(7) + (HS2(IM)/CLSUN)*EGRAV
             QL = QL + EGRAV
-            QLP = QLP + DT*(ENTR*(1.0D0-QDP+QDTP)-ENTR1 - ENTR3*QAP)
-            QLT = QLT + DT*(ENTR*(-QDT+QDTT) + ENTR2 - ENTR3*QAT)
+C 10/29/26 MHP via Claude
+C code changed to divide QDTP and QDTT by QDT.  ENTR carries the factor
+C QDT (chi_T), so its log partials need dln(chi_T) = d(chi_T)/chi_T;
+C QDTT and QDTP are d(chi_T), as in QAT = ... + QDTT/QDT (EQSAHA, EQRELV).
+C Only the Jacobian changes; the residual QL was already right.
+            QLP = QLP + DT*(ENTR*(1.0D0-QDP+QDTP/QDT)-ENTR1 - ENTR3*QAP)
+            QLT = QLT + DT*(ENTR*(-QDT+QDTT/QDT) + ENTR2 - ENTR3*QAT)
 C 7/92 INCLUDE CHANGE IN ROTATIONAL KINETIC ENERGY IN ENERGY EQUATION.
             IF(LROT)THEN
                DEROT(IM) = DT*(HKEROT(IM)-HKEROTO(IM))/HS2(IM)
