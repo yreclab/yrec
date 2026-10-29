@@ -433,19 +433,24 @@ c     MHP 10/24 CHECK STOP CONDITIONS AND DISABLE THEM IF THE STARTING VALUES AR
  101           FORMAT('STARTING D ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
+C 10/29/26 MHP via Claude
+C The X and Y blocks disabled and reported the wrong stop: the X block
+C set END_DCEN = -END_XCEN, leaving the X stop armed and overwriting a
+C D stop, and both printed central D and END_DCEN.  Each now disables
+C and reports its own condition.
             IF(END_XCEN(NK).GT.0.0D0 .AND.
      *           HCOMP(1,1).LT.END_XCEN(NK))THEN
-               END_DCEN(NK)=-END_XCEN(NK)
-               WRITE(*,102)HCOMP(12,1),END_DCEN(NK)
-               WRITE(ISHORT,102)HCOMP(12,1),END_DCEN(NK)
+               END_XCEN(NK)=-END_XCEN(NK)
+               WRITE(*,102)HCOMP(1,1),END_XCEN(NK)
+               WRITE(ISHORT,102)HCOMP(1,1),END_XCEN(NK)
  102           FORMAT('STARTING X ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
             IF(END_YCEN(NK).GT.0.0D0 .AND.
      *           HCOMP(2,1).LT.END_YCEN(NK))THEN
                END_YCEN(NK)=-END_YCEN(NK)
-               WRITE(*,103)HCOMP(12,1),END_DCEN(NK)
-               WRITE(ISHORT,103)HCOMP(12,1),END_DCEN(NK)
+               WRITE(*,103)HCOMP(2,1),END_YCEN(NK)
+               WRITE(ISHORT,103)HCOMP(2,1),END_YCEN(NK)
  103           FORMAT('STARTING Y ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
