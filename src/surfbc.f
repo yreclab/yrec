@@ -31,7 +31,8 @@ C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
       REAL*8 ATEFFL,B,BL,CFENV,CMIXL,ESTORE,FPL,FTL,FTRI,GL,HSTOT,PLIM,
-     *       PS,RL,RS,TEFFL,TEMP,TEMP1,TEMP2,TRIERR,TRIL,TRIT,TS,X,Z
+     *       PS,RL,RS,TEFFL,TEMP,TEMP1,TEMP2,TRIERR,TRIL,TRIT,TS,VTEFFL,
+     *       X,Z
       INTEGER I,I1,I2,I3,ISTORE,IXX,J,KATM,KENV,KSAHA,M,NUMENV
       LOGICAL*4 LC,LFLP,LNEW,LPENV,LPULPT,LRENV,LRESET,LSBC0,LTRI
 
@@ -170,9 +171,14 @@ C COMPUTE NEW ENVELOPES IF NECESSARY
        IF(.NOT.LTRI(I)) THEN
 C NEW ENVELOPE NEEDED
           LFLP = .TRUE.
-          TEFFL = TRIT(I)
+C 10/29/26 MHP via Claude
+C code changed to integrate the vertex at a local VTEFFL.  Writing the
+C vertex Teff into TEFFL changed the model's own log Teff, which CRRECT
+C then passed on (TPGRAD's depth-dependent spot contrast) until it
+C recomputed TEFFL after the corrections.
+          VTEFFL = TRIT(I)
           B = DEXP(CLN*TRIL(I))
-          RL = 0.5D0*(TRIL(I) + CLSUNL - 4.0D0*TEFFL - C4PIL - CSIGL)
+          RL = 0.5D0*(TRIL(I) + CLSUNL - 4.0D0*VTEFFL - C4PIL - CSIGL)
           GL = CGL + STOTAL - RL - RL
           NUMENV = NUMENV + 1
 C G Somers 11/14, LPENV FUNCTIONALITY NOW INCLUDED IN LSTENV.
@@ -192,9 +198,9 @@ C DBG PULSE: DO NOT DO PULSE OUTPUT
 C G Somers 10/14, FOR SPOTTED RUNS, FIND THE
 C PRESSURE AT THE AMBIENT TEMPERATURE ATEFFL
           IF(LC(M).AND.SPOTF.NE.0.0.AND.SPOTX.NE.1.0)THEN
-               ATEFFL = TEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
+               ATEFFL = VTEFFL - 0.25*LOG10(SPOTF * SPOTX**4.0 + 1.0 - SPOTF)
           ELSE
-             ATEFFL = TEFFL
+             ATEFFL = VTEFFL
           ENDIF
           CALL ENVINT(B,FPL,FTL,GL,HSTOT,IXX,LPENV,LSBC0,PLIM,RL,
      *           ATEFFL,X,Z,ESTORE,ISTORE,KATM,KENV,KSAHA,PS,
