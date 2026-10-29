@@ -81,22 +81,35 @@ C NSPEC IS THE NUMBER OF SPECIES BEING TRACKED.
       ENDIF
 C  DDAGE IS THE TIMESTEP IN YEARS.
       DDAGE=DELTS/CSECYR
+C 10/29/26 MHP via Claude
+C code changed to compute the burning rates on the model passed in (HD,
+C HT and the sub-step's own composition), as MIX does, instead of copying
+C HCOMPM.  HCOMPM held the rates MIX found on the previous Newton
+C iterate's end-of-step structure, so the midpoint sub-step from MIDMOD
+C burned with end-of-step rates, contrary to the MHP 6/00 intent there.
       DO II = 1,M
-         HR1(II) = HCOMPM(1,II)
-         HR2(II) = HCOMPM(2,II)
-         HR3(II) = HCOMPM(3,II)
-         HR4(II) = HCOMPM(4,II)
-         HR5(II) = HCOMPM(5,II)
-         HR6(II) = HCOMPM(6,II)
-         HR7(II) = HCOMPM(7,II)
-         HR8(II) = HCOMPM(8,II)
-         HR9(II) = HCOMPM(9,II)
-         HR10(II) = HCOMPM(10,II)
-         HR11(II) = HCOMPM(11,II)
-         HR12(II) = HCOMPM(12,II)
-         HR13(II) = HCOMPM(13,II)
-         HF1(II) = HCOMPM(14,II)
-         HF2(II) = HCOMPM(15,II)
+         IF(HT(II).LE.TCUT(1))THEN
+            HR1(II) = 0.0D0
+            HR2(II) = 0.0D0
+            HR3(II) = 0.0D0
+            HR4(II) = 0.0D0
+            HR5(II) = 0.0D0
+            HR6(II) = 0.0D0
+            HR7(II) = 0.0D0
+            HR8(II) = 0.0D0
+            HR9(II) = 0.0D0
+            HR10(II) = 0.0D0
+            HR11(II) = 0.0D0
+            HR12(II) = 0.0D0
+            HR13(II) = 0.0D0
+            HF1(II) = 0.0D0
+            HF2(II) = 0.0D0
+         ELSE
+            CALL RATES(HD(II),HT(II),HCOMP(1,II),HCOMP(2,II),
+     *           HCOMP(4,II),HCOMP(5,II),HCOMP(6,II),HCOMP(7,II),
+     *           HCOMP(9,II),HCOMP(11,II),II,HR1,HR2,HR3,HR4,HR5,HR6,
+     *           HR7,HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2)
+         ENDIF
       END DO
 C
 C  NOW IMPLICITLY SOLVE FOR THE NEW ABUNDANCES AT THE END OF THE
