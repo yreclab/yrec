@@ -45,7 +45,6 @@ C explicit declarations.
       IMPLICIT NONE
       REAL*8 ALPHA,FEH,GL,P100L,PL,T100,TEFF,TEFFS
       INTEGER I,I1,IRECNO,J,J1,NGA,NHDR,NTA
-      LOGICAL*4 LATMTPTAU100
 C
 C Parameters NTA and NGA are respectively the maximum expected numbers
 C of Teff's and GL's we expect to encounter, even in future tables
@@ -151,7 +150,11 @@ C Process old-stype nextgen input file.
 
 C Ensure that we are not requesting PL,TL at Tau-100. These are not
 C present in the old Nextgen 1 files. If requested, fail
-      If(LATMTPTau100) then
+C 10/29/26 MHP via Claude
+C code changed to test the namelist flag LALTPTau100.  The misspelled
+C LATMTPTau100 was a never-set local, so an old NextGen 1 file was
+C accepted with its tau=100 tables still holding the -999 marker.
+      If(LALTPTau100) then
          write(*,*)
          write(*,*) 'ALFileIN: Invalid old Allard input file ',
      x         'for requested PT,TL at Tau=100'
