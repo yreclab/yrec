@@ -50,6 +50,7 @@ Status as of 2026-10-29.
 | 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
 | 38 | A bare `STOP` ends a failed run with exit status 0 | open |
 | 39 | High-mass start models too compact to resolve the D birthline | DBL above 2.4 Msun rebuilt by zero-timestep ramp, 2026-10-27 |
+| 40 | Henyey Jacobian and EOS second derivatives inconsistent | open; design issue, deferred by MHP (external O1-O3) |
 
 ## Status of the original tasks
 
@@ -2843,3 +2844,46 @@ models to the 1% drop. It reaches the ZAMS within 0.002 dex of its
 reference. So the seam is now between 2.2 Msun, which keeps its evolved
 DBL model (log R = 1.118), and 2.4 Msun (1.087). From 2.4 Msun up the
 ramp sequence is smooth (2.6 Msun is at 1.115).
+
+---
+
+## 40. The Henyey Jacobian and the EOS second derivatives are not consistent
+
+**Status:** open, recorded 2026-10-29 from items O1-O3 of the external
+bug sweep ("YREC bug sweep Oct 2026", a related branch). **A design
+issue, not a bug fix**, per MHP: deferred to future development, not
+part of the bug-sweep passes. The converged models are unaffected; what
+suffers is the rate and robustness of Newton convergence.
+
+Known gaps, all present in our code:
+
+- **Convective temperature gradient (O1).** In a convective shell
+  COEFFT sets the L partial of the temperature equation to zero
+  (`QTL = 0`), although in superadiabatic layers del depends on L
+  through del_rad. Near the adiabat TPGRAD takes the gradient's P and T
+  partials from the EOS's del_ad derivatives.
+- **OPAL density derivatives (O1).** Inside an OPAL table, EQSTAT2
+  adopts OPAL's dln rho/dln P and dln rho/dln T, which agree with finite
+  differences of the tabulated rho(P,T) only to about 2e-3.
+- **EOS second derivatives (O2).** Inside an OPAL table the six second
+  derivatives (d chi_T/dln T and /dln P, d del_ad, d c_P) are left from
+  the Yale solution; the external sweep finds them 8-180% off, one with
+  the wrong sign. In the Saha-to-full-ionization ramp the weight's
+  derivative is commented out, and `QDTT`/`QDTP` are blended as
+  f_full + w f_saha rather than f_full + w (f_saha - f_full).
+- S3 (the 1/chi_T in the eps_grav partials) was a plain error in the
+  same family and is fixed separately (bugsweep-2, `5bac256`).
+
+**Where it shows (O3):** the low-mass cases -- the 0.03 Msun Newton
+two-cycle (issue 33), and the 0.05 and 0.1 Msun
+Allard decks. The external sweep also found these decks have by far the
+thinnest envelope triangles (relative pivot of the plane fit ~6e-3,
+against >= 0.15 elsewhere), so an ill-conditioned surface boundary row
+is a competing explanation.
+
+**Workaround, not a fix:** numerical derivatives for the affected
+entries, which the external branch measured to agree with finite
+differences to ~1e-6. The proper fix is to make the analytic Jacobian
+and the EOS derivatives belong to the EOS actually returned, including
+the ramp's dw/dln T terms. A step retry at a smaller timestep after a
+failed solve would add robustness independently of the cause.
