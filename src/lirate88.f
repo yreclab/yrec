@@ -138,13 +138,20 @@ C SUM RATES
          ENDIF
   100 CONTINUE
   110 CONTINUE
+C 10/29/26 MHP via Claude
+C code changed to clear only the set this call fills.  Clearing both
+C sets let an end-of-step call (J=1) zero start-of-step rates stored
+C earlier in the step, and the reverse, whenever the cool cutoff moved.
       DO 120 K = I,M
-         RLI6(K)=0.0D0
-         RLI7(K)=0.0D0
-         RBE9(K)=0.0D0
-         RLI60(K)=0.0D0
-         RLI70(K)=0.0D0
-         RBE90(K)=0.0D0
+         IF(J.EQ.1)THEN
+            RLI6(K)=0.0D0
+            RLI7(K)=0.0D0
+            RBE9(K)=0.0D0
+         ELSE
+            RLI60(K)=0.0D0
+            RLI70(K)=0.0D0
+            RBE90(K)=0.0D0
+         ENDIF
   120 CONTINUE
       RETURN
       END
