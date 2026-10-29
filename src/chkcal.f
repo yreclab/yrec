@@ -74,7 +74,13 @@ C CALIBRATED SOLAR MODEL.  SET UP OUTPUT FLAGS AND EXIT
 c Added code to use pre-determined partial derivatives    LLP  6/28/09
       DLDX = -3.78D0            ! empirical result:  -3.783    RMS error .070
       DRDX = -0.89D0             ! empirical result:  -0.890    RMS error .048
-      DLDA = 0.0139D0            ! empirical result:  +0.139    RMS error .0022
+C 10/29/26 MHP via Claude
+C DLDA's comment read +0.139, ten times the value used.  0.0139 is right:
+C fitting log L against X, alpha and ln Z over the iterates of the
+C 10/28/26 recalibration of 11 solar decks gives dlogL/dalpha of order
+C 0.01 (median 0.003) and dlogR/dalpha about -0.05, while 0.139 would
+C have moved log L 50 times above the noise.  Only the comment changed.
+      DLDA = 0.0139D0            ! empirical result:  +0.0139   RMS error .0022
       DRDA = -0.050D0            ! empirical result:  -0.0504   RMS error .0059
       GOTO 1234            ! Bypass partial derivative code
 c mhp 5/96 added change to compute solar calibration for 3 kind cards
