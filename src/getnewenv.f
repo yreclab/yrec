@@ -284,9 +284,12 @@ C SOLID BODY ROTATION
             END DO
          ELSE
 C GENERAL CASE
-            W0 = OMEGA(MM)*10.0D0**(HR(MM)*WALPCZ)
+C 10/29/26 MHP via Claude
+C Follow the law WCZ imposes, OMEGA = C*R**WALPCZ.  The old form used
+C OMEGA*R**WALPCZ = const, the inverse, for the accreted shells' guess.
+            W0 = OMEGA(MM)/10.0D0**(HR(MM)*WALPCZ)
             DO J = MM+1,M
-               OMEGA(J) = W0/10.0D0**(HR(J)*WALPCZ)
+               OMEGA(J) = W0*10.0D0**(HR(J)*WALPCZ)
                HI(J) = CC23*10.0D0**(2.0D0*HR(J))
                HJM(J) = OMEGA(J)*HI(J)
             END DO

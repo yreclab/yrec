@@ -986,6 +986,24 @@ C code changed to remove the LISO isochrone-output option
             STOP
          ENDIF
       ENDIF
+C 10/29/26 MHP via Claude
+C Refuse LDIFAD with rotation.  The advection-diffusion transport
+C (DADCOEFT) rebuilds ECOD3 and ECOD4 from equal-grid arrays that no
+C routine assigns (EV0, EV1A, EV1B, EV2A, EV2B, FGEOM, ECOD5, ECOD6,
+C QCHIRE, ...), so it zeroes ROTGRID's coefficients, drops every
+C transport term from the angular-momentum matrix and leaves 0/0 mixing
+C velocities.  The mapping of SETUPV's FV* arrays onto the equal grid
+C was never written.  LDIFAD acts only in the rotation routines, so a
+C non-rotating deck that sets it is unaffected.  Bug-sweep report L13.
+      IF(LROT .AND. LDIFAD)THEN
+         WRITE(ISHORT,3)
+         WRITE(*,3)
+    3    FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/' LDIFAD (ADVECTION-',
+     *   'DIFFUSION TRANSPORT OF ANGULAR MOMENTUM) IS NOT IMPLEMENTED:'/
+     *   ' DADCOEFT READS COEFFICIENTS THAT NO ROUTINE SETS.  SET',
+     *   ' LDIFAD = .FALSE. FOR ROTATING RUNS.'/'RUN STOPPED')
+         STOP 1
+      ENDIF
       WRITE(ISHORT,1)(HPTTOL(I),I=1,12),ALPHAE,ALPHAC,LINSTB,LJDOT0,
      *              ALFA,FK,FW,FC,FO,FMU,RCRIT
     1 FORMAT(1X,'PT TOL',12F6.3/1X,'O.S.ENV',F6.3,' O.S.CORE',F6.3,

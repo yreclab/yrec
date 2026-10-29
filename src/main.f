@@ -433,19 +433,24 @@ c     MHP 10/24 CHECK STOP CONDITIONS AND DISABLE THEM IF THE STARTING VALUES AR
  101           FORMAT('STARTING D ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
+C 10/29/26 MHP via Claude
+C The X and Y blocks disabled and reported the wrong stop: the X block
+C set END_DCEN = -END_XCEN, leaving the X stop armed and overwriting a
+C D stop, and both printed central D and END_DCEN.  Each now disables
+C and reports its own condition.
             IF(END_XCEN(NK).GT.0.0D0 .AND.
      *           HCOMP(1,1).LT.END_XCEN(NK))THEN
-               END_DCEN(NK)=-END_XCEN(NK)
-               WRITE(*,102)HCOMP(12,1),END_DCEN(NK)
-               WRITE(ISHORT,102)HCOMP(12,1),END_DCEN(NK)
+               END_XCEN(NK)=-END_XCEN(NK)
+               WRITE(*,102)HCOMP(1,1),END_XCEN(NK)
+               WRITE(ISHORT,102)HCOMP(1,1),END_XCEN(NK)
  102           FORMAT('STARTING X ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
             IF(END_YCEN(NK).GT.0.0D0 .AND.
      *           HCOMP(2,1).LT.END_YCEN(NK))THEN
                END_YCEN(NK)=-END_YCEN(NK)
-               WRITE(*,103)HCOMP(12,1),END_DCEN(NK)
-               WRITE(ISHORT,103)HCOMP(12,1),END_DCEN(NK)
+               WRITE(*,103)HCOMP(2,1),END_YCEN(NK)
+               WRITE(ISHORT,103)HCOMP(2,1),END_YCEN(NK)
  103           FORMAT('STARTING Y ',E12.4,' BELOW STOP VALUE ',
      *                E12.4,' STOP DISABLED.')
             ENDIF
@@ -792,7 +797,13 @@ C store starting depth of C.Z. for light element burning.
                   PSCAL0 = 0.0D0
                ENDIF
 C find burning rates at the beginning of the time step.
-               CALL LIRATE88(HCOMP,HD,HT,M,1)
+C 10/29/26 MHP via Claude
+C LIRATE88's flag was swapped at all three calls.  J=1 evaluates the
+C model passed in and fills the end-of-step rates (RLI6, RLI7, RBE9);
+C J=2 evaluates the saved start-of-step model (HDO, HCOMPP) and fills
+C RLI60, RLI70, RBE90.  With the old flags both sets held start-of-step
+C rates, so LIBURN never saw the end-of-step model.
+               CALL LIRATE88(HCOMP,HD,HT,M,2)
             ENDIF
 C begin correction routines
 C set flags for CRRECT
@@ -1008,7 +1019,8 @@ C CHANGED FOR LITHIUM BURNING WITH OVERSHOOT.
                   PSCAL1 = 0.0D0
                ENDIF
 C FIND BURNING RATES AT THE END OF THE TIME STEP.
-               CALL LIRATE88(HCOMP,HD,HT,M,2)
+C 10/29/26 MHP via Claude: flag 2 -> 1 (see the start-of-step call).
+               CALL LIRATE88(HCOMP,HD,HT,M,1)
 C                CALL LIBURN(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JENV1,JENV0,M)  ! KC 2025-05-31
                CALL LIBURN(DELTS,HCOMP,HR,HS1,HS2,HT,JENV1,JENV0,M)
             ENDIF
@@ -1040,7 +1052,11 @@ C     INSTEAD WRITE THE PREVIOUS MODEL TIMESTEP TO MODEL.
 C ONLY IF A FIXED END AGE IS USED, NOT FOR OTHER STOPS
        IF(LENDAG(NK) .AND. ENDAGE(NK).GT.0.0D0)THEN
           IF(ENDAGE(NK)-DAGE*1.0D9.LE.1.0D0)THEN
-             DELTS = MAX(DELTS0,1.0D-3*DAGE*CSECYR)
+C 10/29/26 MHP via Claude
+C The floor is 1D-3 of the age.  DAGE is in Gyr, so it needs 1D9 to
+C become years; without it the floor was 1D-12 of the age (0.005 yr at
+C 4.57 Gyr) and never acted.
+             DELTS = MAX(DELTS0,1.0D-3*DAGE*1.0D9*CSECYR)
              DDAGE = DELTS/CSECYR
           ELSE
              DELTS0 = DELTS

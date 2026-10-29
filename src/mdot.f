@@ -36,6 +36,7 @@ C explicit declarations.
      *       DTMAX,DTTOT,EACC,ETHAV,ETHNEW,F1,F2,FAC,FACR,FX,HCOMP,HD,
      *       HJM,HP,HR,HS,HS1,HS2,HSTOT,HSTOT1,HSTOT2,HT,OMEGA,P,RATE,
      *       RATIO,RB,RINIT,RMU,RNEW,RTOT,SENVOLD,SMASS,SUMDM,SURFI,T,
+     *       CJSUM,DMJ,SUMM,SUMX,
      *       TEST,WSURF
       INTEGER I,J,JENV,M
       LOGICAL*4 LDONE,LNEW
@@ -122,9 +123,15 @@ C COMPUTE MASS OF SURFACE CONVECTION ZONE BELOW FITTING POINT
       ENDIF
 C COMPUTE MAXIMUM TIMESTEP BASED ON NOT REMOVING TOO MUCH MASS FROM THE
 C SURFACE CZ (FCZDMDT) OR AS A FRACTION OF THE TOTAL MASS (FTOTDMDT)
-      DTTOT = FTOTDMDT*SMASS*CMSUN/RATE
-      DTCZ = FCZDMDT*DMCZ/RATE
-      DTMAX = MIN(DTTOT,DTCZ)
+C 10/29/26 MHP via Claude: no mass-change limit for a zero rate (these
+C divided by zero).
+      IF(RATE.GT.0.0D0)THEN
+         DTTOT = FTOTDMDT*SMASS*CMSUN/RATE
+         DTCZ = FCZDMDT*DMCZ/RATE
+         DTMAX = MIN(DTTOT,DTCZ)
+      ELSE
+         DTMAX = DELTS
+      ENDIF
 C RESTRICT TIMESTEP TO ADD NO MORE THAN 1/2 OF THE CURRENT MASS
 C BEYOND THE FITTING POINT TO THE STAR.
       IF(RATE.GT.0.0D0)THEN
@@ -206,7 +213,11 @@ C SOLID BODY CZ ROTATION
 C CONSTANT J/M
             DELJ = HJM(M)*DELM
          ELSE
-            WSURF = OMEGA(M)*10.0D0**(HR(M)*WALPCZ)/RTOT**WALPCZ
+C 10/29/26 MHP via Claude
+C Extrapolate with the law WCZ imposes, OMEGA = C*R**WALPCZ, so
+C WSURF = OMEGA(M)*(RTOT/R(M))**WALPCZ.  The old form had the ratio
+C inverted, so for WALPCZ = -1 the surface spun faster than R(M).
+            WSURF = OMEGA(M)*(RTOT/10.0D0**HR(M))**WALPCZ
             DELJ = WSURF*SURFI*DELM
          ENDIF
 C  FIND TOTAL STARTING ANGULAR MOMENTUM OF C.Z.
@@ -215,23 +226,35 @@ C  FIND TOTAL STARTING ANGULAR MOMENTUM OF C.Z.
             CJTOT = CJTOT + HJM(J)*HS2(J)
          END DO
          CJNEW = (CJTOT+DELJ)
-         RATIO = CJNEW/CJTOT
          WRITE(*,22)DELM,DELJ,OMEGA(M),CJNEW,CJTOT,DMCZT
  22      FORMAT(1P6E13.4)
-         DO J = JENV,M
-            HJM(J) = HJM(J)*RATIO
-         END DO
+C 10/29/26 MHP via Claude
+C J/M used to be scaled here by CJNEW/CJTOT, before the shell masses
+C shrank below.  Shrinking them at that J/M removed a further
+C <J/M>*|DELM|, so the zone lost DELJ plus that.  J/M is now scaled after
+C the new shell masses are known, so the zone holds exactly CJNEW.
       ENDIF
 C REMOVE OR ADD MASS IN THE CONVECTION ZONE.
 C HS1 IS THE LOCATION OF THE ZONE CENTERS IN GM;
 C HS IS THE BASE-10 LOG OF HS1
       IF(DELM.LT.0.0D0)THEN
          FX = (DMCZ + DELM)/DMCZ
+C 10/29/26 MHP via Claude
+C For a fully convective star DMCZ is HS1(M), the mass from the centre,
+C so compress about the centre; compressing about HS1(1) moved HS1(M) by
+C less than DELM.
 C      WRITE(*,*)JENV,M,DMCZ,DELM,FX,HS1(M),HS(M)
-         DO I = JENV+1,M
-            HS1(I) = HS1(JENV)+FX*(HS1(I)-HS1(JENV))
-            HS(I) = LOG10(HS1(I))
-         END DO
+         IF(JENV.EQ.1)THEN
+            DO I = 1,M
+               HS1(I) = FX*HS1(I)
+               HS(I) = LOG10(HS1(I))
+            END DO
+         ELSE
+            DO I = JENV+1,M
+               HS1(I) = HS1(JENV)+FX*(HS1(I)-HS1(JENV))
+               HS(I) = LOG10(HS1(I))
+            END DO
+         ENDIF
       ENDIF
 C      WRITE(*,*)HS1(M),HS(M)
 C CORRECT TOTAL MASS IN SOLAR UNITS (SMASS) AND
@@ -246,10 +269,26 @@ C LOG OF TOTAL MASS IN GRAMS (HSTOT,STOTAL)
       HSTOT = LOG10(HSTOT2)
       STOTAL = HSTOT
 C CORRECT MASS CONTENTS OF INDIVIDUAL SHELLS (HS2, IN GM)
-      DO I = JENV,M-1
+C 10/29/26 MHP via Claude
+C With JENV = 1 this read HS1(0).  The innermost shell runs from the
+C centre to the midpoint of HS1(1) and HS1(2) (the HS1(0) = -HS1(1)
+C convention HPOINT uses), so HS2(1) = (HS1(1)+HS1(2))/2.
+      IF(JENV.EQ.1)HS2(1) = 0.5D0*(HS1(1)+HS1(2))
+      DO I = MAX(JENV,2),M-1
        HS2(I) = 0.5D0*(HS1(I+1)-HS1(I-1))
       END DO
       HS2(M) = HSTOT2 - 0.5D0*(HS1(M)+HS1(M-1))
+C 10/29/26 MHP via Claude: scale J/M on the new shell masses (see above).
+      IF(LROT .AND. DELM.LT.0.0D0)THEN
+         CJSUM = 0.0D0
+         DO J = JENV,M
+            CJSUM = CJSUM + HJM(J)*HS2(J)
+         END DO
+         RATIO = CJNEW/CJSUM
+         DO J = JENV,M
+            HJM(J) = HJM(J)*RATIO
+         END DO
+      ENDIF
 C 07/02RESET SENV
       SENV = HS(M) - HSTOT
 C RECOMPUTE SURFACE BOUNDRY CONDITION
@@ -259,8 +298,21 @@ C      WRITE(*,911)DELM,DMCZT,COMPACC(12),HCOMP(12,M),
 C     *            COMPACC(4),HCOMP(4,M)
 C 911  FORMAT(1P6E12.3)
       IF(DELM.GT.0.0D0)THEN
+C 10/29/26 MHP via Claude
+C Mix by the zone's own mass-weighted abundances, sum(X dm), over the
+C shells' masses before the accreted DELM was added to HS2(M).  The old
+C form used the base shell's X for the whole zone with the mass DMCZT,
+C which conserved species only if the zone was already uniform.
          DO I = 1,11
-            ABUND=(HCOMP(I,JENV)*DMCZT+COMPACC(I)*DELM)/(DELM+DMCZT)
+            SUMX = 0.0D0
+            SUMM = 0.0D0
+            DO J = JENV,M
+               DMJ = HS2(J)
+               IF(J.EQ.M)DMJ = DMJ - DELM
+               SUMX = SUMX + HCOMP(I,J)*DMJ
+               SUMM = SUMM + DMJ
+            END DO
+            ABUND = (SUMX+COMPACC(I)*DELM)/(SUMM+DELM)
             DO J = JENV,M
                HCOMP(I,J) = ABUND
             END DO

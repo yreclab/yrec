@@ -49,6 +49,11 @@ C       DATA C21/5.240358E-8/
       SAVE
       DTT = DT*1.0D-9/CSECYR
       IF(IBEGIN.EQ.IEND)THEN
+C 10/29/26 MHP via Claude
+C A single shell's region mass is its own mass.  SUMM was set only in
+C the multi-shell branch, so the accretion blend below used the previous
+C call's region mass (SAVEd) for a single shell.
+         SUMM = HS2(IBEGIN)
          X = HCOMPP(1,IBEGIN)
          XH2 = HCOMPP(12,IBEGIN)
          XHE3 = HCOMPP(4,IBEGIN)
@@ -127,12 +132,17 @@ C UNLIKE THE ROUTINE CALLED BY MIX, THE TIMESTEP
 C HERE IS ONLY A PORTION OF THE TOTAL MODEL DT.
 C DO ONLY THE SMALLER TIMESTEP PORTION OF THE
 C TOTAL MASS ACCRETION.
+C 10/29/26 MHP via Claude
+C FMASSACC is the accreted mass in grams (MDOT), not a fraction of the
+C CZ mass, so 1+FAC2*FMASSACC was dominated by grams and any accretion
+C replaced the region's D, H and He3 by the accreted values.  The blend
+C is now mass weighted, as in DBURN: (X M + X_acc f dM)/(M + f dM).
          FMASSA = FAC2*FMASSACC
          DXH2O = XH2NO - XH2
          DXH2A = XH2NA - COMPACC(12)
-         XH2N = (XH2NO+XH2NA*FMASSA)/(1.0D0+FMASSA)
-         XN = X + 0.5D0*(DXH2O+DXH2A*FMASSA)/(1.0D0+FMASSA)
-         XHE3N = XHE3 -1.5D0*(DXH2O+DXH2A*FMASSA)/(1.0D0+FMASSA)
+         XH2N = (XH2NO*SUMM+XH2NA*FMASSA)/(SUMM+FMASSA)
+         XN = X + 0.5D0*(DXH2O*SUMM+DXH2A*FMASSA)/(SUMM+FMASSA)
+         XHE3N = XHE3 -1.5D0*(DXH2O*SUMM+DXH2A*FMASSA)/(SUMM+FMASSA)
 C      IF(IEND.EQ.M)THEN
 C      WRITE(*,911)IBEGIN,IEND,DRATEM0(IBEGIN),RATE0,RATE1,XH2,XH2N,
 C     *            XHE3,XHE3N

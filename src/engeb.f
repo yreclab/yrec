@@ -994,7 +994,15 @@ C MHP 5/02 ADD DEUTERIUM BURNING
       DG(7)=EG(7)*3.553D0*CONVERT
       DG(8)=EG(8)*2.216D0*CONVERT
       DG(10)=EG(10)*7.162D0*CONVERT
-      DG(11)=EG(11)*5.815D0*CONVERT
+C 10/29/26 MHP via Claude
+C N14(A,G)F18(E+ NU)O18: 5.815 -> 5.646 MeV.  From atomic mass excesses
+C (AME2020) Q = D(He4) + D(N14) - D(O18) = 6.071 MeV; atomic masses
+C already count the positron's annihilation, so only the neutrino energy
+C is lost.  F18 decays 96.73% by beta+ (<E_nu> = 0.3837 MeV) and 3.27%
+C by electron capture (E_nu = 1.6559 MeV), so <E_nu> = 0.425 MeV and the
+C deposited energy is 6.071 - 0.425 = 5.646 MeV.  5.815 had subtracted
+C the mean positron energy (0.25 MeV) instead.
+      DG(11)=EG(11)*5.646D0*CONVERT
       DG(12)=EG(12)*7.275D0*CONVERT
 C JVS 10/11 Need to grab He3 energy generation
       ENGHE3 = DG(2)

@@ -285,7 +285,13 @@ C APPLY CORRECTIONS
        BL = DLOG10(HL(M))
        TEFFL = CFENV(7)*HP(M) + CFENV(8)*HT(M) + CFENV(9)
          IF(LROT)THEN
-            CALL GETROT(HD,HJM,HR,HS,HS2,LCZ,M,ETA2,HI,OMEGA,QIW,R0)
+C 10/29/26 MHP via Claude
+C GETROT now gets LCZO, the rotation convective flags HPOINT (or STARIN,
+C for the starting model) stored from OVROT.  It used to get LCZ, which
+C MAIN declares and passes but never sets, so every shell was inverted
+C on its own and WCZ's convection-zone law was never imposed here.
+C He-flash steps skip HPOINT and keep the previous model's flags.
+            CALL GETROT(HD,HJM,HR,HS,HS2,LCZO,M,ETA2,HI,OMEGA,QIW,R0)
             CALL FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
             DO I = 1,M
                HJ = HJM(I)*HS2(I)
