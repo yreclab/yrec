@@ -151,6 +151,12 @@ C         LPRT = .TRUE.
 C      ENDIF
 C      IF(.NOT.LSCRIB.OR..NOT.LPRTIN) LPRT = .FALSE.
       LPRT = .FALSE.
+C 10/29/26 MHP via Claude
+C code changed to clear LREDO on entry.  The stable-model exit below
+C (IF(.NOT.LDO) GOTO 9999) returns before CHECKJ or CHECKC can set it,
+C so after a redo the retried sub-step returned the previous attempt's
+C .TRUE., and GETW rewound the clock again although nothing had failed.
+      LREDO = .FALSE.
 C MHP 9/94
 C DISK LOCKING CHECKED
       LOCK = .FALSE.
