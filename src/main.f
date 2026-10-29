@@ -775,8 +775,12 @@ C save old model for PTIME
                END DO
 C JVS 04/14 Save Teff as well
                TEFFLO = TEFFL
-C  JVS 05/25 Added model number to list of saved values
-           MO = M
+C 10/29/26 MHP via Claude
+C code changed to save the surface luminosity, HLSURO, in place of the
+C point count MO.  HPOINT re-splines HLO onto the new mesh, so ENTIME's
+C HLO(MO) read an interior point or a stale entry whenever the count
+C changed.
+           HLSURO = HL(M)
 
           ENDIF
 C store starting distribution of rotational kinetic energy.

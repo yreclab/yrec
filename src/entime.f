@@ -75,7 +75,11 @@ C  LUMINSOITY
         HMAX(2)=TRIDL
 
         TESTT = ABS(TEFFLO-TEFFL)
-      TESTL = ABS(DLOG10(HLO(MO))-DLOG10(HL(M)))
+C 10/29/26 MHP via Claude
+C code changed to compare with the saved surface L, HLSURO, not HLO(MO):
+C HLO is re-splined onto the new mesh by HPOINT, so MO no longer indexes
+C its surface.
+      TESTL = ABS(DLOG10(HLSURO)-DLOG10(HL(M)))
 
 C NOW ACTUALLY LIMIT THE TIMESTEP BY A FACTOR THAT REDUCES THE
 C TIME CHANGES IN ALL QUANTITIES TO THE TRIANGLE VALUES OR LESS
