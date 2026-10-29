@@ -1047,7 +1047,11 @@ C     INSTEAD WRITE THE PREVIOUS MODEL TIMESTEP TO MODEL.
 C ONLY IF A FIXED END AGE IS USED, NOT FOR OTHER STOPS
        IF(LENDAG(NK) .AND. ENDAGE(NK).GT.0.0D0)THEN
           IF(ENDAGE(NK)-DAGE*1.0D9.LE.1.0D0)THEN
-             DELTS = MAX(DELTS0,1.0D-3*DAGE*CSECYR)
+C 10/29/26 MHP via Claude
+C The floor is 1D-3 of the age.  DAGE is in Gyr, so it needs 1D9 to
+C become years; without it the floor was 1D-12 of the age (0.005 yr at
+C 4.57 Gyr) and never acted.
+             DELTS = MAX(DELTS0,1.0D-3*DAGE*1.0D9*CSECYR)
              DDAGE = DELTS/CSECYR
           ELSE
              DELTS0 = DELTS
