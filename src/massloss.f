@@ -112,7 +112,9 @@ C            IF(V.GT.0.0D0)THEN
 C               TAUCZ = TAUCZ + DR/V
 C            ENDIF
 C         END DO
-         WRITE(*,*)TAUCZ/CSECYR,RTOT/CRSUN
+C 10/29/26 MHP via Claude: label this diagnostic, which was unlabelled.
+         WRITE(*,'(A,1P2E12.4)')' MASSLOSS: TAUCZ (YR), R/RSUN ',
+     *      TAUCZ/CSECYR,RTOT/CRSUN
          JCZ = JENV
       ELSE
          TAUCZ = 0.0D0
@@ -178,21 +180,29 @@ C THE AVERAGE THERMAL ENERGY OF THE UNPERTURBED CE (W/O ACCN) IS
 C This is experimental code and valid for Allard atmospheres only.
 C   llp  06/15/2009
          CALL ALSURFP(TEFFL,GL,LPRT,LAlFail)
-         T = 10.0D0**AT
-         P = 10.0D0**AP
-         TL = AT
-         PL = AP
          X = HCOMP(1,M)
          Z = HCOMP(3,M)
          LDERIV = .FALSE.
          KSAHA = 1
          LATMO = .TRUE.
-         CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
-     *        AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,
-     *        QCPP,LDERIV,LATMO,KSAHA)
-         BETA = 1.0D0- (CA3*T**4/P)
-         RMU = P*BETA/(D*T)
-         SACC = RMU*(1.5D0*LOG(T)-LOG(D))
+C 10/29/26 MHP via Claude
+C Use the Allard surface point only if the lookup succeeded; AT and AP
+C otherwise still hold the previous lookup's values.
+         IF(.NOT.LAlFail)THEN
+            T = 10.0D0**AT
+            P = 10.0D0**AP
+            TL = AT
+            PL = AP
+            CALL EQSTAT(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,RMU,
+     *           AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,
+     *           QCPP,LDERIV,LATMO,KSAHA)
+            BETA = 1.0D0- (CA3*T**4/P)
+            RMU = P*BETA/(D*T)
+            SACC = RMU*(1.5D0*LOG(T)-LOG(D))
+         ELSE
+            WRITE(*,*)'MASSLOSS: Allard surface lookup failed; ',
+     *         'accreted-matter entropy not computed'
+         ENDIF
 C         WRITE(*,911)TL,PL,SACC,SCEN
 C  911     FORMAT(' TSUR,PSUR ',2F8.5,' SACC ',1PE12.3,' SCORE ',E12.3)
 C ALTERNATE EXPRESSION FOR SURFACE PRESSURE AND LUMINOSITY, FROM STAHLER 1988
