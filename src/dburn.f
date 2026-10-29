@@ -41,6 +41,11 @@ C       DATA C21/5.240358E-8/
       DIMENSION HS2(JSON),HCOMP(15,JSON)
       SAVE
       IF(IBEGIN.EQ.IEND)THEN
+C 10/29/26 MHP via Claude
+C A single shell's region mass is its own mass.  SUMM was set only in
+C the multi-shell branch, so the accretion blend below used the previous
+C call's region mass (SAVEd) for a single shell.
+         SUMM = HS2(IBEGIN)
          X = HCOMPP(1,IBEGIN)
          XH2 = HCOMPP(12,IBEGIN)
          XHE3 = HCOMPP(4,IBEGIN)
