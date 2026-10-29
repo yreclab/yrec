@@ -54,6 +54,10 @@ C G Somers END
 C THIS ROUTINE COMPUTES THE BURNING RATES FOR LI6,LI7,BE9 AT THE
 C BEGINNING AND END OF A TIMESTEP AND STORES THEM IN COMMON BLOCKS
 C NEWRAT AND OLDRAT.
+C J = 1: rates of the model passed in (HCOMP, HD, HT), stored as the
+C        end-of-step set RLI6, RLI7, RBE9 (NEWRAT).
+C J = 2: rates of the saved start-of-step model (HCOMPP, HDO, HTO),
+C        stored as RLI60, RLI70, RBE90 (OLDRAT).
 C
 C BURNING RATES FROM CAUGHLIN AND FOWLER (1988).
 C

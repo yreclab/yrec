@@ -792,7 +792,13 @@ C store starting depth of C.Z. for light element burning.
                   PSCAL0 = 0.0D0
                ENDIF
 C find burning rates at the beginning of the time step.
-               CALL LIRATE88(HCOMP,HD,HT,M,1)
+C 10/29/26 MHP via Claude
+C LIRATE88's flag was swapped at all three calls.  J=1 evaluates the
+C model passed in and fills the end-of-step rates (RLI6, RLI7, RBE9);
+C J=2 evaluates the saved start-of-step model (HDO, HCOMPP) and fills
+C RLI60, RLI70, RBE90.  With the old flags both sets held start-of-step
+C rates, so LIBURN never saw the end-of-step model.
+               CALL LIRATE88(HCOMP,HD,HT,M,2)
             ENDIF
 C begin correction routines
 C set flags for CRRECT
@@ -1008,7 +1014,8 @@ C CHANGED FOR LITHIUM BURNING WITH OVERSHOOT.
                   PSCAL1 = 0.0D0
                ENDIF
 C FIND BURNING RATES AT THE END OF THE TIME STEP.
-               CALL LIRATE88(HCOMP,HD,HT,M,2)
+C 10/29/26 MHP via Claude: flag 2 -> 1 (see the start-of-step call).
+               CALL LIRATE88(HCOMP,HD,HT,M,1)
 C                CALL LIBURN(DELTS,HCOMP,HD,HR,HS1,HS2,HT,JENV1,JENV0,M)  ! KC 2025-05-31
                CALL LIBURN(DELTS,HCOMP,HR,HS1,HS2,HT,JENV1,JENV0,M)
             ENDIF
