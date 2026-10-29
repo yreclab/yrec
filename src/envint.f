@@ -290,7 +290,11 @@ C DBG 12/95 GET OPACITY
       CALL GETOPAC(DL, TL, X, Z, O, OL, QOD, QOT, FXION)
       X0 = PL - GL + DLOG10(O)
       Y(1) = PL
-      DYDX(1) = DEXP(CLN*(GL+X0-OL-PL))
+C 10/29/26 MHP via Claude
+C code changed to include FPL in the starting slope.  QATM, which
+C supplies every later slope, uses G = g*FPL; without it the first
+C Bulirsch-Stoer step of a rotating star began from slope 1, not FPL.
+      DYDX(1) = DEXP(CLN*(GL+X0-OL-PL))*FPL
 c G Somers 11/14 ADDED I/O FLAG AND CHANGED WRITE OUTS TO .STORE.
       IF(LPRT.AND.LSTATM) THEN
        IF(.NOT.LSTCH) WRITE(ISTOR,10)
