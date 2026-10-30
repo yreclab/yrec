@@ -23,8 +23,13 @@ C explicit declarations.
      *       EGG55,ENU,HCOMP,HD,HF1,HF2,HL,HR1,HR10,HR11,HR12,HR13,HR2,
      *       HR3,HR4,HR5,HR6,HR7,HR8,HR9,HS1,HT,HTMAX,QED,QET,SUM1,TL,X,
      *       XBE9,XC12,XC13,XH2,XHE3,XLI6,XLI7,XN14,XN15,XO16,XO17,XO18,
-     *       Y,YCORE,Z
-      INTEGER IT,ITMAX,IU,JCORE,JXBEG,M
+     *       Y,YCORE,Z,DYDT
+      INTEGER IT,ITMAX,IU,J,JCORE,JXBEG,M
+C CENTRAL Y BELOW WHICH THE CORE CRITERION IS DROPPED IN THE SHELL BRANCH.
+C BELOW EVERY END_YCEN IN USE (1D-4, 1D-3); A CO CORE HAS Y AT OR NEAR 0
+C AND IS LEFT TO THE SHELL LIMITS.
+      REAL*8 YFLOOR
+      PARAMETER (YFLOOR = 1.0D-5)
 C 10/12/26 MHP via Claude
 C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
 C namelist variables that the physics routines read from 27 COMMON
@@ -122,8 +127,50 @@ C
           DELTSY = (5.85D17/CLSUN)*DELTSY*(HS1(JCORE)/HL(JCORE))
 
             ELSE
-
-            DELTSY = (5.85D17/CLSUN)*DELTSY*(HS1(JXBEG-1)/HL(JXBEG-1))
+C 10/30/26 MHP via Claude
+C code changed to give the shell branch real limits.  It used to rescale
+C DELTSY, which held HTIMER's saved He timestep in seconds, as if it were
+C an amount of Y, so below ATIME(1) the He limit was meaningless and the
+C step grew through core He exhaustion.  ATIME(12) and ATIME(14) were
+C read from the namelist but never used.  Now the step is the minimum of:
+C   - ATIME(14) Msun of He burned, at the luminosity of the H-free core;
+C   - ATIME(12) of Y burned at any He-rich point (Y >= ATIME(1)) hot
+C     enough to burn He (T >= TCUT(4));
+C   - ATIME(5) of the remaining core He, the core criterion without its
+C     absolute cap, while YCORE > YFLOOR.  This resolves central He
+C     exhaustion down to the END_YCEN stop.
+            DELTSY = 1.0D20
+            IF(JXBEG.GT.1) THEN
+               IF(HL(JXBEG-1).GT.0.0D0) DELTSY =
+     *            (5.85D17/CLSUN)*ATIME(14)*CMSUN/HL(JXBEG-1)
+            ENDIF
+            DO 220 J = 1,M
+               IF(HT(J).LT.TCUT(4) .OR. HCOMP(2,J).LT.ATIME(1)) GOTO 220
+               DL = HD(J)
+               TL = HT(J)
+               X = HCOMP(1,J)
+               Y = HCOMP(2,J)
+               XHE3 = HCOMP(4,J)
+               XC12 = HCOMP(5,J)
+               XC13 = HCOMP(6,J)
+               XN14 = HCOMP(7,J)
+               XO16 = HCOMP(9,J)
+               XO18 = HCOMP(11,J)
+               XH2 = 0.0D0
+               IF(LEXCOM) XH2 = HCOMP(12,J)
+               IU = J
+               CALL ENGEB(EGG11,EGG22,EGG33,EGG44,EGG55,QED,QET,SUM1,DL,
+     *              TL,X,Y,XHE3,XC12,XC13,XN14,XO16,
+     *              XO18,XH2,IU,HR1,HR2,HR3,HR4,HR5,HR6,HR7,
+     *              HR8,HR9,HR10,HR11,HR12,HR13,HF1,HF2,BE7MFLOC,
+     *              EALPCA,ENU)
+C RATE OF Y CONSUMPTION: 3-ALPHA AND ALPHA CAPTURES
+               DYDT = MAX(EGG55,0.0D0)/5.85D17 + MAX(EALPCA,0.0D0)/1.7276D18
+               IF(DYDT.GT.0.0D0) DELTSY = MIN(DELTSY,ATIME(12)*Y/DYDT)
+  220       CONTINUE
+            IF(YCORE.GT.YFLOOR .AND. HL(JCORE).GT.0.0D0) DELTSY =
+     *         MIN(DELTSY,(5.85D17/CLSUN)*ATIME(5)*YCORE*
+     *         (HS1(JCORE)/HL(JCORE)))
 
 C
          ENDIF
