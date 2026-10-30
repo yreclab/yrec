@@ -244,7 +244,8 @@ c               write(*,*)JXBEG-1,JXMID,JXEND,M
      *         'DESIRED NEW ENVELOPE MASS LESS THAN ZERO'/1X,
      *         'OLD ENVELOPE MASS ',1PE9.2,' NEW ENVELOPE ',E9.2,
      *         ' NEW AND OLD TOTAL MASS ',2E10.2)
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
 
 c ***** Calculate scale factor for mass rescaling *****
@@ -290,7 +291,8 @@ c            write(*,*)(10**HSTOT)/CMSUN,' total'
             CHKENV = ((10**HSTOT)/CMSUN)-COROLD
             IF(CHKENV.LE.0.0D0)THEN
                WRITE(ISHORT,69)ENVOLD,ENVOLD+DENV,RESCAL(1,NK),SMASS
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
 
 c **** Calculate scale factor *****
@@ -341,7 +343,8 @@ C
      *         ' RESCALING'/1X,
      *         'OLD ENVELOPE MASS ',1PE10.2,' NEW ENVELOPE ',E10.2,
      *         ' NEW AND OLD CORE MASS ',2E10.2)
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
             HSTOT1 = DLOG10(RESCAL(4,NK)/COROLD)
             DO 80 I = 1,JXBEG-1

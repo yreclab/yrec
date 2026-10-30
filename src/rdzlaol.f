@@ -43,8 +43,8 @@ C     READ IN ARRAY SIZES
   100 FORMAT(/,18X,I2,9X,I3,14X,I3)
       IF(N.NE.1.OR.NUMRHOZ.GT.104.OR.NUMTZ.GT.52) THEN
          WRITE(ISHORT,*)' Z OPACITY INPUT ERROR.'
-C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
-         STOP 2
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       END IF
       READ(IOPUREZ,120)(DUMMY(I),I=1,11)
   120 FORMAT(47X,F8.5,//,1P6E12.5,/,1P4E12.5)

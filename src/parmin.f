@@ -983,8 +983,8 @@ C code changed to remove the LISO isochrone-output option
     2       FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'SEMI-CONVECTION',
      * ' AND OVERSHOOT FLAGS BOTH TURNED ON'/'FLAGS LSEMIC',L2,
      * ' OVERSHOOT - CORE,ENVELOPE,INTERMEDIATE-',3L2/'RUN STOPPED')
-C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
-            STOP 2
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+            STOP 3
          ENDIF
       ENDIF
 C 10/29/26 MHP via Claude
@@ -1312,8 +1312,8 @@ C as the diagnosis.
             WRITE(ISHORT,8803)NCMXCK
             WRITE(*,8803)NCMXCK
          ENDIF
-C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
-         STOP 2
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       ENDIF
  8802 FORMAT('SOLAR CALIBRATION IS ON, SO ONLY CMIXLA(1) IS READ FROM',
      * ' THE NAMELIST'/'RUN STOPPED')

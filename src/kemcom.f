@@ -381,7 +381,8 @@ C            WRITE (ISHORT,1000) IU
  1000       FORMAT(1X,39('>'),40('<')/1X,'ERROR IN SUBROUTINE KEMCOM'/
      *      1X,'UNABLE TO SOLVE FOR NEW ABUNDANCES IN SHELL',I4/1X,
      *      'RUN STOPPED AFTER 50 ATTEMPTS')
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
          ELSE
             GOTO 10
          ENDIF

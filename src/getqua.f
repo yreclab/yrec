@@ -124,5 +124,6 @@ C 10/30/26 MHP via Claude: the two zero-pivot exits used to stop silently.
       WRITE(ISHORT,900)J,M
   900 FORMAT(' GETQUA: ZERO PIVOT IN THE TRIDIAGONAL SOLVE AT ZONE',I5,
      *       ' OF',I5/' RUN STOPPED')
-      STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+      STOP 1
       END

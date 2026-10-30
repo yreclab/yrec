@@ -42,7 +42,8 @@ C MHP 10/02 dimensions changed for consistency with fpft
              WRITE(ISHORT,900)XA(I),XA(I+J),X,N
  900         FORMAT(' POLINT: TWO ABSCISSAE COINCIDE',1P3E14.6,
      *              ' N',I3/' RUN STOPPED')
-             STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+             STOP 1
           ENDIF
           DEN = W/DEN
           D(I) = HP*DEN

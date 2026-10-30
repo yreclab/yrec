@@ -230,8 +230,8 @@ C       IF (INT(DVAL(I+1)).LE.INT(DVAL(I))) THEN
           WRITE(ISHORT,1000) I
  1000       FORMAT(1X,39('>'),40('<')/1X,'ERROR IN SUBROUTINE SETUPS'/
      *      1X,'GLITCH IN FERMI TABLE ELEMENT',I4/1X,'RUN STOPPED')
-C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
-          STOP 2
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+          STOP 3
        ENDIF
        K = INT((DVAL(I+1) - DVAL(I))*20.0D0 + 0.10D0)
        K2 = K1 + K - 1

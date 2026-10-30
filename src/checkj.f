@@ -140,7 +140,8 @@ C            IF(IREDO.GT.3)THEN
      *                5X,'NEGATIVE J/M ENCOUNTERED IN ZONE',I5,
      *                ' AND 3 ATTEMPTS AT CUTTING TIMESTEP FAILED'/
      *                'RUN STOPPED')
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ELSE
                LREDO = .TRUE.
                DT = 0.5D0*DT

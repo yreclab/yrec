@@ -72,7 +72,8 @@ c 912        FORMAT('Omega sat, Tau',1p2e12.3)
             WRITE(*,911)WMAX,TAUCZ
             WRITE(ISHORT,911)WMAX,TAUCZ
  911        FORMAT('ERROR IN WIND - TAUCZ NOT DEFINED ',1P2E12.3,'STOPPED')
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
          ENDIF
       ELSE
          WSAT = WMAX

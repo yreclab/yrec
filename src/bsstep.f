@@ -66,7 +66,8 @@ C      H = 0.25D0*H/2**((IMAX-NUSE)/2)
          WRITE(ISHORT,900)X,H
  900     FORMAT(' ERROR IN BSSTEP: STEP SIZE UNDERFLOW AT X',1PE14.6,
      *          ' H',E12.3/' RUN STOPPED')
-       STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+       STOP 1
       END IF
       GOTO 20
 

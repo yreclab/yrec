@@ -57,6 +57,19 @@ if config.has_section('banned'):
         if name:
             banned_nml_vars.append(name)
 
+# Cases whose run is expected to end in a run-time error stop (STOP 1),
+# such as helium ignition in a low-mass star (KNOWN_ISSUES issue 33): the
+# extent of the run is the measurement.  Such a case may exit with status
+# 1 and is then compared with its reference as usual.  Any other nonzero
+# status, or status 1 in a case not listed, still fails.
+CRASH_EXIT_STATUS = 1
+crash_extent_cases = set()
+if config.has_section('crash_extent'):
+    for name in config['crash_extent'].get('cases', '').split('\n'):
+        name = name.split('#')[0].strip()
+        if name:
+            crash_extent_cases.add(name.replace('.nml1', ''))
+
 banned_nml_res = [
     (name, re.compile(rf'^[^!]*\b{re.escape(name)}\s*=', re.IGNORECASE))
     for name in banned_nml_vars]
@@ -394,8 +407,12 @@ def test_yrec(tdir, nml1, nml2):
     # Ensure outdir is an absolute path
     outdir = os.path.abspath(os.path.join(tdir, outdir))
 
-    # Fail on abnormal termination
-    assert proc.returncode == 0, "Program terminated abnormally"
+    # Fail on abnormal termination, except the expected run-time stop of
+    # a crash-extent case
+    expected_crash = (nml1.replace('.nml1', '') in crash_extent_cases
+                      and proc.returncode == CRASH_EXIT_STATUS)
+    assert proc.returncode == 0 or expected_crash, \
+        "Program terminated abnormally"
 
     # If process completed without error code,
     # check for the presence of a reference standard.

@@ -117,7 +117,8 @@ C  RATHER THAN STOPPING THE CODE.
      *       ' ANOMALOUS COMP NUMBER',I2,' IN ZONE',I5,' ABUNDANCE ',
      *       1PE12.3/' 3 ATTEMPTS AT TIMESTEP CUTTING FAILED'/
      *       'RUN STOPPED')
-                  STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+                  STOP 1
                ELSE
                   LREDO = .TRUE.
                   LOK = .FALSE.

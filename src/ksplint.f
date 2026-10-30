@@ -31,7 +31,8 @@ c      WRITE(*,*)KHI,KLO,XA(KHI),XA(KLO),X
             WRITE(ISHORT,900)XA(KLO),X
  900        FORMAT(' KSPLINT: TWO ABSCISSAE COINCIDE AT',1PE14.6,
      *             ' X',E14.6/' RUN STOPPED')
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
       ENDIF
 C      IF(H.EQ.0D0) STOP 911
       A = (XA(KHI)-X)/H

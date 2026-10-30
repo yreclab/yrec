@@ -91,7 +91,8 @@ C  CHECK T
          WRITE(*,5)TL
          WRITE(ISHORT,5)TL
  5       FORMAT(' LOG T OF',F11.6,'OUT OF OPAL 95 TABLE RANGE')
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
 C CHECK TO SEE IF EXTRAPOLATION BELOW THE FIRST TABLE ELEMENT
 C IN DENSITY IS NEEDED.

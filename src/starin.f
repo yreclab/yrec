@@ -228,7 +228,8 @@ C If flag LARGE is set, model has failed to converge.  Terminate the run.
      *            "STARIN:        ***** RUN STOPPED *****")
           WRITE(ISHORT,1010)
  1010       FORMAT("STARIN: ***** MODEL FAILED TO CONVERGE *****")
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
       ENDIF
 
 C THIS SUBROUTINE READS IN THE INITIAL STELLAR MODEL
@@ -298,8 +299,8 @@ C Last three lines are MODEL2 add-ons
          WRITE(ISHORT,20)
  20      FORMAT('STARIN: ***** RUN TERMINATED, INVALID INPUT',
      *         ' MODEL FILE.  *****')
-C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
-         STOP 2
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       ENDIF
 
 C Model has now been read in. Some post-processing is required.
