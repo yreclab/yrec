@@ -34,9 +34,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
       USE DEUTER_MOD
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/BURN/ into BURN_MOD.
-      USE BURN_MOD
-C 10/14/26 MHP via Claude
 C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
       USE NMLPAR_MOD
 C 10/14/26 MHP via Claude
@@ -275,23 +272,9 @@ C      *        DDAGE,ITLVL)  ! KC 2025-05-31
      *        HR7,HR8,HR10,HR11,HR12,HF1,HS2,HCOMP,DDAGE)
    50 CONTINUE
 C    51 CONTINUE
-      DO I = 1,M
-         HCOMPM(1,I) = HR1(I)
-         HCOMPM(2,I) = HR2(I)
-         HCOMPM(3,I) = HR3(I)
-         HCOMPM(4,I) = HR4(I)
-         HCOMPM(5,I) = HR5(I)
-         HCOMPM(6,I) = HR6(I)
-         HCOMPM(7,I) = HR7(I)
-         HCOMPM(8,I) = HR8(I)
-         HCOMPM(9,I) = HR9(I)
-         HCOMPM(10,I) = HR10(I)
-         HCOMPM(11,I) = HR11(I)
-         HCOMPM(12,I) = HR12(I)
-         HCOMPM(13,I) = HR13(I)
-         HCOMPM(14,I) = HF1(I)
-         HCOMPM(15,I) = HF2(I)
-      END DO
+C 10/30/26 MHP via Claude
+C code changed to stop copying the rates into HCOMPM (BURN_MOD), which
+C nothing has read since ROTMIX computes its own; the module is gone.
 C
 C IF ITLVL=1 THEN THE RATES OF HYDROGEN AND HELIUM BURNING ARE
 C   COMPUTED EXPLICITLY ASSUMING EQUILIBRIUM HE3 AND CN.
