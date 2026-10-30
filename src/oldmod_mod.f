@@ -35,6 +35,9 @@ C a PRIVATE copy here.
       LOGICAL*4 :: LCO(JSON)
       LOGICAL*4 :: LCZO(JSON)
       REAL*8    :: TEFFLO
-      INTEGER*4 :: MO
+C 10/29/26 MHP via Claude
+C code changed to replace the point count MO with the previous model's
+C surface luminosity HLSURO, which is what ENTIME needs.
+      REAL*8    :: HLSURO
 
       END MODULE OLDMOD_MOD

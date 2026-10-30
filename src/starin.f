@@ -947,8 +947,12 @@ C MODEL TO MODEL IN P,T,R,L.
          HLO(I) = HL(I)
 C  JVS 04/14 Added Teff to the list of saved values
          TEFFLO = TEFFL
-C  JVS 05/25 Added model number to list of saved values
-       MO = M
+C 10/29/26 MHP via Claude
+C code changed to save the surface luminosity, HLSURO, in place of the
+C point count MO.  HPOINT re-splines HLO onto the new mesh, so ENTIME's
+C HLO(MO) read an interior point or a stale entry whenever the count
+C changed.
+       HLSURO = HL(M)
  710  CONTINUE
       IF(LROT) THEN
          DO 720 I = 1,M

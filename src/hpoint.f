@@ -341,8 +341,12 @@ C BEGIN REFLOATING OF POINTS
       HLMAX = HL(M)
 C JVS 04/14 added Teff to saved variables
         TEFFLO = TEFFL
-C  JVS 05/25 Added model number to list of saved values
-      MO = M
+C 10/29/26 MHP via Claude
+C code changed to save the surface luminosity, HLSURO, in place of the
+C point count MO.  HPOINT re-splines HLO onto the new mesh, so ENTIME's
+C HLO(MO) read an interior point or a stale entry whenever the count
+C changed.
+      HLSURO = HL(M)
       DO I = M-1,1,-1
          IF(HL(I).GT.HLMAX)THEN
             HLMAX = HL(I)
@@ -661,15 +665,19 @@ C  THIS IS NEEDED FOR COMPOSITION DIFFUSION IN ROTATING MODELS.
 C MHP 05/02 IF THE SURFACE DEUTERIUM IS ABOVE
 C THRESHOLD (1.0D-14) FIND THE NEW RUN OF
 C DEUTERIUM BURNING RATES
-      IF(LEXCOM .AND. HCOMP(12,M).GE.1.0D-14)THEN
-         DO J = 1,M
-            HPO(J) = DRATE0(J)
-         END DO
-         CALL OSPLIN(HSS,HTO,HS,HPO,NTAB,NTOT)
-         DO J = 1,MNEW
-            DRATE0(J) = HTO(J)
-         END DO
-      ENDIF
+C 10/29/26 MHP via Claude
+C code changed to regrid DRATE0 unconditionally.  The gate tested
+C HCOMP(12,M) after HCOMP had moved to the new mesh but while M was
+C still the old count, so it read an interior point or a stale entry;
+C when it failed, DRATE0 stayed in old-mesh order and DBURN and MIDMOD
+C read it zone by zone on the new mesh.
+      DO J = 1,M
+         HPO(J) = DRATE0(J)
+      END DO
+      CALL OSPLIN(HSS,HTO,HS,HPO,NTAB,NTOT)
+      DO J = 1,MNEW
+         DRATE0(J) = HTO(J)
+      END DO
 C NOW FIND RUN OF P,R,L,T,AND RHO IN THAT ORDER FOR THE NEW POINTS.
 
       CALL OSPLIN(HSS,HPO,HS,HP,NTAB,NTOT)
