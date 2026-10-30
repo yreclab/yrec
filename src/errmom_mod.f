@@ -21,6 +21,10 @@ C Classic predates it.  That matches COMMON's semantics.
       IMPLICIT NONE
       SAVE
 
-      REAL*8 :: TOLERI
+C 10/30/26 MHP via Claude
+C code changed to give TOLERI a value.  Nothing set it, so SOLID's
+C relative J tolerance was 0 and every call took all 20 Newton passes;
+C CHECKJ only loosens it for the transport's early iterations.
+      REAL*8 :: TOLERI = 1.0D-12
 
       END MODULE ERRMOM_MOD
