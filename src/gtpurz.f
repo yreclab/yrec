@@ -4,8 +4,24 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C     GET LAOL OPACITY FOR PURE Z
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       SUBROUTINE GTPURZ(DL,TL,O,OL,QOD,QOT)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ZSLAOL/ into ZSLAOL_MOD.
+      USE ZSLAOL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ZLAOL/ into ZLAOL_MOD.
+      USE ZLAOL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DODR,RDL,ROL,RTL,SLOPE,TDOR,TDOT,TOLLOG,TOP,TOP1,TR,TT
+      INTEGER IR,IT,JT,JT1,JT2,KHI,KLO,NUMS,NUMTS
       REAL*8 DL,TL,O,OL,QOD,QOT
 C MHP 8/25 Removed unused variables
 C      CHARACTER*256 FLAOL, FPUREZ
@@ -17,10 +33,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C MHP 8/25 Removed character file names from common block
 C 9/24/26 MHP via Claude
 C code changed to remove dead OLAOL,OXA,OT,ORHO,IOLAOL,
@@ -29,13 +41,21 @@ C (never used, sole other declarers already removed with LAOL89)
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DBG 12/95 ARRAYS FOR PURE Z TABLE
-      COMMON/ZLAOL/ZOLAOL(104,52), ZOT(52), ZORHO(104),
-     *  NUMRHOZ, NUMTZ
-      COMMON/ZSLAOL/ZSLAOLL(104,52),ZSRHOL(104,52),
-     *  ZSDORL(104,52), NUMRSZ(52)
       SAVE
 C
 C     1. CUBIC SPLINE INTERPOLATE IN DENSITY
@@ -43,7 +63,7 @@ C     2. CUBIC SPLINE INTERPOLATE IN TEMPERATURE
 C     IF WITHIN TOLLAOL OF EDGE THEN LINEAR EXTRAPOLATE
 C
 C     TOLLAOL PERMITS SOME EXTRAPLOATION BEYOND TABLE EDGE.
-      TOLL = LOG(TOLLAOL)
+      TOLLOG = LOG(TOLLAOL)
       RTL = TL
       RDL = DL
       CALL LOCATE(ZOT,NUMTZ,RTL,JT)
@@ -64,7 +84,7 @@ C     GET RANGE OF FOUR TT SURROUNDING T
                TOP1(NUMTS) = ROL
                TT(NUMTS) = ZOT(IT)
                DODR(NUMTS)=(TOP(KHI)-TOP(KLO))/(TR(KHI)-TR(KLO))
-            ELSE IF (RDL.GT.TR(1)-TOLL .AND. RDL.LE.TR(1)) THEN
+            ELSE IF (RDL.GT.TR(1)-TOLLOG .AND. RDL.LE.TR(1)) THEN
 C              PUT LINEAR EXTRAPOLATION ROUTINES HERE
                SLOPE = (TOP(2)-TOP(1))/(TR(2)-TR(1))
                ROL = TOP(1)+SLOPE*(RDL-TR(1))
@@ -73,7 +93,7 @@ C              PUT LINEAR EXTRAPOLATION ROUTINES HERE
                TT(NUMTS) = ZOT(IT)
                DODR(NUMTS) = SLOPE
             ELSE IF (RDL.GE.TR(NUMS) .AND.
-     *               RDL.LT.TR(NUMS)+TOLL) THEN
+     *               RDL.LT.TR(NUMS)+TOLLOG) THEN
 C              PUT LINEAR EXTRAPOLATION ROUTINES HERE
                SLOPE = (TOP(NUMS-1)-TOP(NUMS))/
      *                 (TR(NUMS-1)-TR(NUMS))

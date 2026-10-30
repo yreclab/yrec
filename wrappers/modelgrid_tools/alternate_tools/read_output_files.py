@@ -9,9 +9,34 @@ We recommend using load_yrec_tracks due to its extra capabilities
 (such as reading multiple .track files at once and sorting the outputs)
 but we have kept read_track_table as an option.
 '''
+import re
 import pandas as pd
 from astropy.io import ascii
 import numpy as np
+
+
+# 10/20/26 MHP via Claude: values are now converted one at a time by
+# fortran_float, and anything unreadable raises. Previously a failed
+# conversion set the whole column to 0, so one bad value -- or the
+# 1.234-100 form below -- silently zeroed every row of that column.
+_FORTRAN_EXP = re.compile(r'([+-]?(?:\d+\.?\d*|\.\d+))([+-]\d{3,})$')
+
+
+def fortran_float(token, where=''):
+	''' Convert one numeric token from a YREC output file to float.
+
+		Fortran E formatting drops the E when the exponent needs three
+		digits, so 1.234E-100 is written as 1.234-100. Python cannot read
+		that form, so it is converted here. Any other token that is not a
+		number raises ValueError, naming where it came from.
+	'''
+	try:
+		return float(token)
+	except ValueError:
+		m = _FORTRAN_EXP.match(token)
+		if m:
+			return float(m.group(1) + 'E' + m.group(2))
+		raise ValueError(f'cannot read {token!r} as a number{where}') from None
 
 
 def read_track_table(fname):
@@ -27,30 +52,34 @@ def read_track_table(fname):
 		track : pandas DataFrame
 			Table of the parameters of a star's evolution at all timesteps of the YREC run
 	'''
-	track=ascii.read(fname, format="fixed_width_no_header",
-		names=('Step', 'Shls', 'Age_gyr', 'LogL_lsun', 'LogR_rsun', 'Log_g', 'log_Teff', 'Mco_core', 'Mco_env', 'Rco_env',
-		'Tco_env', 'Dco_env', 'Pco_env', 'Oco_env', 'LogT_cen', 'LogD_cen', 'logP_cen', 'Beta_cen', 'Eta_cen', 'X_cen',
-		'Y_cen', 'Z_cen', 'ppI_lsun', 'ppII_lsun', 'ppIII_lsun', 'CNO_lsun', '3a_lsun', 'HeC_lsun', 'Egrav_lsun',
-		'Neut_lsun', 'Cl_snu', 'Ga_snu', 'pp_neut', 'pep_neut', 'hep_neut', 'Be7_neut', 'B8_neut', 'N13_neut', 'O15_neut',
-		'F17_neut', 'diag1', 'diag2', 'He3_cen', 'C12_cen', 'C13_cen', 'N14_cen', 'N15_cen', 'O16_cen', 'O17_cen', 'O18_cen',
-		'He3_sur', 'C12_sur', 'C13_sur', 'N14_sur', 'N15_sur', 'O16_sur', 'O17_sur', 'O18_sur', ' H2_sur', 'Li6_sur',
-		'Li7_sur', 'Be9_sur', 'X_sur', 'Y_sur', 'Z_sur', 'Z_X_sur', 'Jtot', 'KE_rot_tot', 'I_tot', 'I_cz', 'Omega_sur',
-		'Omega_cen', 'Prot_sur_d', 'Vrot_kms', 'TauCZ_s', 'MHshell_base', 'MHshell_mid', 'MHshell_top', 'RHshell_base',
-		'RHShell_mid', 'RHshell_top', 'logP_phot', 'Mass_msun'),
-		col_starts=[0, 9, 17, 33, 50, 65, 81, 98, 113, 129, 141, 153, 165, 177, 189, 205, 
-		221, 237, 253, 269, 285, 301, 317, 333, 349, 365, 381, 397, 413, 429, 445, 
-		455, 465, 475, 485, 495, 505, 515, 525, 535, 545, 555, 565, 581, 597, 613, 
-		629, 645, 661, 677, 693, 709, 725, 741, 757, 773, 789, 805, 821, 837, 853,
-		869, 885, 901, 917, 933, 949, 965, 981, 997, 1013, 1029, 1045, 1061, 1077,
-		1094, 1109, 1125, 1141, 1157, 1173, 1189, 1205] )
-	track = track.to_pandas()
-	track = track.drop(0).reset_index(drop=True)
-	for k in track.columns:
-		try:
-			track[k] = track[k].astype(float)
-		except: # errors arise once X_cen gets below 1e-99
-			track[k]  = 0 # but that's basically 0
-	return track
+	# 10/20/26 MHP via Claude: column names now come from the file's own
+	# header line and each row is split on whitespace, as read_store_file
+	# already does. The fixed column positions that used to be listed here
+	# had drifted from the format YREC writes: they cut every column after
+	# Age_gyr one character off, and since a failed conversion zeroed the
+	# column, 71 of 83 columns read as 0. Every row of all 301 reference
+	# tracks splits into exactly as many fields as the header names. A row
+	# that does not, or a value that cannot be read, now raises ValueError.
+	with open(fname, 'r') as fh:
+		lines = fh.read().split('\n')
+	start = next((i for i, line in enumerate(lines)
+	              if line.split()[:1] == ['Step']), None)
+	if start is None:
+		raise ValueError(f'{fname}: no "Step ..." header line found')
+	names = lines[start].split()
+	rows = []
+	for n, line in enumerate(lines[start + 1:], start=start + 2):
+		if not line.strip() or line.startswith('#'):
+			continue
+		tokens = line.split()
+		if len(tokens) != len(names):
+			raise ValueError(f'{fname}, line {n}: {len(tokens)} fields, '
+			                 f'but the header names {len(names)}')
+		rows.append([fortran_float(t, f' ({fname}, line {n}, column {c})')
+		             for t, c in zip(tokens, names)])
+	return pd.DataFrame(rows, columns=names)
+
+
 
 def read_last_file(fname): 
 	''' Read YREC .last output into a Pandas dataframe.
@@ -74,10 +103,12 @@ def read_last_file(fname):
 	last = last.to_pandas()
 	last = last.drop(0).reset_index(drop=True)
 	for k in last.columns:
-		try:
-			last[k] = last[k].astype(float)
-		except:
-			last[k] = [shell == "T" for shell in last[k]]
+		values = [str(v).strip() for v in last[k]]
+		if values and all(v in ('T', 'F') for v in values):
+			last[k] = [v == 'T' for v in values]
+		else:
+			last[k] = [fortran_float(v, f' ({fname}, column {k})')
+			           for v in values]
 	return last
 
 def read_store_file(fname): 
@@ -96,20 +127,24 @@ def read_store_file(fname):
             Ages (in Gyr) corresponding to each model in the models list.
 	
 	'''
-	model_nums = [] # this isn't currently used for anything. 
+	model_nums = [] # this isn't currently used for anything.
 	model_ages = [] # Gyr
 	models = [] # list of dataframes
-	# 10/8/26 MHP via Claude: added 'MODEL' as the leading column. A main-
-	# branch change widened putstore.f's FORMAT 62 to prepend the model
-	# number to each shell row; without accounting for it here, every
-	# column below would silently be read one position off from SHELL
-	# onward.
-	names =['MODEL','SHELL','MASS','RADIUS','LUMINOSITY','PRESSURE','TEMPERATURE','DENSITY','OMEGA',
-	 'C','H1','He4','METALS','He3','C12','C13','N14','N15','O16','O17','O18','H2','Li6',
-	 'Li7','Be9','OPAC','GRAV','DELR','DEL','DELA','V_CONV','GAM1','HII','HEII','HEIII',
-	 'BETA','ETA','PPI','PPII','PPIII','CNO','3HE','E_NUC','E_NEU','E_GRAV','A','RP/RE',
-	 'FP','FT','J/M','MOMENT','DEL_KE','V_ES','V_GSF','V_SS','VTOT'] # dataframe column names
-	
+	# 10/9/26 MHP via Claude: column names are now read from each model's
+	# own header line in the file, instead of a hardcoded list here. YREC
+	# writes .store in one of two formats depending on the run's LSTCH
+	# namelist setting: the legacy format (header starts 'SHELL ...') or
+	# the newer STITCH format (header starts 'MODEL SHELL ...', with
+	# extra CONVECTIVE/INTERIOR_PT/ENV_PT/ATM_PT/TRIPLE_ALPHA/CP/
+	# DLNRHODLNT columns). A hardcoded list only ever matched the legacy
+	# format and silently misread the other; reading the header directly
+	# handles both, and any future column YREC adds, without needing this
+	# file updated to match. One known quirk: the legacy format's own
+	# header was never updated when putstore.f started prepending a
+	# MODEL value to every data row, so its header is one column short --
+	# detected below and compensated for.
+	boolean_cols = {'C', 'CONVECTIVE', 'INTERIOR_PT', 'ENV_PT', 'ATM_PT'}
+
 	file = open(fname, "r")
 	i = -1
 	flag = False # True while on a line that goes into the current dataframe
@@ -120,26 +155,35 @@ def read_store_file(fname):
 			model_ages.append(float(line[87:102])) # get the age (Gyr)
 			flag = False
 			continue
-		if line[:5] == 'SHELL':
-			i +=1
+		tokens = line.split()
+		if tokens[:2] == ['MODEL', 'SHELL']:
+			# STITCH format: header already labels every column, MODEL included
+			names = tokens
+			i += 1
 			flag = True
 			models.append(pd.DataFrame(columns=names))
 			continue
-		if i > -1 and line.strip() != '' and flag:
+		if tokens[:1] == ['SHELL']:
+			# legacy format: header is missing the MODEL label that
+			# putstore.f's FORMAT 62 nonetheless prepends to every row
+			names = ['MODEL'] + tokens
+			i += 1
+			flag = True
+			models.append(pd.DataFrame(columns=names))
+			continue
+		if i > -1 and line != '' and flag:
 			# print(line.split())
-			models[i].loc[len(models[i])] = line.split()
-		
+			models[i].loc[len(models[i])] = tokens
+
 	file.close()
 
 	# processing to turn things into floats
 	for model in models:
 		for k in model.columns:
-			if k == 'C':
+			if k in boolean_cols:
 				model[k] = [shell == "T" for shell in model[k]]
 			else:
-				try: 
-					model[k] = model[k].astype(float)
-				except: # cannot read numbers less than 1e-99
-					model[k] = 0 # but that's basically 0 anyway
+				model[k] = [fortran_float(v, f' ({fname}, column {k})')
+				            for v in model[k]]
 	
 	return models, np.array(model_ages)

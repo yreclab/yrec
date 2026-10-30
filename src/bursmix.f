@@ -2,15 +2,46 @@ C $$$$$$
       SUBROUTINE BURSMIX(COD2,DELTS,HCOMP,HD,HL,HP,HR,HS,HS1,HS2,HSTOT,
      *                   HT,HV,IMAX,IMIN,JENV0,JENV1,LOK,LCZ,M,MRZONE,
      *                   MXZONE,NRZONE,NZONE)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/FLAG/LEXCOM
-      COMMON/LIOV/PSCAL0,PSCAL1
-      COMMON/NEWRAT/RLI6(JSON),RLI7(JSON),RBE9(JSON)
-      COMMON/OLDRAT/RLI60(JSON),RLI70(JSON),RBE90(JSON)
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDRAT/ into OLDRAT_MOD.
+      USE OLDRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWRAT/ into NEWRAT_MOD.
+      USE NEWRAT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LIOV/ into LIOV_MOD.
+      USE LIOV_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD2,DELTS,DT,ECOD2,EM,HCOMP,HCSAV,HD,HKEEP,HL,HP,HR,HS,
+     *       HS1,HS2,HSTOT,HT,HV
+      INTEGER I,IBEG,IEND,III,IMAX,IMIN,J,JBEG,JEND,JENV0,JENV1,JJJ,M,
+     *       MRZONE,MXZONE,NBURS,NRZONE,NSEQ,NSPEC,NSTEP,NZONE
+      LOGICAL*4 LCONV,LCZ,LOK
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C INPUT VARIABLES
       DIMENSION COD2(JSON),HCOMP(15,JSON),HD(JSON),HL(JSON),
      *     HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HS2(JSON),HT(JSON),

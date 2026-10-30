@@ -6,10 +6,67 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      *DDAGE,SMASS,TEFFL,BL,GL,LSHELL,JXBEG,JXMID,JXEND,JCORE,JENV,
      *TLUMX,TRIT,TRIL,PS,TS,RS,CFENV,FTRI,HSTOT,OMEGA,LPUNCH,
 C      * FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,NKK)  ! KC 2025-05-31
-     * FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+     * FP,FT,ETA2,R0,HJM,HI,SJTOT,SKEROT,HS2,CMIXL,XMSOL,COMPMIX)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SCRTCH/ into SCRTCH_MOD.
+      USE SCRTCH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
+      USE FLUXES_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENT/ into CENT_MOD.
+      USE CENT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,BETA,BETA14,BETAI,BL,BOLM,CFENV,CLSNUF,CMIXL,COREM,
+     *       CORER,CORERL,CZSURF_D,CZSURF_DL,CZSURF_O,CZSURF_P,
+     *       CZSURF_PL,CZSURF_RL,CZSURF_T,CZSURF_TL,D,DAGE,DD1,DD2,
+     *       DDAGE,DELA,DL,EMU,ETA,ETA2,FITMAS,FL115IN,FL37CL,FL71GA,
+     *       FL7LI,FL81BR,FL98MO,FP,FT,FTRI,FX,FX2,FXION,GASNUF,GL,
+     *       HCOMP,HD,HI,HICZ,HITOT,HJM,HL,HP,HR,HS,HS1,HS2,HSB,HSTOT,
+     *       HT,OMEGA,P,PL,PS,QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,QDTP,QDTT,
+     *       R0,RL,RLMAX,RMU,ROTP,ROTV,RRR1,RRR2,RRR3,RS,SJTOT,SKEROT,
+     *       SMASS,SS1,SS2,SS3,SS4,SSS1,SSS2,SSS3,T,TEFFL,TEMP,THL,TL,
+     *       TLMAX,TLUMX,TRIL,TRIT,TS,X,XMSOL,Z
+      INTEGER I,ICHECK,ITMAX,IWRITE,J,JCORE,JENV,JXBEG,JXEND,JXMID,K,
+     *       KSAHA,M,MODEL
+      LOGICAL*4 LATMO,LC,LCMAX,LDERIV,LPUNCH,LSHELL,LTSCAL
+C 10/13/26 MHP via Claude
+C COMPMIX arrives as an argument now that COMMON/I2O/ is gone, and is
+C passed on to PUTSTORE and WRTLST.  It must be declared CHARACTER here:
+C implicit typing would make it REAL*8, since C falls in A-H, and nothing
+C would flag that -- F77 does no cross-file interface checking.
+      CHARACTER*4 COMPMIX
 C MHP 8/25 Fscomp file depreciated,unused variables removed
 C      CHARACTER*256 FLAST, FFIRST, FRUN, FSTAND, FFERMI,
 C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
@@ -27,10 +84,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/24/26 MHP via Claude
 C code changed to remove dead ILLDAT, IKUR from COMMON/LUNUM/
 C 9/24/26 MHP via Claude
@@ -43,70 +96,67 @@ C     1    FDEBUG, FTRACK, FSHORT, FMILNE, FMODPT,
 C     2    FSTOR, FPMOD, FPENV, FPATM, FDYN,
 C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
-      COMMON/CENT/TCENTER,PCENTER,DCENTER,ENVLM,ENVR
-      COMMON/TRACK/ITRVER
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
-      COMMON/CCOUT2/LDEBUG,LCORR,LMILNE,LTRACK,LSTPCH
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
-      COMMON/LABEL/XENV0,ZENV0
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
 C DBG PULSE
-      COMMON/PULSE/XMSOL,LPULSE,IPVER
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/PULSE/, declared here but never used.
 C*** MHP 5/90 ADD COMMON BLOCK FOR GRAVITATIONAL SETTLING.
-      COMMON/GRAVST/GRTOL,ILAMBDA,NITER_GS,LDIFY
 C*** MHP 7/91 ADD COMMON BLOCKS FOR SOLAR NEUTRINO I/O.
-      COMMON/FLUXES/FLUX(10),FLUXTOT(10),CLSNU,GASNU
-      COMMON/NEWENG/NITER4,LNEWS,LSNU
 C MHP 8/25 Removed character file names from common block
 C DBG 11/11/91
 C 9/25/26 MHP via Claude
 C code changed to remove the LISO isochrone-output option
-      COMMON/CHRONE/LRWSH
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/ROTPRT/LPRT0
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/ROTPRT/, declared here but never used.
 C MHP 4/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS 01/11 ACOUSTIC DEPTH
 C KC 2025-05-30 reordered common block elements
 C COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE, TNORM, TCZ, WHE, ICLCD,
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON,LAOLY, IJVS,
 C JVS 08/13 IF THE CZ IS BEYOND THE FITTING POINT, STORE ITS LOCATION
-      COMMON/ENVCZ/ENVRCZ, RINT
-      COMMON/SOUND/GAM1(JSON),LSOUND
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ENVCZ/: ENVRCZ was written once in
+C envint.f and read nowhere, and RINT was never referenced at all.  Its
+C only reader was the commented-out JVS block deleted from wrtout.f
+C earlier in this work, so the block died with it.
+C 10/13/26 MHP via Claude: removed the unused COMMON/SOUND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
-      COMMON/ROTEN/DEROT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/TEMP2/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/ROTEN/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers END
 
 
 C JVS END
 C JVS 10/11 Common block for He3+He3 luminosity
-      COMMON/GRAB/ENGHE3,HE3ALL,UMHE33(JSON),UMHEAL(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/GRAB/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C JVS end
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
       DIMENSION FXION(3),TLUMX(8),HCOMP(15,JSON),HD(JSON),HL(JSON),
      *HP(JSON),HR(JSON),HS(JSON),HS1(JSON),HT(JSON),LC(JSON),
      *PS(3),TS(3),RS(3),CFENV(9),TRIT(3),TRIL(3),OMEGA(JSON),
@@ -220,37 +270,37 @@ C     *           (SDEL(3,JENV)-SDEL(1,JENV-1))
             FX = DD2/(DD2-DD1)
 c            HSB = 0.5D0*(HS1(JENV)+HS1(JENV-1))
             HSB = HS1(JENV-1)+FX*(HS1(JENV)-HS1(JENV-1))
-            ENVLM = (EXP(CLN*HSTOT) - HSB)/CMSUN
+            CZsurf_M = (EXP(CLN*HSTOT) - HSB)/CMSUN
 C           ENVLM = SMASS-HS1(JENV-1)/CMSUN
 C          HSR = 0.5D0*(10.0D0**HR(JENV)+10.0D0**HR(JENV-1))
 C          ENVX = HSR/(10.0D0**RL)
 C MHP 2/98 FIND RADIUS OF CZ BASE
-            ENVRL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))-CRSUNL
-            ENVR = EXP(CLN*ENVRL)
-            ENVO = SO(JENV-1)+FX*(SO(JENV)-SO(JENV-1))
-            ENVTL = HT(JENV-1)+FX*(HT(JENV)-HT(JENV-1))
-            ENVDL = HD(JENV-1)+FX*(HD(JENV)-HD(JENV-1))
-            ENVPL = HP(JENV-1)+FX*(HP(JENV)-HP(JENV-1))
-            ENVT = EXP(CLN*ENVTL)
-            ENVD = EXP(CLN*ENVDL)
-            ENVP = EXP(CLN*ENVPL)
+            CZsurf_RL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))-CRSUNL
+            CZsurf_R = EXP(CLN*CZsurf_RL)
+            CZsurf_O = SO(JENV-1)+FX*(SO(JENV)-SO(JENV-1))
+            CZsurf_TL = HT(JENV-1)+FX*(HT(JENV)-HT(JENV-1))
+            CZsurf_DL = HD(JENV-1)+FX*(HD(JENV)-HD(JENV-1))
+            CZsurf_PL = HP(JENV-1)+FX*(HP(JENV)-HP(JENV-1))
+            CZsurf_T = EXP(CLN*CZsurf_TL)
+            CZsurf_D = EXP(CLN*CZsurf_DL)
+            CZsurf_P = EXP(CLN*CZsurf_PL)
        ELSE
-          ENVLM = SMASS
-          ENVR = 0.0D0
-            ENVT = 10.0D0**TCENTER
-            ENVD = 10.0D0**DCENTER
-            ENVP = 10.0D0**PCENTER
-            ENVO = SO(1)
+          CZsurf_M = SMASS
+          CZsurf_R = 0.0D0
+            CZsurf_T = 10.0D0**TCENTER
+            CZsurf_D = 10.0D0**DCENTER
+            CZsurf_P = 10.0D0**PCENTER
+            CZsurf_O = SO(1)
        ENDIF
       ELSE
-       ENVLM = 0.0D0
-       ENVR = 0.0D0
-         ENVT = 0.0D0
-         ENVD = 0.0D0
-         ENVP = 0.0D0
-         ENVO = 0.0D0
+       CZsurf_M = 0.0D0
+       CZsurf_R = 0.0D0
+         CZsurf_T = 0.0D0
+         CZsurf_D = 0.0D0
+         CZsurf_P = 0.0D0
+         CZsurf_O = 0.0D0
       ENDIF
-      WRITE(ISHORT,50)M,XENV0,ZENV0,COREM,ENVLM, ENVR
+      WRITE(ISHORT,50)M,XENV0,ZENV0,COREM,CZsurf_M, CZsurf_R
    50 FORMAT(1X,'SHELLS=',I5,2X,'(X0,Z0)=(',F9.7,',',F9.7,')',2X,
      *'CONV. ZONE MASSES(MSUN): CORE',F10.7,' ENV.',F10.7,
      *' RAD. FRAC.',F10.7)
@@ -491,43 +541,22 @@ C     *            PLIM,RLL,ATEFFL,X,Z,DUM1,IDUM,KATM,KENV,KSAHA,
 C     *            DUM2,DUM3,DUM4,LPULPT)
 CC G Somers END
 C
-CC JVS 08/13 TRACKS CZ EVEN WHEN OUTSIDE THE ENVELOPE FITTING POINT
-C      IF(JENV.GE.M .AND. .NOT. LC(M)) THEN
-C            ENVR = ENVRCZ
-C      ELSE IF(JENV.GE.M .AND. LC(M)) THEN
-C            DO I=1,M
-C                  DEL1(I) = SDEL(1,I)
-C                  DEL2(I) = SDEL(3,I)
-C            ENDDO
-C                  LJVS = .TRUE.
-C                  CALL TAUINT(HCOMP,HS2,HS1,LC,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
-C                  LJVS = .FALSE.
-C                  DD2 = DEL1(JENV-1)-DEL2(JENV-1)
-C                  DD1 = DEL1(JENV)-DEL2(JENV)
-C                  FX = DD2/(DD2-DD1)
-C                  ENVCZL = HR(JENV-1)+FX*(HR(JENV)-HR(JENV-1))
-C                  ENVR = EXP(CLN*ENVCZL)/CRSUN
-C      ELSE
-C            DO I=1,M
-C                  DEL1(I) = SDEL(1,I)
-C                  DEL2(I) = SDEL(3,I)
-C            ENDDO
-C                  LJVS = .TRUE.
-C                  CALL TAUINT(HCOMP,HS2,HS1,LC,HR,HP,HD,HG,M,SVEL,DEL1,DEL2)
-C                  LJVS = .FALSE.
-C      ENDIF
-C
+C 10/13/26 MHP via Claude
+C code changed to remove a commented-out JVS block that tracked the CZ
+C outside the envelope fitting point.  It was the only code referencing
+C LJVS, whose COMMON/JTEST/ is removed in this change, and it also read
+C ENVRCZ, which is why that COMMON/ENVCZ/ member has no live consumer.
 C G Somers 3/17, ADDED CALL TO NEW TAUCZ AND PPHOT CALCULATION ROUTINE.
 
 C       CALL GETTAU(HCOMP,HR,HP,HD,HG,HS1,HT,FP,FT,TEFFL,  ! KC 2025-05-31
       CALL GETTAU(HCOMP,HR,HP,HD,HS1,HT,FP,FT,TEFFL,
-     *            HSTOT,BL,M,LC,ENVR,CMIXL)
+     *            HSTOT,BL,M,LC,CZsurf_R,CMIXL)
       TAUCZ0 = TAUCZ
       PPHOT0 = PPHOT
 
 C JVS 02/12 Added PPHOT and SMASS to the output
-            WRITE(ITRACK, 1499) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *      ENVR,ENVT,ENVD,ENVP,ENVO,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
+            WRITE(ITRACK, 1499) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *      CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1      HCOMP(3,1),(TLUMX(J),J = 1,5),TLUMX(8),TLUMX(7),TLUMX(6),
      2      CLSNU,GASNU,(FLUXTOT(I),I=1,10),(HCOMP(I,1),I=4,11),
      3      (HCOMP(I,M),I=4,15),(HCOMP(I,M),I=1,3),HCOMP(3,M)/HCOMP(1,M),
@@ -538,8 +567,8 @@ C     1499       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4,16E16.8,12E10.3,41E16.8)
 C MCR 12/25 Preserve precision and 'E' for values w/ 3-digit exponents
  1499       FORMAT(1X,2I8,1P7E17.8E3,1P5E12.4,16E17.8E3,12E10.3,41E17.8E3)
          ELSE IF(ITRVER .EQ.1 .OR. ITRVER .EQ.2) THEN
-            WRITE(ITRACK,1500)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *                     ENVR,ENVT,ENVD,ENVP,ENVO
+            WRITE(ITRACK,1500)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *                     CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O
  1500       FORMAT(1X,2I8,1P7E16.8,0PF8.4,1P4E12.4)
             WRITE(ITRACK,1509)TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1                     HCOMP(3,1),HITOT
@@ -607,8 +636,8 @@ C 4/09 ADDED TAUCZ TO ROTATION INFORMATION
          IF (ITRVER .EQ. 3) THEN
 C        RATIO OF GRAV TO TOTAL ENERGY
 C       GROTOT = 100.0*TLUMX(7)/HL(M)
-            WRITE(ITRACK,1501)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *      ENVR, XNEW
+            WRITE(ITRACK,1501)MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *      CZsurf_R, XNEW
  1501       FORMAT(1X,2I8,1P5E13.5, 1P2E11.3, 0PF8.4, 1PE13.5)
 
          END IF
@@ -637,7 +666,7 @@ C  IF LSTPCH = T, STORE THE LAST MODEL CALCULATED IN A RUN
       IWRITE = ILAST
       CALL WRTLST(IWRITE,HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *DAGE,DDAGE,OMEGA,CMIXL)
+     *DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
 C
 C  PRINT OUT MODEL DETAILS IF REQUESTED FOR THIS MODEL. THIS IS ALL DONE
 C  IN THE SR PUTSTORE.
@@ -645,7 +674,7 @@ C
       IF(LSTORE.AND.MOD(MODEL,NPRTMOD).EQ.0) THEN
        CALL PUTSTORE(HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *   TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,
-     *   HSTOT,DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL)
+     *   HSTOT,DAGE,DDAGE,OMEGA,HS1,ETA2,R0,FP,FT,HJM,HI,CMIXL,XMSOL,COMPMIX)
        LPUNCH = .FALSE.
       ENDIF
 c the call to putstore above creates the necessary pulsation output for LPULSE.
@@ -657,7 +686,7 @@ C        CALL WRTMOD(M,LSHELL,JXBEG,JXEND,JCORE,JENV,HCOMP,HS1,HD,HL,
 C      *   HP,HR,HT,LC,MODEL,BL,TEFFL,OMEGA,FP,FT,ETA2,R0,HJM,HI,HS,
 C      *   DAGE)  ! KC 2025-05-31
        CALL WRTMOD(M,JENV,HCOMP,HS1,HD,HL,
-     *   HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL)
+     *   HP,HR,HT,MODEL,BL,TEFFL,FP,FT,HS,DAGE,CMIXL,XMSOL)
       ENDIF
 C G Somers END
 
@@ -666,7 +695,7 @@ C together the interior and envelope pieces. Columns 68,69,70 are normalized
 C acoustic depth, depth to CZ and acoustic crossing time, respectively.
         IF (LACOUT) THEN
             IF(JENV.GT.1 .AND. LADON) THEN
-                  CALL CALCAD(HR, ENVRL, M, HD, HP,HT,BL, FP, FT, HSTOT,
+                  CALL CALCAD(HR, CZsurf_RL, M, HD, HP,HT,BL, FP, FT, HSTOT,
 C      *            LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
      *            TEFFL, HCOMP, DAGE, JENV, CMIXL)
             ELSE IF (JENV.EQ.1) THEN
@@ -682,11 +711,11 @@ C      *            LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
          IWRITE = IJLAST
          CALL WRTLST(IWRITE,HCOMP,HD,HL,HP,HR,HS,HT,LC,TRIT,TRIL,PS,
      *   TS,RS,CFENV,FTRI,TLUMX,JCORE,JENV,MODEL,M,SMASS,TEFFL,BL,HSTOT,
-     *   DAGE,DDAGE,OMEGA,CMIXL)
+     *   DAGE,DDAGE,OMEGA,CMIXL,COMPMIX)
         ENDIF
 
-            WRITE(ITRACK, 1800) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,ENVLM,
-     *      ENVR,ENVT,ENVD,ENVP,ENVO,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
+            WRITE(ITRACK, 1800) MODEL,M,DAGE,BL,RL,GL,TEFFL,COREM,CZsurf_M,
+     *      CZsurf_R,CZsurf_T,CZsurf_D,CZsurf_P,CZsurf_O,TL,DL,PL,BETA,ETA,HCOMP(1,1),HCOMP(2,1),
      1      HCOMP(3,1),(TLUMX(J),J = 1,5),TLUMX(8),TLUMX(7),TLUMX(6),
      2      CLSNU,GASNU,(FLUXTOT(I),I=1,10),(HCOMP(I,1),I=4,11),
      3      (HCOMP(I,M),I=4,15),(HCOMP(I,M),I=1,3),HCOMP(3,M)/HCOMP(1,M),

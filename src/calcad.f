@@ -48,16 +48,61 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CALCAD(HR, RCZL, M, HD, HP, HT, BL, FP, FT, HSTOT,
 C      *                  LPRT, TEFFL, HCOMP, NKK, DAGE, DDAGE, JENV)  ! KC 2025-05-31
      *                  TEFFL, HCOMP, DAGE, JENV, CMIXL)
-      PARAMETER (JSON=5000)
-      PARAMETER (NTS=63, NPS=76)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ACDPTH/ into ACDPTH_MOD.
+      USE ACDPTH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to convert COMMON/EOS06MISC/ into
+C EOS06MISC_MOD.
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMUJ,ATEFFL,BET14J,BETAIJ,BETAJ,BL,CHRH,CHT,CMIXL,CVJ,DAGE,
+     *       DELAJ,EMUJ,ETAJ,FP,FPLJ,FT,FTLJ,FXIONJ,HCOMP,HD,HP,HR,
+     *       HSTOT,HT,QAPJ,QATJ,QCPJ,QCPPJ,QCPTJ,QDPJ,QDTJ,QDTPJ,QDTTJ,
+     *       RCZ,RCZL,RMUJ,STD,STDL,STP,STPL,STT,STTL,STX,STZ,TEFFL
+      INTEGER IORDER,IRAD,JENV,KHI,KLO,M,MV,MX,NR,NT
+      LOGICAL*4 LATMOJ,LCALCJ,LDERIJ
+C 10/9/26 MHP via Claude
+C code changed to add mx,mv,nr,nt (matching every other file that
+C declares an OPAL 2006 EOS common block), needed below for
+C COMMON/EOS06MISC/'s array dimensions; this file previously only
+C needed COMMON/EEOS06/, which it hardcoded as eos(10) instead.
+      PARAMETER (mx=5,mv=10,nr=169,nt=197)
       REAL*8 HOOD1(7), HOOD2(7), D(7), ANS(1)
       REAL*8 DUM1(4),DUM2(3),DUM3(3),DUM4(3)
       REAL*8 XJ,ZJ,GLJ,RLJ,PLIMJ, BJ
       REAL*8 ABEG0,AMIN0,AMAX0,EBEG0,EMIN0,EMAX0
+C 10/15/26 MHP via Claude
+C code changed to drop TNORM, TCZ and TAUCZN from this REAL*8 statement.
+C All three are COMMON/ACDPTH/ members, declared at line 99 below, and
+C explicitly typing a COMMON member is legal while doing the same to a
+C USE-associated name is rejected, so they had to go before ACDPTH
+C becomes a module.  Removing them changes nothing: IMPLICIT
+C REAL*8(A-H,O-Z) already gives all three that type, T being in O-Z.
       REAL*8 STARR(JSON),START(JSON),STARD(JSON),STARX(JSON),STARP(JSON),
-     *       STARZ(JSON),STARC(JSON),TNORM,TCZ,TAUCZN,STARCZ(JSON),STARRZ(JSON)
+     *       STARZ(JSON),STARC(JSON),STARCZ(JSON),STARRZ(JSON)
 C      REAL*8 ATMOSX, ATMOST(JSON),ATMOSD(JSON),ATMOSP(JSON),ADELAD(JSON),ATMOSC(JSON),
 C     *       ATGAM1(JSON), ATMOSR(JSON),GM1(JSON)
       REAL*8 ATMOSX, GM1(JSON)
@@ -77,55 +122,56 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to remove dead IACAT, IJVS, IJENT, IJDEL unit
 C reservations from COMMON/ACDPTH/ (declared but never opened anywhere)
-      COMMON/ACDPTH/TAUCZN,DELADJ(JSON),TAUHE,TNORM,TCZ,WHE,
-     *  ACATMR(JSON),ACATMD(JSON),ACATMP(JSON),ACATMT(JSON),TATMOS,
-     *  AGEOUT(5),LCLCD,LJLAST,LJWRT,LADON,LAOLY,LACOUT
 C      *LCLCD, AGEOUT(5), IACAT, IJLAST, LJLAST, LJWRT, LADON, LAOLY, IJVS,
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
-      COMMON/INTATM/ATMERR,ATMD0,ATMBEG,ATMMIN,ATMMAX
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     *LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *SENV
-       COMMON/SOUND/GAM1(JSON),LSOUND
-      common/eeos06/esact,eos(10)
-      COMMON /LLOT95/ZTAB
-      COMMON/ENVGEN/ATMSTP,ENVSTP,LENVG
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SOUND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale).
+C 10/11/26 MHP via Claude
+C code changed to remove an incorrect COMMON /LLOT95/ declaration from
+C this file. Every other file declares it as
+C   COMMON /LLOT95/CAPPA(NUMX,NUMT,NUMD),ZTAB
+C so declaring only ZTAB here aliased it to CAPPA(1,1,1) -- an opacity
+C value, not the table's Z. Harmless to date only because this file's
+C two references to ZTAB are both in commented-out CALL ESAC06 lines
+C (see below); nothing reads it. NOTE: if those calls are ever
+C restored they need the real metallicity, which must come from the
+C full block declaration or (better) be passed in as an argument.
 C MHP 10/24 ADDED STOP CRITERIA FOR CENTRAL H,D,AND HE4
-      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50),
-     * END_DCEN(50),END_XCEN(50),END_YCEN(50)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SETT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/SETT/ENDAGE(50),SETDT(50),LENDAG(50),LSETDT(50)
-      COMMON/ATMOS/HRAS,KTTAU,KTTAU0,LTTAU
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/ATMOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 8/25 Remove file names from common blocks
 C 9/24/26 MHP via Claude
 C code changed to remove the OPAL 1995/2001 equations of state
-      COMMON/OPALEOS/lopale06,lNumDeriv
 C Added for experimantal mass loss section
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
 C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
 C G Somers END
       SAVE
 

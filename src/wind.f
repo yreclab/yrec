@@ -3,28 +3,54 @@ C MHP 10/02 UNUSED LFIRST REMOVED FROM CALL
       SUBROUTINE WIND(BL,DELTS,HSBOT,HSTOP,JSTART,JEND,LJDOT,OMEGAS,
 C      *                SJTOT,SMASS,TEFFL,HICZ,HJM,LFIRST)  ! KC 2025-05-31
      *                SMASS,TEFFL,HICZ,HJM)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BL,CGRAV,DELTS,DM,DMDOT,DT,DW,DWTEST,FJDOM,HICZ,HJM,HSBOT,
+     *       HSTOP,OMEGAS,RL,RTOT,SMASS,TEFFL,W,WNEW0,WS,WSAT
+      INTEGER II,JEND,JSTART,K,N,NSTEP
+      LOGICAL*4 LJDOT
 
-      PARAMETER(JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       DIMENSION HJM(JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead, unused CMIXZ (never referenced) from
 C COMMON/CONST3/
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude: removed the unused COMMON/CWIND/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C MHP 3/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       SAVE
 C IF DESIRED, REMOVE ANGULAR MOMENTUM FROM OUTER CONVECTION ZONE
 C USING A WEBER-DAVIS MAGNETIC WIND MODEL

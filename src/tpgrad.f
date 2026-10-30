@@ -6,8 +6,34 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE TPGRAD(TL,T,PL,P,D,RL,SL,B,O,QDT,QDP,QOT,QOD,QCP,
      *DEL,DELR,DELA,QDTT,QDTP,QAT,QAP,QACT,QACP,QACR,QCPT,QCPP,
      *VEL,LDERIV,LCONV,FPL,FTL,TEFFL,CMIXL)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
+      USE PUALPHA_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A1,A3,A3P,ATEFFL,B,CMIXL,D,DDEL,DEEPX,DEL,DELA,DELDEL,DELI,
+     *       DELPM,DELR,FPL,FTL,G,O,P,PHI,PHI2,PHIPHI,PL,PRESHT,QA1P,
+     *       QA1R,QA1T,QA3P,QA3R,QA3T,QACP,QACR,QACT,QAP,QAT,QCP,QCPP,
+     *       QCPT,QDDELP,QDDELT,QDELAP,QDELAT,QDP,QDT,QDTP,QDTT,QOD,QOT,
+     *       QVP,QVR,QVT,RL,RRR,SL,T,TEFFL,TEMP1,TEMP2,TEMP3,TEMPOP,
+     *       TEMPOT,TEST,TL,V,VD,VEL,VP,VTOL
+      INTEGER ITER
+      LOGICAL*4 LCONV,LDERIV
 
-      PARAMETER(JSON=5000)
 C  DL,OL,X,Z,LOCOND USED BY OPACTY
 C COMPUTES RADIATIVE GRADIENT AND COMPARES WITH ADIABATIC GRADIENT
 C COMPUTES CONVECTIVE GRADIENT VIA MIXING LENGTH THEORY IF APPLICABLE
@@ -16,36 +42,34 @@ C RETURNS LCONV = .TRUE. IF CONVECTIVE
 C         DELR = RADIATIVE GRADIENT
 C         DEL = ACTUAL GRADIENT
 C          QACT,QACP = NAT-LOG DERIVATIVES OF THE CONVECTIVE GRADIENT
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *      IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C DBG 7/95 To store variables for pulse output
-      COMMON/PUALPHA/ALFMLT,PHMLT,CMXMLT,
-     *     VALFMLT(JSON),VPHMLT(JSON),VCMXMLT(JSON)
-C G Somers 09/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
 C G Somers END
       DATA VTOL/1.0D-10/
       SAVE
@@ -122,10 +146,10 @@ C POSITIVE NUMBER
       IF(TEST.GT.0.0D0)THEN
          A1 = CMIXL3*PHIPHI*T**3*O/(QCP*DSQRT(TEST))
       ELSE
-C ODD CONVERGENCE PROBLEM; WRITE DIAGNOSTIC AND CONTINUE.
+C PATHOLOGICAL FAILURE IN THE CUBIC SOLVER.
          WRITE(*,201)DELDEL,QDT,TEST
  201     FORMAT('***WARNING***'/'TPGRAD TRIED TO TAKE SQUARE ROOT',
-     *          ' OF NEGATIVE NUMBER - ASSUMED ADIABATIC CONVECTION'/
+     *          ' OF NEGATIVE NUMBER - RUN ENDED'/
      *          ' DELDEL ',1PE12.3,' QDT ',E12.3,' DISC. ',E12.3)
       WRITE(*,911)O,B,PL,SL,TL,FTL,FPL,DELR,DELA,RL
  911  FORMAT(1P10E12.3)
@@ -136,7 +160,7 @@ C      A1 = CMIXL3*PHIPHI*T**3*O/(QCP*DSQRT(DELDEL*G*(-QDT)/PRESHT))
       V = 1.0D0/A1
       A3 = 0.75D0*PHI2*PHIPHI/A1
       A3P = 3.0D0*A3
-      IF(A3.GT.1.0D+3) V = A3**(-0.333333333D0)
+      IF(A3.GT.1.0D+3) V = A3**(-CC13)
       DO 10 ITER = 1,25
        V = DMIN1(V,1.0D0)
        VP = A1 + V*(2.0D0 + V*A3P)

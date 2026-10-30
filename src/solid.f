@@ -2,24 +2,44 @@ C$$$$$$
 C SOLID
       SUBROUTINE SOLID(HD,HJM,HR,HS,HS2,JSTART,JEND,ETA2,HI,OMEGA,
      *                 QIW,R0,M)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ERRMOM/ into ERRMOM_MOD.
+      USE ERRMOM_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DISK/ into DISK_MOD.
+      USE DISK_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CZI,CZJ,CZJNEW,CZQIW,DELJ,DELW,ETA2,HD,HI,HJM,HR,HS,HS2,
+     *       OMEGA,QIW,R0,WGUESS,WSUM
+      INTEGER ICOUNT,J,JEND,JSTART,M
+      LOGICAL*4 LOCK
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/ERRMOM/TOLERI
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 9/94 ADDED DISK LOCKING OPTION - FLAG, TIME OVER WHICH LOCKING
 C IS ENFORCED, AND PERIOD AT WHICH LOCKING IS SET ARE OPTIONS.
-      COMMON/DISK/SAGE,TDISK,PDISK,LDISK
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
       DIMENSION HJM(JSON),HI(JSON),QIW(JSON),OMEGA(JSON),ETA2(JSON),
      * R0(JSON),HD(JSON),HS2(JSON),HR(JSON),HS(JSON)
       SAVE

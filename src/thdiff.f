@@ -18,6 +18,13 @@ C                   the gravitational force g.
 C
 C**************************************************
       SUBROUTINE THDIFF(M,A,Z,X,CL,AP,AT,AX)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AC,ALPHA,AP,AT,AX,C,CC,CL,D,DELTA,GA,GAMMA,TEMP,X,XX,Y,
+     *       YY,Z
+      INTEGER I,INDX,J,L,M,MMAX,N,NMAX
 
 C The parameter M is the number of species considered.
 C
@@ -36,7 +43,6 @@ C The array CL contains the values of the Coulomb Logarithms.
 C The vector AP, AT, and array AX contains the results for the diffusion
 C coefficients.
 
-      IMPLICIT REAL*8(A-H,O-Z)
 
 C      INTEGER M,N,I,J,L,MMAX,NMAX
       PARAMETER (MMAX=20,NMAX=42)

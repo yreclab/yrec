@@ -2,16 +2,19 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C QGAUSS
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE QGAUSS(G0G,GINVG,SPHIG,B,R0,HS,AINT,Q,W2,A,I)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AINT,B,DX,G,G0G,G2,GINVG,HS,Q,R0,S,S2,SPHIG,W,W2,X,XM,XR
+      INTEGER I,J
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-C 9/25/26 MHP via Claude
-C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
-C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
+C 10/13/26 MHP via Claude: removed the unused COMMON/CONSTANTS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION R0(JSON),HS(JSON)
       DIMENSION X(5),W(5)
       DATA X/.14887433898163D0,.43339539412925D0,.67940956829902D0,

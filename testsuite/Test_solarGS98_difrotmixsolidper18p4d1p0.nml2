@@ -32,10 +32,10 @@
  ITDIF1=1 ! Iterations between structure equations and rotational mixing (1=none). This is the same as NITER3 unless >1. Recommend 2 for rotational mixing models.
  FCORR0 = 0.6 ! The code predicts corrections to the structure variables, which can initially be overestimated. This is the iteration 1 scale factor by which they are multipled.          
  FCORRI = 0.05 ! This is the increment to the factor for each successive interation, for example it reaches the max of 1 in 8 steps if (0.6,0.05). larger factor = faster convergence, less stable
- HTOLER(1,1) = 6.0D-9 ! Convergence tol for log P. If the maximum correction in a given stage anywhere is below this threshold (for all 4 state variables), the run is converged. 
- HTOLER(2,1) = 4.5D-9 ! Convergence tol for log T.
- HTOLER(3,1) = 3.0D-9 ! Convergence tol for log R.  
- HTOLER(4,1) = 9.0D-9 ! Convergence tol for L/Ltot. Note: all are local  
+ HTOLER(1,1) = 6.0D-8 ! 10/28/26: HTOLER(1-4,1) relaxed x10. At 6.0D-9 ... 9.0D-9 this solid-body run stalled at 29 Myr on a period-2 cycle of amplitude 3D-7 in the Newton corrections; the LSOLID=F deck with the same tolerances does not. -- Convergence tol for log P. If the maximum correction in a given stage anywhere is below this threshold (for all 4 state variables), the run is converged.
+ HTOLER(2,1) = 4.5D-8 ! 10/28/26 (see above). -- Convergence tol for log T.
+ HTOLER(3,1) = 3.0D-8 ! 10/28/26 (see above). -- Convergence tol for log R.
+ HTOLER(4,1) = 9.0D-8 ! 10/28/26 (see above). -- Convergence tol for L/Ltot. Note: all are local
  HTOLER(5,1) = 3.0D-9 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,1) is for P+R   
  HTOLER(5,2) = 2.5E-7 ! If the difference between analytic and numerical derivatives is better than this, iteration is skipped. (5,2) is for T+L   
 
@@ -180,7 +180,7 @@
  LJDOT0 = .TRUE. ! Include angular momentum loss
  LMWIND = .TRUE. ! Adopt Matt et al. 2012 magnetized wind model.
  AWIND = "V13" ! V13 is the standard van Saders & Pinsonneault 2013 model. K97 is the legacy Krishnamurthi et al. 1997 one. CUS is custom. PMMA, PMMB, PMMC,PMMD, PMMM are only used if this is set to CUS.
- FK = 6.100 ! Scale factor for angular momentum loss. Typically used as a free parameter to reproduce the solar rotation at the solar age.
+ FK = 6.0307 ! 10/28/26: solar recalibration (L, R, Z/X, Prot, A(Li)); was 6.100 -- Scale factor for angular momentum loss. Typically used as a free parameter to reproduce the solar rotation at the solar age.
  LROSSBY = .TRUE. ! Scale the loss rate relative to the Rossby number. Should be used with a saturation threshold (WMAX or WMAXSUN below)
  WMAX = 3.0e-4 ! Maximum angular velocity (rad/s) for scaling the mass loss rate and magnetic fields in the scaled solar wind. This is over-written if WMAX_SUN is below 1000; the latter expresses WMAX relative to the solar angular velocity.
  WMAX_SUN = 10.0D0 ! WMAX in units of PMMSOLW. A convenient alternative way of specifying WMAX.
@@ -195,7 +195,7 @@
  LCODM = .TRUE. ! Add magnetic diffusion term
  CODM = 9.0D4 ! Magnetic diffusion term for angular momentum transport. 0 = Pure hydro. Nonzero=extra diffusive mechanism. 9e4 matches the solar core rotation constraints.
  FW = 1.0 ! Global factor for scaling the angular momentum transport diffusion coefficients.           
- FC = 0.780 ! Scale factor for mixing diffusion coefficeints relative to angular momentum. Typicaly calibrated to match Li depletion in a benchmark (cluster stars or the Sun).
+ FC = 3.2954 ! 10/28/26: solar recalibration (L, R, Z/X, Prot, A(Li)); was 0.780 -- Scale factor for mixing diffusion coefficeints relative to angular momentum. Typicaly calibrated to match Li depletion in a benchmark (cluster stars or the Sun).
  IGSF = 1 ! Toggle for the stability condition used to evaluate the GSF and ABCD instabilties. 1 is recommended.
 
 ! Star spot controls
@@ -255,7 +255,6 @@
  TCUT(2) = 6.5 ! Not used (formerly minimum T for equilibrium pp)        
  TCUT(3) = 6.82 ! Not used (formerly minimum T for CNO)
  MCORE = 40 ! Points to assign to new domain; not used now.
- LENVG = .FALSE. ! Compute the model structure of the outer layers after convergence; used for i/o purposes, or ones where you need information beyond the outer fitting point; not used now (other flags do this)
  ALFA = 1.5 ! Legacy exponent for angular momentum loss in Kawaler (1988) wind model.        
 
  $END

@@ -1,30 +1,64 @@
 C$$$$$$
       SUBROUTINE MCOWIND(BL,DT,HICZ,IT,OMEGAS,SMASS,
      *                  TEFFL,WOLD,WIND1,WIND2)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 BL,C,DT,FCEN1,FCEN2,FCORR1,FCORR2,FSUN,GL,HICZ,OMEGAS,RL,
+     *       SMASS,STRUCTFACTOR,TCZ,TEFFL,TEMP,WFIRST,WIND1,WIND2,WN,
+     *       WNOW,WOLD,WP,WSAT
+      INTEGER IT
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C MHP 8/17 ADDED EXCEN, C_2 TO COMMON BLOCK FOR MATT ET AL. 2012 CENT. TERM
-      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,EXL,EXPR,CONSTFACTOR,
-     *             STRUCTFACTOR,EXCEN,C_2,LJDOT0
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to retire COMMON/CWIND/.  Its namelist members moved to the
+C consolidated block earlier, leaving two.  C_2 is a constant, set once in
+C parmin.f, so it is now the last member of COMMON/CONSTANTS/ -- appended
+C there rather than inserted, and added to every declaration so the block
+C keeps one size; parmin.f DATA-initializes CLSUN and CRSUN, so a short
+C declaration anywhere would be the OP95INTERP hazard again.  It may
+C eventually become a namelist variable.  STRUCTFACTOR, the loss-law
+C prefactor, is computed by AMCALC and read by its own two callers,
+C mwind.f and mcowind.f, so it is now an AMCALC output argument.
 C      COMMON/CWIND/WMAX,EXMD,EXW,EXTAU,EXR,EXM,CONSTFACTOR,STRUCTFACTOR,LJDOT0
 C MHP 3/09 ADDED OPTION TO SCALE THE SATURATION RATE BY THE OVERTURN TIMESCALE
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEUTER/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C G Somers 3/17, ADDING NEW TAUCZ COMMON BLOCK
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
-      CHARACTER*3 AWIND
 C KC 2025-05-30 reordered common block elements
 C       COMMON/PMMWIND/AWIND,LMWIND,LROSSBY,LBSCALE,PMMA,PMMB,PMMC,PMMD,PMMM,
 C      *         PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU
-      COMMON/PMMWIND/PMMA,PMMB,PMMC,PMMD,PMMM,PMMJD,PMMMD,PMMSOLP,PMMSOLW,PMMSOLTAU,
-     *         LMWIND,LROSSBY,LBSCALE,AWIND
+C 10/12/26 MHP via Claude
+C code changed to remove the trailing CHARACTER member AWIND from
+C COMMON/PMMWIND/.  Character data does not belong in a COMMON block, and
+C this file never referenced AWIND.  It is now a local of parmin.f, the
+C only routine that reads it.  Being last, its removal moves no other
+C member, and the block shrinks identically in all five files.
       SAVE
 C  COWIND RETURNS THE CHANGE IN THE ANGULAR VELOCITY OF THE SURFACE
 C  CONVECTION ZONE OF A STAR WHICH IS EXPERIENCING ANGULAR MOMENTUM LOSS.
@@ -102,7 +136,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C
 C NEW CALCULATION. CALL AMCALC TO SET "STRUCTFACTOR"
 C
-      CALL AMCALC(SMASS,BL,TEFFL)
+      CALL AMCALC(SMASS,BL,TEFFL,STRUCTFACTOR)
 C
 C CALCULATE THE NEW WIND COEFFICIENT.
 C

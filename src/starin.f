@@ -9,12 +9,80 @@ C       SUBROUTINE STARIN(BL,CFENV,DAGE,DDAGE,DELTS,DELTSH,DELTS0,ETA2,FP,  ! KC
 C      * ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,  ! KC 2025-05-31
      * ISTORE,JENV,LARGE,LC,LNEW,M,MODEL,NK,OMEGA,PS,QDP,QDT,QIW,
      * R0,RS,SJTOT,SKEROT,SMASS,TEFFL,TLUMX,TRIL,TRIT,TS,VEL,HG,V,
-     * CMIXL)
+     * CMIXL,COMPMIX)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NEWOPAC/ into NEWOPAC_MOD.
+      USE NEWOPAC_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
+      USE OVRTRN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ENVSTRUCT/ into ENVSTRUCT_MOD.
+      USE ENVSTRUCT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DPMIX/ into DPMIX_MOD.
+      USE DPMIX_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP2/ into COMP2_MOD.
+      USE COMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CENV/ into CENV_MOD.
+      USE CENV_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLBYPASS/ into NMLBYPASS_MOD.
+      USE NMLBYPASS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,ATEFFL,ATOMWT,B,BETA,BETA14,BETAI,BL,CFENV,CMIXL,
+     *       CMIXL0,D,DAGE,DD,DDAGE,DEL,DELA,DELR,DELTS,DELTSH,DL,DP,DR,
+     *       DS,DS1,DS2,DS3,DT,DUM1,DUM2,DUM3,DUM4,EBEG0,EMAX0,EMIN0,
+     *       EMU,ETA,ETA2,FACD,FP,FPL,FS,FT,FTL,FTRI,FV,FX,FXION,GL,
+     *       HCOMP,HD,HG,HI,HJ,HJM,HKEROT,HL,HLC,HP,HR,HS,HS1,HS2,HSEND,
+     *       HSTOT,HT,O,OL,OMEGA,P,PDISK0,PL,PLIM,PP,PS,QACP,QACR,QACT,
+     *       QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,QDTP,QDTT,QIW,QOD,QOT,R0,
+     *       RAT_C,RAT_N,RAT_O,RHOC,RL,RMU,RS,SENV1,SENVTOL,SJTOT,SKEROT,SL,
+     *       SMASS,SUMJ,SUMKE,SUM_C,SUM_O,T,TDISK0,TEFFL,TEMP,TEST,TL,
+     *       TLUMX,TOT_C,TOT_N,TOT_O,TRIL,TRIT,TS,V,VEL,VSUM,WMAX0,X,X0,
+     *       X1,X2,Z
+      INTEGER I,IDUM,IKUT,IREAD,ISTORE,IXX,J,JCORE0,JEND,JENV,JENV0,JM,
+     *       K,M,MM,MN,MODEL,MP1,MRZONE,MXZONE,NK,NRZONE,NZONE
+      LOGICAL*4 LARGE,LATMO,LC,LCONV,LCZ,LDERIV,LDIFY0,LDIFZ0,LDISK0,
+     *       LEXCOM0,LEXCP0,LINSTB0,LJDOT00,LMIXL,LNEW,LOCOND,LOVSTC0,
+     *       LOVSTE0,LOVSTM0,LPRT,LPULPT,LPUREZ0,LROT0,LSBC0,LSEMIC0
 
-      PARAMETER (JSON=5000)
-      PARAMETER (NTS=63, NPS=76)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C DBGLAOL
       INTEGER*4 KATM, KENV, KSAHA
 C      CHARACTER*256 OPECALEX(7)
@@ -38,10 +106,6 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to remove dead COMMON/LUNUM/ISCOMP (declared,
 C assigned a unit number, but never opened or read anywhere)
@@ -52,37 +116,35 @@ C     3    FLLDAT, FSNU, FSCOMP, FKUR,
 C     4    FMHD1, FMHD2, FMHD3, FMHD4, FMHD5, FMHD6, FMHD7, FMHD8
 C DBGLAOL
 C MHP 8/25 Removed all character strings from common blocks
-      COMMON/CENV/TRIDT,TRIDL,SENV0,LSENV0,LNEW0
-      COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1     NUMRUN
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/COMP2/YENV,Y3ENV
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to pass CMIXL as an explicit argument instead of via
 C common block, to reduce implicit global state ahead of the F90
 C module conversion
-      COMMON/ENVPRT/EP,ET,ER,ES,ED,EO,EBETA,EDEL(3),EFXION(3),EVEL
-      COMMON/FLAG/LEXCOM
-      COMMON/HEFLSH/LKUTHE
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *     HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *     ETA2X(JSON)
-      COMMON/OPTAB/OPTOL,ZSI,IDT,IDD(4)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/CORE/LCORE,MCORE,FCORE
+C 10/13/26 MHP via Claude: removed the unused COMMON/ENVPRT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/12/26 MHP via Claude
+C code changed to remove COMMON/OPTAB/ entirely.  Once OPTOL moved to the
+C consolidated namelist block, every remaining member was write-only:
+C ZSI appeared only in a DATA statement in parmin.f, and IDT and IDD were
+C assigned the constants 15 and 5 in coefft.f, envint.f, physic.f and
+C starin.f and read nowhere in the code.  They are leftovers from the
+C removed opacity-table interpolation schemes.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1     YYDH,ZZDH,DHNUE(18),LDH
-      COMMON/DPMIX/DPENV,ALPHAC,ALPHAE,ALPHAM,BETAC,IOV1,IOV2,
-     *     IOVIM, LOVSTC, LOVSTE, LOVSTM, LSEMIC, LADOV, LOVMAX
       DIMENSION TLUMX(8),TRIL(3),TRIT(3),PS(3),TS(3),RS(3),CFENV(9),
      *HS(JSON),HL(JSON),HR(JSON),HP(JSON),HT(JSON),HD(JSON),LC(JSON),
      *HCOMP(15,JSON),OMEGA(JSON),HS1(JSON),HS2(JSON),QIW(JSON),
@@ -105,40 +167,27 @@ C code changed to remove dead opacity-table Z-value inputs
 C 9/24/26 MHP via Claude
 C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
 C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
-C 9/24/26 MHP via Claude
-C code changed to remove dead COMMON /ALEXMIX/ (XALEX, ZALEX were
-C never read or written anywhere)
-C DBG 1/96 VNEW REPLACES V
-      COMMON/VNEWCB/VNEW(12)
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDTT,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 10/98 ADDED HPTTOL FOR CHANGING CORE FITTING POINT
-      COMMON/CTOL/HTOLER(5,2),FCORR0,FCORRI,FCORR,HPTTOL(12),
-     1     NITER1,NITER2,NITER3
+C 10/13/26 MHP via Claude: removed the unused COMMON/CTOL/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C MHP 07/02 ADDED FOR ENVELOPE INTEGRATION WHEN CHANGING THE
 C OUTER FITTING POINT
-      COMMON/INTENV/ENVERR,ENVBEG,ENVMIN,ENVMAX
 C MHP 07/02 STORE CONTENTS OF ENVELOPE INTEGRATION INTO A
 C SET OF VECTORS, WHICH ARE FLIPPED AND CONVERTED INTO AN ASCENDING
 C SERIES AFTER THE INTEGRATION IS DONE.
 C KC 2025-05-30 reordered common block elements
 C JvS 08/25 Updated with new elements
-      COMMON/ENVSTRUCT/ENVP(JSON),ENVT(JSON),ENVS(JSON),ENVD(JSON),
-     *     ENVR(JSON),ENVX(JSON),ENVZ(JSON),LCENV(JSON),
-     *     EDELS(3,JSON),EVELS(JSON),EBETAS(JSON),
-     *     EGAM1(JSON),EQCP(JSON),EFXIONS(3,JSON),
-     *     ENVO(JSON), ENVL(JSON),EQDT(JSON),NUMENV     
 C LLP  3/19/03 Add COMMON block /I2O/ for info directly transferred from
 C      input to output model - starting with a code for th initial model
 C      compostion (COMPMIX)
-      COMMON /I2O/ COMPMIX
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/I2O/ with an explicit argument.  COMPMIX
+C is CHARACTER, which does not belong in a COMMON block.  GETMODEL2,
+C GETYREC7 and PUTMODEL2 already took it as an argument; only these three
+C files shared it through the block.
 C G Somers 10/14, Add spot common block
-      COMMON/SPOTS/SPOTF,SPOTX,LSDEPTH
-      COMMON/OVRTRN/LNEWTCZ,LCALCENV,TAUCZ,TAUCZ0,PPHOT,PPHOT0,FRACSTEP
 C G Somers END
 C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE CNO MASS FRACTIONS
 C ISOTOPIC RATIOS(C,N,O) AND D/HE3/LI/BE/B ABUNDANCES.
@@ -146,14 +195,25 @@ C THESE CONTROLS ONLY ALTER THE MIXTURE IN THE STARTING MODEL AND ONLY
 C IF THE MODEL IS CHEMICALLY UNEVOLVED. POSTPROCESSING TOOLS SHOULD BE USED FOR THE
 C CORE HE BURNING PHASE.
 c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ANEWCP
-      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL
-      COMMON/NEWMX/ISETMIX,ISETISO,LMIXTURE,LISOTOPE,FRAC_C,FRAC_N,
-     * FRAC_O,R12_13,R14_15,R16_17,R16_18,ZXMIX,
-     * XH2_INI,XHE3_INI,XLI6_INI,XLI7_INI,XBE9_INI,XB10_INI,XB11_INI
+C 10/12/26 MHP via Claude
+C code changed to merge COMMON/NEWPARAM/, COMMON/NEWCROSS/ and
+C COMMON/XSECT/ into a single COMMON/NMLBYPASS/, declared here, in
+C remap.f and in starin.f.
+C
+C These are namelist variables that exist only to set other quantities,
+C or that are reserved for future development; none is read by the wider
+C code.  Keeping them in their own block keeps them OUT of the single
+C consolidated namelist block being built, so that block holds only
+C variables the physics routines actually consume.  starin.f declares it
+C although it uses none of them yet, so the isotope and cross-section
+C machinery there can reach them without reopening this layout.
+C
+C Member order is NEWPARAM, then NEWCROSS, then XSECT, and the three
+C declarations are generated from one list so all files agree.
       DATA ATOMWT/23.0D0,26.99D0,24.32D0,55.86D0,28.1D0,12.015D0,
      * 1.008D0,16.0D0,14.01D0,39.96D0,20.19D0,4.004D0/
-      COMMON/SCRTCH/SESUM(JSON),SEG(7,JSON),SBETA(JSON),SETA(JSON),
-     * LOCONS(JSON),SO(JSON),SDEL(3,JSON),SFXION(3,JSON),SVEL(JSON),SCP(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCRTCH/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 
 C       DIMENSION MXZONE(12,2),MXZON0(12,2),MRZONE(13,2)  ! KC 2025-07-22
       DIMENSION MXZONE(12,2),MRZONE(13,2)
@@ -521,7 +581,18 @@ C FOR THIS PURPOSE(BASE OF ATMOSPHERE).
        IF(SENV0.GT.-1.0D-12) SENV0 = -1.D-12
        SENV = HS(M) - HSTOT
        SENV1 = SENV
-       IF(SENV.EQ.SENV0) GOTO 599
+C 10/28/26 MHP via Claude
+C code changed to leave the fitting point alone when the requested one
+C matches the current one to within roundoff, not only when it is exactly
+C equal.  SENV = HS(M) - HSTOT is a difference of two log masses near 33,
+C so it carries roundoff of order 1D-14.  A request such as SENV0 = -1D-4
+C on a model whose SENV is -1.0000000000332D-4 used to pass the exact
+C test, and the shallower-envelope branch below then added a point with
+C FX = 0, a copy of point M; SPLINT stopped on the duplicate abscissa.
+C The tolerance is 100 ulps of HSTOT, about 7D-13, below the 1D-12
+C minimum envelope mass imposed above.
+       SENVTOL = 1.0D2*EPSILON(HSTOT)*ABS(HSTOT)
+       IF(ABS(SENV-SENV0).LE.SENVTOL) GOTO 599
        JEND = 11
        IF(LEXCOM) JEND = 15
        IF(SENV0.LT.SENV) THEN
@@ -573,10 +644,6 @@ C CONVECTIVE OR RADIATIVE.
              SL = HS(M)
              FPL = 1.0D0
              FTL = 1.0D0
-             IDT = 15
-             DO 588 KK = 1,4
-              IDD(KK) = 5
- 588           CONTINUE
 C 9/22/26 MHP via Claude
 C code changed to remove the MHD equation of state
 C 9/23/26 MHP via Claude

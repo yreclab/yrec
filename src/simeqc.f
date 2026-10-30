@@ -4,8 +4,13 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C SIMEQC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SIMEQC(A,M,N)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,BIGA,SAVE
+      INTEGER I,IA,IB,IC,ID,IG,IH,IJ,IMAX,IT,IX,J,JJ,JX,JY,K,M,N,N1,NY
 
-      IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION A(56)
       SAVE
 

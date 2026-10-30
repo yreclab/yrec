@@ -1,50 +1,93 @@
 C $$$$$$
 C       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,LCZ,M,HRU,  ! KC 2025-05-31
       SUBROUTINE SETUPV(HD,HG,HL,HP,HR,HS1,HT,IMIN,IMAX,M,HRU,
-     *                  QWRMAX)
+     *                  QWRMAX,FACI)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/VFACT/ into VFACT_MOD.
+      USE VFACT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TAUKH/ into TAUKH_MOD.
+      USE TAUKH_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ROTDER/ into ROTDER_MOD.
+      USE ROTDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT2/ into OLDROT2_MOD.
+      USE OLDROT2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/MDPHY/ into MDPHY_MOD.
+      USE MDPHY_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTVAR/ into INTVAR_MOD.
+      USE INTVAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRIDDER/ into EGRIDDER_MOD.
+      USE EGRIDDER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD3/ into DIFAD3_MOD.
+      USE DIFAD3_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A21,A31,A32,A41,A42,A43,C1,CG,CG2,CPIGI,CPMI,D1,D2,D3,D4,
+     *       DDEL,DELMU,DMIN,DR,EM,ETA,F1,F2,F3,FAC,FACI,FF,FL,FNU,HD,
+     *       HG,HL,HP,HPSC,HR,HRU,HS1,HT,HTM,HTP,HTP2,HTSC,OPM,QC1R,
+     *       QCHIT,QDR,QETM,QHTR,QQC1RR,QQCHITR,QWRMAX,V0,XA1,XA2,XA3,
+     *       XA4
+      INTEGER I,I0,I1,IMAX,IMIN,M
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/13/26 MHP via Claude
+C FACI is now a dummy argument, formerly COMMON/INTFAC/.
+      DIMENSION FACI(4,JSON)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/MDPHY/AMUM(JSON),CPM(JSON),DELM(JSON),DELAM(JSON),
-     *             DELRM(JSON),ESUMM(JSON),OM(JSON),QDTM(JSON),
-     *             THDIFM(JSON),VELM(JSON),VISCM(JSON),EPSM(JSON)
 C MHP 06/02 ADDED FACT7 AND FACT8 FOR DIF/AD TREATMENT
-      COMMON/VFACT/FACT1(JSON),FACT2(JSON),FACT3(JSON),FACT4(JSON),
-     *     FACT5(JSON),FACT7(JSON),FACT8(JSON)
-      COMMON/INTFAC/FACI(4,JSON)
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/INTFAC/ with an explicit argument:
+C setupv.f fills FACI and vcirc.f reads it, both called only from
+C seculr.f, which now owns the storage.
 C MHP 3/92 COMMON BLOCK ADDED FOR SHEAR VELOCITY
-      COMMON/TAUKH/FACT6(JSON),FES1(JSON),FES2(JSON),FGSFJ(JSON),
-     *             FGSFK(JSON),FES3(JSON)
-      COMMON/INTVAR/ALM(JSON),DELAMI(JSON),DELMI(JSON),DM(JSON),
-     *              EPSILM(JSON),HGM(JSON),HS3(JSON),PM(JSON),
-     *              QDTMI(JSON),RM(JSON),TM(JSON)
 C MHP 06/02
 C Time change of theta
-      COMMON/OLDROT2/THO(JSON),THN(JSON),THM(JSON),
-     *               DDELM(JSON),FESTIME(JSON),THP(JSON),
-     *               QWRST(JSON),WMST(JSON),QWRMST(JSON)
 C CAPPA AND EPSILON DERIVATIVES
-      COMMON/ROTDER/SQOD(JSON),SQOT(JSON),SQED(JSON),SQET(JSON),
-     *              FRACNUC(JSON)
+C 10/13/26 MHP via Claude
+C code changed to drop the write-only members SQOD and SQED from
+C COMMON/ROTDER/.  coefft.f assigned both and nothing ever read them;
+C setupv.f, the block's only reader, uses SQOT, SQET and FRACNUC.  That
+C frees 10,000 words.  The block itself stays: coefft.f and setupv.f sit
+C in different phases -- setupv.f is reached via seculr.f -- so passing
+C the rest explicitly would mean threading 15,000-word arrays through
+C main.f and GETW.
 C DEFINITION TERMS FOR THE SECOND AND THIRD DERIVATIVE
 C TERMS IN THE ZAHN FORMULATION
-      COMMON/EGRIDDER/EQQCOD(JSON),EQQQCOD(JSON),QQCOD(JSON),
-     *                QQQCOD(JSON)
 C MHP 06/02
 C HIGHER ORDER TERMS IN M.C. VELOCITY
-      COMMON/DIFAD3/FACD2(JSON),FACD3(JSON),VESD2(JSON),VESD3(JSON),
-     *              ECOD5(JSON),ECOD6(JSON),FGEOM(JSON),FV0(JSON),
-     *              FV1A(JSON),FV1B(JSON),FV2A(JSON),FV2B(JSON),
-     *              EV0(JSON),EV1A(JSON),EV1B(JSON),EV2A(JSON),
-     *              EV2B(JSON),DSS(JSON),DGSF(JSON),ESS(JSON),EGSF(JSON)
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C JvS 09/25 CHANGED CPM --> CPMI TO AVOID CONFLICT IN MDPHY      
       DIMENSION HD(JSON),HG(JSON),HL(JSON),HP(JSON),HR(JSON),HS1(JSON),
 C      *          HT(JSON),LCZ(JSON),HRU(JSON),QWRMAX(JSON),  ! KC 2025-05-31

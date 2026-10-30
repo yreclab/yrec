@@ -4,8 +4,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C INTEP2
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE INTRP2(A,B,X)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,A21,A31,A32,A41,A42,A43,B,D1,D2,D3,D4,X,XA1,XA2,XA3,XA4
 C INTERP WITHOUT DERIVATIVES
-      IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION A(4),B(4)
       SAVE
 C INTERP IS THE INTERPOLATION ROUTINE FOR THE VANDENBERG

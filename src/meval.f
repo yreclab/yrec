@@ -3,13 +3,21 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C MEVAL
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MEVAL(XVAL,YVAL,XTAB,YTAB,MTAB,NUM,NUME,EPS,ERR)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,IND,LCN,LCN1,NCASE,NUM,NUM1,NUME,NUME1
 C
 C                                 SHAPE PRESERVING QUADRATIC SPLINES
 C                                   BY D.F.MCALLISTER & J.A.ROULIER
 C                                     CODED BY S.L.DOOD & M.ROULIER
 C                                       N.C. STATE UNIVERSITY
 C
-      PARAMETER (JSON=5000)
       REAL*8 XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON),
      *     MTAB(JSON),V1,V2,W1,W2,Z1,Z2,Y1,Y2,E1,E2,SPLINE,EPS
       INTEGER START,START1,END,END1,ERR,FND

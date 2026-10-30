@@ -3,16 +3,45 @@ C       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HQPR,HRU,HS1,HTU,  ! KC 2025-0
       SUBROUTINE MODEL_TO_EQUAL(COD1,COD2,HCOMP,HRU,HS1,
      *                          IBEGIN,IEND,M,QCOD1X,QCOD2X,DR,
      *                          ECOD1,ECOD1_H,ECOD2_H,EM,EM_H,
-     *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-C MHP 3/94 ADDED METAL DIFFUSION.
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
-      COMMON/GRAVSZ/COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
-      COMMON/GRAVEZ/ECOD1Z(JSON),ECOD1Z_H(JSON),ECOD2Z_H(JSON),
-     *              EQCOD1Z_H(JSON),EQCOD2Z_H(JSON),EZ(JSON),
-     *              EZ_H(JSON)
+     *                          EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,NPT,COD1Z,COD2Z,QCOD1Z,QCOD2Z)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GRAVEZ/ into GRAVEZ_MOD.
+      USE GRAVEZ_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD1,COD1Z,COD2,COD2Z,DELR,DR,DR1,DR2,DRMIN,DRTOT,ECOD1,
+     *       ECOD1_H,ECOD2_H,EM,EM_H,EQCOD1X_H,EQCOD2X_H,ER,EX,EX_H,
+     *       FAC1,FAC2,FACDERIV,FACINTERP,FX,GRIDRAD,HCOMP,HRU,HS1,
+     *       QCOD1X,QCOD1Z,QCOD2X,QCOD2Z,TABLER
+      INTEGER I,IBEGIN,IEND,IU,J,JMIN,K,K0,M,NPT
+C 10/13/26 MHP via Claude
+C formerly COMMON/GRAVSZ/, now dummy arguments.
+      DIMENSION COD1Z(JSON),COD2Z(JSON),QCOD1Z(JSON),QCOD2Z(JSON)
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to replace COMMON/GRAVSZ/ with explicit arguments:
+C setup_grsett.f fills these four and model_to_equal.f reads them, and
+C grsett.f calls both, so grsett.f now owns the storage.
 C       DIMENSION COD1(JSON),COD2(JSON),HCOMP(15,JSON),HQPR(JSON),
 C      *   HRU(JSON),HS1(JSON),HTU(JSON),QCOD1X(JSON),QCOD2X(JSON),  ! KC 2025-05-31
       DIMENSION COD1(JSON),COD2(JSON),HCOMP(15,JSON),

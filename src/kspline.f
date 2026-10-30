@@ -1,5 +1,10 @@
 C$$$$$$
       SUBROUTINE KSPLINE(X,Y,Y2)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER I,K,N,NM
       PARAMETER (NM=4)
       REAL*8 X(NM),Y(NM),Y2(NM),U(NM),SIG,QN,UN,P
       SAVE

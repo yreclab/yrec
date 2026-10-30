@@ -6,6 +6,35 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE EQRELV(TL,T,PL,P,DL,D,BETA,AMU,EMU,ETA,QDT,QDP,QCP,
 C      1   DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,X)  ! KC 2025-05-31
      1   DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CCR/ into CCR_MOD.
+      USE CCR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ACP,ALMIX,AMU,BCP,BETA,BETA1,CDEN1,CDEN2,CDEN3,CL1,CL2,CL3,
+     *       CMFDH,CMFDH0,CMFDH1,CORR,D,D8,DCL1,DCL2,DCL3,DELA,DF1,DF2,
+     *       DL,DL8,DML,DPEL1,DPEL2,DX1,DX2,DX3,EMU,EMUL,EMUL8,ETA,FACT,
+     *       FACTL,FACTOR,FF,FFE,P,PA,PD,PDH,PDHP,PDT,PDU,PE,PEL,PEQ,
+     *       PINV,PL,PL8,PR,PR1,PR2,PR3,PR4,PR5,PR6,PR7,PR8,PR8L,PR9,
+     *       PR9L,PT,PTL,QAP,QAT,QCP,QCPI,QCPP,QCPT,QDP,QDPP,QDT,QDTP,
+     *       QDTT,QPD,QPED,QPEQD,QPEQT,QPT,QQPDD,QQPDT,QQPEDD,QQPTT,
+     *       QQUDT,QQUTT,QUDT,QUEQT,QUTD,QUTP,RAMU,RAMUT,SLOPE,T,T0,T1,
+     *       TL,TL8,TTCU,TTDCU,TTUD,U,UA,UDH,UDHU,UE,UEQ,UI,UR,XX
+      INTEGER ID,ID1,ID1P,ID2,ID3,II,JT1,JT2,JT3,KK,NDEN,NN
 
 C          QDTT,QDTP = NAT-LOG DERIVATIVES OF QDT=D(LOG D )/D(LOG T )
 C          QAT,QAP = NAT-LOG DERIVATIVES OF THE ADIABATIC DERIVATIVE
@@ -16,8 +45,6 @@ C     BETWEEN THE NONDEGENERATE AND DEGERNATE ELECTRON GAS CASES OF THE
 C     D.H. CORRECTION IS USED (THIS IS NOT CORRECT BUT, HOPEFULLY IS
 C     CLOSE ENOUGH.  CONSTANT TERM CDH IS CALCULATED IN SETUPS.
 
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
@@ -25,17 +52,9 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/CCR/DVAL(43),ETAT8(43),DTABLE(5,43,20),IDEN(261)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
@@ -47,8 +66,18 @@ C     IF LDH = .TRUE. THEN APPLY D.H. CORRECTION.
 C     ZDH IS ARRAY OF RELATIVE MASS FRACTIONS OF LAOL METAL MIXTURE
 C     SUMMED TO 1.0.
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
       DIMENSION DF1(5,3),DF2(5,3),FF(5,3),FFE(5)
       SAVE
 

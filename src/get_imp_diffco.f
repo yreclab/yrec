@@ -1,9 +1,16 @@
 C $$$$$$
       SUBROUTINE GET_IMP_DIFFCO(ALPHA,ECOD2_H,EX_H,EQCOD2X_H,A,B,C,NPT)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,ALPHA,B,C,ECOD2_H,EQCOD2X_H,EX_H
+      INTEGER I,NPT
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       DIMENSION ALPHA(JSON),ECOD2_H(JSON),EX_H(JSON),EQCOD2X_H(JSON),
      *   A(JSON),B(JSON),C(JSON)
       SAVE

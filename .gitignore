@@ -1,5 +1,14 @@
 **/*.o
+# Fortran module files: compiler- and version-specific build
+# artifacts. A committed .mod from another compiler surfaces only
+# as ifort's "error #7013", which does not point at the cause.
+**/*.mod
 **/fort.*
 **/__pycache__
 **/.DS_Store
 **/.*~
+src/yrec
+**/#*#
+
+# Emacs backup files
+*~

@@ -1,7 +1,11 @@
 C$$$$$$
       SUBROUTINE SPLINJ(X,Y,Y2,N)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 P,QN,SIG,UN
+      INTEGER I,K,N
 C     PARAMETER (JSON=5000)
       REAL*8 X(N),Y(N),Y2(N),U(N)
 C     SAVE
