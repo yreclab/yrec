@@ -2885,6 +2885,11 @@ Known gaps, all present in our code:
   f_full + w f_saha rather than f_full + w (f_saha - f_full).
 - S3 (the 1/chi_T in the eps_grav partials) was a plain error in the
   same family and is fixed separately (bugsweep-2, `5bac256`).
+- **Opacity ramp derivatives (external O18).** Where GETOPAC blends two
+  opacity sources, kappa = w kappa_1 + (1-w) kappa_2, the dln kappa
+  derivatives are blended with w and 1-w instead of w kappa_1/kappa and
+  (1-w) kappa_2/kappa, and the (dw/dln T)(kappa_1 - kappa_2)/kappa term
+  is dropped. Jacobian only, like the rest of this issue.
 
 **Where it shows (O3):** the low-mass cases -- the 0.03 Msun Newton
 two-cycle (issue 33), and the 0.05 and 0.1 Msun
