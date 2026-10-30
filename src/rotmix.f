@@ -203,7 +203,10 @@ C place, commented, rather than deleted.
 C            write(69,*) 'JMAX=',JMAX,' FM= ',fm,' TSCALE=',TSCALE
             DTMAX = DT_GS*TSCALE
             NSTEP = INT(DELTS/DTMAX)
-            IF(MOD(DTMAX,DELTS).NE.0.0D0.OR.NSTEP.EQ.0)NSTEP=NSTEP+1
+C 10/30/26 MHP via Claude
+C code changed to MOD(DELTS,DTMAX); the arguments were reversed, which
+C took one sub-step too many when DELTS was an exact multiple of DTMAX.
+            IF(MOD(DELTS,DTMAX).NE.0.0D0.OR.NSTEP.EQ.0)NSTEP=NSTEP+1
 C            write(69,*)'DTMAX=',dtmax,' DELTS=',delts,' NSTEP=',nstep
             DT = DELTS/DFLOAT(NSTEP)
          ELSE
