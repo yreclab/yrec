@@ -2945,6 +2945,12 @@ in:
   (`b279422`).
 - **One case at shell 61 near the centre,** where central X was falling
   to 1e-10: P, T and R 5-7 times their tolerances, L about 500 times.
+- **ZAHB 1.7 Msun (`ZAHB_m1p7feh+0p0_TAHB`), 2026-10-30,** at 51 Myr
+  (Yc 0.74) once LOVMAX was turned on: L at shell 2650 flipping by
+  +/-1.06e-5 with the step factor already at 1. FCORR0 0.6 -> 0.3
+  avoids it. The path sensitivity is large: FCORR0 0.3 reaches the
+  TAHB at 212.4 Myr and 0.2 at 233.5 Myr, a 10% spread from a damping
+  factor that should not change the converged models.
 
 **Workaround in use.** `HTOLER(1-4,1)` relaxed x10 (x30 for 0.07 and
 0.04 Msun), each with a dated comment in the deck. With a different
@@ -3018,3 +3024,29 @@ What follows:
   (timestep and zoning decisions, convective boundaries), which turns
   a smooth input change into a jump in the path.
 
+
+---
+
+## 44. Semiconvection cannot be combined with any overshoot
+
+**Status:** open, 2026-10-30. Flagged by MHP as a potential code change.
+
+PARMIN stops the run (`STOP 3`) when `LSEMIC` is on together with any
+of `LOVSTC`, `LOVSTE` or `LOVSTM`. The block guards against a real
+conflict at the core edge, but is broader than it needs to be.
+
+MIX calls CONVEC, which calls OVERSH, which moves the zone edges in
+`MXZONE` out to the overshoot boundaries. SCONVEC (Castellani et al.
+1971) then tests for semiconvection at "the edge of all convective
+regions" using those same `MXZONE` edges. With core overshoot on, it
+would test the overshoot boundary, not the Schwarzschild edge, so the
+two cannot simply both run as written.
+
+Envelope and intermediate overshoot do not touch the core edge, yet
+they are refused too. Every HB deck has envelope overshoot on, so none
+of them can enable semiconvection, although the `LSEMIC` comment in
+the decks says it should be on for core He burning.
+
+**Possible change:** run SCONVEC on the Schwarzschild edges (CONVEC's
+`MXZON0`), apply core overshoot beyond the semiconvective region, and
+allow envelope overshoot alongside semiconvection.
