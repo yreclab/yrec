@@ -33,6 +33,10 @@ C code changed to convert COMMON/LLOT95/ into LLOT95_MOD.
 C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
       IMPLICIT NONE
       REAL*8 A,B,C,DL,O,OL,QOD,QOT,RR,TL,X,Z,ZZ
       INTEGER I,IDD,ITT,IXX,J,JXX,K,NUMD,NUMT,NUMX,NUMZ
@@ -85,6 +89,7 @@ C COMPUTE LOG R = RHO/T6**3
 C  CHECK T
       IF(TL.LT.TGR(1) .OR. TL.GT.TGR(NUMT))THEN
          WRITE(*,5)TL
+         WRITE(ISHORT,5)TL
  5       FORMAT(' LOG T OF',F11.6,'OUT OF OPAL 95 TABLE RANGE')
          STOP
       ENDIF

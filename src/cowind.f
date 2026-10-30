@@ -13,6 +13,10 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
       IMPLICIT NONE
       REAL*8 BL,C,DMDOT,DT,HICZ,OMEGAS,RL,RTOT,SMASS,TEFFL,TEMP,WIND1,
      *       WIND2,WN,WOLD,WP,WSAT
@@ -82,6 +86,7 @@ c            WRITE(*,912)WSAT,TAUCZ
 c 912        FORMAT('Omega sat, Tau',1p2e12.3)
          ELSE
             WRITE(*,911)WMAX,TAUCZ
+            WRITE(ISHORT,911)WMAX,TAUCZ
  911        FORMAT('ERROR IN WIND - TAUCZ NOT DEFINED ',1P2E12.3,'STOPPED')
             STOP
          ENDIF

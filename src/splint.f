@@ -40,7 +40,11 @@ C COMMON/IOUNITS/
       END IF
       H = XA(KHI) - XA(KLO)
       IF (H .EQ. 0D0) THEN
-           WRITE(ISHORT,*) 'ERROR IN SPLINT ROUTINE.'
+C 10/30/26 MHP via Claude: report the values, and to the terminal too.
+           WRITE(*,900)XA(KLO),X
+           WRITE(ISHORT,900)XA(KLO),X
+ 900       FORMAT(' ERROR IN SPLINT ROUTINE: TWO ABSCISSAE COINCIDE AT',
+     *            1PE14.6,' X',E14.6/' RUN STOPPED')
          STOP
       ENDIF
       A = (XA(KHI)-X)/H
