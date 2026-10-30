@@ -460,6 +460,13 @@ C TEST ON X-CHANGE (ONLY FOR INCREASING X) USING HIO AS DUMMY ARRAY
          DX = (HKO(J) - HKO(J-1))/HPMAX(3)
 C NUMBER OF NEW POINTS NEEDED
          NN = INT(DX)
+C 10/30/26 MHP via Claude: stop before the insertion runs past JSON, as
+C the chi placement above already does.
+         IF(MM+NN.GT.JSON)THEN
+            WRITE(*,104)'X',MM+NN,JSON
+            WRITE(ISHORT,104)'X',MM+NN,JSON
+            STOP 1
+         ENDIF
 C
          DSS = (HSS(J)-HSS(J-1))/DFLOAT(NN+1)
          DO K = MM+NN,J+NN,-1
@@ -474,6 +481,8 @@ C
       MNEW = MM
 C
  102  CONTINUE
+ 104  FORMAT(' HPOINT: ',A,' POINT INSERTION NEEDS',I7,' POINTS; JSON IS',
+     *       I7/' RUN STOPPED')
 C TEST FOR ASSIGNING POINTS BASED ON THE GRADIENT IN Z.
       DO J = 1,M
          XTAB(J) = HS(J)
@@ -509,6 +518,13 @@ C
          DZ = (HFO(J-1) - HFO(J))/HPMAX(4)
 C NUMBER OF NEW POINTS NEEDED
          NN = INT(DZ)
+C 10/30/26 MHP via Claude: stop before the insertion runs past JSON, as
+C the chi placement above already does.
+         IF(MM+NN.GT.JSON)THEN
+            WRITE(*,104)'Z',MM+NN,JSON
+            WRITE(ISHORT,104)'Z',MM+NN,JSON
+            STOP 1
+         ENDIF
          DSS = (HSS(J)-HSS(J-1))/DFLOAT(NN+1)
          DO K = MM+NN,J+NN,-1
             HSS(K) = HSS(K-NN)

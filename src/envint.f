@@ -826,7 +826,10 @@ C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 3
       STOP 1
  300  CONTINUE
 C 07/02 NOW INVERT THE ENVELOPE VECTOR.
-      IF(SENV.LT.-1.0D-12)THEN
+C 10/30/26 MHP via Claude: .LT. -> .LE., to match the test that decides
+C to integrate (SENV.GT.-1.0D-12 skips); SENV = -1.0D-12 exactly was
+C integrated but not reversed.
+      IF(SENV.LE.-1.0D-12)THEN
          DO I = 1,NUMENV
             I1 = I
             I2 = NUMENV - I + 1

@@ -172,6 +172,9 @@ C WITH THE LAST MODEL POINT AND SHIFT ALL OF THE POINTS DOWN BY ONE.
             ENVT(J) = ENVT(J+1)+DT
             ENVX(J) = ENVX(J+1)
             ENVZ(J) = ENVZ(J+1)
+C 10/30/26 MHP via Claude: shift the convective flag with the rest; it
+C was left in place, so LC(J) = LCENV(JM) below read it one point off.
+            LCENV(J) = LCENV(J+1)
             TEST = TEST2
             NUMNEW = NUMNEW + 1
          ENDIF
