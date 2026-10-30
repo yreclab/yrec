@@ -2881,6 +2881,22 @@ thinnest envelope triangles (relative pivot of the plane fit ~6e-3,
 against >= 0.15 elsewhere), so an ill-conditioned surface boundary row
 is a competing explanation.
 
+**A concrete fork (bugsweep-2 measurement, 2026-10-30):** the 9 Msun
+base TAHB deck (`Test_m9p0feh+0p0GS98_base_TAHB`) is sensitive to the
+Newton path at He ignition. At model 1009 (Y_c = 0.983) the mixed region
+moves between iteration stages (shells 933-1225, then 920-1229), and the
+model is accepted on the "R.H.S. below tolerances" test while the last
+L correction is still ~7e-3 against an L tolerance of 9e-8. Which shells
+end up mixed therefore depends on the iteration path. S3 changed only
+the Jacobian, yet the two runs split there: dlog L passes 1e-3 by
+Y_c 0.93 and 1e-2 by Y_c 0.75, the blue loops differ, and the He-burning
+lifetime moves from 3.241 to 3.662 Myr (+13%). Small path changes that
+do not cross the edge (FCORRI 0.05 -> 0.051, HTOLER(1,1) 6.0e-8 ->
+5.9e-8) move the old run only in the last digits. Treat a He-lifetime
+spread of this size on this deck as known numerical sensitivity, not a
+regression, until the convergence test and the discrete convective
+boundary are dealt with.
+
 **Workaround, not a fix:** numerical derivatives for the affected
 entries, which the external branch measured to agree with finite
 differences to ~1e-6. The proper fix is to make the analytic Jacobian
