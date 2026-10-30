@@ -161,7 +161,10 @@ C ENDING CZ DEPTH : DETERMINE OVERSHOOT FROM TRUE CZ BASE.
                R = EXP(CLN*HR(J))
                IF(R.LT.ROS)THEN
                   JENV = J + 1
-                  DR = EXP(CLN*HRO(J+1))-R
+C 10/30/26 MHP via Claude
+C code changed to take the zone width from the end-of-step model alone.
+C The outer edge was the start-of-step HRO, the inner one the current HR.
+                  DR = EXP(CLN*HR(J+1))-R
                   FX = 0.5D0-((ROS-R)/DR)
                   FX = MAX(-0.5D0,FX)
                   FX = MIN(0.5D0,FX)
