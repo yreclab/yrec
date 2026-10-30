@@ -1319,6 +1319,18 @@ C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
      * ' THE NAMELIST'/'RUN STOPPED')
  8803 FORMAT('CMIXLA MUST BE SET FOR EACH OF THE',I3,' KIND CARDS'/
      * 'RUN STOPPED')
+C 10/30/26 MHP via Claude
+C code changed to refuse a non-positive envelope triangle size.  A zero
+C size made SURFBC's reflection walk loop for ever, and a negative TRIDT
+C started the triangle with the wrong orientation.
+      IF(TRIDT.LE.0.0D0 .OR. TRIDL.LE.0.0D0)THEN
+         WRITE(ISHORT,8804)TRIDT,TRIDL
+         WRITE(*,8804)TRIDT,TRIDL
+ 8804    FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'ENVELOPE TRIANGLE SIZE',
+     *          ' TRIDT',1PE11.3,' TRIDL',E11.3,' MUST BE POSITIVE'/
+     *          'RUN STOPPED')
+         STOP 3
+      ENDIF
       IF(KTTAU .EQ. 0) THEN
            WRITE(ISHORT, 197)
       ELSE IF (KTTAU .EQ. 1) THEN

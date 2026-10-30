@@ -32,8 +32,8 @@ C explicit declarations.
       IMPLICIT NONE
       REAL*8 ATEFFL,B,BL,CFENV,CMIXL,ESTORE,FPL,FTL,FTRI,GL,HSTOT,PLIM,
      *       PS,RL,RS,TEFFL,TEMP,TEMP1,TEMP2,TRIERR,TRIL,TRIT,TS,VTEFFL,
-     *       X,Z
-      INTEGER I,I1,I2,I3,ISTORE,IXX,J,KATM,KENV,KSAHA,M,NUMENV
+     *       X,Z,DEN
+      INTEGER I,I1,I2,I3,ISTORE,IXX,J,KATM,KENV,KSAHA,M,NUMENV,NREFL
       LOGICAL*4 LC,LFLP,LNEW,LPENV,LPULPT,LRENV,LRESET,LSBC0,LTRI
 
 C INPUTS   LNEW = .T.    START UP WITH 3 NEW ENVELOPES ABOUT(TEFFL,BL)
@@ -155,6 +155,9 @@ C STARTING PROCEDURE
        LNEW = .FALSE.
       ELSE
 C CHECK TRIANGULATION OF POINT (TEFFL,BL)
+C 10/30/26 MHP via Claude: limit the reflection walk.  It never ended for
+C a degenerate triangle; the suite's decks need at most a few reflections.
+       NREFL = 0
  10      CONTINUE
        DO 20 I1 = 1,3
           I2 = MOD(I1,3) + 1
@@ -167,6 +170,15 @@ C CHECK TRIANGULATION OF POINT (TEFFL,BL)
              TRIL(I1) = TRIL(I2) + TRIL(I3) - TRIL(I1)
              LTRI(I1) = .FALSE.
              TRIERR = 0.0D0
+             NREFL = NREFL + 1
+             IF(NREFL.GT.1000)THEN
+                WRITE(*,60)TEFFL,BL
+                WRITE(ISHORT,60)TEFFL,BL
+ 60             FORMAT(' SURFBC: ENVELOPE TRIANGLE WALK FAILED AFTER',
+     *                 ' 1000 REFLECTIONS AT LOG TEFF',F9.5,' LOG L',
+     *                 F9.5/' RUN STOPPED')
+                STOP 1
+             ENDIF
              GOTO 10
           ENDIF
  20      CONTINUE
@@ -217,9 +229,28 @@ C G Somers END
  40   CONTINUE
       IF(LRENV) THEN
 C RECOMPUTE COEFFICIENTS
+C 10/30/26 MHP via Claude
+C code changed to refuse a degenerate plane fit: two fitting points at
+C the same log T, or three collinear in (log P, log T), gave Inf or NaN
+C coefficients silently.  The suite's decks stay above 6e-3 of the
+C differences divided, against the 1e-10 refused here.
+       IF(ABS(TS(2)-TS(1)).LE.1.0D-10*ABS(TS(3)-TS(1)))THEN
+          WRITE(*,61)(TS(I),PS(I),I=1,3)
+          WRITE(ISHORT,61)(TS(I),PS(I),I=1,3)
+          STOP 1
+       ENDIF
        TEMP = 1.0D0/(TS(2)-TS(1))
        TEMP1 = (TS(3)-TS(1))*TEMP
-       TEMP2 = 1.0D0/(PS(3)-PS(1)-TEMP1*(PS(2)-PS(1)))
+       DEN = PS(3)-PS(1)-TEMP1*(PS(2)-PS(1))
+       IF(ABS(DEN).LE.1.0D-10*(ABS(PS(3)-PS(1))+
+     *    ABS(TEMP1*(PS(2)-PS(1)))))THEN
+          WRITE(*,61)(TS(I),PS(I),I=1,3)
+          WRITE(ISHORT,61)(TS(I),PS(I),I=1,3)
+ 61       FORMAT(' SURFBC: DEGENERATE ENVELOPE TRIANGLE FIT; FITTING',
+     *           ' POINTS (LOG T, LOG P):'/3(2F12.7/)' RUN STOPPED')
+          STOP 1
+       ENDIF
+       TEMP2 = 1.0D0/DEN
        CFENV(1) = (  RS(3)-  RS(1)-TEMP1*(  RS(2)-  RS(1)))*TEMP2
        CFENV(4) = (TRIL(3)-TRIL(1)-TEMP1*(TRIL(2)-TRIL(1)))*TEMP2
        CFENV(7) = (TRIT(3)-TRIT(1)-TEMP1*(TRIT(2)-TRIT(1)))*TEMP2
