@@ -1039,9 +1039,11 @@ return a sentinel the caller must handle.
 
 **Status:** superseded by issue 32, which measures the same problem in
 more detail and lists the options. The auto-copy hazard described here
-is now documented in `REBASELINE_PROTOCOL.md`, where "a missing reference
-is created silently, and the case passes" is the second harness
-behaviour listed. The harness itself still does not warn.
+is now documented in `REBASELINE_PROTOCOL.md`. Since 2026-10-30 the
+harness no longer creates a missing reference: the case fails with
+"Missing reference standard" unless `YREC_MAKE_REFS=1` is set. The
+2026-10-30 bugsweep-4 pass in a worktree with only 180 of 891
+references had passed 229 cases against their own output this way.
 
 `git ls-files` returns nothing for `testsuite/standard` or
 `examples/*/standard`: all 903 reference files, about 493 MB, exist only on
