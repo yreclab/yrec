@@ -2953,11 +2953,10 @@ The low-mass decks also have the thinnest envelope triangles, so an
 ill-conditioned surface row is a candidate there. Issue 40's 9 Msun
 fork is a related case where the switching boundary was identified.
 
-**Proposed solver fix, not made.** In `CRRECT`, when the largest
-corrections flip sign with nearly equal magnitude on consecutive
-iterations, apply half the correction once. This would land on the
-cycle's midpoint, which is the fixed point if the cycle is symmetric.
-It changes every run that hits a cycle, so it needs a measured commit.
+**Not a fix: half-steps.** Damping the correction by half when it
+flip-flops was considered and set aside: per MHP, half-steps do not
+help. The per-deck tolerance relaxation is the working remedy until the
+switching residual (or issue 40) is dealt with.
 
 ---
 
