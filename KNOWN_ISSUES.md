@@ -51,6 +51,9 @@ Status as of 2026-10-29.
 | 38 | A bare `STOP` ends a failed run with exit status 0 | open |
 | 39 | High-mass start models too compact to resolve the D birthline | DBL above 2.4 Msun rebuilt by zero-timestep ramp, 2026-10-27 |
 | 40 | Henyey Jacobian and EOS second derivatives inconsistent | open; design issue, deferred by MHP (external O1-O3) |
+| 41 | Period-2 limit cycle in the Newton corrections | open; worked around per deck by relaxing `HTOLER` |
+| 42 | Solid-body rotation raises the convergence floor | open, unexplained; worked around in one deck |
+| 43 | Solar log L noise floor of 1-3e-5 | documented; limits calibration precision |
 
 ## Status of the original tasks
 
@@ -2709,6 +2712,15 @@ exits a nonzero code (`STOP 1`, or a distinct code per site, as
 kinds. Until then, a case that writes fewer models than its reference
 is worth checking by hand, whatever its exit status.
 
+A second instance: when the envelope integrator gives up, `ENVINT`
+prints "ENVELOPE INTEGRATION FAILED AFTER MAXSTP TRIES. I QUIT" and
+ends with a bare `STOP` ([envint.f:818-825](src/envint.f#L818-L825)).
+On 2026-10-28 this ended the 0.09 and 0.08 Msun DBL-to-ZAMS decks
+during setup, when their envelope spacing was halved as a trial fix.
+Both runs exited 0 having written no models. Halving the step was not
+needed (relaxed tolerances fixed those decks), so the trial was
+dropped, but the exit status would have hidden it in a suite run.
+
 ---
 
 ## 39. Above about 2.4 Msun the start models are too compact to resolve the deuterium birthline
@@ -2903,3 +2915,101 @@ differences to ~1e-6. The proper fix is to make the analytic Jacobian
 and the EOS derivatives belong to the EOS actually returned, including
 the ramp's dw/dln T terms. A step retry at a smaller timestep after a
 failed solve would add robustness independently of the cause.
+
+---
+
+## 41. Period-2 limit cycle in the Newton corrections
+
+**Status:** open, recorded 2026-10-30 from work on 2026-10-26 to
+2026-10-28. Each case so far has been worked around in its deck.
+
+**Signature.** The Newton corrections flip sign on every iteration
+with the same magnitude, until the iteration limit stops the run with
+FAILED TO CONVERGE. No table edge or domain message is printed. Seen
+in:
+
+- **Low-mass pre-MS decks (0.1 Msun Allard; 0.09-0.04 Msun gray
+  DBL-to-ZAMS; 0.05 Msun Allard),** at log Teff 3.44-3.48 late in the
+  pre-MS contraction. Only the surface shell is stuck: in the 0.05 Msun
+  case T swings by +/-4.98e-4, 11 times its 4.5e-5 tolerance, while
+  P, R and L are at or near theirs. 14 failures examined, all alike.
+  The 0.03 Msun two-cycle in issue 33 has the same form.
+- **`Test_solarGS98_base`,** at 25 Myr, P, T, R and L all flipping.
+- **3 Msun `RGp2diffrotI2`,** at model 221 when started from the old
+  February TAMS model; it runs to the end from the regenerated one
+  (`b279422`).
+- **One case at shell 61 near the centre,** where central X was falling
+  to 1e-10: P, T and R 5-7 times their tolerances, L about 500 times.
+
+**Workaround in use.** `HTOLER(1-4,1)` relaxed x10 (x30 for 0.07 and
+0.04 Msun), each with a dated comment in the deck. With a different
+path the run usually never enters the cycle, even when the cycle's
+amplitude is above the relaxed tolerance.
+
+**Likely causes.** A residual that switches discretely between
+iterations (a convective boundary, an opacity or EOS table seam, the
+surface boundary condition) or an inconsistent Jacobian (issue 40).
+The low-mass decks also have the thinnest envelope triangles, so an
+ill-conditioned surface row is a candidate there. Issue 40's 9 Msun
+fork is a related case where the switching boundary was identified.
+
+**Not a fix: half-steps.** Damping the correction by half when it
+flip-flops was considered and set aside: per MHP, half-steps do not
+help. The per-deck tolerance relaxation is the working remedy until the
+switching residual (or issue 40) is dealt with.
+
+---
+
+## 42. Solid-body rotation raises the convergence floor
+
+**Status:** open, unexplained; recorded 2026-10-30 from 2026-10-28.
+
+`Test_solarGS98_difrotmixsolidper18p4d1p0` (`LSOLID = .TRUE.`) stalled
+at 28.9-29 Myr in a period-2 cycle (issue 41) with amplitude about
+3e-7 in L and 1e-7 in P, T and R, against tolerances of 9e-9 and
+3-6e-9. Its references reached 4.568 Gyr.
+
+- **The structure explains nothing.** The stuck shells (283-364,
+  m = 0.43-0.68 Msun) sit in a smooth radiative zone, well away from
+  the convective core (to shell 120) and the envelope (from 502).
+- **Solid-body mode is the trigger.** With `LSOLID = .FALSE.` and
+  nothing else changed, the deck reaches 4.568 Gyr at 9e-9. Its two
+  differentially rotating partners pass at the same tolerances.
+- **It appeared only with both the new rates and the new DBL model;**
+  either alone, the deck completed.
+- **Candidate, unconfirmed:** each Newton iteration recomputes omega and
+  the centrifugal factors from the updated structure
+  ([crrect.f:296-297](src/crrect.f#L296-L297)), and that update is not
+  in the Jacobian. With solid-body rotation omega is one global value,
+  so a correction at any shell moves the centrifugal terms everywhere.
+  A rough estimate puts the feedback near 1e-9, too small on its own.
+
+**Workaround:** the deck's `HTOLER(1-4,1)` relaxed x10, to 6e-8 ...
+9e-8, in its 2026-10-28 commit. It then reaches 4.568 Gyr. x100 also
+works.
+
+---
+
+## 43. Solar log L noise floor of 1-3e-5
+
+**Status:** documented, 2026-10-30. Not a defect; a limit on what a
+calibration can resolve.
+
+In the solar calibrations of 2026-10-28, changing X by a few millionths
+moved log L at 4.568 Gyr by up to 3e-5, not smoothly. Calibrating to
+1e-5 in log L is therefore at the edge of what a run resolves, and the
+final iterates met it partly by luck. Two physically identical
+calibrations (`Test_solarGS98_base` and the examples' `noGS_norot`,
+which differ only in numerics) agree to 9e-6 in X and 6e-5 in alpha,
+about what this floor allows.
+
+What follows:
+
+- A change that moves a solar deck's final log L by less than about
+  3e-5 is within noise, not a result.
+- Calibration tolerances tighter than about 1e-5 in log L will not
+  converge reliably; the wrappers' 5e-6 is already below the floor.
+- The source is likely the same discrete switching as issue 41
+  (timestep and zoning decisions, convective boundaries), which turns
+  a smooth input change into a jump in the path.
+

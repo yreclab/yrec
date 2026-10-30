@@ -449,12 +449,18 @@ C  CORRECT GSF VELOCITY AS WELL.
             DR = HRU(I)-HRU(I-1)
             RMID = 0.5D0*(HRU(I)+HRU(I-1))
             IF(OMEGA(I).LT.OMEGA(I-1))THEN
-               WMIN = OMEGA(I) + QWRMAX(I)*CLN*(HR(I)-HR(I-1))
                WMID = OMEGA(I) + QWRMAX(I)*CLN*(HR(I)-LOG10(RMID))
             ELSE
-               WMIN = OMEGA(I) - QWRMAX(I)*CLN*(HR(I)-HR(I-1))
                WMID = OMEGA(I) - QWRMAX(I)*CLN*(HR(I)-LOG10(RMID))
             ENDIF
+C 10/30/26 MHP via Claude
+C code changed to take WMIN from the trigger's own centred gradient.
+C QWLNR is proportional to OMEGA(I)-OMEGA(I-1), so the OMEGA(I-1) at
+C which it equals QWRMAX lies this fraction of the way to OMEGA(I-1).
+C The fraction is below 1 whenever the trigger fires, so WMIN lies
+C between the two and is positive.  The plain difference quotient used
+C before could put WMIN beyond OMEGA(I-1), or at or below zero.
+            WMIN = OMEGA(I) + (OMEGA(I-1)-OMEGA(I))*QWRMAX(I)/QWR
             DLNWDR0 = abs(LOG(OMEGA(I))-LOG(OMEGA(I-1)))/DR
             DLNJMDR0 = ABS(2.0D0/RMID+(LOG(OMEGA(I))-
      *                   LOG(OMEGA(I-1)))/DR)
@@ -465,7 +471,10 @@ C MISSED IN CODE CHANGES EARLIER!
 c kippenhahn (1980) estimate
 C OMIT BRANCH FOR JAMES AND KAHN.
 C            IF(IGSF.EQ.2 .OR. IGSF.EQ.1 .OR. IGSF.EQ.0)THEN
-            IF(OMEGA(I)*HRU(I)**2.LT.WMIN*HRU(I-1)**2)THEN
+C 10/30/26 MHP via Claude
+C code changed to choose the branch from the actual profile, which the
+C normalization FX2 below also uses, not from the limited one.
+            IF(OMEGA(I)*HRU(I)**2.LT.OMEGA(I-1)*HRU(I-1)**2)THEN
                FX = MAX(2.0D0*DLNJMDR,0.25D0*DLNWDR)
                FX2 = MAX(2.0D0*DLNJMDR0,0.25D0*DLNWDR0)
                VGSF(I) = VGSF(I)*FX/FX2

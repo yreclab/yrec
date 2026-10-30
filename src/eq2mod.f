@@ -55,7 +55,12 @@ C OUTPUT VARIABLE :
 C  HJM - THE NEW RUN OF SPECIFIC ANGULAR MOMENTUM AT THE MODEL POINTS.
 C -------------------------------------------------------------------------
 C CHECK FOR LOWER AND UPPER CONVECTION ZONES.
-      IF(.NOT.LCZ(IBEG) .OR. IBEG.EQ.1)THEN
+C 10/30/26 MHP via Claude
+C code changed to widen the write-back with the test ROTGRID's sums use:
+C any convection zone adjoining the region, whether or not the end zone
+C is itself convective.  The sums took that zone into the end cell, but
+C its change went to the end zone alone when that zone was radiative.
+      IF(IBEG.EQ.1)THEN
          I0 = IBEG
       ELSE
          DO I = IBEG - 1, 1, -1
@@ -67,7 +72,7 @@ C CHECK FOR LOWER AND UPPER CONVECTION ZONES.
          I0 = 1
  10      CONTINUE
       ENDIF
-      IF(.NOT.LCZ(IEND) .OR. IEND.EQ.M)THEN
+      IF(IEND.EQ.M)THEN
          I1 = IEND
       ELSE
          DO I = IEND+1,M

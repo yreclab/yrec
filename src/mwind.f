@@ -79,6 +79,10 @@ C      *                SJTOT,SMASS,TEFFL,HICZ,HJM)  ! KC 2025-05-31
      *                SMASS,TEFFL,HICZ,HJM)
          GOTO 9999
       ENDIF
+C 10/30/26 MHP via Claude
+C code changed to honour the wind switch, as WIND does.  SECULR calls
+C MWIND whatever LJDOT0 is, so a run with LJDOT0 = F still lost J here.
+      IF(.NOT.LJDOT) GOTO 9999
 C
 C ADD ROSSBY SCALING IF DESIRED.
       IF(LROSSBY)THEN
@@ -162,7 +166,10 @@ C  AND IMPLICIT SOLUTIONS).
          WNEW0 = WS
     5    CONTINUE
 C G Somers 08/17 IF ADDING ADDITIONAL B SCALING, ADD ADDITIONAL TAUCZ TERM.
-         IF(LBSCALE)THEN
+C 10/30/26 MHP via Claude
+C code changed to scale by TCZ only under LROSSBY, as above.  TCZ is set
+C only there, so LBSCALE without LROSSBY used TCZ = 0 and gave no torque.
+         IF(LROSSBY.AND.LBSCALE)THEN
             WNOW = W*TCZ/PMMSOLTAU
          ELSE
             WNOW = W

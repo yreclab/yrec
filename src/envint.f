@@ -857,8 +857,13 @@ C  08/25 JVS
             DUM1 = ENVO(I1)
             ENVO(I1) = ENVO(I2)
             ENVO(I2) = DUM1
+C 10/30/26 MHP via Claude
+C code changed to complete the ENVL swap; ENVL(I2) was never set, so
+C the reversal copied the outer half over the inner half.  No output
+C changes while every envelope point holds the same luminosity B.
             DUM1 = ENVL(I1)
             ENVL(I1) = ENVL(I2)
+            ENVL(I2) = DUM1
             DUM1 = EQDT(I1)
             EQDT(I1) = EQDT(I2)
             EQDT(I2) = DUM1    

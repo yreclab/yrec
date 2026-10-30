@@ -14,7 +14,7 @@ C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 BL,C,DT,FCEN1,FCEN2,FCORR1,FCORR2,FSUN,GL,HICZ,OMEGAS,RL,
+      REAL*8 BL,C,DT,FCEN1,FCEN2,FCORR1,FCORR2,FSUN,HICZ,OMEGAS,RL,
      *       SMASS,STRUCTFACTOR,TCZ,TEFFL,TEMP,WFIRST,WIND1,WIND2,WN,
      *       WNOW,WOLD,WP,WSAT
       INTEGER IT
@@ -144,7 +144,10 @@ C
 C MHP 8/17 ADDED CENTRIFUGAL REDUCTION TERM FROM MATT+2012 ApJ 754, L26
 C NOTE THAT THIS IS IMPLEMENTED HERE RELATIVE TO THE SUN
 C      C_2 = 0.0506
-      FSUN = 0.5*PMMSOLW**2*CRSUN**3/EXP(CLN*GL)/CMSUN
+C 10/30/26 MHP via Claude
+C code changed to divide by G (CGL).  GL was an unset local, so FSUN
+C lacked its 1/G and the solar reference term was ~1.5e7 too small.
+      FSUN = 0.5*PMMSOLW**2*CRSUN**3/EXP(CLN*CGL)/CMSUN
 C     RADIUS
       RL = 0.5D0*(BL+CLSUNL-C4PIL-CSIGL-4.D0*TEFFL)
       FCORR1 = 0.5*WOLD**2*EXP(CLN*(3.0*RL-CGL))/SMASS/CMSUN
