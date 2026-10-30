@@ -103,6 +103,7 @@ C  LOCAL VECTOR, USED TO SKIP LONG HEADER.
 C     READ IN OPACITY TABLES, SKIPPING HEADER.  HEY, IT WORKS.
       OPEN(ILIV95,FILE=FLIV95,STATUS='OLD',ACCESS='SEQUENTIAL')
       NFMT=1
+      NN = 0
 
  10   READ(ILIV95,1,END=9999)DUMMY
       IF( DUMMY(NFMT:NFMT+4).NE.'TABLE' ) GO TO 10
@@ -125,7 +126,9 @@ C ENTRY POINT FOR GETTING NEW TABLES.
       ENDIF
 
 C READ IN HEADER INFO: GRID IN RHO/T6**3
-      READ(ILIV95,20,END=1000) (R0GR(I),I=1,NUMD)
+C 10/30/26 MHP via Claude: END=1000 -> END=9999.  An end of file at a
+C table header is an error; 1000 is the exit after all NUMXZ tables.
+      READ(ILIV95,20,END=9999) (R0GR(I),I=1,NUMD)
  20   FORMAT(///,4X,19F7.1,/)
 C READ IN FULL TABLE: LOG CAPPA AS A FUNCTION OF LOG T AND
 C LOG R = RHO/T6**3
@@ -200,6 +203,15 @@ C  Z TABLES.
       Z = ZOPAL951
 
       CALL OP95ZTAB(Z)
- 9999 CONTINUE
       RETURN
+C 10/30/26 MHP via Claude
+C code changed to stop on a truncated table file.  Every END= exit came
+C here, to a bare RETURN, so a short file left CAPPA2 partly filled, the
+C unit open and the fixed-Z table never built, with no message.
+ 9999 CONTINUE
+      WRITE(*,9000)TRIM(FLIV95),NN,NUMXZ
+      WRITE(ISHORT,9000)TRIM(FLIV95),NN,NUMXZ
+ 9000 FORMAT(' OPAL95: UNEXPECTED END OF FILE IN ',A/
+     *       ' WHILE READING TABLE',I4,' OF',I4,'. RUN STOPPED')
+      STOP 951
       END
