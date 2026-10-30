@@ -298,7 +298,8 @@ C Last three lines are MODEL2 add-ons
          WRITE(ISHORT,20)
  20      FORMAT('STARIN: ***** RUN TERMINATED, INVALID INPUT',
      *         ' MODEL FILE.  *****')
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+         STOP 2
       ENDIF
 
 C Model has now been read in. Some post-processing is required.

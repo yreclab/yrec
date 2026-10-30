@@ -42,7 +42,8 @@ C DESIRED Z > 0.1D0; STOP
       WRITE(*,5)Z
  5    FORMAT(1X,'DESIRED Z',F10.6,'OUTSIDE OP95 TABLE RANGE'/
      *       ' RUN STOPPED')
-      STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+      STOP 2
  10   CONTINUE
 C  FIND INTERPOLATION FACTORS IN Z.
       DO I = 1,4

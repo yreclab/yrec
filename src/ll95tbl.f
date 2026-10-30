@@ -122,7 +122,8 @@ C ENTRY POINT FOR GETTING NEW TABLES.
       ENDIF
       IF(ZZG(IZ).NE.ZZ .OR. XXT.NE.XX)THEN
        WRITE(ISHORT,*)' OPAL95: Z ERROR INCOMPATIBLE TABLE'
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+         STOP 2
       ENDIF
 
 C READ IN HEADER INFO: GRID IN RHO/T6**3
@@ -213,5 +214,6 @@ C unit open and the fixed-Z table never built, with no message.
       WRITE(ISHORT,9000)TRIM(FLIV95),NN,NUMXZ
  9000 FORMAT(' OPAL95: UNEXPECTED END OF FILE IN ',A/
      *       ' WHILE READING TABLE',I4,' OF',I4,'. RUN STOPPED')
-      STOP 951
+C 10/30/26 MHP via Claude: STOP 2, the input-error code (issue 38).
+      STOP 2
       END

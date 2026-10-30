@@ -75,7 +75,8 @@ C               STOP
                   WRITE(*,25)KK,R0GR06(KK),R0GRTAB(KK)
  25    FORMAT(1X,'ERROR IN ALEXANDER OPACITY TABLES:'/
      *        1X,'EXPECTED AND ACTUAL R',I3,2F7.3,' RUN STOPPED')
-                  STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+                  STOP 2
                ENDIF
             END DO
             JJ = (I-1)*NUMZ+II
@@ -88,7 +89,8 @@ C STORE IN A NUMXZ*NUMT*NUMR ARRAY.
                   WRITE(*,35)J,TGR06(J),T
  35    FORMAT(1X,'ERROR IN ALEXANDER OPACITY TABLES:'/
      *        1X,'EXPECTED AND ACTUAL T',I3,2F7.3,' RUN STOPPED')
-                  STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+                  STOP 2
                ENDIF
             END DO
          END DO
@@ -105,13 +107,15 @@ C HEADER INFORMATION: X AND Z; CHECK FOR CONSISTENCY
          XTEST = 1.0D0 - ZZG06(II)
          IF(XX.NE.XTEST .OR. ZZ.NE.ZZG06(II))THEN
             WRITE(*,15)XTEST,XX,ZZG06(II),ZZ
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+            STOP 2
          ENDIF
          READ(IALEX06,20)(R0GRTAB(K),K=1,NUMD)
          DO KK=1,16
             IF(R0GRTAB(KK).NE.R0GR06(KK))THEN
                WRITE(*,25)KK,R0GR06(KK),R0GRTAB(KK)
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+               STOP 2
             ENDIF
          END DO
          JJ = (NUMX-1)*NUMZ+II
@@ -121,7 +125,8 @@ C STORE IN A NUMXZ*NUMT*NUMR ARRAY.
             READ(IALEX06,30) T,(CAPTALEX06(JJ,J,K),K=1,NUMD)
             IF(T.NE.TGR06(J))THEN
                WRITE(*,35)J,TGR06(J),T
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+               STOP 2
             ENDIF
          END DO
       END DO

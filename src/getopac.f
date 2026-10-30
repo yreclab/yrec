@@ -89,7 +89,8 @@ C code changed to remove the Alexander 1995 opacity tables
          ELSE
             WRITE(ISHORT,*)'NO MOLECULAR OPACITY TABLE CHOSEN',
      *      ' RUN STOPPED. X Z TL=',X,Z,TL
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+            STOP 2
          END IF
       ENDIF
 C 10/20/26 MHP via Claude
@@ -124,7 +125,8 @@ C for no opacity table chosen
          ELSE
             WRITE(ISHORT,*)'NO OPACITY TABLE CHOSEN',
      *      ' RUN STOPPED. X Z TL=',X,Z,TL
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+            STOP 2
          END IF
        SLOPE = (OL-OLZ)/(ZIT-1.0D0)
        OL = OLZ + (Z-1.0D0)*SLOPE
@@ -158,7 +160,8 @@ C SHOULD NOT BE ABLE TO GET HERE.
       ELSE
          WRITE(ISHORT,*)'NO OPACITY TABLE CHOSEN',
      *   ' RUN STOPPED. X Z TL=',X,Z,TL
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 2, the input-error code (issue 38).
+         STOP 2
       END IF
 C      END IF
 C
