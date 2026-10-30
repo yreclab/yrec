@@ -61,7 +61,7 @@ class Tcase:
                 line = line.strip()
                 if len(line) == 0 or line[0] == '!':
                     continue
-                if 'FFIRST' in line:
+                if line[0:6] == 'FFIRST':
                     ffirst = re.search('(".*")', line).groups()[0].replace('"', '')
                     ffirst_stub = line.rsplit('/')[-1].rsplit('.')[0]
                     return ffirst_stub
