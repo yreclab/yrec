@@ -34,7 +34,7 @@ C explicit declarations.
       IMPLICIT NONE
       REAL*8 CHKENV,CORNEW,COROLD,DCOR,DELZ,DENV,ENVNEW,ENVOLD,ENVOLD2,
      *       ENVTOTAL,FS,HCOMP,HL,HS,HSTOT,HSTOT1,SFACTOR,SHIFT,SHLNEW,
-     *       SHLOLD,SHLP,SLOPE,SMASS,TEMP,XFACT,ZFACT,ZP
+     *       SHLOLD,SHLP,SLOPE,SMASS,TEMP,XFACT,XTARG,ZFACT,ZP
       INTEGER I,I1,ICOMP,J,JCORE,JENV,JXBEG,JXEND,JXMID,M,NK
       LOGICAL*4 LC,LSHELL
 C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
@@ -115,7 +115,11 @@ C            ACOMP = ' X '
      *      'GREATER THAN UNITY.  X NOT RESCALED')
          ENDIF
       ENDIF
-      IF(RESCAL(3,NK).GE.0.0D0) THEN
+C 10/30/26 MHP via Claude
+C code changed from .GE. to .GT., as for X and the mass.  RSCLZ defaults
+C to 0, so a rescale card that left Z unset set Z = 0.  No deck asks
+C for Z = 0, which the opacity tables do not cover in any case.
+      IF(RESCAL(3,NK).GT.0.0D0) THEN
 C  RESCALE Z BY ADDING (RESCAL(3,NK)-OLD Z) TO EACH Z VALUE IN THE STAR
 C  THE CNO CYCLE ELEMENTS AND HE3 ARE MULTIPLIED BY THE RATIO OF THE
 C  DESIRED NEW Z TO THE OLD Z - LIGHT ELEMENT ABUNDANCES ARE LEFT ALONE
@@ -155,15 +159,20 @@ C  JNEWCP = INDEX OF ELEMENT TO BE CHANGED IN MATRIX HCOMP
 C  IF LREL = T, ABUNDANCE IS RELATIVE TO SURFACE HYDROGEN ABUNDANCE
 C  ON A LOGARITHMIC SCALE WHERE X ABUNDANCE = 12.0
 C  E.G. AN ABUNDANCE OF 3.0 MEANS 1.0D-9* SURFACE H ABUNDANCE
-            IF(LREL) XNEWCP = DEXP(CLN*(XNEWCP-12.0D0))*HCOMP(1,M)
-            IF(XNEWCP.LT.1.0D0) THEN
+C 10/30/26 MHP via Claude
+C code changed to convert a relative target into a local, XTARG.  It
+C used to overwrite the control XNEWCP, so a second rescale converted
+C the converted value again (10**(~0-12) X, about 1e-12 X).
+            XTARG = XNEWCP
+            IF(LREL) XTARG = DEXP(CLN*(XNEWCP-12.0D0))*HCOMP(1,M)
+            IF(XTARG.LT.1.0D0) THEN
                DO 35 I = 1,M
-                  HCOMP(INEWCP,I) = XNEWCP
+                  HCOMP(INEWCP,I) = XTARG
    35          CONTINUE
             ELSE
 C  ERROR - RESCALED ABUNDANCE >100% - ABUNDANCE NOT CHANGED
 C               ACOMP = ANEWCP
-               WRITE(ISHORT,1004)ICOMP,NK,XNEWCP
+               WRITE(ISHORT,1004)ICOMP,NK,XTARG
  1004       FORMAT(1X,'ERROR IN SUBROUTINE RSCALE'/1X,'RESCALING OF ',
      *      'SPECIES ',I3,' IN KIND CARD # ',I3,' FAILED - DESIRED COMP',F9.6/1X,
      *      'GREATER THAN UNITY.  Z NOT RESCALED')
@@ -394,7 +403,11 @@ C mass fraction RSCLZM.  Compensate changing Z with X.
             DO I = 1,M
                FS = 10.0D0**HS(I)/(SMASS*CMSUN)
                IF (FS .LT. RSCLZM1(NK)) THEN
-                  ZFACT = (HCOMP(3,I)-RSCLZC(NK))/HCOMP(3,I)
+C 10/30/26 MHP via Claude
+C code changed to scale CNO by Z_new/Z_old, as the uniform rescale does.
+C (Z_old-Z_new)/Z_old was right only when Z halves; it gave 0 for no
+C change and a negative abundance when Z rose.
+                  ZFACT = RSCLZC(NK)/(HCOMP(3,I)+1.0D-30)
                   HCOMP(3,I) = RSCLZC(NK)
                   HCOMP(1, I) = 1.0D0-HCOMP(3,I)-HCOMP(4,I)-HCOMP(2,I)
                   DO J = 5,11
@@ -402,7 +415,7 @@ C mass fraction RSCLZM.  Compensate changing Z with X.
                   ENDDO
                ELSE IF (FS .LT. RSCLZM2(NK)) THEN
                   ZP = (FS-RSCLZM1(NK))*SLOPE+RSCLZC(NK)
-                  ZFACT = (HCOMP(3,I)-ZP)/HCOMP(3,I)
+                  ZFACT = ZP/(HCOMP(3,I)+1.0D-30)
                   HCOMP(3, I) = ZP
                   HCOMP(1, I) = 1.0D0-HCOMP(3,I)-HCOMP(4,I)-HCOMP(2,I)
                   DO J = 5,11

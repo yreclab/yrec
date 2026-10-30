@@ -110,12 +110,18 @@ C MHP 06/13 Remember that flag is switched
          IF(KTTAU0.EQ.3.AND.TEFFL.LT.3.95D0)THEN
             KTTAU = KTTAU0
             LTTAU = .FALSE.
+C 10/30/26 MHP via Claude
+C code changed to start a new triangle on the switch back, as the switch
+C to gray does; the old vertices were integrated with the gray T(tau).
+            LNEW = .TRUE.
             WRITE(*,9) TEFFL
  9          FORMAT('LOG TEFF OF ',F7.3,' BELOW 3.95 - SWITCH'
      *      ,' BACK TO KURUCZ ATMOSPHERE BOUNDARY CONDITION')
          ELSE IF(KTTAU0.EQ.4.AND.TEFFL.LT.AL_TEFFLmax)THEN
             KTTAU = KTTAU0
             LTTAU = .FALSE.
+C 10/30/26 MHP via Claude: new triangle here too (see above).
+            LNEW = .TRUE.
             WRITE(*,11) TEFFL,AL_TEFFLmax
  11         FORMAT('LOG TEFF OF ',F7.3,' below Allard Table max ',F7.3
      *     ,'  - SWITCH BACK TO ALLARD ATMOSPHERE BOUNDARY CONDITION')
