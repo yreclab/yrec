@@ -830,8 +830,9 @@ C   ONE LARGE EVOLUTIONARY TIMESTEP.
             VELO(IM) = SVEL(IM)
             VISCO(IM) = VISC(IM)
             THDIFO(IM) = THDIF(IM)
-C MHP 06/02
-            DDELM(IM) = DELAO(IM) - DELO(IM)
+C 10/30/26 MHP via Claude
+C code changed to drop the store of DDELM (MHP 06/02).  SETUPV overwrites
+C it over the same zones before VCIRC reads it, in every SECULR region.
 C MHP 6/00 CALCULATED EARLIER
 C            ESUMO(IM) = SESUM(IM)
             QWRMX0(IM) = QWRMAX(IM)
