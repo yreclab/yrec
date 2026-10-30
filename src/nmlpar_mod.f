@@ -219,7 +219,7 @@ C in main.f, making 235 members.  See the note there.
       LOGICAL*4 :: LOVSTM = .FALSE.
       LOGICAL*4 :: LSEMIC = .FALSE.
       LOGICAL*4 :: LADOV = .FALSE.
-      LOGICAL*4 :: LOVMAX = .FALSE.
+      LOGICAL*4 :: LOVMAX = .TRUE.
       REAL*8    :: ATMSTP = 0.5
       REAL*8    :: ENVSTP = 0.5
       LOGICAL*4 :: LSOLWIND = .FALSE.
