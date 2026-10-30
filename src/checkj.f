@@ -191,7 +191,10 @@ C  SOLID-BODY ROTATION IN THE OFFENDING PAIR OF ZONES.
       IBOT = M
    20 CONTINUE
 C  POSITIVE OMEGA GRADIENT ENCOUNTERED.
-      IF(OMEGA(I)-OMEGA(I-1).GT.1.0d0)THEN
+C 10/30/26 MHP via Claude
+C code changed to enter at 1.0D-15 rad/s, the threshold the rest of this
+C search uses.  At 1 rad/s (the Sun turns at 2.9e-6) it never fired.
+      IF(OMEGA(I)-OMEGA(I-1).GT.1.0D-15)THEN
 C  IF PREVIOUS GRADIENT WAS POSITIVE, LEAVE ALONE.
          IF(WOLD(I)-WOLD(I-1).GT.1.0D-15)THEN
             I = IBOT-1
