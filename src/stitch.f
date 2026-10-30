@@ -40,7 +40,8 @@ C explicit declarations.
       IMPLICIT NONE
       REAL*8 A,ABEG0,AMAX0,AMIN0,ATEFFL,B,BL,CG,CMIXL,DUMA,EBEG0,EMAX0,
      *       EMIN0,ETA2,FM,FP,FPL,FT,FTL,GL,HCOMP,HD,HI,HJM,HL,HP,HR,HS,
-     *       HS1,HSTOT,HT,OMEGA,PLIM,R0,RAD,RL,RPOLEQ,SG,TEFFL,VTOT,X,Z
+     *       HS1,HSTOT,HT,OMEGA,PLIM,R0,RAD,RBASE,RL,RPOLEQ,SG,TEFFL,VTOT,
+     *       X,Z
       INTEGER I,IDUM,IXX,J,K,KATM,KENV,KSAHA,M,MODEL
       LOGICAL*4 LC,LPRT,LPULPT,LSBC0
 
@@ -199,9 +200,18 @@ C             zero out rotation columns for envelope
 C *************************** WRITE OUT ATMOSPHERE INFORMATION  ************************
 C Finish with the atmosphere, if the atmosphere was computed
        IF(LSTATM)THEN
+C 10/30/26 MHP via Claude
+C code changed to take the base radius from the outer shell when no
+C envelope point is stored.  For the starting model NUMENV is 0, and
+C this read ENVR(0).
+            IF(NUMENV.GT.0)THEN
+               RBASE = ENVR(NUMENV)
+            ELSE
+               RBASE = HR(M)
+            ENDIF
             DO I=NUMATM,1,-1
 C write out the basic info. Omega and abundances take value of last interior point.
-            RAD = DLOG10(DEXP(CLN*ENVR(NUMENV)) + ATMOR(I))
+            RAD = DLOG10(DEXP(CLN*RBASE) + ATMOR(I))
             WRITE(ISTOR,62,ADVANCE='no') MODEL,NUMATM-I+M+NUMENV,HSTOT,RAD,B,
      *      ATMOP(I),ATMOT(I),ATMOD(I),OMEGA(M),
      *      .FALSE.,.FALSE.,.FALSE.,.TRUE.,(HCOMP(J,M),J=1,15)
