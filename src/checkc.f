@@ -85,11 +85,17 @@ C
 C  CHECK FOR ANOMALOUS COMPOSITIONS.
 C  PRIOR TO THE LAST ITERATION, ONLY DIFFUSION OF H,HE,HE3 PERFORMED.
 C  FIND NUMBER OF SPECIES BEING DIFFUSED.
-      IF(IT.EQ.ITDIF2)THEN
-         JEND = 11
-      ELSE
-         JEND = 4
-      ENDIF
+C 10/30/26 MHP via Claude
+C code changed to check species 1-4 on every iteration.  SECULR mixes
+C species 5-11 (5-15 with LEXCOM) once, after its iteration loop, so the
+C last-iteration branch below tested them before they were mixed.  MIX
+C and ROTMIX clip every species to [0,1] at the start of the next step.
+C      IF(IT.EQ.ITDIF2)THEN
+C         JEND = 11
+C      ELSE
+C         JEND = 4
+C      ENDIF
+      JEND = 4
       LREDO = .FALSE.
       DO 20 J = 1,JEND
 C  HCOMP(3,...) IS Z, WHICH IS NOT DIFFUSED AS A UNIT.
