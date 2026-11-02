@@ -28,8 +28,8 @@ C a PRIVATE copy here.
       REAL*8 :: ALFMLT
       REAL*8 :: PHMLT
       REAL*8 :: CMXMLT
-      REAL*8 :: VALFMLT(JSON)
-      REAL*8 :: VPHMLT(JSON)
-      REAL*8 :: VCMXMLT(JSON)
+C 11/02/26 MHP via Claude
+C code changed to drop VALFMLT, VPHMLT and VCMXMLT, always-zero copies
+C of the three scalars above; WRTMOD now writes literal zeros.
 
       END MODULE PUALPHA_MOD

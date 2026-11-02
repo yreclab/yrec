@@ -25,9 +25,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
       USE PULSE1_MOD
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
-      USE PUALPHA_MOD
-C 10/14/26 MHP via Claude
 C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
       USE DEBHU_MOD
 C 10/14/26 MHP via Claude
@@ -291,9 +288,12 @@ C          ADDED X AND Z TO OUTPUT
      *      PQCP(I), PRMU(I), PQDT(I), HCOMP(1,I),HCOMP(3,I)
          ELSE IF (IPVER.EQ.3) THEN
 C DBG 7/95 Modifed to include mixing length variables
-         WRITE(IOPMOD, 6053)HR(I),FS,HL(I),HT(I),HD(I),VALFMLT(I),
-     *      HP(I), SESUM(I),SO(I), PQDP(I), PQED(I),VPHMLT(I),
-     *      PQET(I), PQOD(I), PQOT(I), SDEL(2,I),SDEL(3,I),VCMXMLT(I),
+C 11/02/26 MHP via Claude
+C code changed to write literal zeros for the mixing-length columns,
+C which were always zero; kept so IPVER=3 readers see the same layout.
+         WRITE(IOPMOD, 6053)HR(I),FS,HL(I),HT(I),HD(I),0.0D0,
+     *      HP(I), SESUM(I),SO(I), PQDP(I), PQED(I),0.0D0,
+     *      PQET(I), PQOD(I), PQOT(I), SDEL(2,I),SDEL(3,I),0.0D0,
      *      PQCP(I), PRMU(I), PQDT(I), HCOMP(1,I),HCOMP(3,I)
          END IF
  5003      CONTINUE

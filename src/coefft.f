@@ -29,14 +29,8 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/PULSE1/ into PULSE1_MOD.
       USE PULSE1_MOD
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/PUALPHA/ into PUALPHA_MOD.
-      USE PUALPHA_MOD
-C 10/14/26 MHP via Claude
 C code changed to convert COMMON/MASSCHG2/ into MASSCHG2_MOD.
       USE MASSCHG2_MOD
-C 10/14/26 MHP via Claude
-C code changed to convert COMMON/GRAB/ into GRAB_MOD.
-      USE GRAB_MOD
 C 10/14/26 MHP via Claude
 C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
       USE FLUXES_MOD
@@ -313,10 +307,9 @@ C TO UNITS OF 10**10 ERGS BY MULTIPLYING BY THE MASS.
                TLUMX(J) = TLUMX(J) + (HS2(IM)/CLSUN)*EG(J)
                THL = THL + (HS2(IM)/CLSUN)*EG(J)
  20         CONTINUE
-C JVS 10/11 Calculate the He3+He3 and sum of He3+He3 and He3+He4 luminosity
-            UMHE33(IM) = (HS2(IM)/CLSUN)*ENGHE3
-            UMHEAL(IM) = (HS2(IM)/CLSUN)*HE3ALL
-C JVS end
+C 11/02/26 MHP via Claude
+C code changed to drop the never-read He3 luminosity arrays UMHE33
+C and UMHEAL (JVS 10/11).
             TLUMX(8)=TLUMX(8)+(HS2(IM)/CLSUN)*ECA
             THL = THL + (HS2(IM)/CLSUN)*ECA
             QL = E
@@ -501,9 +494,9 @@ C DBG PULSE
             PRMU(IM) = RMU
             PEMU(IM) = EMU
             PQDT(IM) = QDT
-            VALFMLT(IM) = ALFMLT
-            VPHMLT(IM) = PHMLT
-            VCMXMLT(IM) = CMXMLT
+C 11/02/26 MHP via Claude
+C code changed to drop VALFMLT, VPHMLT and VCMXMLT, which only copied
+C TPGRAD's always-zero ALFMLT, PHMLT and CMXMLT.  WRTMOD writes zeros.
          END IF
  30   CONTINUE
 

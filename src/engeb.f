@@ -15,9 +15,6 @@ C 10/14/26 MHP via Claude
 C code changed to convert COMMON/OVRTRN/ into OVRTRN_MOD.
       USE OVRTRN_MOD
 C 10/14/26 MHP via Claude
-C code changed to convert COMMON/GRAB/ into GRAB_MOD.
-      USE GRAB_MOD
-C 10/14/26 MHP via Claude
 C code changed to convert COMMON/FLUXES/ into FLUXES_MOD.
       USE FLUXES_MOD
 C 10/14/26 MHP via Claude
@@ -1004,10 +1001,9 @@ C deposited energy is 6.071 - 0.425 = 5.646 MeV.  5.815 had subtracted
 C the mean positron energy (0.25 MeV) instead.
       DG(11)=EG(11)*5.646D0*CONVERT
       DG(12)=EG(12)*7.275D0*CONVERT
-C JVS 10/11 Need to grab He3 energy generation
-      ENGHE3 = DG(2)
-      HE3ALL = DG(2)+DG(3)
-C JVS end
+C 11/02/26 MHP via Claude
+C code changed to drop ENGHE3 and HE3ALL (GRAB_MOD).  They fed only
+C COEFFT's UMHE33 and UMHEAL arrays, which nothing read.
 
 C *******************************************************************
 C END OF CALCULATION OF ENERGY RELEASE.
