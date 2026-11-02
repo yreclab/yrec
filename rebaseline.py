@@ -49,12 +49,15 @@ SUFFIXES = ('.short', '.store', '.track')
 CLEAN_FAILURES = ('Output differs from reference standard',
                   'Missing reference standard')
 
-result_re = re.compile(r'^test_all\.py::test_yrec\[(.+)\] (PASSED|FAILED|ERROR)\b')
+# --dist loadgroup appends the xdist group to a grouped case's id, as in
+# "test_yrec[...]@chain0"; GROUP drops it so the id is the same either way.
+GROUP = r'(?:@\S+)?'
+result_re = re.compile(r'^test_all\.py::test_yrec\[(.+)\]' + GROUP + r' (PASSED|FAILED|ERROR)\b')
 # pytest-xdist (-n N) puts the worker and progress first, then the outcome:
 # "[gw0] [ 12%] PASSED test_all.py::test_yrec[...]"
 xdist_result_re = re.compile(
-    r'^\[gw\d+\] \[\s*\d+%\] (PASSED|FAILED|ERROR) test_all\.py::test_yrec\[(.+)\]\s*$')
-section_re = re.compile(r'^_+ test_yrec\[(.+)\] _+$')
+    r'^\[gw\d+\] \[\s*\d+%\] (PASSED|FAILED|ERROR) test_all\.py::test_yrec\[(.+)\]' + GROUP + r'\s*$')
+section_re = re.compile(r'^_+ test_yrec\[(.+)\]' + GROUP + r' _+$')
 assertion_re = re.compile(r'^E\s+AssertionError: (.*)$')
 summary_re = re.compile(r'^=+ .*\b(passed|failed)\b.* in [\d.]+s')
 

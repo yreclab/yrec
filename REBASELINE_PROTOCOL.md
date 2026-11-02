@@ -14,11 +14,11 @@ a measurement to be reviewed, not a copy operation.
 1. Decide whether a rebaseline is needed at all.
 2. Commit the code change on its own, and build from that commit.
 3. Back up the current references, and verify the backup.
-4. Run the full suite **twice**, and measure from the second pass.
+4. Run the full suite once; measure from that pass.
 5. Review every case: exit status, run extent, stopping criterion, `NaN`s.
 6. Hold back any case that needs a physics judgement.
-7. Install references only from cases that exited cleanly in pass 2.
-8. Run the full suite a third time; it must pass.
+7. Install references only from cases that exited cleanly in that pass.
+8. Run the full suite a second time; it must pass.
 9. Record what moved and why.
 
 ## How the harness behaves (read this first)
@@ -95,24 +95,23 @@ rebaseline.
 Write the backup under your home directory, not `/tmp`. The references
 total about 500 MB.
 
-## 4. Run the suite twice
+## 4. Run the suite
 
 ```sh
-pytest -v test_all.py > pass1.log 2>&1
-pytest -v test_all.py > pass2.log 2>&1
+pytest -n 8 -v test_all.py > pass2.log 2>&1
 ```
 
-Use pass 2 for all measurement and installation. Pass 1 is needed
-because the suite modifies its own inputs:
+Use this pass (the log keeps the name `pass2.log` used below) for all
+measurement and installation. The suite modifies its own inputs: four
+cases start from a model that another case writes into `startmodels/`
+(issue 35). Since 2026-11-02 the harness finds those chains from the
+`FFIRST`/`FLAST` paths and runs each on one worker, producer first
+(`pytest.ini` sets `--dist loadgroup`), so a single pass already starts
+every consumer from the new binary's model. Until then a throwaway first
+pass was needed for that. Issue 5 no longer applies: those cases now
+start from a committed model.
 
-- **Issue 35.** Three cases read a start model from `startmodels/` that a
-  later case in the same run rewrites. In pass 1 they start from a model
-  made by the *old* binary. By pass 2 they start from one made by the new
-  binary.
-- **Issue 5.** Five `Test_m2p0_feh+0p0_vzams150_*` cases read a model from
-  `$YREC_OUTPUT` that is written by an example case collected later.
-
-After pass 2, `git status` will show modified `startmodels/*.last` files.
+After the pass, `git status` will show modified `startmodels/*.last` files.
 These are the new start models, and they are part of the rebaseline.
 Commit them together with its record (step 9).
 
@@ -195,17 +194,17 @@ Do not get new references by deleting the old ones and letting the
 harness create them (`YREC_MAKE_REFS=1`). That works only for cases that exit cleanly, gives
 you no point at which to review, and skips the holds.
 
-## 8. Verify with a third pass
+## 8. Verify with a second pass
 
 ```sh
-pytest -v test_all.py > pass3.log 2>&1
+pytest -n 8 -v test_all.py > pass3.log 2>&1
 ```
 
 Every case must pass, except the held cases, which are expected to fail
 against their old references. List them by name. Also confirm that
 `git status` shows **no further changes** to `startmodels/*.last`. That
 shows the start-model chain has settled (issue 35). If the start models
-keep changing, the chain has not settled, and the pass 2 references
+keep changing, the chain has not settled, and the new references
 cannot be reproduced.
 
 ## 9. Record
