@@ -228,7 +228,8 @@ C If flag LARGE is set, model has failed to converge.  Terminate the run.
      *            "STARIN:        ***** RUN STOPPED *****")
           WRITE(ISHORT,1010)
  1010       FORMAT("STARIN: ***** MODEL FAILED TO CONVERGE *****")
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
       ENDIF
 
 C THIS SUBROUTINE READS IN THE INITIAL STELLAR MODEL
@@ -251,8 +252,9 @@ C the stellar model currently stored in memory.
       IF(.NOT.LFIRST(NK)) THEN
 C Use the model currently in memory as the starting model.
 C DBG 2/92 CHANGED SO WILL RESCALE ENVELOPE MASS ON EACH NEW RUN
-         IF(IRESCA(NK).NE.1) CALL RSCALE(HL,HCOMP,HS,HSTOT,M,NK,
-     *      SMASS,LC)
+C 10/30/26 MHP via Claude
+C code changed to drop this RSCALE call.  The jump to 3000 reaches the
+C call after the core extension, so a reused model was rescaled twice.
 C Now skip over the reading and processing of an input model file
          GOTO 3000
       ENDIF
@@ -298,7 +300,8 @@ C Last three lines are MODEL2 add-ons
          WRITE(ISHORT,20)
  20      FORMAT('STARIN: ***** RUN TERMINATED, INVALID INPUT',
      *         ' MODEL FILE.  *****')
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       ENDIF
 
 C Model has now been read in. Some post-processing is required.
@@ -483,6 +486,10 @@ C     FCORE is factor to reduce inner mass shell.
   476        FORMAT(2A)
   477        FORMAT(A, I8, A, I8)
   478        FORMAT(A)
+C 10/30/26 MHP via Claude
+C code changed to stop here, as the message says.  The run went on and
+C shifted the model past JSON.  STOP 3: the input asks for too many points.
+             STOP 3
           ENDIF
           DS = HPTTOL(2)
 c shift data for remaining points by the required number
@@ -739,6 +746,9 @@ C WITH THE LAST MODEL POINT.
                ENVT(J) = ENVT(J+1)+DT
                ENVX(J) = ENVX(J+1)
                ENVZ(J) = ENVZ(J+1)
+C 10/30/26 MHP via Claude: shift the convective flag with the rest; it
+C was left in place, so LC(J) = LCENV(JM) below read it one point off.
+               LCENV(J) = LCENV(J+1)
             END DO
             NUMENV = NUMENV - 1
             DO J = M+1,M+NUMENV

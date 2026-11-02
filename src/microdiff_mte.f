@@ -63,7 +63,11 @@ C  DR <= DRMIN.
       NPT=INT(DRTOT/DRMIN)
       IF(MOD(DRTOT,DRMIN).NE.0.0D0)NPT=NPT+1
 C JVS add additional trap to deal with models with NPT=1
-      IF (NPT .EQ. 1) NPT=NPT+1
+C 10/30/26 MHP via Claude
+C code changed to require at least 4 points, not 2.  The 4-point
+C Lagrangian stencils here and on the way back read ER(K0..K0+3), so a
+C 2- or 3-point grid read points never set, or ER(-1) and ER(0).
+      NPT = MAX(NPT,4)
 C  ENSURE THAT NUMBER OF POINTS DOES NOT EXCEED JSON.
 
 C 10/15/26 MHP via Claude

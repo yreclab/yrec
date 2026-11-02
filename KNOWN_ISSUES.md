@@ -1039,9 +1039,11 @@ return a sentinel the caller must handle.
 
 **Status:** superseded by issue 32, which measures the same problem in
 more detail and lists the options. The auto-copy hazard described here
-is now documented in `REBASELINE_PROTOCOL.md`, where "a missing reference
-is created silently, and the case passes" is the second harness
-behaviour listed. The harness itself still does not warn.
+is now documented in `REBASELINE_PROTOCOL.md`. Since 2026-10-30 the
+harness no longer creates a missing reference: the case fails with
+"Missing reference standard" unless `YREC_MAKE_REFS=1` is set. The
+2026-10-30 bugsweep-4 pass in a worktree with only 180 of 891
+references had passed 229 cases against their own output this way.
 
 `git ls-files` returns nothing for `testsuite/standard` or
 `examples/*/standard`: all 903 reference files, about 493 MB, exist only on
@@ -2885,6 +2887,11 @@ Known gaps, all present in our code:
   f_full + w f_saha rather than f_full + w (f_saha - f_full).
 - S3 (the 1/chi_T in the eps_grav partials) was a plain error in the
   same family and is fixed separately (bugsweep-2, `5bac256`).
+- **Opacity ramp derivatives (external O18).** Where GETOPAC blends two
+  opacity sources, kappa = w kappa_1 + (1-w) kappa_2, the dln kappa
+  derivatives are blended with w and 1-w instead of w kappa_1/kappa and
+  (1-w) kappa_2/kappa, and the (dw/dln T)(kappa_1 - kappa_2)/kappa term
+  is dropped. Jacobian only, like the rest of this issue.
 
 **Where it shows (O3):** the low-mass cases -- the 0.03 Msun Newton
 two-cycle (issue 33), and the 0.05 and 0.1 Msun
@@ -2908,6 +2915,19 @@ do not cross the edge (FCORRI 0.05 -> 0.051, HTOLER(1,1) 6.0e-8 ->
 spread of this size on this deck as known numerical sensitivity, not a
 regression, until the convergence test and the discrete convective
 boundary are dealt with.
+
+**Second symptom, same deck (bugsweep-4, 2026-11-02):** with the YTIME
+He-timestep fix (f0fe0d2) the deck stops with status 1 at model 5470
+(Y_c 1.1e-3, 34.19 Myr; the old reference reached Y_c 1e-4 at 34.24 Myr).
+The steps are well behaved (dt ~70 yr), but from Y_c ~2e-3 every model
+needs 26-130 iterations: the central L correction falls only ~7% per
+iteration, and in the failing model the envelope (shells 1088-1294)
+oscillates and diverges. The old code passed this phase with five
+1000-yr steps in the same 60-130 iteration regime. FCORR0 0.3 and 0.2
+fail at Y_c ~8e-4; HTOLER x10 fails at the same model. Linear
+convergence points at an inconsistent Jacobian. Per MHP the deck now
+stops at END_YCEN = 2e-3 instead of 1e-4; put it back to 1e-4 once the
+Jacobian is fixed.
 
 **Workaround, not a fix:** numerical derivatives for the affected
 entries, which the external branch measured to agree with finite
@@ -2940,6 +2960,12 @@ in:
   (`b279422`).
 - **One case at shell 61 near the centre,** where central X was falling
   to 1e-10: P, T and R 5-7 times their tolerances, L about 500 times.
+- **ZAHB 1.7 Msun (`ZAHB_m1p7feh+0p0_TAHB`), 2026-10-30,** at 51 Myr
+  (Yc 0.74) once LOVMAX was turned on: L at shell 2650 flipping by
+  +/-1.06e-5 with the step factor already at 1. FCORR0 0.6 -> 0.3
+  avoids it. The path sensitivity is large: FCORR0 0.3 reaches the
+  TAHB at 212.4 Myr and 0.2 at 233.5 Myr, a 10% spread from a damping
+  factor that should not change the converged models.
 
 **Workaround in use.** `HTOLER(1-4,1)` relaxed x10 (x30 for 0.07 and
 0.04 Msun), each with a dated comment in the deck. With a different
@@ -3013,3 +3039,29 @@ What follows:
   (timestep and zoning decisions, convective boundaries), which turns
   a smooth input change into a jump in the path.
 
+
+---
+
+## 44. Semiconvection cannot be combined with any overshoot
+
+**Status:** open, 2026-10-30. Flagged by MHP as a potential code change.
+
+PARMIN stops the run (`STOP 3`) when `LSEMIC` is on together with any
+of `LOVSTC`, `LOVSTE` or `LOVSTM`. The block guards against a real
+conflict at the core edge, but is broader than it needs to be.
+
+MIX calls CONVEC, which calls OVERSH, which moves the zone edges in
+`MXZONE` out to the overshoot boundaries. SCONVEC (Castellani et al.
+1971) then tests for semiconvection at "the edge of all convective
+regions" using those same `MXZONE` edges. With core overshoot on, it
+would test the overshoot boundary, not the Schwarzschild edge, so the
+two cannot simply both run as written.
+
+Envelope and intermediate overshoot do not touch the core edge, yet
+they are refused too. Every HB deck has envelope overshoot on, so none
+of them can enable semiconvection, although the `LSEMIC` comment in
+the decks says it should be on for core He burning.
+
+**Possible change:** run SCONVEC on the Schwarzschild edges (CONVEC's
+`MXZON0`), apply core overshoot beyond the semiconvective region, and
+allow envelope overshoot alongside semiconvection.

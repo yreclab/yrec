@@ -136,8 +136,16 @@ C BASE IS HIGHER; IF IT IS POSITIVE, THE TRUE BASE IS LOWER.
          ELSE
 C STARTING CZ DEPTH
             IF(RBASE0.EQ.0.0D0)THEN
-               RBASE0 = 0.5D0*(EXP(CLN*HRO(JNENV0))
-     *                  +EXP(CLN*HRO(JNENV0-1)))
+C 10/30/26 MHP via Claude
+C code changed to take the radius below shell 1 as zero (the centre).
+C With a fully convective start-of-step model JNENV0 is 1 and this read
+C HRO(0).
+               IF(JNENV0.GT.1)THEN
+                  RBASE0 = 0.5D0*(EXP(CLN*HRO(JNENV0))
+     *                     +EXP(CLN*HRO(JNENV0-1)))
+               ELSE
+                  RBASE0 = 0.5D0*EXP(CLN*HRO(1))
+               ENDIF
                ROS = RBASE0 - PSCAL0
                DO J = JNENV0-1,1,-1
                   R = EXP(CLN*HRO(J))

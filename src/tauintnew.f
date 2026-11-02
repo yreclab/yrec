@@ -66,6 +66,11 @@ C DETERMINE EXTENT OF SURFACE CONVECTION ZONE.
       LALLCZ = .FALSE.
 C FIND THE TOP OF THE MAIN INTERNAL CONVECTION ZONE.
       IBEG = 1
+C 10/30/26 MHP via Claude
+C code changed to start with no core (JCORE = 0).  A model whose centre
+C is radiative never set JCORE, so the test below read the value left
+C from an earlier call (SAVE).
+      JCORE = 0
    50 LRADZONE = .TRUE.
       IF (LCZ(IBEG)) LRADZONE = .FALSE.
       DO 60 I = IBEG,M,1
@@ -186,6 +191,9 @@ C              FIND LOCATION WHERE HP = R
 C                 IF K = IMAX+1, MOVE AWAY FROM EDGE CASE.
                   KK = K
                   IF (K.EQ.IMAX+1) KK = K+1
+C 10/30/26 MHP via Claude: keep the 4-point stencil KK-2..KK+1 inside
+C 1..M; next to the surface it read point M+1.
+                  KK = MAX(3,MIN(KK,M-1))
 C                 FIND V WITH CUBIC SPLINE
                   XDEL(1) = EXP(CLN*HR(KK-2))-RBCZ-
      *                      EXP(CLN*(HP(KK-2)-HD(KK-2)))/HG(KK-2)
@@ -246,6 +254,9 @@ C FIND INDICES SURROUNDING LINEAR CENTER OF CZ
 C           IF K = IMAX+1, MOVE AWAY FROM EDGE CASE.
             KK = K
             IF (K.EQ.IMAX+1) KK = K+1
+C 10/30/26 MHP via Claude: keep the 4-point stencil KK-2..KK+1 inside
+C 1..M; next to the surface it read point M+1.
+            KK = MAX(3,MIN(KK,M-1))
 C CALCULATE CVEL AT THAT CENTRAL LOCATION
             XRAD(1) = EXP(CLN*HR(KK-2))
             XRAD(2) = EXP(CLN*HR(KK-1))

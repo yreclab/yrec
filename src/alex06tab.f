@@ -12,6 +12,10 @@ C code changed to convert COMMON/ALOT06ALL/ into ALOT06ALL_MOD.
 C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
       IMPLICIT NONE
       REAL*8 X,XMAX,ZMAX
       INTEGER I,IZ,J,K,KK,KK2,KK3,KK4,NUMD,NUMT,NUMX,NUMZ
@@ -26,14 +30,18 @@ C  XE = DESIRED X; ZE = DESIRED Z
 C CHECK THAT THE REQUESTED COMPOSITION IS INSIDE TABLE BOUNDS
       IF(XE.LT.0.0D0 .OR. XE. GT. XMAX)THEN
          WRITE(*,5) XE,ZE
+         WRITE(ISHORT,5) XE,ZE
  5       FORMAT('ILLEGAL COMPOSITION (X,Z) = ',2F6.2,' IN ALEX06.RUN STOPPED')
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
 C PERMIT EXTRAPOLATION IN Z BY UP TO 1 TABLE ELEMENT
       ZMAX = ZZG06(NUMZ)+(ZZG06(NUMZ)-ZZG06(NUMZ-1))
       IF(ZE.LT.0.0D0 .OR. ZE. GT. ZMAX)THEN
          WRITE(*,5) XE,ZE
-         STOP
+         WRITE(ISHORT,5) XE,ZE
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
 C FIND 4 NEAREST TABLES IN Z.
       DO I = 3,NUMZ-2

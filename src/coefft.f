@@ -275,6 +275,12 @@ C TEMPERATURE GRADIENT IS CONVECTIVE
        QL = 0.0D0
        QLT = 0.0D0
        QLP = 0.0D0
+C 10/30/26 MHP via Claude
+C code changed to zero the epsilon derivatives below the burning cutoff.
+C They kept the last burning shell's values, which reached SQET (read
+C by SETUPV in rotating runs) and the pulse arrays.
+       QED = 0.0D0
+       QET = 0.0D0
        IF(TL.GT.TCUT(1)) THEN
 C SET UP NUCLEAR ENERGY TERMS
 C 10/13/26 MHP via Claude

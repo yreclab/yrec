@@ -29,10 +29,12 @@ a measurement to be reviewed, not a copy operation.
   `<test dir>/standard/`. A full pass takes about five hours.
 - Floats pass within a fractional tolerance of `float_frac_tol` (0.02);
   integers must match exactly.
-- **A missing reference is created silently, and the case passes.** If
-  `standard/<case>.track` does not exist, the harness copies the current
-  output there and compares it with itself. "All passed" therefore says
-  nothing about a case whose reference was absent.
+- **A missing reference fails the case** with "Missing reference
+  standard" (since 2026-10-30). The harness used to copy the output into
+  `standard/` and compare it with itself, so a case whose reference was
+  absent always passed. `YREC_MAKE_REFS=1` restores the copy for
+  deliberately creating references; step 7's `rebaseline.py` accepts this
+  failure as a clean exit and installs the new case's references.
 - **Every case writes to one shared output directory**, `$YREC_OUTPUT`
   (issue 16). Files there persist between runs, so a file in it may be
   left over from an earlier binary or an earlier crash.
@@ -190,7 +192,7 @@ must come from `pytest -v` and must have run to completion. It does none
 of the review in step 5.
 
 Do not get new references by deleting the old ones and letting the
-harness create them. That works only for cases that exit cleanly, gives
+harness create them (`YREC_MAKE_REFS=1`). That works only for cases that exit cleanly, gives
 you no point at which to review, and skips the holds.
 
 ## 8. Verify with a third pass

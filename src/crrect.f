@@ -113,7 +113,10 @@ C ZERO COUNTERS
       KATM = 0
       KSAHA = 0
       SENV = HS(M) - HSTOT
-      IF(LNEW.OR.LRESET .AND.ITLVL.EQ.2) LSBC = .TRUE.
+C 10/30/26 MHP via Claude
+C code changed to parenthesize as the compiler parses it.  A new run
+C needs a triangle at level 1; MAIN already sets LSBC at level 2.
+      IF(LNEW .OR. (LRESET .AND. ITLVL.EQ.2)) LSBC = .TRUE.
 C  FIND NEW FP AND FT IF MODEL IS ROTATING
       IF(LROT.AND.LSBC) THEN
        FPL = FP(M)

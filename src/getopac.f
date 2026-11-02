@@ -89,7 +89,8 @@ C code changed to remove the Alexander 1995 opacity tables
          ELSE
             WRITE(ISHORT,*)'NO MOLECULAR OPACITY TABLE CHOSEN',
      *      ' RUN STOPPED. X Z TL=',X,Z,TL
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+            STOP 3
          END IF
       ENDIF
 C 10/20/26 MHP via Claude
@@ -109,7 +110,8 @@ C     semiconvection+overshoot HB models, which can reach lower core temperature
          IF(.NOT.LPUREZ) THEN
             WRITE(ISHORT, *)' ERROR: Z>0.10 T > 5 X 10^7 K',
      *        ' NEED PURE Z TABLE TO CONTINUE. Z,LOG T=',Z, TL
-              STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+              STOP 1
        END IF
        CALL GTPURZ(DL,TL,OZ,OLZ,QODZ,QOTZ)
          IF (LOPAL95) THEN
@@ -124,7 +126,8 @@ C for no opacity table chosen
          ELSE
             WRITE(ISHORT,*)'NO OPACITY TABLE CHOSEN',
      *      ' RUN STOPPED. X Z TL=',X,Z,TL
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+            STOP 3
          END IF
        SLOPE = (OL-OLZ)/(ZIT-1.0D0)
        OL = OLZ + (Z-1.0D0)*SLOPE
@@ -140,7 +143,8 @@ C     JCZ 211125 changed to 10^7 K in message to reflect above change in logic.
          WRITE(ISHORT,*)' Z>0.12 T < 10^7 K',
      *   ' OUTSIDE OPAL OPACITY TABLE RANGE OR Z',
      *   ' OUTSIDE SINGLE TABLE USED.Z,ZENV,LOG T=',Z,ZENV,TL
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
 C
 C     NOT HELIUM BURNING REGION (HB EVOLUTION) OR L2Z=T AND
 C     Z STILL NOT TOO LARGE IN CORE (<.15) SO CAN USE
@@ -158,7 +162,8 @@ C SHOULD NOT BE ABLE TO GET HERE.
       ELSE
          WRITE(ISHORT,*)'NO OPACITY TABLE CHOSEN',
      *   ' RUN STOPPED. X Z TL=',X,Z,TL
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       END IF
 C      END IF
 C

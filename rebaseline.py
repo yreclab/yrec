@@ -18,7 +18,8 @@ into <test dir>/standard/, but only after every case passes these checks:
   - the case appears in the log. A case the log does not mention was not
     run, so its output is not from this binary.
   - the case exited cleanly. A case passes this check if it is PASSED, or
-    FAILED only because "Output differs from reference standard". Any
+    FAILED only because "Output differs from reference standard" or
+    "Missing reference standard" (a new case). Any
     other failure, an abort included, blocks the install, because an
     aborted case still leaves fresh partial outputs behind (issue 35).
   - every output is newer than the binary. The output directory is shared
@@ -42,7 +43,11 @@ import shutil
 import sys
 
 SUFFIXES = ('.short', '.store', '.track')
-CLEAN_FAILURE = 'Output differs from reference standard'
+# Failures that still mean the case exited cleanly: its outputs differ from
+# the reference, or it has no reference yet (a new case; test_all.py no
+# longer creates one silently).
+CLEAN_FAILURES = ('Output differs from reference standard',
+                  'Missing reference standard')
 
 result_re = re.compile(r'^test_all\.py::test_yrec\[(.+)\] (PASSED|FAILED|ERROR)\b')
 # pytest-xdist (-n N) puts the worker and progress first, then the outcome:
@@ -138,7 +143,7 @@ def main():
         if result is None:
             not_run.append(base)
             continue
-        if result != 'PASSED' and reason.get(test_id) != CLEAN_FAILURE:
+        if result != 'PASSED' and reason.get(test_id) not in CLEAN_FAILURES:
             aborted.append((base, reason.get(test_id, result)))
             continue
         for suf in SUFFIXES:

@@ -39,10 +39,17 @@ C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
       IMPLICIT NONE
-      REAL*8 ACC,DELJ,DELJI,DJ,DT,ETA2,HD,HI,HJM,HJMP,HJMSAV,HR,HS,HS2,
+      REAL*8 ACC,DELJ,DJ,DT,ETA2,HD,HI,HJM,HJMP,HJMSAV,HR,HS,HS2,
      *       HV,OMEGA,QIW,R0,TOLER0,WSAV
-      INTEGER I,IBEG,IBOT,ID,IDM,IEND,II,IJMAX,IMAX,IMAXI,IMIN,IREDO,IT,
-     *       ITOP,J,M
+      INTEGER I,IBEG,IBOT,ID,IDM,IEND,II,IJMAX,IMAX,IMIN,IREDO,IT,
+     *       ITOP,J,M,NHIST
+C 10/30/26 MHP via Claude
+C code changed to size the per-iteration history from ITDIF2.  DELJI and
+C IMAXI were dimensioned 16 and indexed by the iteration number, which
+C nothing bounded, so ITDIF2 > 16 wrote past them.  They are kept
+C (SAVE) across SECULR's iterations, which print the whole history.
+      REAL*8, ALLOCATABLE :: DELJI(:)
+      INTEGER, ALLOCATABLE :: IMAXI(:)
       LOGICAL*4 LCZ,LOK,LOKAD,LREDO
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
 C 10/12/26 MHP via Claude
@@ -70,7 +77,7 @@ C MHP 3/93
 C MHP 11/94
       DIMENSION HD(JSON),HJM(JSON),HJMP(JSON),HR(JSON),HS(JSON),
      *   HS2(JSON),LCZ(JSON),ETA2(JSON),HI(JSON),OMEGA(JSON),
-     *   QIW(JSON),R0(JSON),HJMSAV(JSON),DELJI(16),IMAXI(16),
+     *   QIW(JSON),R0(JSON),HJMSAV(JSON),
      *   ID(JSON),HV(JSON),WSAV(JSON)
 C     *   ECOD(JSON),ECOD2(JSON)
       SAVE
@@ -121,6 +128,14 @@ C  LOK : FLAG SET T IF DIFFUSION CEOFFICIENTS HAVE CONVERGED.
 C  LREDO : FLAG SET T IF A PROBLEM REQUIRES CUTTING THE DIFFUSION TIMESTEP.
 C  OMEGA : RUN OF ANGULAR VELOCITY.
 C
+C  ONE HISTORY SLOT PER ITERATION; SECULR RUNS IT = 1,ITDIF2.
+      NHIST = MAX(ITDIF2,IT,1)
+      IF(.NOT.ALLOCATED(DELJI))THEN
+         ALLOCATE(DELJI(NHIST),IMAXI(NHIST))
+      ELSE IF(SIZE(DELJI).LT.NHIST)THEN
+         DEALLOCATE(DELJI,IMAXI)
+         ALLOCATE(DELJI(NHIST),IMAXI(NHIST))
+      ENDIF
 C  CHECK FOR NEGATIVE J/M.
       LOK = .FALSE.
       LREDO = .FALSE.
@@ -140,7 +155,8 @@ C            IF(IREDO.GT.3)THEN
      *                5X,'NEGATIVE J/M ENCOUNTERED IN ZONE',I5,
      *                ' AND 3 ATTEMPTS AT CUTTING TIMESTEP FAILED'/
      *                'RUN STOPPED')
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ELSE
                LREDO = .TRUE.
                DT = 0.5D0*DT

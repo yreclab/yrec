@@ -364,7 +364,8 @@ C and j1 for the GL direction
      x      '@ 9999 *************'
        write(ISHORT,*)
        write(ISHORT,*)
-      STOP 9999
+C 10/30/26 MHP via Claude: STOP 3, the input-error code (issue 38).
+      STOP 3
 
       end      ! END OF ALINITTAB
 

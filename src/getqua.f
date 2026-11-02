@@ -15,6 +15,10 @@ C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
 C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
       IMPLICIT NONE
       REAL*8 BET,C4PIG,DR,DRHO,DRHOW2,DRI,DRMI,DRPL,DW2,FAC,FMI,FPL,FX,
      *       HD,HG,HRU,OMEGA,RPLU
@@ -92,13 +96,16 @@ C OUTSIDE THE STAR PHI(R) = PHI(RSTAR)*(RSTAR/R)**3.
       C(M) = 0.0D0
       D(M) = 0.0D0
 C  SOLUTION OF SYSTEM FROM NUMERICAL RECIPES.
-      IF(B(1).EQ.0.0D0)STOP
+      IF(B(1).EQ.0.0D0)THEN
+         J = 1
+         GOTO 90
+      ENDIF
       BET = B(1)
       U(1) = D(1)/BET
       DO J = 2,M
          GAMA(J) = C(J-1)/BET
          BET = B(J) - A(J)*GAMA(J)
-         IF(BET.EQ.0.0D0)STOP
+         IF(BET.EQ.0.0D0)GOTO 90
          U(J) = (D(J) - A(J)*U(J-1))/BET
       END DO
 C BACKSUBSTITUTION.
@@ -111,4 +118,12 @@ C BACKSUBSTITUTION.
       END DO
 
       RETURN
+C 10/30/26 MHP via Claude: the two zero-pivot exits used to stop silently.
+   90 CONTINUE
+      WRITE(*,900)J,M
+      WRITE(ISHORT,900)J,M
+  900 FORMAT(' GETQUA: ZERO PIVOT IN THE TRIDIAGONAL SOLVE AT ZONE',I5,
+     *       ' OF',I5/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+      STOP 1
       END

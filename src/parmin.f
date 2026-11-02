@@ -983,7 +983,8 @@ C code changed to remove the LISO isochrone-output option
     2       FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'SEMI-CONVECTION',
      * ' AND OVERSHOOT FLAGS BOTH TURNED ON'/'FLAGS LSEMIC',L2,
      * ' OVERSHOOT - CORE,ENVELOPE,INTERMEDIATE-',3L2/'RUN STOPPED')
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+            STOP 3
          ENDIF
       ENDIF
 C 10/29/26 MHP via Claude
@@ -1311,12 +1312,25 @@ C as the diagnosis.
             WRITE(ISHORT,8803)NCMXCK
             WRITE(*,8803)NCMXCK
          ENDIF
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+         STOP 3
       ENDIF
  8802 FORMAT('SOLAR CALIBRATION IS ON, SO ONLY CMIXLA(1) IS READ FROM',
      * ' THE NAMELIST'/'RUN STOPPED')
  8803 FORMAT('CMIXLA MUST BE SET FOR EACH OF THE',I3,' KIND CARDS'/
      * 'RUN STOPPED')
+C 10/30/26 MHP via Claude
+C code changed to refuse a non-positive envelope triangle size.  A zero
+C size made SURFBC's reflection walk loop for ever, and a negative TRIDT
+C started the triangle with the wrong orientation.
+      IF(TRIDT.LE.0.0D0 .OR. TRIDL.LE.0.0D0)THEN
+         WRITE(ISHORT,8804)TRIDT,TRIDL
+         WRITE(*,8804)TRIDT,TRIDL
+ 8804    FORMAT(1X,'ERROR IN SUBROUTINE PARMIN'/'ENVELOPE TRIANGLE SIZE',
+     *          ' TRIDT',1PE11.3,' TRIDL',E11.3,' MUST BE POSITIVE'/
+     *          'RUN STOPPED')
+         STOP 3
+      ENDIF
       IF(KTTAU .EQ. 0) THEN
            WRITE(ISHORT, 197)
       ELSE IF (KTTAU .EQ. 1) THEN

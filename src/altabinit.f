@@ -146,7 +146,8 @@ C    (b) Ensure that every row has at least 4 valid entries and that there are a
        write(ISHORT,*)'******** ALTABINIT: Program Terminated ********'
        write(ISHORT,*)
        CALL ALPRINT
-       STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+       STOP 3
 
        END
 

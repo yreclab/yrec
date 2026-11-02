@@ -493,7 +493,8 @@ C PRINT NASTY MESSAGE AND QUIT.
       WRITE(ISHORT,50)
    50 FORMAT(5X,'ATMOSPHERE INTEGRATION FAILED AFTER MAXSTP',1X,
      *       'INTEGRATIONS.I QUIT.')
-      STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+      STOP 1
 C ENVELOPE INTEGRATION
 C HERE P IS THE INDEPENDENT VARIABLE AND M,R,AND T ARE
 C DEPENDENT VARIABLES.  INTEGRATE FROM TAU = 2/3 TO THE LAST
@@ -821,10 +822,14 @@ C PRINT NASTY MESSAGE AND QUIT.
       WRITE(ISHORT,911)
  911  FORMAT(5X,'ENVELOPE INTEGRATION FAILED AFTER MAXSTP TRIES.',1X,
      *     'I QUIT')
-      STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+      STOP 1
  300  CONTINUE
 C 07/02 NOW INVERT THE ENVELOPE VECTOR.
-      IF(SENV.LT.-1.0D-12)THEN
+C 10/30/26 MHP via Claude: .LT. -> .LE., to match the test that decides
+C to integrate (SENV.GT.-1.0D-12 skips); SENV = -1.0D-12 exactly was
+C integrated but not reversed.
+      IF(SENV.LE.-1.0D-12)THEN
          DO I = 1,NUMENV
             I1 = I
             I2 = NUMENV - I + 1

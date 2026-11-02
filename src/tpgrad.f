@@ -185,12 +185,11 @@ C DERIVATIVES OF CONVECTIVE GRADIENT
    30 DDEL = DELDEL*V*(V+A1)
       DEL = DELA + DDEL
 C CALCULATE CONVECTIVE VELOCITY
-      TEST = G*(-QDT)*PRESHT*DELDEL
-      IF(TEST.GT.0.0D0)THEN
-         VEL = V*DSQRT(G*(-QDT)*(CMIXL**2)*PRESHT*DELDEL/8.0D0)
-      ELSE
-         VEL = 1.0D0-11
-      ENDIF
+C 10/30/26 MHP via Claude
+C code changed to drop a dead sign test.  The radicand is the TEST above
+C times PRESHT**2, and a non-positive TEST already stopped (STOP 912).
+C Its else branch set VEL = 1.0D0-11, which is -10, not 1.0D-11.
+      VEL = V*DSQRT(G*(-QDT)*(CMIXL**2)*PRESHT*DELDEL/8.0D0)
       DELPM=DEL-V*V*DELDEL
       RRR = 10.0D0**RL
       IF(LDERIV) THEN

@@ -25,6 +25,10 @@ float_frac_tol = float(config['tolerances']['float_frac_tol'])
 int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
 show_output = config.getboolean('options','show_output_upon_failure')
+# Set YREC_MAKE_REFS=1 to copy an output into standard/ when its reference
+# is missing.  Otherwise a missing reference fails the case.
+make_refs = os.environ.get('YREC_MAKE_REFS', '') not in ('', '0')
+MISSING_REFERENCE = "Missing reference standard"
 ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
 
 # Lines matching any of these regular expressions are dropped from BOTH the
@@ -56,6 +60,19 @@ if config.has_section('banned'):
         name = name.strip()
         if name:
             banned_nml_vars.append(name)
+
+# Cases whose run is expected to end in a run-time error stop (STOP 1),
+# such as helium ignition in a low-mass star (KNOWN_ISSUES issue 33): the
+# extent of the run is the measurement.  Such a case may exit with status
+# 1 and is then compared with its reference as usual.  Any other nonzero
+# status, or status 1 in a case not listed, still fails.
+CRASH_EXIT_STATUS = 1
+crash_extent_cases = set()
+if config.has_section('crash_extent'):
+    for name in config['crash_extent'].get('cases', '').split('\n'):
+        name = name.split('#')[0].strip()
+        if name:
+            crash_extent_cases.add(name.replace('.nml1', ''))
 
 banned_nml_res = [
     (name, re.compile(rf'^[^!]*\b{re.escape(name)}\s*=', re.IGNORECASE))
@@ -394,8 +411,12 @@ def test_yrec(tdir, nml1, nml2):
     # Ensure outdir is an absolute path
     outdir = os.path.abspath(os.path.join(tdir, outdir))
 
-    # Fail on abnormal termination
-    assert proc.returncode == 0, "Program terminated abnormally"
+    # Fail on abnormal termination, except the expected run-time stop of
+    # a crash-extent case
+    expected_crash = (nml1.replace('.nml1', '') in crash_extent_cases
+                      and proc.returncode == CRASH_EXIT_STATUS)
+    assert proc.returncode == 0 or expected_crash, \
+        "Program terminated abnormally"
 
     # If process completed without error code,
     # check for the presence of a reference standard.
@@ -411,19 +432,29 @@ def test_yrec(tdir, nml1, nml2):
     # Fail on missing outputs
     assert len(outputs) > 0, "Missing output(s)"
 
-    # For each output, check if a refrence exists.
-    # If not, copy output into reference.
+    # For each output, check that a reference exists.  A missing reference
+    # fails the case: copying the output in and comparing it with itself
+    # passed every case whose reference was absent (KNOWN_ISSUES.md issue
+    # 18).  YREC_MAKE_REFS=1 restores the copy, for deliberately creating
+    # references; rebaseline.py is the reviewed route.
     print("--------------------------------------------------------------")
     print("Comparing outputs with reference standards...\n")
     outputs_identical = True
+    missing_refs = []
     for out in outputs:
         refname = os.path.basename(out)
         ref = f"{tdir}/{ref_dir}/{refname}"
         if not os.path.isfile(ref):
-            shutil.copyfile(out, ref)
-            print(f"{out} copied to reference")
+            if make_refs:
+                shutil.copyfile(out, ref)
+                print(f"{out} copied to reference")
+                continue
+            print(f"--- No reference {ref}\n")
+            missing_refs.append(refname)
+            continue
         print(f"--- Comparing standard to {out}\n")
         if filevals_differ(ref, out, float_frac_tol, int_abs_tol):
             outputs_identical = False
     assert outputs_identical, "Output differs from reference standard"
+    assert not missing_refs, MISSING_REFERENCE
 

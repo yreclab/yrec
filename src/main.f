@@ -420,7 +420,8 @@ C      *    HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2025-05
      *           ' Initialize rotation rates or set LROT to',
      *           ' FALSE.')
           PRINT 1611
-          STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+          STOP 3
       ENDIF
 c     MHP 10/24 CHECK STOP CONDITIONS AND DISABLE THEM IF THE STARTING VALUES ARE BELOW THE TARGET THRESHOLD
          IF(LENDAG(NK))THEN
@@ -685,7 +686,8 @@ C      *          HSTOT,HT,IKUT,ISTORE,JCORE,JENV,LARGE,LC,LNEW,M,MODEL,  ! KC 2
      *                  ' Initialize rotation rates or set LROT to',
      *                  ' FALSE.')
                  PRINT 18
-                 STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+                 STOP 3
              ENDIF
           ENDIF
           LPUNCH = .TRUE.

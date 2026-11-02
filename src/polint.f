@@ -7,6 +7,10 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C 10/20/26 MHP via Claude
 C code changed to replace implicit typing with IMPLICIT NONE and
 C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
       IMPLICIT NONE
       REAL*8 C,D,DEN,DIF,DIFT,DY,HO,HP,W,X,XA,Y,YA
       INTEGER I,J,N,NS
@@ -33,7 +37,14 @@ C MHP 10/02 dimensions changed for consistency with fpft
           HP = XA(I+J)-X
           W = C(I+1) - D(I)
           DEN = HO - HP
-          IF(dabs(DEN).LT.1.0D-20)STOP
+          IF(dabs(DEN).LT.1.0D-20)THEN
+             WRITE(*,900)XA(I),XA(I+J),X,N
+             WRITE(ISHORT,900)XA(I),XA(I+J),X,N
+ 900         FORMAT(' POLINT: TWO ABSCISSAE COINCIDE',1P3E14.6,
+     *              ' N',I3/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+             STOP 1
+          ENDIF
           DEN = W/DEN
           D(I) = HP*DEN
           C(I) = HO*DEN

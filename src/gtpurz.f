@@ -107,7 +107,8 @@ C              PUT LINEAR EXTRAPOLATION ROUTINES HERE
             WRITE(ISHORT,120)DL,TL
   120       FORMAT(' OUTSIDE Z OPACITY TABLE, IN DENSITY.  ',
      *     'LOG(RHO)=',1PE12.3, ' LOG(T)=', 1PE12.3)
-            STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
          END IF
       END DO
       IF(NUMTS .GE. 4) THEN
@@ -120,7 +121,8 @@ C              PUT LINEAR EXTRAPOLATION ROUTINES HERE
          WRITE(ISHORT,121)DL,TL
   121    FORMAT(' OUTSIDE Z OPACITY TABLE, IN TEMPERATURE.  ',
      *         'LOG(RHO)=',1PE12.3, ' LOG(T)=', 1PE12.3)
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       END IF
       IF(ROL .GT. 35) THEN
          O = 1.0D35

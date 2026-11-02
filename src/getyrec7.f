@@ -142,7 +142,8 @@ C Read FIRST PART:M,R,L,P,T,RHO,CONV(T/F),X,Y,AND Z - one line per shell
  1000       FORMAT(1X,39('>'),40('<')/1X,'RUN STOPPED')
  1050       FORMAT(' ERROR IN SUBROUTINE GETY7'/1X,'GLITCH IN SHELL',
      *      I3,', SHELL MASS LESS THAN ZERO OR GREATER THAN STAR MASS')
-          STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 3, the input-error code (issue 38).
+          STOP 3
        ENDIF
        HCOMP(1,I) = 1.0D-6*DFLOAT(IX)
        HCOMP(3,I) = 1.0D-6*DFLOAT(IZ)
