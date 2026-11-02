@@ -595,10 +595,11 @@ C zero out entropy terms.
    99    CONTINUE
 
 C zero out light element burning rates in the surface CZ.
+C 11/02/26 MHP via Claude
+C code changed to clear LBLIOLD instead of zeroing BLI6OLD, BLI7OLD and
+C BBE9OLD, which LIBURN now reuses only when LBLIOLD is set.
          IF(LEXCOM)THEN
-            BLI6OLD = 0.0D0
-            BLI7OLD = 0.0D0
-            BBE9OLD = 0.0D0
+            LBLIOLD = .FALSE.
          ENDIF
 
 C for a given kind card, evolve NMODLS(NK) times

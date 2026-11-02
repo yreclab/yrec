@@ -213,25 +213,23 @@ C    67 CONTINUE
       FLI60 = FLI60/FM0
       FLI70 = FLI70/FM0
       FBE90 = FBE90/FM0
-      IF(BLI6OLD.LE.0.0D0)THEN
-C COMPUTE MASS-WEIGHTED AVERAGE RATES AT THE START OF THE STEP.
-         BLI60 = 0.0D0
-         BLI70 = 0.0D0
-         BBE90 = 0.0D0
-         DO 68 I = JENV0,M
-            BLI60 = BLI60 + RLI60(I)*HS2(I)
-            BLI70 = BLI70 + RLI70(I)*HS2(I)
-            BBE90 = BBE90 + RBE90(I)*HS2(I)
-   68    CONTINUE
-         BLI60 = LOG(BLI60/FM0)
-         BLI70 = LOG(BLI70/FM0)
-         BBE90 = LOG(BBE90/FM0)
-      ELSE
-C USE THE RATE FROM THE END OF THE PREVIOUS TIMESTEP.
-         BLI60 = BLI6OLD
-         BLI70 = BLI7OLD
-         BBE90 = BBE9OLD
-      ENDIF
+C 11/02/26 MHP via Claude
+C code changed to always compute the start-of-step rates here.  BURSMIX
+C restarts each extrapolation sequence from the start-of-step model and
+C does not advance RLI60, so an end-of-step rate from an earlier call
+C must not be reused (the old BLI6OLD.LE.0 test never allowed it).
+C MASS-WEIGHTED AVERAGE RATES AT THE START OF THE STEP.
+      BLI60 = 0.0D0
+      BLI70 = 0.0D0
+      BBE90 = 0.0D0
+      DO 68 I = JENV0,M
+         BLI60 = BLI60 + RLI60(I)*HS2(I)
+         BLI70 = BLI70 + RLI70(I)*HS2(I)
+         BBE90 = BBE90 + RBE90(I)*HS2(I)
+   68 CONTINUE
+      BLI60 = LOG(BLI60/FM0)
+      BLI70 = LOG(BLI70/FM0)
+      BBE90 = LOG(BBE90/FM0)
 C USE THE LOCATION OF THE TRUE EDGE OF THE CONVECTION ZONE (FX, FOUND AT
 C BEGINNING OF SR) TO ADJUST THE BURNING RATE AND MASS OF THE BOTTOM POINT
 C SUCH THAT IT INCLUDES THE ENTIRE C.Z.
@@ -312,10 +310,10 @@ C TIME-AVERAGED RATES USING LINEAR INTERPOLATION IN THE LOG.
          HCOMP(14,I) = FLI7
          HCOMP(15,I) = FBE9
       END DO
-C STORE ENDING RATE FOR USE AT THE BEGINNING OF THE NEXT STEP.
-      BLI6OLD = BLI6
-      BLI7OLD = BLI7
-      BBE9OLD = BBE9
+C 11/02/26 MHP via Claude
+C code changed to clear LBLIOLD instead of storing the ending rates, so
+C LIBURN does not reuse a rate from this routine (see above).
+      LBLIOLD = .FALSE.
 C NOW SOLVE FOR ABUNDANCES IN THE REGION WHICH BEGAN CONVECTIVE AND
 C ENDED RADIATIVE.
       IF(JENV.LE.JENV0)GOTO 200

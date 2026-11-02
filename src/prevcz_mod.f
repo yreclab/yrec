@@ -25,6 +25,11 @@ C Classic predates it.  That matches COMMON's semantics.
       REAL*8    :: BLI6OLD
       REAL*8    :: BLI7OLD
       REAL*8    :: BBE9OLD
+C 11/02/26 MHP via Claude
+C code changed to add LBLIOLD, set when BLI6OLD, BLI7OLD and BBE9OLD hold
+C LIBURN's end-of-step surface CZ rates.  The old test BLI6OLD.LE.0 was
+C always true for these logs of small rates, so they were never reused.
+      LOGICAL*4 :: LBLIOLD = .FALSE.
       INTEGER*4 :: JENVOS
 
       END MODULE PREVCZ_MOD
