@@ -76,7 +76,12 @@ set aside by ruling. No unclassified consolidation candidates remain.
 Issues 1 to 13 below are what those tasks surfaced and did not resolve;
 issues 14 to 20 were added when closing them out. The next body of work,
 F90 modules and `IMPLICIT NONE`, is planned separately in
-`F90_CONVERSION_PLAN.md`.
+`docs/archive/F90_CONVERSION_PLAN.md`.
+
+*2026-11-02:* the conversion plan was moved to `docs/archive/`, and its
+one-off audit scripts `shadow_census.py` and `literal_audit.py` were
+removed (both are in git history up to 75d8cf7). References to them
+below are historical.
 
 *F90 modules and `IMPLICIT NONE`* -- stages 0 to 5 are **done** as of
 2026-10-20. Every scoping unit is `IMPLICIT NONE`, and 83 blocks are
@@ -370,7 +375,7 @@ relying on directory order in `pytest.ini`.
 
 ## 6. `IMPLICIT` statements are inconsistent between scoping units
 
-**Status: RESOLVED 2026-10-20 by stage 5** (`F90_CONVERSION_PLAN.md`).
+**Status: RESOLVED 2026-10-20 by stage 5** (`docs/archive/F90_CONVERSION_PLAN.md`).
 Every scoping unit is now `IMPLICIT NONE` with explicit declarations, so
 no `IMPLICIT` typing statement remains and the inconsistency below no
 longer exists. Every type was preserved exactly. No unit turned out to
@@ -907,7 +912,7 @@ removal. `NUMT` and `NUMTT` are both 70 in any case.
 
 ### Why `USE ... , ONLY:` shrinks this problem
 
-With `ONLY` adopted (see `F90_CONVERSION_PLAN.md` stage 1), an import
+With `ONLY` adopted (see `docs/archive/F90_CONVERSION_PLAN.md` stage 1), an import
 names just the members a routine references, so a name a routine does not
 use cannot be captured. That removes the prefix-subset class entirely --
 the `RL`/`RLL` situation could not recur -- and leaves only these five,
@@ -1249,7 +1254,7 @@ guarantees there are none:
 The original text follows, measured on 2026-10-14.
 
 The module conversion uses a **blanket `USE`**, decided in
-`F90_CONVERSION_PLAN.md` stage 1. That is safe for the conversion itself
+`docs/archive/F90_CONVERSION_PLAN.md` stage 1. That is safe for the conversion itself
 because of three properties that hold across the code after the issue 14
 renames:
 
@@ -1803,7 +1808,7 @@ is not exported and so cannot clash with a parameters module. Switching
 them to `USE` the parameters module instead would remove that
 duplication, but it would be **the first module importing another module
 in this code**, which is the trigger condition for
-`F90_CONVERSION_PLAN.md` stage 0 item 3: the Makefile's
+`docs/archive/F90_CONVERSION_PLAN.md` stage 0 item 3: the Makefile's
 `$(OBJS): $(MODOBJS)` rule orders modules against ordinary objects but
 not among themselves. So the importer work can be done now; dedupicating
 the modules is a separate step that needs generated inter-module
@@ -2644,7 +2649,7 @@ succeeds, with the same 19 warnings as before.
 
 The original entry follows.
 
-`F90_CONVERSION_PLAN.md` records stages 3 and 4 as leaving "no `COMMON`
+`docs/archive/F90_CONVERSION_PLAN.md` records stages 3 and 4 as leaving "no `COMMON`
 blocks". That is not quite right. Three blocks of the OPAL 2006 equation
 of state are still `COMMON`, with 19 declarations across 8 files:
 

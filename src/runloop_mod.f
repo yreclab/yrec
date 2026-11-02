@@ -47,11 +47,11 @@ C so it cannot change meaning.
 C
 C The residual risk is the next edit, not this one: adding a USE to a file
 C that already uses one of these names as an implicitly typed local would
-C capture it silently.  Run shadow_census.py in the repository root before
-C adding a USE to a file or a member to a module: --file names what a
-C given file would capture, --member names every file already using a
-C name.  See KNOWN_ISSUES.md issue 22 for the 45 places in the tree where
-C that would currently happen.
+C capture it silently.  See KNOWN_ISSUES.md issue 22.
+C 11/02/26 MHP via Claude
+C Every file now has IMPLICIT NONE, so such a capture is a compile error
+C (a USE'd name clashing with a local declaration).  shadow_census.py,
+C which checked for it, was removed; it is in git history before this date.
       MODULE RUNLOOP_MOD
 
       IMPLICIT NONE

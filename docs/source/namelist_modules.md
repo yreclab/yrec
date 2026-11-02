@@ -119,18 +119,17 @@ To locate any name:
 
 ```
 grep -l 'VARNAME' src/*_mod.f          # which module declares it
-./shadow_census.py --member VARNAME    # every file that references it
+grep -lw 'VARNAME' src/*.f             # every file that references it
 ```
 
-The second form also reports whether a file holds the name through a
-module or as its own local, which is the distinction that matters when
-you are adding a `USE` statement. See `KNOWN_ISSUES.md` issue 22 for why
-that check is worth running.
+Every file now has `IMPLICIT NONE`, so a `USE` that would capture a
+name a file already declares as a local is a compile error rather than
+a silent change of meaning (`KNOWN_ISSUES.md` issue 22).
 
 ## Module conventions
 
 Every converted block follows the same pattern, described at length in
-`F90_CONVERSION_PLAN.md`:
+`docs/archive/F90_CONVERSION_PLAN.md`:
 
 - one block per file, `<block>_mod.f` containing `MODULE <BLOCK>_MOD`;
 - imported with a blanket `USE`, not `USE ... , ONLY:`;
