@@ -67,9 +67,7 @@ Sample Namelists
 
 2. `Test_solar_noGS_norot` (`nml1` and `nml2`) is a solar model run using the solution from the auto-calibrator in the first namelist. Both of these models do not include gravitational settling of helium and heavy elements, or rotation.
 
-3. `Test_solar_GS_norot_gray_OPALSCV_SF2_GS98_OP_CF10` (`nml1` and `nml2`) is a solar model that includes gravitational settling of helium and heavy elements, but does not include rotation.
-
-4. `Test_solar_GS_rot_gray_OPALSCV_SF2_GS98_OP_CF10` (`nml1` and `nml2`) is a solar model that includes both gravitational settling of helium and heavy elements and rotation.
+Solar models with gravitational settling of helium and heavy elements are in the test suite: `testsuite/Test_solarGS98_dif` (settling, no rotation) and `testsuite/Test_solarGS98_difrotmixper18p4d1p0` (settling and rotation).
 
 ## Starting Models (subdirectories)
 

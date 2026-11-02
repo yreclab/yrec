@@ -1,9 +1,12 @@
 C $$$$$$
 C       SUBROUTINE BANDW(A,NM,M1,M2,B)  ! KC 2025-05-31
       SUBROUTINE BANDW(A,NM,B)
-      PARAMETER (JSON=5000, NMAX=8000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER II,IMJ,IMJ5,JJ,NMAX
+      PARAMETER (NMAX=8000)
 C       INTEGER*4 M1,M2,NM  ! KC 2025-05-31
       INTEGER*4 NM
       REAL*8 A(NMAX,10),B(NMAX),TINY

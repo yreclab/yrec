@@ -37,23 +37,40 @@ NAME = yrec
 PREFIX ?= /usr/local/bin
 
 # Compose list of all object files to produce.
-OBJS := $(patsubst %.f,%.o,$(wildcard *.f))
+#
+# Module sources are named *_mod.f by convention and are held in a separate
+# list, because a module must be compiled before anything that USEs it.
+MODOBJS := $(patsubst %.f,%.o,$(wildcard *_mod.f))
+
+# Everything else. filter-out keeps the module objects from appearing twice.
+OBJS := $(filter-out $(MODOBJS),$(patsubst %.f,%.o,$(wildcard *.f)))
+
+# The module-before-object ordering rule lives further down, with the other
+# targets. It must not appear above them.
+
+# Where .mod files are written and searched for. This is the build directory
+# in every case, which is already each compiler's default; it is stated
+# explicitly so that an out-of-tree build does not scatter them, and so the
+# three compilers are visibly doing the same thing. gfortran spells it -J,
+# ifort and ifx spell it -module.
+GNU_MODFLAGS = -J.
+INTEL_MODFLAGS = -module .
 
 # Flags for GNU Fortran (gfortran)
-GNU_BASE_FFLAGS = -ffixed-line-length-132 -Wall -cpp -DGIT_HASH="'$(REPO_HASH)'"
+GNU_BASE_FFLAGS = -ffixed-line-length-132 -Wall -cpp $(GNU_MODFLAGS) -DGIT_HASH="'$(REPO_HASH)'"
 GNU_DEV_FFLAGS = -fcheck=all -ffpe-trap=invalid,zero,overflow
 GNU_DBG_FFLAGS = -g -fsanitize=undefined -fsanitize=address -fstack-protector-strong -O0
 GNU_PROF_FFLAGS = -O3 -g -pg
 GNU_REL_FFLAGS = -O3
 
 # Flags for Intel Fortran (ifort)
-IFORT_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp -DGIT_HASH="'$(REPO_HASH)'"
+IFORT_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp $(INTEL_MODFLAGS) -DGIT_HASH="'$(REPO_HASH)'"
 IFORT_DEV_FFLAGS = -check all -fpe:0
 IFORT_DBG_FFLAGS = -g
 IFORT_REL_FFLAGS = -O3
 
 # Flags for newer Intel Fortran compiler (ifx)
-IFX_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp -DGIT_HASH="'$(REPO_HASH)'"
+IFX_BASE_FFLAGS = -132 -traceback -warn all -nogen-interfaces -fpp $(INTEL_MODFLAGS) -DGIT_HASH="'$(REPO_HASH)'"
 IFX_DEV_FFLAGS = -check all -fpe:0
 IFX_DBG_FFLAGS = -g
 IFX_REL_FFLAGS = -O3
@@ -107,6 +124,11 @@ ifeq ($(UNAME), Darwin)
 endif
 
 # Targets
+#
+# Pinned explicitly so that adding a rule above this point cannot silently
+# change what a bare 'make' does.
+.DEFAULT_GOAL := default
+
 default: FFLAGS += $(REL_FFLAGS)
 default: $(NAME)
 
@@ -128,13 +150,30 @@ static: FFLAGS += $(REL_FFLAGS)
 static: LDFLAGS += $(STATIC_FLAGS)
 static: $(NAME)
 
-$(NAME): $(OBJS)
-	$(FC) $(LDFLAGS) -o $(NAME) $(OBJS)
+# Build every module before any ordinary object. Stated as a dependency
+# rather than as recipe order so that parallel builds (make -j) honour it
+# too. This rule carries no recipe, so the built-in %.o: %.f rule still
+# supplies one.
+#
+# It does not order the modules among themselves, so each module-to-module
+# USE needs its own rule below. Today there is one: the 36 block modules
+# dimensioned on JSON import it from DIMENSIONS_MOD. If more edges appear,
+# generate the dependencies instead (makedepf90, or a short script) rather
+# than hand-maintaining a list.
+$(OBJS): $(MODOBJS)
+$(filter-out dimensions_mod.o,$(MODOBJS)): dimensions_mod.o
 
-# Remove all object files and executable
+$(NAME): $(MODOBJS) $(OBJS)
+	$(FC) $(LDFLAGS) -o $(NAME) $(MODOBJS) $(OBJS)
+
+# Remove all object files, module files and the executable.
+#
+# Deliberately *.o to handle all object files present, regardless if
+# the set has changed from build to build.
 clean:
 	@rm -f $(NAME)
-	@rm -f $(OBJS)
+	@rm -f *.o
+	@rm -f *.mod
 
 install:
 	install -d $(PREFIX)

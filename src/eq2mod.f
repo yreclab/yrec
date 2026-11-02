@@ -1,10 +1,22 @@
 C $$$$$$
       SUBROUTINE EQ2MOD(DJ,EJ,HS2,IBEG,IEND,LCZ,M,SUMDJ,HJM)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/SPLIN/XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON)
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SPLIN/ into SPLIN_MOD.
+      USE SPLIN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DJ,EJ,HJM,HS2,RATIO,SUMDJ,SUMDJMOD,SUMJMOD,TEST,VAL
+      INTEGER I,I0,I1,IBEG,IEND,II,M,NMOD
+      LOGICAL*4 LCZ
       DIMENSION DJ(JSON),EJ(JSON),HS2(JSON),LCZ(JSON),HJM(JSON)
       SAVE
 C  THE DIFFUSION EQUATION FOR ANGULAR MOMENTUM TRANSPORT IS SOLVED USING AN
@@ -43,7 +55,12 @@ C OUTPUT VARIABLE :
 C  HJM - THE NEW RUN OF SPECIFIC ANGULAR MOMENTUM AT THE MODEL POINTS.
 C -------------------------------------------------------------------------
 C CHECK FOR LOWER AND UPPER CONVECTION ZONES.
-      IF(.NOT.LCZ(IBEG) .OR. IBEG.EQ.1)THEN
+C 10/30/26 MHP via Claude
+C code changed to widen the write-back with the test ROTGRID's sums use:
+C any convection zone adjoining the region, whether or not the end zone
+C is itself convective.  The sums took that zone into the end cell, but
+C its change went to the end zone alone when that zone was radiative.
+      IF(IBEG.EQ.1)THEN
          I0 = IBEG
       ELSE
          DO I = IBEG - 1, 1, -1
@@ -55,7 +72,7 @@ C CHECK FOR LOWER AND UPPER CONVECTION ZONES.
          I0 = 1
  10      CONTINUE
       ENDIF
-      IF(.NOT.LCZ(IEND) .OR. IEND.EQ.M)THEN
+      IF(IEND.EQ.M)THEN
          I1 = IEND
       ELSE
          DO I = IEND+1,M

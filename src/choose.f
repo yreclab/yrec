@@ -4,6 +4,11 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C CHOOSE
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CHOOSE(P1,P2,M1,M2,Q1,Q2,EPS,NCASE)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER NCASE
 C
 C                                 SHAPE PRESERVING QUADRATIC SPLINES
 C                                   BY D.F.MCALLISTER & J.A. ROULIER

@@ -5,10 +5,16 @@ C
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
       function quadeos06(ic,i,x,y1,y2,y3,x1,x2,x3)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 C1,C2,C3,QUADEOS06,X,X1,X2,X3,XX,XX12,XX13,XX1PXX2,XX1SQ,
+     *       XX23,Y1,Y2,Y3,YY
+      INTEGER I,IC
 
 c..... this function performs a quadratic interpolation.
 
-      IMPLICIT REAL*8 (A-H,O-Z)
       dimension  xx(3),yy(3),xx12(30),xx13(30),xx23(30),xx1sq(30)
      . ,xx1pxx2(30)
 

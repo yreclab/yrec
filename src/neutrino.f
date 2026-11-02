@@ -10,7 +10,11 @@ c
 
 
       subroutine neutrino(temp,den,x,y,zc,zo,snu,dsnudt,dsnudd)
-      implicit real*8 ( a-h, o-z )
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      implicit none
+      real*8 den,dsnudd,dsnudt,snu,temp,x,y,zc,zo
       integer          ionmax
       parameter        (ionmax=4)
       real*8 xmass(ionmax),ymass(ionmax),aion(ionmax),zion(ionmax)

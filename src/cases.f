@@ -4,6 +4,11 @@ C CASES
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE CASES(P1,P2,M1,M2,Q1,Q2,E1,E2,V1,V2,W1,W2,Z1,Z2,
      *                 Y1,Y2,NCASE)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      INTEGER NCASE
 C
 C                                 SHAPE PRESERVING QUADRATIC SPLINES
 C                                   BY D.F.MCALLISTER & J.A.ROULIER

@@ -1,12 +1,27 @@
 C $$$$$$
       SUBROUTINE MIXCOM(DT,ECOD2,EM,HS2,IBEG,IEND,LCZ,LOK,M,HCOMP,
      *           JBEG,JEND)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
-      COMMON/SPLIN/XVAL(JSON),YVAL(JSON),XTAB(JSON),YTAB(JSON)
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/SPLIN/ into SPLIN_MOD.
+      USE SPLIN_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DCOMP,DCOMP2,DT,ECOD2,ECOMP,EM,HCOMP,HS2,SUMSPEC,SUMSPEC2,
+     *       TEST
+      INTEGER I,I0,I1,IBEG,ID,IEND,II,J,JBEG,JEND,M,N,NSPEC,NTAB
+      LOGICAL*4 LCZ,LOK
       DIMENSION ECOD2(JSON),EM(JSON),HCOMP(15,JSON),HS2(JSON),LCZ(JSON)
       DIMENSION ECOMP(JSON),ID(15)
       SAVE
@@ -94,7 +109,14 @@ C  USE YVAL AS DUMMY ARRAY FOR THE NEW RUN OF COMP AT THE ORIGINAL
 C  POINT GRID.
          CALL OSPLIN(XVAL,YVAL,XTAB,YTAB,NTOT,NTAB)
 C CHECK FOR LOWER CONVECTION ZONE
-         IF(LCZ(IBEG).AND.IBEG.GT.1)THEN
+C 10/30/26 MHP via Claude
+C code changed to widen the write-back with the test MIXGRID's sums
+C use: any convection zone adjoining the region, whether or not the end
+C zone is itself convective.  The sums took that zone's mass into the
+C end cell, but its change went to the end zone alone when that zone
+C was radiative, so species were not conserved.  I1 is now also set
+C when the top zone is radiative; it was left from an earlier call.
+         IF(IBEG.GT.1)THEN
             DO I = IBEG-1,1,-1
                IF(.NOT.LCZ(I))THEN
                   I0 = I + 1
@@ -107,7 +129,7 @@ C CHECK FOR LOWER CONVECTION ZONE
             I0 = IBEG
          ENDIF
 C CHECK FOR UPPER CONVECTION ZONE.
-         IF(LCZ(IEND).AND.IEND.LT.M)THEN
+         IF(IEND.LT.M)THEN
             DO I = IEND+1,M
                IF(.NOT.LCZ(I))THEN
                   I1 = I - 1
@@ -116,6 +138,8 @@ C CHECK FOR UPPER CONVECTION ZONE.
             END DO
             I1 = M
    97       CONTINUE
+         ELSE
+            I1 = IEND
          ENDIF
          DCOMP2 = 0.0D0
 C COMPUTE SUM OF SPECIES MASS
@@ -132,9 +156,15 @@ C UPDATE COMPOSITION ARRAY.
             SUMSPEC2 = SUMSPEC2 + HS2(J)*HCOMP(ID(N),J)
          END DO
 C UPDATE INNER CZ COMPOSITION IF APPLICABLE.
+C A convective end zone was mixed with its neighbour, so copy its value;
+C a radiative one was not, so add the end cell's change instead.
          IF(I0.LT.IBEG)THEN
             DO I = IBEG-1,I0,-1
-               HCOMP(ID(N),I)=HCOMP(ID(N),IBEG)
+               IF(LCZ(IBEG))THEN
+                  HCOMP(ID(N),I)=HCOMP(ID(N),IBEG)
+               ELSE
+                  HCOMP(ID(N),I)=HCOMP(ID(N),I)+YVAL(1)
+               ENDIF
                SUMSPEC2 = SUMSPEC2 + HS2(I)*HCOMP(ID(N),I)
                DCOMP2 = DCOMP2 + YVAL(1)*HS2(I)
             END DO
@@ -142,7 +172,11 @@ C UPDATE INNER CZ COMPOSITION IF APPLICABLE.
 C UPDATE OUTER CZ COMPOSITION IF APPLICABLE.
          IF(IEND.LT.I1)THEN
             DO I = IEND+1,I1
-               HCOMP(ID(N),I)=HCOMP(ID(N),IEND)
+               IF(LCZ(IEND))THEN
+                  HCOMP(ID(N),I)=HCOMP(ID(N),IEND)
+               ELSE
+                  HCOMP(ID(N),I)=HCOMP(ID(N),I)+YVAL(NTAB)
+               ENDIF
                SUMSPEC2 = SUMSPEC2 + HS2(I)*HCOMP(ID(N),I)
                DCOMP2 = DCOMP2 + YVAL(NTAB)*HS2(I)
             END DO

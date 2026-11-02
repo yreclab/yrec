@@ -3,10 +3,41 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C RSCALE
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RSCALE(HL,HCOMP,HS,HSTOT,M,NK,SMASS,LC)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/LABEL/ into LABEL_MOD.
+      USE LABEL_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/RUNLOOP/ into RUNLOOP_MOD.  A blanket
+C USE imports exactly the names the COMMON declaration made global here,
+C so it cannot change meaning.  See runloop_mod.f for the block history
+C and for why the module declares the types the implicit rules supplied.
+      USE RUNLOOP_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 CHKENV,CORNEW,COROLD,DCOR,DELZ,DENV,ENVNEW,ENVOLD,ENVOLD2,
+     *       ENVTOTAL,FS,HCOMP,HL,HS,HSTOT,HSTOT1,SFACTOR,SHIFT,SHLNEW,
+     *       SHLOLD,SHLP,SLOPE,SMASS,TEMP,XFACT,XTARG,ZFACT,ZP
+      INTEGER I,I1,ICOMP,J,JCORE,JENV,JXBEG,JXEND,JXMID,M,NK
+      LOGICAL*4 LC,LSHELL
 C DBG 5/94 Added rescaling of Z in core ZRAMP stuff.
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C      CHARACTER*256 FLAOL2, FOPAL2
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
@@ -14,26 +45,22 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/CKIND/RESCAL(4,50),NMODLS(50),IRESCA(50),LFIRST(50),
-     1     NUMRUN
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C MHP 5/91 COMMON BLOCK ADDED TO FIX CORE RESCALING.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/LABEL/XENV0,ZENV0
-C MHP 10/24 ADDED NEW CONTROLS FOR ALTERING THE HEAVY ELEMENT MIXTURE
-C THEY ARE USED IN STARIN. THE OLD ENTRIES (XNEWCP->ANEWCP) ARE USED HERE
-c      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL,ACOMP
-      COMMON/NEWCMP/XNEWCP,INEWCP,LNEWCP,LREL
 c      ISETMIX,ISETISO,
 c     * LMIXTURE,LISOTOPE,FRAC_C,FRAC_N,FRAC_O,R12_13,R14_15,R16_17,R16_18,ZXMIX,
 c     * XH2_INI,XHE3_INI,XLI6_INI,XLI7_INI,XBE9_INI,XB10_INI,XB11_INI
@@ -42,9 +69,17 @@ C MHP 8/25 Removed character file names from common block
 C DBG 5/94 ZRAMP stuff.
 C 9/24/26 MHP via Claude
 C code changed to remove dead IOOPAL2 from COMMON/ZRAMP/
-      COMMON/ZRAMP/RSCLZC(50), RSCLZM1(50), RSCLZM2(50),
-     *     IOLAOL2, NK2,
-     *     LZRAMP
+C 10/9/26 MHP via Claude
+C code changed to remove NK (was NK2 here only, since this file's own
+C dummy argument NK already carries the identical value, passed down
+C from main.f's own run-index loop variable through STARIN) from
+C COMMON/ZRAMP/. It was never read by name here, only declared for
+C positional alignment with the other members, so this file's own NK
+C argument is untouched.
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/ZRAMP/: its sole remaining member
+C IOLAOL2 is neither written nor read anywhere.  The namelist members
+C that shared this block moved to the consolidated block in stage 2b.
       DIMENSION HCOMP(15,JSON),HS(JSON),HL(JSON),LC(JSON)
       SAVE
 
@@ -80,7 +115,11 @@ C            ACOMP = ' X '
      *      'GREATER THAN UNITY.  X NOT RESCALED')
          ENDIF
       ENDIF
-      IF(RESCAL(3,NK).GE.0.0D0) THEN
+C 10/30/26 MHP via Claude
+C code changed from .GE. to .GT., as for X and the mass.  RSCLZ defaults
+C to 0, so a rescale card that left Z unset set Z = 0.  No deck asks
+C for Z = 0, which the opacity tables do not cover in any case.
+      IF(RESCAL(3,NK).GT.0.0D0) THEN
 C  RESCALE Z BY ADDING (RESCAL(3,NK)-OLD Z) TO EACH Z VALUE IN THE STAR
 C  THE CNO CYCLE ELEMENTS AND HE3 ARE MULTIPLIED BY THE RATIO OF THE
 C  DESIRED NEW Z TO THE OLD Z - LIGHT ELEMENT ABUNDANCES ARE LEFT ALONE
@@ -120,15 +159,20 @@ C  JNEWCP = INDEX OF ELEMENT TO BE CHANGED IN MATRIX HCOMP
 C  IF LREL = T, ABUNDANCE IS RELATIVE TO SURFACE HYDROGEN ABUNDANCE
 C  ON A LOGARITHMIC SCALE WHERE X ABUNDANCE = 12.0
 C  E.G. AN ABUNDANCE OF 3.0 MEANS 1.0D-9* SURFACE H ABUNDANCE
-            IF(LREL) XNEWCP = DEXP(CLN*(XNEWCP-12.0D0))*HCOMP(1,M)
-            IF(XNEWCP.LT.1.0D0) THEN
+C 10/30/26 MHP via Claude
+C code changed to convert a relative target into a local, XTARG.  It
+C used to overwrite the control XNEWCP, so a second rescale converted
+C the converted value again (10**(~0-12) X, about 1e-12 X).
+            XTARG = XNEWCP
+            IF(LREL) XTARG = DEXP(CLN*(XNEWCP-12.0D0))*HCOMP(1,M)
+            IF(XTARG.LT.1.0D0) THEN
                DO 35 I = 1,M
-                  HCOMP(INEWCP,I) = XNEWCP
+                  HCOMP(INEWCP,I) = XTARG
    35          CONTINUE
             ELSE
 C  ERROR - RESCALED ABUNDANCE >100% - ABUNDANCE NOT CHANGED
 C               ACOMP = ANEWCP
-               WRITE(ISHORT,1004)ICOMP,NK,XNEWCP
+               WRITE(ISHORT,1004)ICOMP,NK,XTARG
  1004       FORMAT(1X,'ERROR IN SUBROUTINE RSCALE'/1X,'RESCALING OF ',
      *      'SPECIES ',I3,' IN KIND CARD # ',I3,' FAILED - DESIRED COMP',F9.6/1X,
      *      'GREATER THAN UNITY.  Z NOT RESCALED')
@@ -209,7 +253,8 @@ c               write(*,*)JXBEG-1,JXMID,JXEND,M
      *         'DESIRED NEW ENVELOPE MASS LESS THAN ZERO'/1X,
      *         'OLD ENVELOPE MASS ',1PE9.2,' NEW ENVELOPE ',E9.2,
      *         ' NEW AND OLD TOTAL MASS ',2E10.2)
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
 
 c ***** Calculate scale factor for mass rescaling *****
@@ -255,7 +300,8 @@ c            write(*,*)(10**HSTOT)/CMSUN,' total'
             CHKENV = ((10**HSTOT)/CMSUN)-COROLD
             IF(CHKENV.LE.0.0D0)THEN
                WRITE(ISHORT,69)ENVOLD,ENVOLD+DENV,RESCAL(1,NK),SMASS
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
 
 c **** Calculate scale factor *****
@@ -306,7 +352,8 @@ C
      *         ' RESCALING'/1X,
      *         'OLD ENVELOPE MASS ',1PE10.2,' NEW ENVELOPE ',E10.2,
      *         ' NEW AND OLD CORE MASS ',2E10.2)
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ENDIF
             HSTOT1 = DLOG10(RESCAL(4,NK)/COROLD)
             DO 80 I = 1,JXBEG-1
@@ -356,7 +403,11 @@ C mass fraction RSCLZM.  Compensate changing Z with X.
             DO I = 1,M
                FS = 10.0D0**HS(I)/(SMASS*CMSUN)
                IF (FS .LT. RSCLZM1(NK)) THEN
-                  ZFACT = (HCOMP(3,I)-RSCLZC(NK))/HCOMP(3,I)
+C 10/30/26 MHP via Claude
+C code changed to scale CNO by Z_new/Z_old, as the uniform rescale does.
+C (Z_old-Z_new)/Z_old was right only when Z halves; it gave 0 for no
+C change and a negative abundance when Z rose.
+                  ZFACT = RSCLZC(NK)/(HCOMP(3,I)+1.0D-30)
                   HCOMP(3,I) = RSCLZC(NK)
                   HCOMP(1, I) = 1.0D0-HCOMP(3,I)-HCOMP(4,I)-HCOMP(2,I)
                   DO J = 5,11
@@ -364,7 +415,7 @@ C mass fraction RSCLZM.  Compensate changing Z with X.
                   ENDDO
                ELSE IF (FS .LT. RSCLZM2(NK)) THEN
                   ZP = (FS-RSCLZM1(NK))*SLOPE+RSCLZC(NK)
-                  ZFACT = (HCOMP(3,I)-ZP)/HCOMP(3,I)
+                  ZFACT = ZP/(HCOMP(3,I)+1.0D-30)
                   HCOMP(3, I) = ZP
                   HCOMP(1, I) = 1.0D0-HCOMP(3,I)-HCOMP(4,I)-HCOMP(2,I)
                   DO J = 5,11

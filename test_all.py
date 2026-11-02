@@ -7,6 +7,7 @@
 #     pytest-xdist
 
 import os, sys
+import math
 import shutil
 from glob import glob
 import pathlib
@@ -24,7 +25,64 @@ float_frac_tol = float(config['tolerances']['float_frac_tol'])
 int_abs_tol = int(config['tolerances']['int_abs_tol'])
 ref_dir = config['paths']['reference_dir']
 show_output = config.getboolean('options','show_output_upon_failure')
+# Set YREC_MAKE_REFS=1 to copy an output into standard/ when its reference
+# is missing.  Otherwise a missing reference fails the case.
+make_refs = os.environ.get('YREC_MAKE_REFS', '') not in ('', '0')
+MISSING_REFERENCE = "Missing reference standard"
 ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
+
+# Default the input and start-model locations to the repository's own
+# directories when they are not set.  Absolute, because each case runs from
+# its own test directory.  (After M. Rendina's test_deps branch.)
+for key, subdir in (('YREC_INPUT', 'input'), ('YREC_START', 'startmodels')):
+    os.environ.setdefault(key, os.path.abspath(subdir))
+
+# Lines matching any of these regular expressions are dropped from BOTH the
+# reference and the output before comparison, each file filtered
+# independently.  See iter_compared_lines() for why that matters.
+version_banner_re = re.compile(r"# YREC v.* \(.*\)")
+ignore_line_res = []
+if config.has_section('ignore'):
+    for pattern in config['ignore'].get('patterns', '').split('\n'):
+        pattern = pattern.strip()
+        if not pattern:
+            continue
+        try:
+            ignore_line_res.append(re.compile(pattern))
+        except re.error as ex:
+            raise ValueError(
+                f"pytest.ini [ignore] patterns: {pattern!r} is not a valid "
+                f"regular expression ({ex})")
+
+# Namelist variables that must not appear in any test-suite input file.
+# A variable lands here once it is dead in the code but still named by the
+# inputs: a namelist read fails on a name the group no longer declares, so
+# the inputs have to be cleaned before the code is, and nothing may
+# reintroduce the name in between.  test_namelists_free_of_banned_variables
+# enforces it over every collected case.
+banned_nml_vars = []
+if config.has_section('banned'):
+    for name in config['banned'].get('variables', '').split('\n'):
+        name = name.strip()
+        if name:
+            banned_nml_vars.append(name)
+
+# Cases whose run is expected to end in a run-time error stop (STOP 1),
+# such as helium ignition in a low-mass star (KNOWN_ISSUES issue 33): the
+# extent of the run is the measurement.  Such a case may exit with status
+# 1 and is then compared with its reference as usual.  Any other nonzero
+# status, or status 1 in a case not listed, still fails.
+CRASH_EXIT_STATUS = 1
+crash_extent_cases = set()
+if config.has_section('crash_extent'):
+    for name in config['crash_extent'].get('cases', '').split('\n'):
+        name = name.split('#')[0].strip()
+        if name:
+            crash_extent_cases.add(name.replace('.nml1', ''))
+
+banned_nml_res = [
+    (name, re.compile(rf'^[^!]*\b{re.escape(name)}\s*=', re.IGNORECASE))
+    for name in banned_nml_vars]
 
 if not os.path.exists(yrec_exe):
     raise FileNotFoundError(f"YREC executable {yrec_exe} not found!")
@@ -66,6 +124,131 @@ def collect_tests(testreqs):
     return tcases
 
 
+def case_fingerprint(tdir, nml1, nml2):
+    '''Return the normalized contents of a case's two input files, used to
+    recognize a case that is duplicated between test directories. Trailing
+    whitespace is stripped from each line, since it cannot affect namelist
+    input.'''
+    parts = []
+    for name in (nml1, nml2):
+        path = os.path.join(tdir, name)
+        try:
+            with open(path, 'r', errors='replace') as fh:
+                parts.append('\n'.join(line.rstrip() for line in fh))
+        except OSError:
+            # Missing or unreadable input: fingerprint on the path so this
+            # case can never be silently merged with a different one.
+            parts.append(f'<unreadable {path}>')
+    return tuple(parts)
+
+
+def drop_duplicate_cases(tcases):
+    '''Drop any case whose two input files match those of a case already
+    collected, so the same model is not evolved twice in one run.
+
+    The first occurrence in pytest.ini `tests` order is the one kept, which
+    puts the regression suite ahead of the example directories. Matching is
+    on file contents, not names, so editing either copy makes them differ
+    and both are collected again -- this needs no maintenance as cases are
+    added. Note that the skipped case's reference files are not compared
+    while it remains a duplicate.'''
+    seen = {}
+    kept = []
+    duplicates = []
+    for tdir, nml1, nml2 in tcases:
+        fingerprint = case_fingerprint(tdir, nml1, nml2)
+        if fingerprint in seen:
+            duplicates.append((f"{tdir}/{nml1}", seen[fingerprint]))
+        else:
+            seen[fingerprint] = f"{tdir}/{nml1}"
+            kept.append([tdir, nml1, nml2])
+    for skipped, original in duplicates:
+        print(f"duplicate case skipped: {skipped} has the same inputs as "
+              f"{original}")
+    return kept
+
+
+# Matches an FFIRST or FLAST assignment, with or without a run index, and
+# captures the quoted path.  A comment after the value is not part of it.
+model_file_re = re.compile(
+    r'''^\s*(FFIRST|FLAST)\s*(?:\(\s*\d+\s*\))?\s*=\s*["']([^"']+)["']''',
+    re.IGNORECASE)
+
+
+def model_files(tdir, nml1):
+    '''Return ({FFIRST paths}, {FLAST paths}) named in a case's nml1.  A path
+    written with a {YREC_...} placeholder is kept as written, so a producer
+    and its consumers match regardless of where the variables point; any
+    other path is made absolute relative to the test directory.'''
+    found = {'FFIRST': set(), 'FLAST': set()}
+    with open(os.path.join(tdir, nml1), 'r', errors='replace') as fh:
+        for line in fh:
+            m = model_file_re.match(line)
+            if m:
+                path = m.group(2).strip()
+                if not path.startswith('{'):
+                    path = os.path.normpath(
+                        os.path.join(os.path.abspath(tdir), path))
+                found[m.group(1).upper()].add(path)
+    return found['FFIRST'], found['FLAST']
+
+
+def order_dependent_cases(tcases):
+    '''Keep each case that starts from a model another case writes on the
+    same worker as that case, and after it (KNOWN_ISSUES issue 35).
+
+    A case depends on another when one of its FFIRST paths is one of the
+    other's FLAST paths.  Linked cases form a chain, marked with one
+    xdist_group; pytest.ini sets --dist loadgroup, so a chain runs on one
+    worker in list order.  Chains come first, producers before consumers,
+    so the long ones start early; the independent cases follow in their
+    collected order.  Without xdist the marks do nothing and the order alone
+    keeps a serial run correct.'''
+    reads, writes = zip(*(model_files(*case[:2]) for case in tcases))
+    producers = {}
+    for i, paths in enumerate(writes):
+        for path in paths:
+            producers.setdefault(path, []).append(i)
+    needs = [sorted(j for path in reads[i] - writes[i]
+                    for j in producers.get(path, []) if j != i)
+             for i in range(len(tcases))]
+
+    # Union the linked cases into chains.
+    chain = list(range(len(tcases)))
+    def root(i):
+        while chain[i] != i:
+            chain[i] = chain[chain[i]]
+            i = chain[i]
+        return i
+    for i, deps in enumerate(needs):
+        for j in deps:
+            chain[root(i)] = root(j)
+    members = {}
+    for i in range(len(tcases)):
+        members.setdefault(root(i), []).append(i)
+
+    # Within a chain, put each case after everything it needs.
+    def visit(i, done, out):
+        if i in done:
+            return
+        done.add(i)
+        for j in needs[i]:
+            visit(j, done, out)
+        out.append(i)
+
+    ordered, independent = [], []
+    for n, (_, idx) in enumerate(sorted(members.items())):
+        if len(idx) == 1:
+            independent.append(tcases[idx[0]])
+            continue
+        done, out = set(), []
+        for i in idx:
+            visit(i, done, out)
+        group = pytest.mark.xdist_group(f"chain{n}")
+        ordered += [pytest.param(*tcases[i], marks=group) for i in out]
+    return ordered + independent
+
+
 def vals_from_line(line):
     '''Split text line and return list of separate integer, float,
     and text segment components.'''
@@ -85,39 +268,78 @@ def vals_from_line(line):
     return vals
 
 
+def iter_compared_lines(path):
+    '''Yield (physical line number, line) for every line of `path` that is not
+    excluded by an ignore rule.
+
+    Each file is filtered independently and on its own content, so a line
+    that appears in only one of the two files -- a version banner, or a
+    namelist variable that one side echoes and the other does not -- is
+    removed from that side alone and cannot shift the rest of the comparison.
+    Deciding from one file and skipping both, as this once did, turns a single
+    unmatched line into a difference on every line that follows it.'''
+    with open(path, 'r') as fh:
+        for lineno, line in enumerate(fh, start=1):
+            if ignore_version_diffs and version_banner_re.search(line):
+                continue
+            if any(rx.search(line) for rx in ignore_line_res):
+                continue
+            yield lineno, line
+
+
 def filevals_differ(ref_file, out_file, float_tol, int_tol):
     '''Iterate over lines in two files to compare, split lines into tokens and
     compare each token with an integer or floating-point tolerance for numeric
-    values or literally, otherwise.'''
-    ref = open(ref_file, 'r')
-    out = open(out_file, 'r')
-    lineno = 1
+    values or literally, otherwise.  Reported line numbers are physical lines
+    of the reference file, counting any lines an ignore rule dropped.'''
+    ref = iter_compared_lines(ref_file)
+    out = iter_compared_lines(out_file)
     diff_found = False
 
     # Iterate over lines of files
     while True:
         difference = False
         locs = []
-        try:
-            refline = next(ref)
-            outline = next(out)
-            if ignore_version_diffs and re.search(r"# YREC v.* \(.*\)", outline):
-                continue
-            ref_vals = vals_from_line(refline)
-            out_vals = vals_from_line(outline)
-        except StopIteration as ex:
+        ref_next = next(ref, None)
+        out_next = next(out, None)
+        if ref_next is None and out_next is None:
             break
+        if ref_next is None or out_next is None:
+            # One file still has comparable lines once the other is exhausted.
+            # Returning silently here would let a truncated output pass.
+            longer = "reference" if out_next is None else "output"
+            print(f"{longer} has more comparable lines than the other file")
+            diff_found = True
+            break
+        lineno, refline = ref_next
+        _, outline = out_next
+        ref_vals = vals_from_line(refline)
+        out_vals = vals_from_line(outline)
 
         # Compare all values on line
         for i, val in enumerate(ref_vals):
             if isinstance(val, numbers.Number):
                 # An IndexError indicates the number of tokens on the line
-                # differs between files.
+                # differs between files.  A TypeError indicates the token at
+                # this position is numeric in one file and text in the other,
+                # which happens whenever the two files are line-shifted
+                # relative to each other (e.g. a namelist echo gained or lost
+                # a variable).  Both are differences, not harness errors.
                 try:
                     diff = abs(out_vals[i] - val)
-                except IndexError as ex:
+                except (IndexError, TypeError) as ex:
                     difference = True
                     break
+
+                # NaN and Inf compare false against any tolerance, so without
+                # this a non-finite output would pass against a finite
+                # reference, and a non-finite reference would accept any
+                # output. Either side being non-finite is a difference, even
+                # when both are NaN.  See KNOWN_ISSUES.md issue 30.
+                if not (math.isfinite(val) and math.isfinite(out_vals[i])):
+                    locs.append(i)
+                    difference = True
+                    continue
 
                 # Check against fractional floating point tolerance
                 if type(val) == float:
@@ -149,10 +371,7 @@ def filevals_differ(ref_file, out_file, float_tol, int_tol):
             print(f"line: {lineno}")
             print(refline, end='')
             print(color_indicator(outline, locs))
-        lineno += 1
 
-    ref.close()
-    out.close()
     return diff_found
 
 
@@ -195,12 +414,61 @@ def color_indicator(line, indices):
     return out
 
 
-test_cases = collect_tests(tests)
+test_cases = drop_duplicate_cases(collect_tests(tests))
+# The same cases, with dependency chains grouped and ordered first.  Kept
+# apart because a marked pytest.param does not unpack as (tdir, nml1, nml2).
+test_params = order_dependent_cases(test_cases)
 
 
+def test_namelists_free_of_banned_variables():
+    '''Fail if any collected case names a variable listed in pytest.ini
+    [banned] variables.
+
+    This guards the window between cleaning a dead variable out of the
+    namelist inputs and removing it from the code.  During that window the
+    name still exists in the namelist group, so a stale input file reads
+    without complaint and nothing reveals that a case reintroduced it --
+    until the code-side removal lands, at which point the namelist read
+    fails on every input that still names it.
+
+    Deliberately one test over all cases rather than one test per case, so
+    that adding this guard does not multiply the collected test count.  It
+    reads input files only and never runs YREC, so it costs nothing.
+    '''
+    if not banned_nml_res:
+        pytest.skip("no banned variables configured in pytest.ini [banned]")
+
+    offenders = []
+    checked = set()
+    for tdir, nml1, nml2 in test_cases:
+        for name in (nml1, nml2):
+            path = os.path.join(tdir, name)
+            if path in checked:
+                continue
+            checked.add(path)
+            try:
+                with open(path, 'r', errors='replace') as fh:
+                    lines = fh.readlines()
+            except OSError:
+                # A missing nml2 is legitimate: collect_tests falls back to
+                # the per-directory file, which another case already
+                # checked.  Nothing to test here.
+                continue
+            for lineno, line in enumerate(lines, start=1):
+                for var, regex in banned_nml_res:
+                    if regex.search(line):
+                        offenders.append(f"{path}:{lineno}: {var}: "
+                                         f"{line.strip()}")
+
+    assert not offenders, (
+        f"{len(offenders)} banned namelist variable assignment(s) found in "
+        f"{len(checked)} input files.\n"
+        "These names are dead in the code and must not appear in test "
+        "inputs; remove the line, comment included.\n"
+        + "\n".join(offenders))
 
 
-@pytest.mark.parametrize("tdir,nml1,nml2", test_cases)
+@pytest.mark.parametrize("tdir,nml1,nml2", test_params)
 def test_yrec(tdir, nml1, nml2):
     '''Process a test case definition consisting of
        (test directory, NML1 file, NML2 file)
@@ -233,8 +501,12 @@ def test_yrec(tdir, nml1, nml2):
     # Ensure outdir is an absolute path
     outdir = os.path.abspath(os.path.join(tdir, outdir))
 
-    # Fail on abnormal termination
-    assert proc.returncode == 0, "Program terminated abnormally"
+    # Fail on abnormal termination, except the expected run-time stop of
+    # a crash-extent case
+    expected_crash = (nml1.replace('.nml1', '') in crash_extent_cases
+                      and proc.returncode == CRASH_EXIT_STATUS)
+    assert proc.returncode == 0 or expected_crash, \
+        "Program terminated abnormally"
 
     # If process completed without error code,
     # check for the presence of a reference standard.
@@ -250,19 +522,29 @@ def test_yrec(tdir, nml1, nml2):
     # Fail on missing outputs
     assert len(outputs) > 0, "Missing output(s)"
 
-    # For each output, check if a refrence exists.
-    # If not, copy output into reference.
+    # For each output, check that a reference exists.  A missing reference
+    # fails the case: copying the output in and comparing it with itself
+    # passed every case whose reference was absent (KNOWN_ISSUES.md issue
+    # 18).  YREC_MAKE_REFS=1 restores the copy, for deliberately creating
+    # references; rebaseline.py is the reviewed route.
     print("--------------------------------------------------------------")
     print("Comparing outputs with reference standards...\n")
     outputs_identical = True
+    missing_refs = []
     for out in outputs:
         refname = os.path.basename(out)
         ref = f"{tdir}/{ref_dir}/{refname}"
         if not os.path.isfile(ref):
-            shutil.copyfile(out, ref)
-            print(f"{out} copied to reference")
+            if make_refs:
+                shutil.copyfile(out, ref)
+                print(f"{out} copied to reference")
+                continue
+            print(f"--- No reference {ref}\n")
+            missing_refs.append(refname)
+            continue
         print(f"--- Comparing standard to {out}\n")
         if filevals_differ(ref, out, float_frac_tol, int_abs_tol):
             outputs_identical = False
     assert outputs_identical, "Output differs from reference standard"
+    assert not missing_refs, MISSING_REFERENCE
 

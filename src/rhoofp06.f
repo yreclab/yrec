@@ -6,18 +6,38 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 C       function rhoofp06(x,ztab,t6,p,irad)  ! KC 2025-05-31
       function rhoofp06(x,t6,p,irad)
+C 10/20/26 MHP via Claude
+C code changed to convert COMMON/AEOS06/, COMMON/EOS06MISC/ into
+C AEOS06_MOD, EOS06MISC_MOD.
+      USE AEOS06_MOD
+      USE EOS06MISC_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 P,P1,P2,P3,PMAX,PMIN,PNR,PR,RAT,RHOG1,RHOG2,RHOG3,RHOOFP06,
+     *       SIGMACC,T6,X
+      INTEGER ICOUNT,IHI,ILO,IMD,IRAD,KLO,MLO,MV,MX,NR,NT
 
       parameter (mx=5,mv=10,nr=169,nt=197)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      common/lreadco/itime
-      common/aeos06/  xz(mx,mv,nt,nr),
-     . t6list(nr,nt),rho(nr),t6a(nt),esk(nt,nr),esk2(nt,nr),dfsx(mx)
-     . ,dfs(nt),dfsr(nr),m,mf,xa(mx)
+C 10/13/26 MHP via Claude
+C code changed to remove COMMON/LREADCO/; the table is now read once by
+C SETEOS06 from SETUPS, so this routine no longer needs the first-time
+C switch or the fabricated ESAC06 call that used to force the read.
+C 10/9/26 MHP via Claude
+C code changed to rename AEOS06's M member to MIDX: M is such a
+C universally-used name elsewhere in this codebase (e.g. shell count
+C in calcad.f) that keeping it here was just asking for a future
+C collision. M is genuinely used (as a composition/mixture-axis
+C index) in esac06.f and readcoeos06.f; declared but never read or
+C written by name in this file.
 C KC 2025-05-30 reordered common block elements
 C       common/beos06/ iri(10),index(10),nta(nr),zz(mx),nra(nt)
-      common/beos06/ zz(mx),iri(10),index(10),nta(nr),nra(nt)
-      common/eeos06/esact,eos(mv)
-      data sigmacc/1.8914785e-3/
+C 10/9/26 MHP via Claude
+C code changed to merge COMMON/EEOS06/, COMMON/AAEOS06/, COMMON/BBEOS06/,
+C and COMMON/BEOS06/ into COMMON/EOS06MISC/ (see esac06.f for the full
+C rationale). AEOS06 (above) is left untouched.
+      data sigmacc/1.8914785D-3/
 c--------------------------------------------------------------------
 
       save
@@ -25,15 +45,6 @@ c--------------------------------------------------------------------
       pr=0D0
       if(irad .eq. 1) pr=4D0/3D0*rat*t6**4   ! Mb
       pnr=p-pr
-
-      if (itime .ne. 12345678) then
-      XDBG = 0.5D0
-      T6DBG = 1.0D0
-      RDBG = 0.001D0
-      IDBG = 1
-C       CALL ESAC06 (XDBG,ZTAB,T6DBG,RDBG,IDBG,IRAD,*999)  ! KC 2025-05-31
-      CALL ESAC06 (XDBG,T6DBG,RDBG,IDBG,IRAD,*999)
-      endif
 
         ilo=2
         ihi=mx

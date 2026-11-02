@@ -9,19 +9,25 @@ C (WITH THE XA[I]'S IN ORDER), AND GIVEN THE ARRAY Y2A, WHICH IS THE
 C OUTPUT OF SPLINE ABOVE, AND GIVEN A VALUE OF X, THIS ROUTINE RETURNS
 C A CUBIC-SPLINE INTERPOLATED VALUE Y.
       SUBROUTINE SPLINTD2(XA, YA, N, Y2A, X, Y, KLO, KHI)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      PARAMETER (JSON=5000)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,B,H,X,XA,Y,Y2A,YA
+      INTEGER K,KHI,KLO,N
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
       DIMENSION XA(JSON), YA(JSON), Y2A(JSON)
       SAVE
       KLO = 1
@@ -37,8 +43,13 @@ C COMMON/IOUNITS/
       END IF
       H = XA(KHI) - XA(KLO)
       IF (H .EQ. 0D0) THEN
-           WRITE(ISHORT,*) 'ERROR IN SPLINT ROUTINE.'
-         STOP
+C 10/30/26 MHP via Claude: report the values, and to the terminal too.
+           WRITE(*,900)XA(KLO),X
+           WRITE(ISHORT,900)XA(KLO),X
+ 900       FORMAT(' ERROR IN SPLINT ROUTINE: TWO ABSCISSAE COINCIDE AT',
+     *            1PE14.6,' X',E14.6/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
       A = (XA(KHI)-X)/H
       B = (X - XA(KLO))/H

@@ -1,15 +1,28 @@
 C  SUBROUTINE FOR GENERATING SURFACE X AND Z TABLES FOR ALEXANDER OPACITIES
       SUBROUTINE ALEX06TAB
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/GALOT06/ into GALOT06_MOD.
+      USE GALOT06_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALOT06/ into ALOT06_MOD.
+      USE ALOT06_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ALOT06ALL/ into ALOT06ALL_MOD.
+      USE ALOT06ALL_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
+      IMPLICIT NONE
+      REAL*8 X,XMAX,ZMAX
+      INTEGER I,IZ,J,K,KK,KK2,KK3,KK4,NUMD,NUMT,NUMX,NUMZ
       PARAMETER (NUMX=9)
       PARAMETER (NUMZ=16)
-      PARAMETER (NUMXZ=143)
       PARAMETER (NUMT=85)
       PARAMETER (NUMD=19)
-      COMMON /GALOT06/TGR06(NUMT),XXG06(NUMX),R0GR06(NUMD),ZZG06(NUMZ)
-      COMMON /ALOT06/CAPALEX06(NUMT,NUMD),XE,ZE,IX,IT,ID
-      COMMON /ALOT06ALL/CAPTALEX06(NUMXZ,NUMT,NUMD)
       REAL*8 QR(4),FX(4), CAPTEMP(4,NUMT,NUMD)
       SAVE
 C  XE = DESIRED X; ZE = DESIRED Z
@@ -17,14 +30,18 @@ C  XE = DESIRED X; ZE = DESIRED Z
 C CHECK THAT THE REQUESTED COMPOSITION IS INSIDE TABLE BOUNDS
       IF(XE.LT.0.0D0 .OR. XE. GT. XMAX)THEN
          WRITE(*,5) XE,ZE
+         WRITE(ISHORT,5) XE,ZE
  5       FORMAT('ILLEGAL COMPOSITION (X,Z) = ',2F6.2,' IN ALEX06.RUN STOPPED')
-         STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
 C PERMIT EXTRAPOLATION IN Z BY UP TO 1 TABLE ELEMENT
       ZMAX = ZZG06(NUMZ)+(ZZG06(NUMZ)-ZZG06(NUMZ-1))
       IF(ZE.LT.0.0D0 .OR. ZE. GT. ZMAX)THEN
          WRITE(*,5) XE,ZE
-         STOP
+         WRITE(ISHORT,5) XE,ZE
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+         STOP 1
       ENDIF
 C FIND 4 NEAREST TABLES IN Z.
       DO I = 3,NUMZ-2

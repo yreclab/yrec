@@ -23,21 +23,21 @@
  LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
  RSCLM(1) = -1.00 ! If positive, rescale to this mass (Msun)
  RSCLCM(1) = -0.8D0 ! If positive, rescale to this core mass (CHeB only)
- RSCLX(1) = 0.719620 ! If positive, rescale to this hydrogen.
- RSCLZ(1) = 0.016492 ! If positive, rescale to this metallicity. 
+ RSCLX(1) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.719620 -- If positive, rescale to this hydrogen.
+ RSCLZ(1) = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- If positive, rescale to this metallicity.
  NMODLS(1) = 2 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
- XENV0A(1) = 0.719620 ! Envelope abundance label
- ZENV0A(1) = 0.016492 ! Envelope abundance label
- CMIXLA(1) = 1.707575 ! Rescale to this mixing length (or use for the run).
+ XENV0A(1) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.719620 -- Envelope abundance label
+ ZENV0A(1) = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- Envelope abundance label
+ CMIXLA(1) = 1.70767823  ! 10/28/26: solar calibration (base); was 1.707575 -- Rescale to this mixing length (or use for the run).
  LSENV0A(1) = .TRUE. ! If true, adjust outer fitting point mass location.
  SENV0A(1) = -1.0D-7 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
   
  KINDRN(2) = 1   
  LFIRST(2) = .FALSE.  
  NMODLS(2) = 1000 
- XENV0A(2) = 0.719620
- ZENV0A(2) = 0.016492
- CMIXLA(2) = 1.707575
+ XENV0A(2) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.719620
+ ZENV0A(2) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.016492
+ CMIXLA(2) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707575
 ! ENDAGE(2) = 4.568D9 ! Run stops if NMODLS(I) is reached or this age is reached
 ! END_DCEN(2) = 2.75d-5 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, start)
 ! END_DCEN(2) = 2.75d-7 ! Run stops if NMODLS(I) is reached or this central deuterium is reached (D bl, end)
@@ -76,14 +76,14 @@
  FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
    
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.016232 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ ZOPAL951 = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016232 -- Generate a surface mixture table with this Z. Speeds up models without diffusion.
  FLIV95 = "{YREC_INPUT}/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
   
  LPUREZ = .TRUE. 
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path
   
 ! FFIRST = "{YREC_INPUT}/models/seed/p100gs98z01757.ahbl" ! Starting model path.
- FFIRST = "{YREC_START}/dbl/m0080gs98z018804_Dbl.first" ! Starting model path.
+ FFIRST = "{YREC_START}/start/m0080gs98z018804_prems.first" ! 10/28/26: start model, not the DBL model; from the new DBL model this low-mass case failed to converge.
  FLAST = "{YREC_OUTPUT}/Test_m0080_feh0_noGS_ZAMS.last" ! The last converged model is stored here.
  FMODPT = "{YREC_OUTPUT}/Test_m0080_feh0_noGS_ZAMS.full" ! No longer used.
  FSTOR = "{YREC_OUTPUT}/Test_m0080_feh0_noGS_ZAMS.store" ! Model snapshots during the run are stored here.

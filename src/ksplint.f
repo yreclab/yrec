@@ -1,5 +1,14 @@
 C$$$$$$
       SUBROUTINE KSPLINT(XA,YA,Y2A,X,Y)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
+      IMPLICIT NONE
+      INTEGER K,KHI,KLO,NM
       PARAMETER(NM=4)
       REAL*8 XA(NM),YA(NM),Y2A(NM),X,Y,H,A,B
       SAVE
@@ -18,8 +27,12 @@ C$$$$$$
 c      WRITE(*,*)KHI,KLO,XA(KHI),XA(KLO),X
       H = XA(KHI) - XA(KLO)
       IF(H.EQ.0D0) THEN
-            PRINT*, 'Ksplint failure'
-            STOP
+            WRITE(*,900)XA(KLO),X
+            WRITE(ISHORT,900)XA(KLO),X
+ 900        FORMAT(' KSPLINT: TWO ABSCISSAE COINCIDE AT',1PE14.6,
+     *             ' X',E14.6/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+            STOP 1
       ENDIF
 C      IF(H.EQ.0D0) STOP 911
       A = (XA(KHI)-X)/H

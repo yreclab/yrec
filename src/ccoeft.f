@@ -1,21 +1,25 @@
 C $$$$$$
       SUBROUTINE CCOEFT(COD,DR,DT,ECOMP,EM,NTOT)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 COD,DR,DT,ECOMP,EM,FACT,FACT0
+      INTEGER I,NTOT
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION COD(JSON),ECOMP(JSON),EM(JSON)
       SAVE
 C  SET UP COEFFICIENTS OF DIFFUSION DIFFERENCE EQUATIONS FOR COMPOSITION

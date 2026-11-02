@@ -2,28 +2,58 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C DBURN - COMPUTE THE ABUNDANCE CHANGES RESULTING FROM DEUTERIUM BURNING
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE DBURNM(IBEGIN,IEND,M,HS2,HCOMP,DT,DRATEM,DRATEM0,FAC2)
-      PARAMETER(JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEUTER/ into DEUTER_MOD.
+      USE DEUTER_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DELRATE,DRATEM,DRATEM0,DT,DTT,DXH2,DXH2A,DXH2O,FAC2,FMASSA,
+     *       FSTEP,HCOMP,HS2,R0,RATE,RATE0,RATE1,SUMM,SUMR0,SUMR1,TSTEP,
+     *       X,X2NEW,XH2,XH2N,XH2NA,XH2NACC,XH2NO,XHE3,XHE3N,XN
+      INTEGER I,IBEGIN,IEND,ISTEP,M
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
 C 9/24/26 MHP via Claude
 C code changed to remove dead CMIXL from COMMON/CONST3/; it is now
 C passed as an explicit argument where actually used
-      COMMON/DEUTER/DRATE(JSON),DRATE0(JSON),FMASSACC,JCZ
-      COMMON/MASSCHG/DMDT0,FCZDMDT,FTOTDMDT,COMPACC(15),CREIM,
-     *               LREIMER,LMDOT
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),
-     *     HDO(JSON),HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C       DATA C21/5.240358E-8/
       DIMENSION HS2(JSON),HCOMP(15,JSON),DRATEM(JSON),DRATEM0(JSON)
       SAVE
       DTT = DT*1.0D-9/CSECYR
       IF(IBEGIN.EQ.IEND)THEN
+C 10/29/26 MHP via Claude
+C A single shell's region mass is its own mass.  SUMM was set only in
+C the multi-shell branch, so the accretion blend below used the previous
+C call's region mass (SAVEd) for a single shell.
+         SUMM = HS2(IBEGIN)
          X = HCOMPP(1,IBEGIN)
          XH2 = HCOMPP(12,IBEGIN)
          XHE3 = HCOMPP(4,IBEGIN)
@@ -102,12 +132,17 @@ C UNLIKE THE ROUTINE CALLED BY MIX, THE TIMESTEP
 C HERE IS ONLY A PORTION OF THE TOTAL MODEL DT.
 C DO ONLY THE SMALLER TIMESTEP PORTION OF THE
 C TOTAL MASS ACCRETION.
+C 10/29/26 MHP via Claude
+C FMASSACC is the accreted mass in grams (MDOT), not a fraction of the
+C CZ mass, so 1+FAC2*FMASSACC was dominated by grams and any accretion
+C replaced the region's D, H and He3 by the accreted values.  The blend
+C is now mass weighted, as in DBURN: (X M + X_acc f dM)/(M + f dM).
          FMASSA = FAC2*FMASSACC
          DXH2O = XH2NO - XH2
          DXH2A = XH2NA - COMPACC(12)
-         XH2N = (XH2NO+XH2NA*FMASSA)/(1.0D0+FMASSA)
-         XN = X + 0.5D0*(DXH2O+DXH2A*FMASSA)/(1.0D0+FMASSA)
-         XHE3N = XHE3 -1.5D0*(DXH2O+DXH2A*FMASSA)/(1.0D0+FMASSA)
+         XH2N = (XH2NO*SUMM+XH2NA*FMASSA)/(SUMM+FMASSA)
+         XN = X + 0.5D0*(DXH2O*SUMM+DXH2A*FMASSA)/(SUMM+FMASSA)
+         XHE3N = XHE3 -1.5D0*(DXH2O*SUMM+DXH2A*FMASSA)/(SUMM+FMASSA)
 C      IF(IEND.EQ.M)THEN
 C      WRITE(*,911)IBEGIN,IEND,DRATEM0(IBEGIN),RATE0,RATE1,XH2,XH2N,
 C     *            XHE3,XHE3N

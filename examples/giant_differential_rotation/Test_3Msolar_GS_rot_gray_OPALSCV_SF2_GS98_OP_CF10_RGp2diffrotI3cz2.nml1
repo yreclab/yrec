@@ -13,7 +13,7 @@
  KINDRN(1) = 1  
  LFIRST(1) = .FALSE.  
  NMODLS(1) = 12000
- CMIXLA(1) = 1.822729
+ CMIXLA(1) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.822729
 END_YCEN(1) = 0.5 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
  
 

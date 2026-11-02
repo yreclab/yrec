@@ -3,39 +3,59 @@ C SCONVEC
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE SCONVEC(DELTS,HCOMP,HD,HL,HP,HR,HS,HT,M,MXZONE,NZONE,
      *                   TEFFL,CMIXL)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DEBHU/ into DEBHU_MOD.
+      USE DEBHU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,B,BETA,BETA1,BETA14,CMIXL,D,DEL,DELA,DELR,DELR0,DELR1,
+     *       DELTS,DL,EMU,ETA,FDEL,FPL,FTL,FXION,HCOMP,HD,HL,HP,HR,HS,
+     *       HT,O,OL,P,PL,QACP,QACR,QACT,QAP,QAT,QCP,QCPP,QCPT,QDP,QDT,
+     *       QDTP,QDTT,QOD,QOT,RDIFF,RL,RMAX,RMU,RSUM,RVAL1,RVAL2,SL,T,
+     *       TEFFL,TL,VEL,X,XINTMU,Z
+      INTEGER I,II,ILOOP,IU,J,J2,JBEG,JEND,JMC,JMC2,JMR,JSTEP,K,K1,
+     *       KSAHA,M,MXZONE,NZONE
+      LOGICAL*4 LATMO,LCONV,LDERIV,LFLAGD,LFLAGU,LMAX,LOCOND,L_ONLY_CORE
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-C MHP 8/25 Removed unused variables
-C      CHARACTER*256 FLAOL, FPUREZ
-      COMMON/FLAG/LEXCOM
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C MHP 8/25 Removed character file names from common block
-C DBGLAOL
-C 9/24/26 MHP via Claude
-C code changed to merge COMMON /MISCOPAC/ and COMMON/NWLAOL/ into
-C COMMON /NEWOPAC/
-      COMMON/NEWOPAC/ZOPAL951,TMOLMIN,TMOLMAX,TOLLAOL,LALEX06,LOPAL95,
-     *  L2Z,LLAOL,LPUREZ,LcondOpacP
+C 10/13/26 MHP via Claude: removed the unused COMMON/NEWOPAC/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1             YYDH,ZZDH,DHNUE(18),LDH
       DIMENSION HCOMP(15,JSON),HD(JSON),HP(JSON),HR(JSON),HS(JSON),
      *          HT(JSON),MXZONE(12,2),FXION(3),HL(JSON)
       SAVE

@@ -7,6 +7,33 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE EQSTAT2(TL,T,PL,P,DL,D,X,Z,BETA,BETAI,BETA14,FXION,
      *RMU,AMU,EMU,ETA,QDT,QDP,QCP,DELA,QDTT,QDTP,QAT,QAP,QCPT,QCPP,
      *LDERIV,LATMO,KSAHA)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/COMP/ into COMP_MOD.
+      USE COMP_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 AMU,AMUI,AMUO,ATOMW2,ATOMWT,BETA,BETA14,BETA14O,BETAI,
+     *       BETAIO,BETAO,D,D1,D10O,DELA,DELA0,DELA1,DELA2,DELAO,DFX1,
+     *       DFX12,DFX4,DL,DL0,DL1,DOO,DPL,DPL2,DTL,DTL2,DXX,DYY,EMU,
+     *       EMUO,ETA,FAC,FMUENV,FX,FXION,P,PL,PPL,QAP,QAP0,QAP1,QAT,
+     *       QAT0,QAT1,QCP,QCP0,QCP1,QCP2,QCPO,QCPP,QCPP0,QCPP1,QCPT,
+     *       QCPT0,QCPT1,QDP,QDP0,QDP1,QDP2,QDPO,QDT,QDT0,QDT1,QDT2,
+     *       QDTO,QDTP,QDTP0,QDTP1,QDTT,QDTT0,QDTT1,R1A,RAA,RAT,RMU,
+     *       RMUO,SCALES,SCALET,T,TL,TTL,WT0,WTS,WTS2,X,Z,Z0
+      INTEGER I,KSAHA,NZP1
+      LOGICAL*4 LATMO,LCALC,LCALC1,LCALC2,LDERIV,LONLYS,LRAMP,LSAHA,
+     *       LSCVD,LTAB
 c
 c  Input Arguments: TL, PL, X, Z, LDERIV, LATMO
 c
@@ -16,9 +43,6 @@ c
 c  Update (Input and Output) Arguments: KSAHA
 c
 
-      PARAMETER (NTS=63, NPS=76)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C KC 2025-05-30 addressed warning messages from Makefile.legacy
 C       SAVE
 C 9/25/26 MHP via Claude
@@ -27,41 +51,28 @@ C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
       DIMENSION FX(12),ATOMWT(4),FXION(3),ATOMW2(12)
-      COMMON/COMP/XENV,ZENV,ZENVM,AMUENV,FXENV(12),XNEW,ZNEW,STOTAL,
-     *     SENV
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C DBG 7/92 COMMON BLOCK ADDED TO COMPUTE DEBYE-HUCKEL CORRECTION.
-C 9/25/26 MHP via Claude
-C code changed to fix XXDY -> XXDH, matching every other file that
-C declares COMMON/DEBHU/ (pre-existing name-only inconsistency; this
-C slot was never read or written by name in this file)
-      COMMON/DEBHU/CDH,ETADH0,ETADH1,ZDH(18),XXDH,
-     1     YYDH,ZZDH,DHNUE(18),LDH
-C YCK 2/95 OPAL eos
-C LLP 2001 OPAL eos
-C LLP 2006 OPAL eos
-C LLP Add Use Numerical Derivatives flag, LNumDeriv   7/07
-C MHP 8/25 Remove unused variables
-C 9/24/26 MHP via Claude
-C code changed to remove the OPAL 1995/2001 equations of state
-      COMMON/OPALEOS/lopale06,lNumDeriv
-C MHP 3/94 ADDED METAL DIFFUSION
-      COMMON/GRAVS3/FGRY,FGRZ,LTHOUL,LDIFZ
-C MHP  5/97 ADDED COMMON BLOCK FOR SCV EOS TABLES
-      COMMON/SCVEOS/TLOGX(NTS),TABLEX(NTS,NPS,12),
-     *     TABLEY(NTS,NPS,12),SMIX(NTS,NPS),TABLEZ(NTS,NPS,13),
-     *     TABLENV(NTS,NPS,12),NPTSX(NTS),LSCV,IDT,IDP
+C 10/13/26 MHP via Claude: removed the unused COMMON/DEBHU/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/SCVEOS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DATA NZP1/12/
       DATA ATOMWT/0.9921D0,0.24975D0,0.08322D0,0.4995D0/
       DATA SCALET,SCALES/0.500D0, 2.000D0/
@@ -129,9 +140,9 @@ C ASSUME EXCESS Z(METALS) IS IN THE FORM OF CARBON(12)
        AMU = AMUENV + DFX1 + DFX4 + DFX12
        AMUI = 1.0D0/AMU
        IF(LSAHA) THEN
-          FMU = AMUENV*AMUI
+          FMUENV = AMUENV*AMUI
           DO 20 I = 1,NZP1
-             FX(I) = FMU*FXENV(I)
+             FX(I) = FMUENV*FXENV(I)
  20         CONTINUE
           FX(6) = FX(6) + DFX12*AMUI
           FX(7) = FX(7) + DFX1*AMUI

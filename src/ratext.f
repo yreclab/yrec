@@ -2,8 +2,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C RATEXT
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE RATEXT(IEST,XEST,YEST,YZ,DY,NV,NUSE)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 B,B1,C,D,DDY,DY,FX,V,X,XEST,YEST,YY,YZ
+      INTEGER IEST,IMAX,J,K,M1,NCOL,NMAX,NUSE,NV
       PARAMETER (IMAX=11,NMAX=15,NCOL=7)
       DIMENSION X(IMAX),YEST(NV),YZ(NV),DY(NV),D(NMAX,NCOL),FX(NCOL)
       SAVE

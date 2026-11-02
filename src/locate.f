@@ -7,7 +7,12 @@ C A VALUE J SUCH THAT X IS BETWEEN XX(J) AND XX(J+1).  X=0 OR N
 C THEN OUT OF RANGE.
 C
       SUBROUTINE LOCATE(XX, N, X, J)
-      IMPLICIT REAL*8 (A-H,O-Z)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 X,XX
+      INTEGER J,JL,JM,JU,N
       DIMENSION XX(N)
       SAVE
       JL = 0

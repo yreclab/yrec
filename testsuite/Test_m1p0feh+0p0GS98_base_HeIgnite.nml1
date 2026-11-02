@@ -27,9 +27,9 @@
  KINDRN(1) = 1 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, where there is no zero timestep solution)
  LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
  NMODLS(1) = 20000 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
- XENV0A(1) = 0.719629 ! Envelope abundance label
- ZENV0A(1) = 0.016492 ! Envelope abundance label
- CMIXLA(1) = 1.712513 ! Rescale to this mixing length (or use for the run).
+ XENV0A(1) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.719629 -- Envelope abundance label
+ ZENV0A(1) = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- Envelope abundance label
+ CMIXLA(1) = 1.70767823  ! 10/28/26: solar calibration (base); was 1.712513 -- Rescale to this mixing length (or use for the run).
 ! YREC uses an outer fitting point. 
  LSENV0A(1) = .TRUE. ! If true, adjust outer fitting point mass location.
  SENV0A(1) = -1.0D-4 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
@@ -67,7 +67,7 @@
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
  FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.016232 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ ZOPAL951 = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016232 -- Generate a surface mixture table with this Z. Speeds up models without diffusion.
  FLIV95 = "{YREC_INPUT}/opacity/atomic/op05/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
  FPUREZ = "{YREC_INPUT}/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path

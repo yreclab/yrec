@@ -26,9 +26,9 @@
  RSCLX(1) = -0.719620 ! If positive, rescale to this hydrogen.
  RSCLZ(1) = -0.016492 ! If positive, rescale to this metallicity. 
  NMODLS(1) = 2000 ! Stop after this number of models. An initial rescaling with 2 models is recommended, followed by an evolve run
- XENV0A(1) = 0.719620 ! Envelope abundance label
- ZENV0A(1) = 0.016492 ! Envelope abundance label
- CMIXLA(1) = 1.707575 ! Rescale to this mixing length (or use for the run).
+ XENV0A(1) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.719620 -- Envelope abundance label
+ ZENV0A(1) = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- Envelope abundance label
+ CMIXLA(1) = 1.70767823  ! 10/28/26: solar calibration (base); was 1.707575 -- Rescale to this mixing length (or use for the run).
  LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.
  SENV0A(1) = -1.0D-4 ! Log of fractional envelope fitting point mass. 1e-4 standard, 1e-7 thin
  END_XCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central hydrogen is reached (TAMS)
@@ -77,7 +77,7 @@
  FALEX06 = "{YREC_INPUT}/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
    
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.016232 ! Generate a surface mixture table with this Z. Speeds up models without diffusion.
+ ZOPAL951 = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016232 -- Generate a surface mixture table with this Z. Speeds up models without diffusion.
  FLIV95 = "{YREC_INPUT}/opacity/atomic/op05/GS98.OP17" ! Atomic opacity table path
   
  LPUREZ = .TRUE. 

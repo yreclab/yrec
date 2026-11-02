@@ -57,7 +57,7 @@
  DPENV = 1.0 ! Full mixing from center to fractional depth in mass. Not a standard option.
  LOVSTC = .TRUE. ! Include core overshoot (t/f). Note: unless LOVAD=T, this is overmixing only, and does not impact the thermal structure
  ALPHAC = 0.25 ! Core overshoot in Hp
- LOVMAX = .FALSE. ! Alternative test (only checked if LOVSTC = T) to avoid pathologies in overshoot of small cores.
+ LOVMAX = .TRUE. ! 10/30/26: on for every deck with core overshoot (MHP); caps overshoot at BETAC of the core size. -- Alternative test (only checked if LOVSTC = T) to avoid pathologies in overshoot of small cores.
  BETAC = 0.15 ! Alternative test - maximum overshoot in fraction of physical size of core
  LOVSTE = .TRUE. ! Include envelope overshoot (t/f)
  ALPHAE = 0.513  ! Envelope overshoot in Hp
@@ -235,7 +235,6 @@
  TCUT(2) = 6.5 ! Not used (formerly minimum T for equilibrium pp)        
  TCUT(3) = 6.82 ! Not used (formerly minimum T for CNO)
  MCORE = 40 ! Points to assign to new domain; not used now.
- LENVG = .FALSE. ! Compute the model structure of the outer layers after convergence; used for i/o purposes, or ones where you need information beyond the outer fitting point; not used now (other flags do this)
  ALFA = 1.5 ! Legacy exponent for angular momentum loss in Kawaler (1988) wind model.
  
  $END

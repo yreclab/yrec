@@ -3,11 +3,26 @@ C MHP 6/00 SUBROUTINE.  MIXING AND BURNING ARE PERFORMED SEQUENTIALLY
 C FOR AN INCREASING NUMBER OF SUBSTEPS FOR A GIVEN TOTAL STEP.  THIS ROUTINE
 C EXTRAPOLATES TO ZERO TIMESTEP,
       SUBROUTINE BSROTMIX(DELTS,HCOMP,IEST,M,JBEG,NSPEC,NSEQ,LCONV)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 D,DELTA,DELTS,ERRMAX,F1,F2,HCOMP,HCOMPA,HCOMPE,HCOMPI,Q,
+     *       SUM,X,X12,X13,X14,X16,XEST
+      INTEGER I,ICOUNT,IEST,IMAX,J,J1,JBEG,JJ,JMAX,K1,M,NMAX,NSEQ,NSPEC
+      LOGICAL*4 LCNCHECK,LCONV
       DIMENSION HCOMP(15,JSON),NSEQ(11),X(11),D(15,JSON),JJ(15)
-      COMMON/BSBURN/HCOMPI(11,15,JSON),HCOMPA(15,JSON),HCOMPE(15,JSON)
+C 10/9/26 MHP via Claude
+C code changed to convert COMMON/BSBURN/ to a plain local array:
+C declared only in this file (confirmed via a codebase-wide scan), so
+C there's nothing to share via COMMON. The existing blanket SAVE
+C statement below already preserves its values across calls, same as
+C COMMON did.
+      DIMENSION HCOMPI(11,15,JSON),HCOMPA(15,JSON),HCOMPE(15,JSON)
       LOGICAL*4 LDO(15), LCNO(JSON),LHE3(JSON)
       SAVE
 C      SAVE X,D,JJ,LDO,NMAX,LCNO,LCNCHECK

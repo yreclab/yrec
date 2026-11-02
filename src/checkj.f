@@ -4,39 +4,80 @@ C MHP 10/02 ECOD, ECOD2 NO LONGER USED; OMITTED FROM CALL
 C      *                  LPRT,M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,  ! KC 2025-05-31
      *                  M,DT,ETA2,HI,HJM,IREDO,LOK,LREDO,OMEGA,
      *                  QIW,R0,WSAV,ID,IDM,LOKAD)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TEMP2/ into TEMP2_MOD.
+      USE TEMP2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADD/ into QUADD_MOD.
+      USE QUADD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDROT/ into OLDROT_MOD.
+      USE OLDROT_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/ERRMOM/ into ERRMOM_MOD.
+      USE ERRMOM_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/EGRID/ into EGRID_MOD.
+      USE EGRID_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD2/ into DIFAD2_MOD.
+      USE DIFAD2_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/DIFAD/ into DIFAD_MOD.
+      USE DIFAD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/IOUNITS/ into IOUNITS_MOD.
+      USE IOUNITS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 ACC,DELJ,DJ,DT,ETA2,HD,HI,HJM,HJMP,HJMSAV,HR,HS,HS2,
+     *       HV,OMEGA,QIW,R0,TOLER0,WSAV
+      INTEGER I,IBEG,IBOT,ID,IDM,IEND,II,IJMAX,IMAX,IMIN,IREDO,IT,
+     *       ITOP,J,M,NHIST
+C 10/30/26 MHP via Claude
+C code changed to size the per-iteration history from ITDIF2.  DELJI and
+C IMAXI were dimensioned 16 and indexed by the iteration number, which
+C nothing bounded, so ITDIF2 > 16 wrote past them.  They are kept
+C (SAVE) across SECULR's iterations, which print the whole history.
+      REAL*8, ALLOCATABLE :: DELJI(:)
+      INTEGER, ALLOCATABLE :: IMAXI(:)
+      LOGICAL*4 LCZ,LOK,LOKAD,LREDO
 C     *                  QIW,R0,WSAV,ID,IDM,ECOD,ECOD2,LOKAD)
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/CCOUT1/NPENV,NPRTMOD,NPRTPT,NPOINT
-      COMMON/DIFUS/DTDIF,DJOK,ITDIF1,ITDIF2
-      COMMON/ERRMOM/TOLERI
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
 C 9/25/26 MHP via Claude
 C code changed to consolidate all I/O logical unit numbers, previously
 C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
 C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
 C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
 C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/OLDROT/WOLD(JSON),HJX(JSON),HIO(JSON),HGO(JSON),R0X(JSON),
-     *     ETA2X(JSON)
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/TEMP2/VES(JSON),VES0(JSON),VSS(JSON),VSS0(JSON),
-     *     HLE(JSON),VGSF(JSON),VGSF0(JSON),VMU(JSON)
 C MHP 7/93
-      COMMON/VARFC/VFC(JSON),LVFC,LDIFAD
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/VARFC/, declared here but never used.
 C MHP 3/93
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
 C MHP 11/94
-      COMMON/EGRID/CHI(JSON),ECHI(JSON),ES1(JSON),DCHI,NTOT
-      COMMON/DIFAD/ECOD3(JSON),ECOD4(JSON)
-      COMMON/DIFAD2/VESA(JSON),VESA0(JSON),VESD(JSON),VESD0(JSON)
       DIMENSION HD(JSON),HJM(JSON),HJMP(JSON),HR(JSON),HS(JSON),
      *   HS2(JSON),LCZ(JSON),ETA2(JSON),HI(JSON),OMEGA(JSON),
-     *   QIW(JSON),R0(JSON),HJMSAV(JSON),DELJI(16),IMAXI(16),
+     *   QIW(JSON),R0(JSON),HJMSAV(JSON),
      *   ID(JSON),HV(JSON),WSAV(JSON)
 C     *   ECOD(JSON),ECOD2(JSON)
       SAVE
@@ -87,6 +128,14 @@ C  LOK : FLAG SET T IF DIFFUSION CEOFFICIENTS HAVE CONVERGED.
 C  LREDO : FLAG SET T IF A PROBLEM REQUIRES CUTTING THE DIFFUSION TIMESTEP.
 C  OMEGA : RUN OF ANGULAR VELOCITY.
 C
+C  ONE HISTORY SLOT PER ITERATION; SECULR RUNS IT = 1,ITDIF2.
+      NHIST = MAX(ITDIF2,IT,1)
+      IF(.NOT.ALLOCATED(DELJI))THEN
+         ALLOCATE(DELJI(NHIST),IMAXI(NHIST))
+      ELSE IF(SIZE(DELJI).LT.NHIST)THEN
+         DEALLOCATE(DELJI,IMAXI)
+         ALLOCATE(DELJI(NHIST),IMAXI(NHIST))
+      ENDIF
 C  CHECK FOR NEGATIVE J/M.
       LOK = .FALSE.
       LREDO = .FALSE.
@@ -106,7 +155,8 @@ C            IF(IREDO.GT.3)THEN
      *                5X,'NEGATIVE J/M ENCOUNTERED IN ZONE',I5,
      *                ' AND 3 ATTEMPTS AT CUTTING TIMESTEP FAILED'/
      *                'RUN STOPPED')
-               STOP
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+               STOP 1
             ELSE
                LREDO = .TRUE.
                DT = 0.5D0*DT
@@ -157,7 +207,10 @@ C  SOLID-BODY ROTATION IN THE OFFENDING PAIR OF ZONES.
       IBOT = M
    20 CONTINUE
 C  POSITIVE OMEGA GRADIENT ENCOUNTERED.
-      IF(OMEGA(I)-OMEGA(I-1).GT.1.0d0)THEN
+C 10/30/26 MHP via Claude
+C code changed to enter at 1.0D-15 rad/s, the threshold the rest of this
+C search uses.  At 1 rad/s (the Sun turns at 2.9e-6) it never fired.
+      IF(OMEGA(I)-OMEGA(I-1).GT.1.0D-15)THEN
 C  IF PREVIOUS GRADIENT WAS POSITIVE, LEAVE ALONE.
          IF(WOLD(I)-WOLD(I-1).GT.1.0D-15)THEN
             I = IBOT-1

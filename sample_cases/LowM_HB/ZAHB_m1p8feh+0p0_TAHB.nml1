@@ -18,25 +18,25 @@
 
  KINDRN(1) = 2 ! 1 = evolve 2= rescale (zero timestep,MS or CHeB); 3 = rescale and evolve (pre-MS, no zero timestep)
  LFIRST(1) = .TRUE. ! T = use stored starting model F = use result of prior run
- CMIXLA(1) = 1.707873
- RSCLX(1) = 0.7196200
- RSCLZ(1) = 0.016492
+ CMIXLA(1) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
+ RSCLX(1) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.7196200
+ RSCLZ(1) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.016492
  NMODLS(1) = 10
 
  KINDRN(2) = 2 ! rescale
  LFIRST(2) = .FALSE.
- CMIXLA(2) = 1.707873
- RSCLX(2) = 0.7196200
- RSCLZ(2) = 0.016492
+ CMIXLA(2) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
+ RSCLX(2) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.7196200
+ RSCLZ(2) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.016492
  RSCLM(2) = -1 ! If positive, rescale to this mass (Msun)
  RSCLCM(2) = 0.417973 ! If positive, rescale to this core mass (CHeB only)
  NMODLS(2) = 10
 
  KINDRN(3) = 2 ! rescale
  LFIRST(3) = .FALSE.
- CMIXLA(3) = 1.707873
- RSCLX(3) = 0.7196200
- RSCLZ(3) = 0.016492
+ CMIXLA(3) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
+ RSCLX(3) = 0.71961003 ! 10/28/26: solar calibration (base); was 0.7196200
+ RSCLZ(3) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.016492
  RSCLM(3) = -1 ! If positive, rescale to this mass (Msun)
  RSCLCM(3) = 0.414236 ! If positive, rescale to this core mass (CHeB only)
  NMODLS(3) = 10
@@ -44,9 +44,9 @@
  KINDRN(4) = 1
  LFIRST(4) = .FALSE.
  NMODLS(4) = 1000000
- XENV0A(4) = 0.7196200 ! Envelope abundance label
- ZENV0A(4) = 0.016492
- CMIXLA(4) = 1.707873
+ XENV0A(4) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.7196200 -- Envelope abundance label
+ ZENV0A(4) = 0.01649314 ! 10/28/26: solar calibration (base); was 0.016492
+ CMIXLA(4) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.707873
  END_YCEN(4) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
 
  LSTORE = .TRUE. ! If T, store model structures at specified points to the .store file. 
@@ -68,7 +68,7 @@
  LALEX06 = .TRUE. ! If T, use Ferguson+2005 molecular opacities (recommended)
  FALEX06 = "../../input/opacity/molecular/alex06/alexmol06gs98.tab" ! Molecular opacity table path  
  LOPAL95 = .TRUE. ! If T, use atomic opacities in the OP/OPAL format (recommended).
- ZOPAL951 = 0.016492 ! Generate a surface mixture table with this Z. Speeds up models without	 diffusion.
+ ZOPAL951 = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- Generate a surface mixture table with this Z. Speeds up models without	 diffusion.
  FLIV95 = "../../input/opacity/atomic/legacy/opal95/GS98.OP17" ! Atomic opacity table path
  LPUREZ = .TRUE. 
  FPUREZ = "../../input/opacity/atomic/lanl/PURECO.DBGLAOL" ! Pure Y/Z  opacity table path

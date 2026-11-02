@@ -1,8 +1,12 @@
 
 *********************************************************************
       SUBROUTINE LUBKSB(A,N,NP,INDX,B)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,B,SUM
 
-      IMPLICIT REAL*8(A-H,O-Z)
 
 C     .. Scalar Arguments ..
       INTEGER N,NP

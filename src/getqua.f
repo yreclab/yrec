@@ -1,16 +1,32 @@
       SUBROUTINE GETQUA(HD,HG,HRU,OMEGA,M)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/TRIDI/ into TRIDI_MOD.
+      USE TRIDI_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADRU/ into QUADRU_MOD.
+      USE QUADRU_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
+      IMPLICIT NONE
+      REAL*8 BET,C4PIG,DR,DRHO,DRHOW2,DRI,DRMI,DRPL,DW2,FAC,FMI,FPL,FX,
+     *       HD,HG,HRU,OMEGA,RPLU
+      INTEGER I,J,M
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-      COMMON/TRIDI/A(JSON),B(JSON),C(JSON),D(JSON),U(JSON),GAMA(JSON)
-      COMMON/QUADRU/QUAD(JSON),GG(JSON)
       DIMENSION HD(JSON),HG(JSON),HRU(JSON),OMEGA(JSON),DW2(JSON)
       SAVE
 
@@ -80,13 +96,16 @@ C OUTSIDE THE STAR PHI(R) = PHI(RSTAR)*(RSTAR/R)**3.
       C(M) = 0.0D0
       D(M) = 0.0D0
 C  SOLUTION OF SYSTEM FROM NUMERICAL RECIPES.
-      IF(B(1).EQ.0.0D0)STOP
+      IF(B(1).EQ.0.0D0)THEN
+         J = 1
+         GOTO 90
+      ENDIF
       BET = B(1)
       U(1) = D(1)/BET
       DO J = 2,M
          GAMA(J) = C(J-1)/BET
          BET = B(J) - A(J)*GAMA(J)
-         IF(BET.EQ.0.0D0)STOP
+         IF(BET.EQ.0.0D0)GOTO 90
          U(J) = (D(J) - A(J)*U(J-1))/BET
       END DO
 C BACKSUBSTITUTION.
@@ -99,4 +118,12 @@ C BACKSUBSTITUTION.
       END DO
 
       RETURN
+C 10/30/26 MHP via Claude: the two zero-pivot exits used to stop silently.
+   90 CONTINUE
+      WRITE(*,900)J,M
+      WRITE(ISHORT,900)J,M
+  900 FORMAT(' GETQUA: ZERO PIVOT IN THE TRIDIAGONAL SOLVE AT ZONE',I5,
+     *       ' OF',I5/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+      STOP 1
       END

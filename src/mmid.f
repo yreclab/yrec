@@ -7,9 +7,15 @@ C MMID
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE MMID(Y,DYDX,NVAR,XS,HTOT,NSTEP,YOUT,DERIV,B,FPL,FTL,
      *          GL,LATMO,LDERIV,LOCOND,LSAVE,RL,TEFFL,X,Z,KOUNT,KSAHA)
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 B,DYDX,FPL,FTL,GL,H,H2,HTOT,RL,SWAP,TEFFL,X,X0,XS,Y,YM,YN,
+     *       YOUT,Z
+      INTEGER I,KOUNT,KSAHA,N,NSTEP,NVAR
+      LOGICAL*4 LATMO,LDERIV,LOCOND,LSAVE
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       DIMENSION Y(3),DYDX(3),YOUT(3),YM(3),YN(3)
       EXTERNAL DERIV
       SAVE

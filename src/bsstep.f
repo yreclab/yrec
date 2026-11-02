@@ -6,11 +6,24 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE BSSTEP(Y,DYDX,NV,X0,HTRY,EPS,YSCAL,HDID,HNEXT,DERIV,
      *                  B,FPL,FTL,GL,LATMO,LDERIV,LOCOND,LSAVE,RL,
      *                  TEFFL,X,Z,KOUNT,KSAHA,ERR)
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/INTPAR/ into INTPAR_MOD.
+      USE INTPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+C 10/30/26 MHP via Claude
+C code changed to USE IOUNITS_MOD for ISHORT, so the error stop below
+C also reports to the .short file (issue 38).
+      USE IOUNITS_MOD
+      IMPLICIT NONE
+      REAL*8 B,DYDX,DYSAV,EPS,ERR,ERRMAX,FPL,FTL,GL,GROW,H,HDID,HNEXT,
+     *       HTRY,ONE,RL,SHRINK,TEFFL,X,X0,XEST,XSAV,Y,YERR,YSAV,YSCAL,
+     *       YSEQ,Z
+      INTEGER I,J,KOUNT,KSAHA,NSEQ,NV
+      LOGICAL*4 LATMO,LDERIV,LOCOND,LSAVE
 
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
       PARAMETER (ONE=1.0D0,SHRINK=0.95D0,GROW=1.2D0)
-      COMMON/INTPAR/STOLR0,IMAX,NUSE
       DIMENSION Y(3),DYDX(3),YSCAL(3),YERR(3),YSAV(3),DYSAV(3),
      *          YSEQ(3),NSEQ(11),ERR(3)
       EXTERNAL DERIV
@@ -49,8 +62,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       H = 0.25D0*H/2.0D0**INT((IMAX-NUSE)/2)
 C      H = 0.25D0*H/2**((IMAX-NUSE)/2)
       IF(X+H.EQ.X) THEN
-         WRITE(*,*) 'ERROR IN BSSTEP'
-       STOP
+         WRITE(*,900)X,H
+         WRITE(ISHORT,900)X,H
+ 900     FORMAT(' ERROR IN BSSTEP: STEP SIZE UNDERFLOW AT X',1PE14.6,
+     *          ' H',E12.3/' RUN STOPPED')
+C 10/30/26 MHP via Claude: bare STOP -> STOP 1, the run-time error code (issue 38).
+       STOP 1
       END IF
       GOTO 20
 

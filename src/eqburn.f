@@ -6,13 +6,40 @@ C      *                  HR10,HR11,HR12,HS2,HT,IBEGIN,IEND,  ! KC 2025-05-31
       SUBROUTINE EQBURN(HR1,HR2,HR3,HR4,HR5,HR6,HR7,
      *                  HR10,HR12,HS2,HT,IBEGIN,IEND,
      *                  DCDT,DODT,DXDT,DYDT,XC12,XO16,X,Z)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/OLDMOD/ into OLDMOD_MOD.
+      USE OLDMOD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/NMLPAR/ into NMLPAR_MOD.
+      USE NMLPAR_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 DCDT,DODT,DXDT,DYDT,GR1,GR10,GR12,GR2,GR3,GR4,GR5,GR6,GR7,
+     *       HR1,HR10,HR12,HR2,HR3,HR4,HR5,HR6,HR7,HS2,HT,R11,R1214,
+     *       R1314,R34,R3A,R412,SUMCNO,WTSUM,X,XC12,XC13,XHE3,XHE3E,
+     *       XN14,XO16,XSUM,Y,Z
+      INTEGER I,IBEGIN,IEND,J
 
-      PARAMETER (JSON=5000)
-      IMPLICIT REAL*8(A-H,O-Z)
-      IMPLICIT LOGICAL*4(L)
-      COMMON/CTLIM/ATIME(14),TCUT(5),TSCUT,TENV0,TENV1,TENV,TGCUT
-      COMMON/OLDMOD/HPO(JSON),HTO(JSON),HRO(JSON),HLO(JSON),HDO(JSON),
-     *              HCOMPP(15,JSON),HSS(JSON),LCO(JSON),LCZO(JSON),TEFFLO,MO
+C 10/12/26 MHP via Claude
+C code changed to extend COMMON/NMLPAR/ to 234 members, adding the
+C namelist variables that the physics routines read from 27 COMMON
+C blocks which also held derived or working members.  Those blocks keep
+C only their non-namelist members; five of them -- NEWMX, VMULT,
+C PMMWIND, CCOUT1 and ENVGEN -- had nothing left and are gone.
+C Derivation-only namelist variables from the same blocks went to
+C COMMON/NMLBYPASS/ instead, not here.
+C
+C Declared identically in all 121 files that hold any of these members.
+C Generated from one member list, so every copy is byte-identical; the
+C linker's 'size of symbol changed' warning is the check that they are.
+C 10/13/26 MHP via Claude
+C code changed to drop COMMON/CTLIM/, declared here but never used.
       DIMENSION XSUM(11)
       DIMENSION HT(JSON),HR1(JSON),HR2(JSON),HR3(JSON),HR4(JSON),
 C      *HR5(JSON),HR6(JSON),HR7(JSON),HR8(JSON),HR9(JSON),HR10(JSON),

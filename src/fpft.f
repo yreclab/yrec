@@ -1,28 +1,33 @@
 C $$$$$$
       SUBROUTINE FPFT(HD,HR,HS,M,OMEGA,ETA2,FP,FT,HG,R0)
+C 10/15/26 MHP via Claude
+C code changed to take JSON from DIMENSIONS_MOD instead of declaring
+C PARAMETER(JSON=5000) here.
+      USE DIMENSIONS_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/QUADD/ into QUADD_MOD.
+      USE QUADD_MOD
+C 10/14/26 MHP via Claude
+C code changed to convert COMMON/CONSTANTS/ into CONSTANTS_MOD.
+      USE CONSTANTS_MOD
+C 10/20/26 MHP via Claude
+C code changed to replace implicit typing with IMPLICIT NONE and
+C explicit declarations.
+      IMPLICIT NONE
+      REAL*8 A,AINT,AINT0,AINT1,AINTP,AINTT,B,CG,DINT,EPS,ETA2,ETA22,
+     *       ETA22P,F0,FACT,FP,FT,G0,GINV,GINV0,GM,H,HD,HG,HR,HS,OMEGA,
+     *       Q,QP,R0,R03,R0P,RHO,RHOP,RPHI,RPHI3,SM,SPHI,W2,W2P,XA,YA
+      INTEGER I,J,J1,JMAX,K,KM,M,N1
 
-      PARAMETER (JSON=5000)
-      IMPLICIT LOGICAL*4(L)
-      IMPLICIT REAL*8(A-H,O-Z)
-      COMMON/CCOUT/LSTORE,LSTATM,LSTENV,LSTMOD,LSTPHYS,LSTROT,LSCRIB,LSTCH,LPHHD
+C 10/13/26 MHP via Claude: removed the unused COMMON/NMLPAR/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
+C 10/13/26 MHP via Claude: removed the unused COMMON/CCOUT/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
 C 9/25/26 MHP via Claude
 C code changed to merge COMMON/CONST/, COMMON/CONST1/, COMMON/CONST2/,
 C and COMMON/CONST3/ into a single COMMON/CONSTANTS/
-      COMMON/CONSTANTS/CLSUN,CLSUNL,CLNSUN,CMSUN,CMSUNL,CRSUN,CRSUNL,
-     *  CMBOL,CLN,CLNI,C4PI,C4PIL,C4PI3L,CC13,CC23,CPI,CGAS,CA3,CA3L,
-     *  CSIG,CSIGL,CGL,CMKH,CMKHN,CDELRL,CMIXL2,CMIXL3,CLNDP,CSECYR
-C 9/25/26 MHP via Claude
-C code changed to consolidate all I/O logical unit numbers, previously
-C scattered across COMMON/LUOUT/, COMMON/LUNUM/, COMMON/ALEX06/,
-C COMMON/ACDPTH/, COMMON/NEWOPAC/, COMMON/LOPAL95/, COMMON/ATMOS2/,
-C COMMON/ALATM03/, COMMON/OPALEOS/, and COMMON/SCV2/, into a single
-C COMMON/IOUNITS/
-      COMMON/IOUNITS/ILAST,IDEBUG,ITRACK,ISHORT,IMILNE,IMODPT,ISTOR,
-     *  IOWR,IFIRST,IRUN,ISTAND,IFERMI,IOPMOD,IOPENV,IOPATM,ISNU,
-     *  IALEX06,ICLCD,IJLAST,IOPUREZ,IcondOpacP,ILIV95,IOATM,IOATMA,
-     *  IOPALE,ISCVH,ISCVHE,ISCVZ
-      COMMON/ROT/WNEW,WALPCZ,ACFPFT,ITFP1,ITFP2,LROT,LINSTB,LWNEW
-      COMMON/QUADD/PHISP(JSON),PHIROT(JSON),PHIDIS(JSON),RAT(JSON)
+C 10/13/26 MHP via Claude: removed the unused COMMON/IOUNITS/ declaration
+C (no member referenced here; residue of the obsolete-option removals).
       DIMENSION HD(JSON),HS(JSON),HR(JSON),OMEGA(JSON),FP(JSON),
      * FT(JSON),ETA2(JSON),R0(JSON),H(20),XA(20),YA(20),AINT0(10),
      * HG(JSON)

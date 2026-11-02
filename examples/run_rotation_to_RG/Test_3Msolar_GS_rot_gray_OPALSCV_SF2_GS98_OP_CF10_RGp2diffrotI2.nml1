@@ -13,7 +13,7 @@
  KINDRN(1) = 1  
  LFIRST(1) = .FALSE.  
  NMODLS(1) = 1200
- CMIXLA(1) = 1.822729
+ CMIXLA(1) = 1.70767823 ! 10/28/26: solar calibration (base); was 1.822729
 
  
 
