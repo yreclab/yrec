@@ -31,6 +31,12 @@ make_refs = os.environ.get('YREC_MAKE_REFS', '') not in ('', '0')
 MISSING_REFERENCE = "Missing reference standard"
 ignore_version_diffs = config.getboolean('options', 'ignore_version_diffs')
 
+# Default the input and start-model locations to the repository's own
+# directories when they are not set.  Absolute, because each case runs from
+# its own test directory.  (After M. Rendina's test_deps branch.)
+for key, subdir in (('YREC_INPUT', 'input'), ('YREC_START', 'startmodels')):
+    os.environ.setdefault(key, os.path.abspath(subdir))
+
 # Lines matching any of these regular expressions are dropped from BOTH the
 # reference and the output before comparison, each file filtered
 # independently.  See iter_compared_lines() for why that matters.
@@ -160,6 +166,87 @@ def drop_duplicate_cases(tcases):
         print(f"duplicate case skipped: {skipped} has the same inputs as "
               f"{original}")
     return kept
+
+
+# Matches an FFIRST or FLAST assignment, with or without a run index, and
+# captures the quoted path.  A comment after the value is not part of it.
+model_file_re = re.compile(
+    r'''^\s*(FFIRST|FLAST)\s*(?:\(\s*\d+\s*\))?\s*=\s*["']([^"']+)["']''',
+    re.IGNORECASE)
+
+
+def model_files(tdir, nml1):
+    '''Return ({FFIRST paths}, {FLAST paths}) named in a case's nml1.  A path
+    written with a {YREC_...} placeholder is kept as written, so a producer
+    and its consumers match regardless of where the variables point; any
+    other path is made absolute relative to the test directory.'''
+    found = {'FFIRST': set(), 'FLAST': set()}
+    with open(os.path.join(tdir, nml1), 'r', errors='replace') as fh:
+        for line in fh:
+            m = model_file_re.match(line)
+            if m:
+                path = m.group(2).strip()
+                if not path.startswith('{'):
+                    path = os.path.normpath(
+                        os.path.join(os.path.abspath(tdir), path))
+                found[m.group(1).upper()].add(path)
+    return found['FFIRST'], found['FLAST']
+
+
+def order_dependent_cases(tcases):
+    '''Keep each case that starts from a model another case writes on the
+    same worker as that case, and after it (KNOWN_ISSUES issue 35).
+
+    A case depends on another when one of its FFIRST paths is one of the
+    other's FLAST paths.  Linked cases form a chain, marked with one
+    xdist_group; pytest.ini sets --dist loadgroup, so a chain runs on one
+    worker in list order.  Chains come first, producers before consumers,
+    so the long ones start early; the independent cases follow in their
+    collected order.  Without xdist the marks do nothing and the order alone
+    keeps a serial run correct.'''
+    reads, writes = zip(*(model_files(*case[:2]) for case in tcases))
+    producers = {}
+    for i, paths in enumerate(writes):
+        for path in paths:
+            producers.setdefault(path, []).append(i)
+    needs = [sorted(j for path in reads[i] - writes[i]
+                    for j in producers.get(path, []) if j != i)
+             for i in range(len(tcases))]
+
+    # Union the linked cases into chains.
+    chain = list(range(len(tcases)))
+    def root(i):
+        while chain[i] != i:
+            chain[i] = chain[chain[i]]
+            i = chain[i]
+        return i
+    for i, deps in enumerate(needs):
+        for j in deps:
+            chain[root(i)] = root(j)
+    members = {}
+    for i in range(len(tcases)):
+        members.setdefault(root(i), []).append(i)
+
+    # Within a chain, put each case after everything it needs.
+    def visit(i, done, out):
+        if i in done:
+            return
+        done.add(i)
+        for j in needs[i]:
+            visit(j, done, out)
+        out.append(i)
+
+    ordered, independent = [], []
+    for n, (_, idx) in enumerate(sorted(members.items())):
+        if len(idx) == 1:
+            independent.append(tcases[idx[0]])
+            continue
+        done, out = set(), []
+        for i in idx:
+            visit(i, done, out)
+        group = pytest.mark.xdist_group(f"chain{n}")
+        ordered += [pytest.param(*tcases[i], marks=group) for i in out]
+    return ordered + independent
 
 
 def vals_from_line(line):
@@ -328,6 +415,9 @@ def color_indicator(line, indices):
 
 
 test_cases = drop_duplicate_cases(collect_tests(tests))
+# The same cases, with dependency chains grouped and ordered first.  Kept
+# apart because a marked pytest.param does not unpack as (tdir, nml1, nml2).
+test_params = order_dependent_cases(test_cases)
 
 
 def test_namelists_free_of_banned_variables():
@@ -378,7 +468,7 @@ def test_namelists_free_of_banned_variables():
         + "\n".join(offenders))
 
 
-@pytest.mark.parametrize("tdir,nml1,nml2", test_cases)
+@pytest.mark.parametrize("tdir,nml1,nml2", test_params)
 def test_yrec(tdir, nml1, nml2):
     '''Process a test case definition consisting of
        (test directory, NML1 file, NML2 file)

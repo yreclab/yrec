@@ -15,7 +15,7 @@ Status as of 2026-10-29.
 | 2 | One case unchanged although both `LCODM` gates are open | open, unexplained |
 | 3 | `dadcoeft.f` has no test coverage | open; needs a `LROT`+`LDIFAD` case |
 | 4 | m9p0 TAMS cases did not reproduce their start model | **resolved** 2026-10-16 (`9568ab4`); confirmed 2026-10-20 |
-| 5 | Five cases read a file a later example case writes | open |
+| 5 | Five cases read a file a later example case writes | **resolved**: they now read a committed `{YREC_START}` model |
 | 6 | Inconsistent `IMPLICIT` statements | **resolved** 2026-10-20 (stage 5) |
 | 7 | QENV/QATM callback data cannot become arguments | standing constraint |
 | 8 | `LREADCO`: read the EOS table earlier | **resolved** 2026-10-13 |
@@ -45,7 +45,7 @@ Status as of 2026-10-29.
 | 32 | Test references not under version control | open; MHP to decide |
 | 33 | Crash-terminated cases: run extent is the measurement | documented; not a defect |
 | 34 | `ZAHB_m1p0feh+0p0_TAHB` no longer reaches TAHB | open; needs MHP's judgement |
-| 35 | Cases read a start model a later case overwrites | open; install-time checks now in `rebaseline.py` |
+| 35 | Cases read a start model a later case overwrites | **resolved** 2026-11-02: the harness orders each chain |
 | 36 | yaleeos TAHB aborts in `TPGRAD` | open (cause of the `NaN`); rebaselined 2026-10-20 |
 | 37 | Three OPAL06 EOS `COMMON` blocks were never converted | **resolved** 2026-10-20 |
 | 38 | A bare `STOP` ends a failed run with exit status 0 | open |
@@ -337,7 +337,10 @@ state so the TAHB references in `standard/` remain self-consistent.
 
 ## 5. Five testsuite cases depend on a file produced by a later example case
 
-**Status:** open.
+**Status:** resolved. The five cases now read
+`{YREC_START}/Test_m2000_feh0_noGS_ZAMS.last`, which is committed, so
+they no longer depend on the example case (checked 2026-11-02). The
+description below is the original report.
 
 The five `testsuite/Test_m2p0_feh+0p0_vzams150_*` cases read
 
@@ -2438,7 +2441,14 @@ certify the shorter run as correct. The other 297 cases are rebaselined.
 
 ## 35. Three cases read a start model that a later case overwrites
 
-**Status:** open, found 2026-10-16 while committing the issue 23
+**Status:** resolved 2026-11-02. `test_all.py` (`order_dependent_cases`)
+links each case whose `FFIRST` is another case's `FLAST`, and runs each
+chain on one worker, producer first, through an `xdist_group` mark and
+`--dist loadgroup` in `pytest.ini`. It finds exactly the four chains in
+the table below. A rebaseline now needs one measurement pass, not two.
+The idea is from M. Rendina's `test_deps` branch.
+
+Original report: found 2026-10-16 while committing the issue 23
 rebaseline. Pre-existing. Handled for this rebaseline; the underlying
 ordering hazard is not fixed. Since 2026-10-20 the rebaseline procedure
 guards against it. `REBASELINE_PROTOCOL.md` requires two full passes and
