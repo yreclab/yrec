@@ -32,7 +32,10 @@
  XENV0A(1) = 0.71961003  ! 10/28/26: solar calibration (base); was 0.719600 -- Envelope abundance label
  ZENV0A(1) = 0.01649314  ! 10/28/26: solar calibration (base); was 0.016492 -- Envelope abundance label
  CMIXLA(1) = 1.70767823  ! 10/28/26: solar calibration (base); was 1.707873 -- Rescale to this mixing length (or use for the run).
- END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+! 11/02/26 MHP via Claude: END_YCEN 1e-4 -> 2e-3.  Below Yc ~1e-3 Newton converges only
+! linearly and the run diverges at model 5470 (KNOWN_ISSUES issue 40); FCORR0 and HTOLER don't help.
+! END_YCEN(1) = 0.0001 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
+ END_YCEN(1) = 0.0020 ! Run stops if NMODLS(I) is reached or this central helium is reached (TAHB)
 ! END_YCEN(1) = 0.9700 ! Run stops if NMODLS(I) is reached or this central helium is reached (ZAHB)
 ! YREC uses an outer fitting point. 
  LSENV0A(1) = .FALSE. ! If true, adjust outer fitting point mass location.

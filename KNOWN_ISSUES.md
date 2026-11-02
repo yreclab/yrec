@@ -2916,6 +2916,19 @@ spread of this size on this deck as known numerical sensitivity, not a
 regression, until the convergence test and the discrete convective
 boundary are dealt with.
 
+**Second symptom, same deck (bugsweep-4, 2026-11-02):** with the YTIME
+He-timestep fix (f0fe0d2) the deck stops with status 1 at model 5470
+(Y_c 1.1e-3, 34.19 Myr; the old reference reached Y_c 1e-4 at 34.24 Myr).
+The steps are well behaved (dt ~70 yr), but from Y_c ~2e-3 every model
+needs 26-130 iterations: the central L correction falls only ~7% per
+iteration, and in the failing model the envelope (shells 1088-1294)
+oscillates and diverges. The old code passed this phase with five
+1000-yr steps in the same 60-130 iteration regime. FCORR0 0.3 and 0.2
+fail at Y_c ~8e-4; HTOLER x10 fails at the same model. Linear
+convergence points at an inconsistent Jacobian. Per MHP the deck now
+stops at END_YCEN = 2e-3 instead of 1e-4; put it back to 1e-4 once the
+Jacobian is fixed.
+
 **Workaround, not a fix:** numerical derivatives for the affected
 entries, which the external branch measured to agree with finite
 differences to ~1e-6. The proper fix is to make the analytic Jacobian
