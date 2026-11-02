@@ -3,9 +3,12 @@ C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 C COEFFT
 C$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       SUBROUTINE COEFFT(DELTS,M,HD,HHA,HHB,HHC,HL,HMAX,HP,HPP,HR,HS,HS1,
-     *HS2,HT,HTT,HCOMP,LC,TLUMX,LATMO,LDERIV,LMIX,LOCOND,QDT,QDP,KSAHA,
+     *HS2,HT,HTT,HCOMP,LC,TLUMX,LATMO,LDERIV,LMIX,LOCOND,KSAHA,
 C      *MODEL,FP,FT,HKEROT,HKEROTO,JENV,TEFFL)  ! KC 2025-05-31
      *FP,FT,HKEROT,HKEROTO,JENV,TEFFL,CMIXL)
+C 11/02/26 MHP via Claude
+C code changed to make QDT and QDP locals.  EQSTAT sets them at every
+C point before use, so the values passed in from CRRECT were never read.
 C 10/15/26 MHP via Claude
 C code changed to take JSON from DIMENSIONS_MOD instead of declaring
 C PARAMETER(JSON=5000) here.
