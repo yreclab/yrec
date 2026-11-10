@@ -409,6 +409,9 @@ def test_yrec(tdir, nml1, nml2, request):   # 'request' is pytest built-in fixtu
         print(out)
         print(err)
 
+    # Fail on abnormal termination
+    assert proc.returncode == 0, "Program terminated abnormally"
+
     # Extract output directory from terminal output
     outdir = None
     for line in out.split('\n'):
@@ -417,9 +420,6 @@ def test_yrec(tdir, nml1, nml2, request):   # 'request' is pytest built-in fixtu
 
     # Ensure outdir is an absolute path
     outdir = os.path.abspath(os.path.join(tdir, outdir))
-
-    # Fail on abnormal termination
-    assert proc.returncode == 0, "Program terminated abnormally"
 
     # If process completed without error code,
     # check for the presence of a reference standard.
